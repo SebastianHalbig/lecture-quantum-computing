@@ -1,0 +1,556 @@
+\documentclass[a4paper,oneside, 12pt]{amsart}
+
+\usepackage[draft,
+            type = paper,
+            externalise,
+            figureFolder = tikzfigures,
+            font = libertine,
+            sidenotes,
+            math = euler,
+            pkgOptions={
+              hyperref = {linkcolor=red},
+              geometry = {a4paper, margin=3cm}
+            }
+            ]{style}
+
+\def\bibfont{\footnotesize}
+\addbibresource{local-bib.bib}
+\usetikzlibrary{babel} % TODO: WIESO?!?
+\pdfoutput=1
+\title{Quantum Computing}
+\author{Sebastian Halbig}
+\author{Istvan Heckenberger}
+
+%%% --- Course specific macros
+\newcommand*{\Pclass}{\ensuremath{\mathsf{P}}}
+\newcommand*{\NPclass}{\ensuremath{\mathsf{NP}}}
+\newcommand*{\Dtime}{\ensuremath{\mathbf{DTIME}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+
+\DeclarePairedDelimiter\bra{\langle}{\rvert}
+\DeclarePairedDelimiter\ket{\lvert}{\rangle}
+\DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1\,\delimsize\vert\,\mathopen{}#2}
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section*{About the course}
+
+\subsection*{Main resources}\label{sec:main-resources}
+\begin{enumerate}
+  \item \cite{wolf2023:QuantumComputing}
+  \item \cite{simon2021:TopologicalQuantum}
+  \item \cite{kissinger-wetering2025:PicturingQuantumSoftware}
+  \item \cite{coecke-kissinger2017:PicturingQuantumProcesses}
+  \item \cite{nielsen-chuang2000:QuantumComputationInformation}
+  \item \cite{kockum-soro-garcía-álvarez-et-al2025:Lecture}
+  % \item  TODO Preskill
+\end{enumerate}
+
+
+
+
+\numberwithin{theorem}{section}
+\cleardoublepage
+
+\section{Why quantum computing?}\label{sec:why-quantum-computing}
+
+To motivate why quantum computers are such a fascinating topic, we will showcase---without going into technical details---how the fundamental principles of quantum mechanics can be used to solve certain problems much faster than classical computers.
+This ``quantum advantage'' relies on a rather simple shift of perspective: instead of using bit logic---expressed as maps \(\{0,1\}^{n}\to\{0,1\}^{m}\)---we have (almost) the full power of linear algebra at our disposal.
+
+\subsection*{The Deutsch--Jozsa algorithm}\label{sec:the-deutsch--josza-algorithm}
+
+Consider the following problem.
+For a fixed number \(n \in \mathbb{N}\), we are given a map \(f \from \{0,1\}^{n}\to\{0,1\}\).
+We have no information about this map except: either it is constant or balanced:
+\begin{itemize}
+  \item \emph{Constant:} The output is always the same (all 0s or all 1s).
+  \item \emph{Balanced:} For exactly half the possible inputs, the output is \(0\) and for the other half \(1\).
+\end{itemize}
+We are now given the task:
+\medskip
+
+\noindent
+\textit{Determine which type of function we have.}
+\medskip
+
+\noindent
+The catch: if \(f\) is balanced, we do not know which inputs belong to the half producing \(0s\) and which inputs result in \(1s\).
+Thus, in the worst case a classical computer must compute the value of \(f\) for \(2^{n-1} + 1\) inputs to conclude the type of \(f\).
+For \(n=10\) this already results in \(\tfrac{1024}{2}-1 = 513\) operations.
+
+\subsubsection*{The quantum approach}
+Quite miraculously, a quantum computer can solve the above problem with a single call to (a quantum version of) \(f\).
+\begin{enumerate}
+  \item[Step 1:] We initialise the system by setting up \(n+1\) qubits---the quantum version of bits.
+  The first \(n\) qubits are set to \(0\) and a single trailing \(1\) qubit at the end.
+  We will use the first \(n\) qubits as our ``input'' and the last qubit will function as a  control qubit that captures the output of \(f\).
+
+  \item [Step 2:] While classical gates like AND and OR would allow us to transform our first \(n\) qubits (which are \((00\dots0)\)) to some other input of \(f\) (\eg \((0101\dots 01)\)), we want to use the ``magic'' of quantum mechanics to simultaneously capture all possible inputs of \(f\).
+  Much like  ``Schrödinger's cat'', the Hadamard gate transforms a \(0\)-qubit into a state that is equally likely \(0\)  and \(1\).
+  Thus, applying Hadamard gates to all of our \(n+1\) qubits results in particular in our desired superposition: a combination of all possible inputs of \(f\).
+  Observe that we also used a Hadamard gate to alter the control qubit.
+  In the next step this will be crucial in  distinguishing behind the balanced and the constant case.
+
+  \item [Step 3:] We now apply the quantum version of \(f\) to this superposition and thereafter apply  Hadamard gates again to the first \(n\) qubits.
+  While the details are subtle, we can roughly think of this as creating an interference pattern that depends on \(f\).
+  \begin{description}
+    \item [Constructive] In case \(f\) is constant, it treats all inputs the same.
+  Because of the way we set up our control qubit, this results in the components of our superposition adding up.
+    \item [Destructive] In contrast, if \(f\) is balanced, it treats one half of our superposition different than the other resulting in cancellations.
+  \end{description}
+
+
+  \item [Step 4:] In order to determine the type of \(f\), we now simply have to measure the first \(n\) qubits.
+  Due to the interference of the previous step we get two cases
+  \begin{enumerate}
+      \item If all qubits are zero, the interference was constructive and \(f\) mus have been constant.
+      \item In case we observe any thing else (at least one qubit being \(1\)), the function \(f\) must be balanced.
+  \end{enumerate}
+\end{enumerate}
+
+Unlike the classical case, which scales exponentially, the Deutsch--Jozsa algorithm is linear in the number of inputs \(n\) of \(f\).
+For a classical computer, even a relatively small \(n=300\) would require more operations than there are atoms in the known universe\footnote{
+  The number of atoms in the observable universe is estimated to be around \(10^{80}\). % TODO Some source
+}, whereas a quantum computer could determine the type of \(f\) in merely \(603\) steps.
+
+It is precisely this potential for exponential speedups, that explains the excitement around quantum computing.
+
+Unlike the classical case, the Deutsch--Jozsa algorithm is linear in the number of inputs \(n\) of \(f\).
+For a classical computer \(n\geq 300\), would require more operations  operations that there are atoms in the known universe\footnote{
+  The amount of atoms in the known universe is believed to be at around \(10^{80}\).
+}, whereas a quantum computer could determine the type of \(f\) in merely \(603\) steps.
+It is precisely this exponential speedup that partially explains the  excitement around quantum computing.
+
+\subsection{The plan for this semester}\label{sec:the-plan-for-this-semester}
+
+Our exposition of the Deutsch--Jozsa algorithm raises several questions that will guide us through the semester.
+\bigskip
+
+First and foremost, while we tried to convey the main ideas behind an exemplary quantum algorithm, many terms (superposition, interference, \etc) remained rather opaque.
+In order to describe and analyse quantum algorithms precisely, we must develop  a rigorous mathematical framework.
+\medskip
+
+\noindent
+\textit{The mathematics of quantum computing}
+\medskip
+
+\noindent
+While classical algorithms can be studied using \eg Boolean algebras,
+our framework of quantum computation will be finite-dimensional unitary vector spaces
+\begin{description}
+  \item[The SCUM postulates] Following~\cite{kissinger-wetering2025:PicturingQuantumSoftware}, we will  mathematically describe
+  \begin{enumerate}
+    \item [S] States of a quantum system correspond to vectors in a Hilbert space.
+    \item [C] Compound systems are represented by the tensor product.
+    \item [U] Unitary maps evolve states in time.
+    \item [M] Measurements are computed according to the Born rule.
+  \end{enumerate}
+\item \textbf{ZX-calculus:} An introduction to a rigorous diagrammatic language for representing and transforming quantum circuits based on category theory and graph rewriting.
+\end{itemize}
+\medskip
+
+\noindent
+The Deutsch--Jozsa algorithm, while pedagogically significant for demonstrating exponential separation, addresses a problem with no direct practical utility. To understand the broader impact of the field, we must examine algorithms that provide speedups for commercially and scientifically relevant problems.
+\medskip
+
+\noindent
+\textit{Algorithmic paradigms and applications}
+\medskip
+
+\noindent
+We will study the core algorithms that form the basis for quantum advantage in search, number theory, and numerical analysis.
+\begin{itemize}
+\item \textbf{Grover's Algorithm:} An analysis of amplitude amplification providing a quadratic speedup for searching unstructured databases.
+\item \textbf{Shor's Algorithm:} The application of the quantum Fourier transform to achieve a sub-exponential speedup for integer factorization and discrete logarithms.
+\item \textbf{Linear Systems (HHL):} The methodology for solving linear equations of the form Ax=b with exponential speedup in the dimension of the matrix, under specific sparsity constraints.
+\end{itemize}
+\medskip
+
+\noindent
+To rigorously evaluate the "quantum advantage," we must categorize problems by the computational resources they require. Classical complexity theory distinguishes between problems solvable in polynomial time and those that are not; we must define the boundaries of what a quantum machine can efficiently achieve.
+\medskip
+
+\noindent
+\textit{Quantum complexity theory}
+\medskip
+
+\noindent
+We will examine the fundamental limits of quantum computation, including the conditions under which quantum systems can be simulated classically and the requirements for universal computation.
+\begin{itemize}
+\item \textbf{Universal Quantum Computing:} An analysis of the Solovay--Kitaev theorem, which establishes that a finite set of gates can approximate any unitary transformation to arbitrary precision.
+\item \textbf{Efficient Classical Simulation:} A study of the Gottesman--Knill theorem, identifying the Clifford group as a restricted class of quantum operations that can be efficiently simulated on a classical computer.
+\item \textbf{The Class BQP:} Formal definition of Bounded-error Quantum Polynomial time and its relationship to classical complexity classes such as P, NP, and PSPACE.
+\end{itemize}
+\medskip
+
+\noindent
+The Deutsch--Jozsa algorithm was presented in an idealized, noise-free environment. However, physical quantum hardware is subject to decoherence and operational errors. The long-term viability of quantum computing depends on the ability to protect information from environmental interaction.
+\medskip
+
+\noindent
+\textit{Outlook: Quantum error-correction}
+\medskip
+
+\noindent
+We will conclude with an introduction to the methods used to encode quantum information into larger physical systems to mitigate hardware-level faults.
+\begin{itemize}
+\item \textbf{Shor’s 9-qubit Code:} The fundamental construction demonstrating that quantum information can be protected against both bit-flip and phase-flip errors.
+\item \textbf{Topological Quantum Codes:} An examination of the Toric Code and surface codes, which utilize the global topological properties of a lattice to provide robust error suppression.
+\end{itemize}
+
+\cleardoublepage
+\section{Linear algebra for quantum computing}\label{sec:linear-algebra-for-quantum-computing}
+\section{Quantum mechanics}\label{sec:a-swift-introduction-to-quantum-mechanics}
+
+As suggested by their name, quantum computers rely on the basic working principles of quantum mechanics.
+Following \cite{kissinger-wetering2025:PicturingQuantumSoftware}, we recall parts of this story using their \textrm{SCUM} postulates.
+\medskip
+We will consider systems modelled by finite-dimensional unitary (and therefore in particular complex) vector spaces.
+
+\subsection{Preliminaries}\label{sec:preliminaries}
+
+Bra-ket notation.
+String diagrams.
+Monoidal categories?
+
+\subsection{States}\label{sec:states}
+
+The states of a quantum system are described as certain vectors in a Hilbert space \(H\).
+In our case, \(H\) will always be finite-dimensional.
+
+\subsubsection{Normalised vectors}\label{sec:normed-vectors}
+
+\subsubsection{Rank-1 orthogonal projections}\label{sec:rank-1-orthogonal-projections}
+
+\subsection{Qubits}\label{sec:qubits}
+
+\subsection{Unitary evolution}\label{sec:qubits}
+
+\subsubsection{Unitary transformations on the Bloch sphere}\label{sec:unitary-transformations-on-the-bloch-sphere}
+
+Pauli operations
+
+\subsubsection{The Schrödinger equation}\label{sec:the-schrödinger-equation}
+
+\subsubsection{Matrix exponentials and time evolution}\label{sec:matrix-exponentials-and-time-evolution}
+
+
+\subsection{Measurement}\label{sec:measurement}
+
+\subsubsection{Traces}\label{sec:traces}
+
+
+\subsubsection{The Born rule}\label{sec:the-born-rule}
+
+\subsection{Composite systems}\label{sec:composite-systems}
+
+\subsubsection{Tensor products of Hilbert spaces}\label{sec:tensor-products-of-hilbert-spaces}
+
+\subsubsection{Tensor products of linear maps}\label{sec:tensor-products-of-linear-maps}
+
+
+
+\section{The gate model for quantum computing}\label{sec:the-gate-model-for-quantum-computing}
+
+\section{Quantum computation via the zx calculus}\label{sec:quantum-computation-via-the-zx-calculus}
+\begin{description}
+  \item[Kitaev--Solvay theorem] ``All models for quantum computing are equivalent''
+  \item[Qubits] Tensor products of vector spaces, homomorphisms, matrices.
+  \item[Bloch sphere model]
+  \item[ZX-calculus] Spiders et al
+  \item[Relations between spiders]
+\end{description}
+
+\section{Quantum algorithms}\label{sec:quantum-algorithms}
+\begin{description}
+  \item[Simon's algorithm]
+  \item[Shor's algorithm]
+  \item[Grover's algorithm]
+  \item[HHL algorithm]
+\end{description}
+
+\section{Quantum computing from a complexity theory perspective}\label{sec:quantum-computing-from-a-complexity-theory-perspective}
+\subsection{Some complexity theory terminology}\label{sec:some-complexity-theory-terminology}
+
+
+\begin{definition}\label{def:letters-words-languages}
+  A \emph{word} in the \emph{letters} \(\{0,1\}\) is a finite sequence \(w \eqdef (s_{1}, \dots , s_{n})\), where \(n\in \mathbb{N}\) and \(s_{i}\in \{0,1\}\) for all \(1 \leq i \leq n\).
+
+  We call \(|x|\eqdef n\) the \emph{length} of \(w\) and write \(\{0,1\}^{n}\) for the set of all words of length \(n\).
+  Furthermore, we set
+  \begin{equation}\label{eq:set-of-words}
+    \{0,1\}^{*}\eqdef \bigcup_{n\geq 0}\{0,1\}^{n}.
+  \end{equation}
+
+  A \emph{decision problem} is a subset \(L \subset \{0,1\}^{*}\).
+\end{definition}
+
+There is a bijection
+\begin{equation}
+  \begin{aligned}
+    \{\text{decision problems}\} &\iso \{f\from\{0,1\}^{*} \to \{0,1\}\}\\
+    L &\mapsto  f\from\{0,1\}^{*} \to \{0,1\}, \quad f(x)= 1 \iff x \in L \\
+    L_{f}\eqdef\{x \in\{0,1\}^{*} \mid f(x) = 1\} & \longmapsfrom f
+  \end{aligned}
+\end{equation}
+We will often view decision problems in terms of their unique associated maps \(\{0,1\}^{*}\to\{0, 1\}\)
+\medskip
+
+Besides formalising algorithms, we want to discuss their (asymptotic) efficiency.
+To that end, we need to a notion of functions being ``approximately similar''.
+
+\begin{definition}\label{def:O-notation}
+  Let \(D\) be a subset of \( \mathbb{R}\) and\(f, g \from D \to \mathbb{R}\).
+  We write \(f \in O(g)\) if there exists a \(M\in \mathbb{R}\) such that
+  \begin{equation}
+    |f(x)| \leq |M g(x) | \qquad\quad \text{ for all } x \in D.
+  \end{equation}
+
+\end{definition}
+
+
+\subsection{Universal Turing machines}\label{sec:universal-turing-machines}
+We now formalise the principles outlined in our construction of the map \(\mathrm{add}\) in terms of Turing machines.
+
+\begin{definition}\label{def:Turing-machine}
+  A \emph{Turing machine} is a triple \((\Gamma, Q, \delta)\) comprising
+  \begin{description}
+    \item[\(\Gamma\)] the \emph{alphabet} \(\{0,1,\rhd, \square \}\) of \(M\).
+    It includes  the (distinguished) \emph{start symbol} \(\rhd\) and the \emph{blank symbol} \(\square\).
+    \item[\(Q\)] a finite set of \emph{states}, containing a \emph{starting state} \(q_{\mathrm{start}}\) and a \emph{halting state} \(q_{\mathrm{halt}}\).
+    \item[\(\delta\)] a \emph{transition function}
+    \begin{equation*}
+      \delta \from Q \times \Gamma \to Q \times \Gamma\times\{L,S,R\}.
+    \end{equation*}
+  \end{description}
+\end{definition}
+
+\begin{example}\label{ex:add-as-Turing-machine}
+  TODO: give an easy introduction for a Turing machine.
+\end{example}
+A widely held belief is that Turing machines provide a model for ``computable functions''.
+
+\begin{remark}[Church--Turing thesis]\label{rmk:Church-Turing-thesis}
+  A function \(f \from  \mathbb{N} \to  \mathbb{N}\) can be computed by some device if it can be computed by a Turing machine.
+\end{remark}
+
+
+\begin{definition}\label{def:time-constructible-function}
+  A map \(f \from \mathbb{N} \to \mathbb{N}\) is \emph{time-constructible} if there exists a Turing machine \(M\) such that for each input \(n\) (in binary presentation) \(M\) halts in \(O(f)\) steps with output \(f(n)\) (in  binary presentation).
+\end{definition}
+
+\begin{remark}\label{rmk:encoding-Turing-machines}
+  A Turing machine \(M\) itself can be encoded as a word in the letters \(\{0,1, \square\}\).
+  Explicitly, we
+\end{remark}
+
+\begin{theorem}\label{thm:existence-of-universal-TM}
+  There exists a Turing machine \(U\)
+\end{theorem}
+
+
+
+
+\begin{definition}\label{def:deciding-a-decision-problem}
+  A Turing machine \(M\) \emph{decides} a decision problem \(L \subset\{0,1\}^{*}\) if \(M\) halts for each \(x \in \{0,1\}^{*}\) and the output of \(M\) is \(1\) if \(x\in L\) and \(0\) otherwise.
+\end{definition}
+
+
+\begin{definition}\label{def:Dtime}
+  Consider a time constructible function \(T \from \mathbb{N} \to \mathbb{N}\).
+  The class \(\Dtime(T)\) consists of all decision problems \(L \subset\{0,1\}^{*}\) such that there exists a Turing machine \(M\) that halts in \(O(T)\) steps and decides \(L\).
+\end{definition}
+
+
+\begin{definition}\label{def:class-p}
+  The \emph{complexity class} \(\Pclass\) is given by
+  \begin{equation}\label{eq:p-class}
+    \Pclass = \bigcup_{n\geq 1} \Dtime(t^{n}).
+  \end{equation}
+\end{definition}
+
+We think of problems in the complexity class \(\Pclass\) as being precisely the  ``feasible'' problems.
+The \emph{strong} Church--Turing thesis states:
+\begin{remark}[strong Church--Turing thesis]\label{rmk:strong-Church-Turing-thesis}
+  If a function \(f \from \mathbb{N} \to \mathbb{N}\) can be computed in polynomial time by some device, it can be computed in polynomial time by a Turing machines.
+\end{remark}
+
+Quantum computers potentially challenge the point of view.
+As we will see over the span of this course, they provide ways of performing tasks efficiently (in polynomial time) for which no efficient classical solution is know.
+
+\begin{definition}\label{def:class-np}
+  A decision problem \(L\) is in \(\NPclass\) (Nondeterministic Polynomial time) if there exists a polynomial-time TM \(V\), called a \emph{verifier}, and a polynomial \(p\), such that:
+  \(x \in L \iff \exists y \in \{0,1\}^{p(|x|)} \text{ s.t. } V(x, y) = 1\).
+\end{definition}
+
+\begin{remark}
+  While \(\Pclass \subseteq \NPclass\), we believe \(\Pclass \neq \NPclass\). Quantum computers are interesting because they can solve certain problems in \(\NPclass\) (like integer factoring) in polynomial time, whereas we suspect no such polynomial-time classical algorithm exists.
+\end{remark}
+
+
+\section{Fault-tolerance}\label{sec:fault-tolerance}
+\begin{description}
+  \item[Quantum compilation stack]
+  \item[Stabiliser codes]
+  \item[Toric and surface codes]
+  \item[Outlook: Toplogical quantum computing]
+\end{description}
+\appendix
+\section{Linear algebra}\label{sec:linear algebra}
+
+\subsection{Unitary vector spaces}\label{sec:unitary vector spaces}
+
+The state space of a quantum system is a complex vector space equipped with an inner product.
+
+\begin{definition}\label{def:complex-vector-space}
+  A \emph{complex vector space} is a set \(V\) equipped with two operations,
+  \begin{equation*}
+    + \from V \times V \to V, \qquad (v,w) \mapsto v + w, \qquad
+    \cdot \from \mathbb{C} \times V \to V, \qquad (\lambda, v) \mapsto \lambda v,
+  \end{equation*}
+  called \emph{addition}, respectively \emph{scalar multiplication},
+  that satisfy
+  \begin{thmlist}
+    \item the addition is \emph{associative}: for every \(v,w,x \in V\) we have \((v+w)+x = v+(w+x)\),
+    \item the addition is \emph{commutative}: \(v+w = w+v\) for every \(v,w\in V\),
+    \item There exists an element \(0\in V\), called a \emph{zero}, such that \(v+0 = v = 0+v\) for all \(v \in V\),
+    \item the scalar multiplication is \emph{associative}: for all \(\lambda, \mu \in \mathbb{C}\) and \(v \in V\) we have  \(\lambda(\mu v) = (\lambda \mu) v\),
+    \item the scalar multiplication is \emph{unital}: we have \(1_{\mathbb{C}}v= v\)for all \(v\in V\).
+    \item the scalar multiplication is \emph{distributive} \(\lambda(v+w) = \lambda v + \lambda w\) and \((\lambda +\mu)v = \lambda v + \mu v\).
+  \end{thmlist}
+\end{definition}
+
+\begin{example}[The space \(\mathbb{C}^n\)]\label{ex:complex-n-space}
+  The set of all \(n\)-tuples of complex numbers,
+  \begin{equation*}
+    \mathbb{C}^n = \left\{ \begin{pmatrix} z_1 \\ \vdots \\ z_n \end{pmatrix}  \;\middle|\; z_i \in \mathbb{C} \right\},
+  \end{equation*}
+  is a complex vector space under component-wise addition and scalar multiplication.
+\end{example}
+
+\begin{example}[The space of complex matrices]\label{ex:mat-complex}
+  The set \(\Mat_{n,m}(\mathbb{C})\) of all \(n \times m\) matrices with complex entries forms a complex vector space. The operations are defined by:
+  \begin{itemize}
+    \item \((A + B)_{ij} = A_{ij} + B_{ij}\)
+    \item \((cA)_{ij} = c \cdot A_{ij}\)
+  \end{itemize}
+\end{example}
+
+\begin{definition}\label{def:inner-product}
+  An \emph{inner product} on a complex vector space \(V\) is a map \(\braket{ \blank }{=} \from  V \times V \to \mathbb{C}\) satisfying
+  \begin{thmlist}
+    \item \emph{sesquilinearity}: for every \(\lambda,\mu \in \mathbb{C}\) and \(v,w,x, y\in V\) we have
+    \begin{equation*}
+      \braket{\lambda v+ w}{\mu x+ y} = \overline{\lambda}\mu \braket v x + \overline{\lambda} \braket v y + \mu \braket{w}{x} + \braket{w}{y}.
+    \end{equation*}
+    \item \textit{hermitian} \(\braket v w = \overline{\braket w v}\).
+    \item \emph{positivity} \(\braket v v \geq 0\) and \(\braket v v = 0\) if and only if \(v = 0\).
+  \end{thmlist}
+\end{definition}
+
+\begin{example}\label{ex:standard-scalar-product}
+  The \emph{standard scalar product} on  \(\mathbb{C}^{n}\) is given by
+  \begin{equation*}
+    \braket v w \eqdef \sum_{i=1}^{n} \overline{v_{i}}w_{i}.
+  \end{equation*}
+
+\end{example}
+\begin{definition}\label{def:onb}
+  A basis \((e_{1}, \dots , e_{n})\) of a unitary vector space \(V\) is \emph{orthonormal basis} if
+  \begin{equation*}
+    \braket{e_{i}}{e_{j}} =
+    % \begin{cases}
+    %   1 & \(i=j\)\\
+    %   0 & \text{otherwise.}
+    % \end{cases}
+  \end{equation*}
+\end{definition}
+
+
+\begin{definition}\label{def:unitary-matrix}
+  A matrix \(U \in \Mat_{n}( \mathbb{C})\) is
+  \begin{thmlist}
+    \item \emph{unitary} if \(UU^{*}= \Id_{n} =  U^{*}U\),
+    \item \emph{positive}
+    \item \emph{self-adjoint}
+    \item \emph{orthogonal projection} if
+  \end{thmlist}
+\end{definition}
+
+\begin{remark}\label{rem:all-normal}
+  Note that all the classes of matrices defined in Definition~\ref{def:unitary-matrix} are in particular \emph{normal}.
+\end{remark}
+
+\begin{theorem}\label{thm:spectral-theorem}
+  A matrix \(A \in \Mat_{n}(\mathbb{C})\) is normal if and only if it is unitarily diagonalisable.
+  That is, there exists a unitary matrix \(U\) and a diagonal matrix \(D\) such that \(A = UDU^*\). Equivalently, \(A\) can be written as:
+  \begin{equation*}
+      A = \sum_{i} \lambda_i P_i,
+  \end{equation*}
+  where \(\lambda_i\) are the eigenvalues of \(A\) and \(P_i\) are orthogonal projections onto the corresponding eigenspaces.
+\end{theorem}
+
+
+\subsection{Tensor products}\label{sec:tensor-products}
+
+
+\begin{definition}\label{def:tensor-product}
+  Consider two complex vector spaces \(V, W\).
+  A \emph{tensor product} of \(V\) and \(W\) is a tuple \((V \otimes W, \blank \otimes = )\) comprising a vector space \(V \otimes W\) and a bilinear map
+  \begin{equation*}
+    \blank \otimes = \from V\times W \to V\otimes W, (v, w) \mapsto v\otimes w
+  \end{equation*}
+  such that for each bilinear map \(b \from V \times W \to X\) there is a unique linear map \(f_{b}\from V\otimes W \to X\) such that
+  \begin{equation*}
+    f_{b}(v\otimes w) = b(v,w) \qquad \text{ for all } v \in V, w\in W.
+  \end{equation*}
+\end{definition}
+
+\begin{theorem}\label{thm:tensor-product-existence}
+  For any two complex vector spaces \(V\) and \(W\), there exists a tensor product \((V \otimes W, \blank \otimes = )\).
+  Moreover, if \((V \boxtimes W, \blank \boxtimes = )\)  is another tensor product,
+  there is a unique isomorphism of vector spaces
+  \(f \from V\otimes W \to V \boxtimes W\) such that \(f(v\otimes w) = v \boxtimes w\).
+\end{theorem}
+
+\begin{lemma}\label{lem:basis-of-tp}
+  Let \(V, W\) be two complex vector spaces with basis \((v_{1}, \dots , v_{n})\) and \((w_{1}, \dots , w_{m})\), respectively.
+  Then \((v_{i}\otimes w_{j})_{1\leq i \leq n, 1\leq j \leq m}\) is a basis of \(V \otimes W\).
+\end{lemma}
+
+\begin{lemma}\label{lem:assoc-of-tps}
+  Let \(V,W,X\) be three complex vector spaces.
+  There is a (canonical) isomorphism
+  \(V \otimes (W\otimes X) \to (V\otimes W) \otimes X\).
+\end{lemma}
+
+
+
+\subsection{The Trace Operator}\label{subsec:trace}
+
+\begin{definition}\label{def:trace}
+  The \emph{trace} of a square matrix \(A \in \Mat_{n}(\mathbb{C})\) is the sum of its diagonal elements:
+  \begin{equation*}
+      \tr(A) \eqdef \sum_{i=1}^n A_{ii}.
+  \end{equation*}
+\end{definition}
+
+\begin{remark}\label{rem:trace-properties}
+  The trace is a linear functional and satisfies the \emph{cyclic property}: \(\tr(AB) = \tr(BA)\) for any \(A, B \in \Mat_{n}(\mathbb{C})\). This implies that the trace is invariant under basis changes (similarity transformations), and is equal to the sum of the eigenvalues of the matrix.
+\end{remark}
+
+
+\setlength{\bibitemsep}{0\baselineskip}
+\printbibliography
+\end{document}
+
+%\section{Sketched contents}\label{sec:sketched-contents}
+
+%%% Local Variables:
+%%% mode: LaTeX
+%%% TeX-master: t
+%%% End:
