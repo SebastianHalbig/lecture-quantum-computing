@@ -13,7 +13,6 @@
             }
             ]{style}
 
-\def\bibfont{\footnotesize}
 \addbibresource{local-bib.bib}
 \usetikzlibrary{babel} % TODO: WIESO?!?
 \pdfoutput=1
@@ -21,10 +20,15 @@
 \author{Sebastian Halbig}
 \author{Istvan Heckenberger}
 
-%%% --- Course specific macros
+%%% --- Course specific definitions and macros
+
 \newcommand*{\Pclass}{\ensuremath{\mathsf{P}}}
 \newcommand*{\NPclass}{\ensuremath{\mathsf{NP}}}
+\newcommand*{\BQPclass}{\ensuremath{\mathsf{BQP}}}
 \newcommand*{\Dtime}{\ensuremath{\mathbf{DTIME}}}
+
+\DeclareMathOperator{\sgn}{sgn}
+
 \DeclareMathOperator{\GL}{GL}
 \DeclareMathOperator{\Mat}{Mat}
 
@@ -32,10 +36,54 @@
 \DeclarePairedDelimiter\ket{\lvert}{\rangle}
 \DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1\,\delimsize\vert\,\mathopen{}#2}
 
+\newcommand\leftidx[3]{%
+  {\vphantom{#2}}#1#2#3%
+}
+
+\newcommand{\underConstruction}{%
+  \par\addvspace{1.5em} % Ensure new line and add space above
+  \noindent
+  \begingroup
+  \setlength{\fboxrule}{2pt} % Thicker frame
+  \setlength{\fboxsep}{10pt} % Space between frame and content
+  \fbox{%
+    \begin{minipage}{\linewidth-2\fboxsep-2\fboxrule}
+      % Left side: The Icon
+      \begin{minipage}{0.15\linewidth}
+        \centering
+        \scalebox{0.4}{ % Increased scale slightly for the thicker box
+          \begin{tikzpicture}[limb/.style={line cap=round,line width=1.5mm,line join=bevel}]
+            \draw[line width=2mm,rounded corners,fill=yellow] (-2,0) -- (0,-2) -- (2,0) -- (0,2) -- cycle;
+            \fill (1.5mm,7mm) circle (1.5mm);
+            \fill(0,-7.5mm) -- ++(10mm,0mm) -- ++(120:2mm)--++(100:1mm)--++(150:2mm) arc (70:170:2.5mm and 1mm);
+            \draw[limb] (-7.5mm,-6.5mm)--++(70:4mm)--++(85:4mm) coordinate(a)--++(-45:5mm)--(-2.5mm,-6.5mm);
+            \fill[rotate around={45:(a)}] ([shift={(-0.5mm,0.55mm)}]a) --++(0mm,-3mm)--++
+            (7mm,-0.5mm)coordinate(b)--++(0mm,4mm)coordinate(c)--cycle;
+            \draw[limb] ([shift={(-0.6mm,-0.4mm)}]b) --++(-120:5mm) ([shift={(-0.5mm,-0.5mm)}]c) --++
+            (-3mm,0mm)--++(-100:3mm)coordinate (d);
+            \draw[ultra thick] (d) -- ++(-45:1.25cm);
+          \end{tikzpicture}
+        }
+      \end{minipage}%
+      \hfill
+      % Right side: The Text
+      \begin{minipage}{0.80\linewidth}
+        \raggedright
+        \small \textbf{Under Construction:}\\
+        This part of the lecture notes is still under construction and may change over the course of the semester.
+      \end{minipage}
+    \end{minipage}%
+  }
+  \endgroup
+  \par\addvspace{1.5em} % Add space below
+}
+
 
 \begin{document}
 \maketitle
 \tableofcontents
+
+\cleardoublepage
 
 \section*{About the course}
 
@@ -59,13 +107,15 @@
 \section{Why quantum computing?}\label{sec:why-quantum-computing}
 
 To motivate why quantum computers are such a fascinating topic, we will showcase---without going into technical details---how the fundamental principles of quantum mechanics can be used to solve certain problems much faster than classical computers.
-This ``quantum advantage'' relies on a rather simple shift of perspective: instead of using bit logic---expressed as maps \(\{0,1\}^{n}\to\{0,1\}^{m}\)---we have (almost) the full power of linear algebra at our disposal.
+This ``quantum advantage'' relies on a rather simple shift of perspective: instead of using bit logic---expressed as maps \(f\from \{0,1\}^{n}\to\{0,1\}^{m}\)---we have (almost) the full power of linear algebra at our disposal.
 
+\addtocontents{toc}{\SkipTocEntry}
 \subsection*{The Deutsch--Jozsa algorithm}\label{sec:the-deutsch--josza-algorithm}
+
 
 Consider the following problem.
 For a fixed number \(n \in \mathbb{N}\), we are given a map \(f \from \{0,1\}^{n}\to\{0,1\}\).
-We have no information about this map except: either it is constant or balanced:
+We have no information about this map except: either it is constant or balanced.
 \begin{itemize}
   \item \emph{Constant:} The output is always the same (all 0s or all 1s).
   \item \emph{Balanced:} For exactly half the possible inputs, the output is \(0\) and for the other half \(1\).
@@ -78,12 +128,11 @@ We are now given the task:
 \medskip
 
 \noindent
-The catch: if \(f\) is balanced, we do not know which inputs belong to the half producing \(0s\) and which inputs result in \(1s\).
+The catch: if \(f\) is balanced, we do not know which inputs belong to the half producing 0s and which inputs result in 1s.
 Thus, in the worst case a classical computer must compute the value of \(f\) for \(2^{n-1} + 1\) inputs to conclude the type of \(f\).
-For \(n=10\) this already results in \(\tfrac{1024}{2}-1 = 513\) operations.
 
 \subsubsection*{The quantum approach}
-Quite miraculously, a quantum computer can solve the above problem with a single call to (a quantum version of) \(f\).
+In contrast to the classical solution which grows exponentially in \(n\), a quantum computer can solve the above problem with a single call to (a quantum version of) \(f\).
 \begin{enumerate}
   \item[Step 1:] We initialise the system by setting up \(n+1\) qubits---the quantum version of bits.
   The first \(n\) qubits are set to \(0\) and a single trailing \(1\) qubit at the end.
@@ -111,99 +160,1264 @@ Quite miraculously, a quantum computer can solve the above problem with a single
       \item In case we observe any thing else (at least one qubit being \(1\)), the function \(f\) must be balanced.
   \end{enumerate}
 \end{enumerate}
-
-Unlike the classical case, which scales exponentially, the Deutsch--Jozsa algorithm is linear in the number of inputs \(n\) of \(f\).
+Quite counterintuitively, the Deutsch--Jozsa algorithm is linear in the number of inputs \(n\) of \(f\).
 For a classical computer, even a relatively small \(n=300\) would require more operations than there are atoms in the known universe\footnote{
   The number of atoms in the observable universe is estimated to be around \(10^{80}\). % TODO Some source
-}, whereas a quantum computer could determine the type of \(f\) in merely \(603\) steps.
+}, whereas a quantum computer could determine the type of \(f\) in merely \(603\) steps (601 Hadarmard gates, 1 application of \(f\), and 1 measurement).
 
 It is precisely this potential for exponential speedups, that explains the excitement around quantum computing.
 
-Unlike the classical case, the Deutsch--Jozsa algorithm is linear in the number of inputs \(n\) of \(f\).
-For a classical computer \(n\geq 300\), would require more operations  operations that there are atoms in the known universe\footnote{
-  The amount of atoms in the known universe is believed to be at around \(10^{80}\).
-}, whereas a quantum computer could determine the type of \(f\) in merely \(603\) steps.
-It is precisely this exponential speedup that partially explains the  excitement around quantum computing.
+
 
 \subsection{The plan for this semester}\label{sec:the-plan-for-this-semester}
 
-Our exposition of the Deutsch--Jozsa algorithm raises several questions that will guide us through the semester.
+\( \)\underConstruction
+
+The preceding exposition of the Deutsch--Jozsa algorithm raises several questions that will guide us through the semester.
 \bigskip
 
-First and foremost, while we tried to convey the main ideas behind an exemplary quantum algorithm, many terms (superposition, interference, \etc) remained rather opaque.
-In order to describe and analyse quantum algorithms precisely, we must develop  a rigorous mathematical framework.
-\medskip
+\begin{center}
+  \textit{The mathematics of quantum computing}
+\end{center}
+\bigskip
 
-\noindent
-\textit{The mathematics of quantum computing}
-\medskip
+While we tried to convey the main ideas behind an exemplary quantum algorithm, many terms (superposition, interference, \etc) remained rather opaque.
+In order to properly describe and analyse quantum algorithms precisely, we must develop a rigorous mathematical framework.
+For us, this framework will be that of finite-dimensional unitary vector spaces and unitary transformations.
 
-\noindent
-While classical algorithms can be studied using \eg Boolean algebras,
-our framework of quantum computation will be finite-dimensional unitary vector spaces
-\begin{description}
-  \item[The SCUM postulates] Following~\cite{kissinger-wetering2025:PicturingQuantumSoftware}, we will  mathematically describe
+\begin{thmlist}
+  \item In order to describe qubits, we will explain the \emph{SCUM rules} of~\cite{kissinger-wetering2025:PicturingQuantumSoftware}:
   \begin{enumerate}
     \item [S] States of a quantum system correspond to vectors in a Hilbert space.
     \item [C] Compound systems are represented by the tensor product.
     \item [U] Unitary maps evolve states in time.
     \item [M] Measurements are computed according to the Born rule.
   \end{enumerate}
-\item \textbf{ZX-calculus:} An introduction to a rigorous diagrammatic language for representing and transforming quantum circuits based on category theory and graph rewriting.
-\end{itemize}
-\medskip
+  \item Often, explicit matrix computations can become quite cumbersome.
+  As an alternative, we will discuss the \emph{ZX-calculus}---a graphical computation method that provides a lucid description of linear maps between highly compound systems.
+\end{thmlist}
+\bigskip
 
-\noindent
-The Deutsch--Jozsa algorithm, while pedagogically significant for demonstrating exponential separation, addresses a problem with no direct practical utility. To understand the broader impact of the field, we must examine algorithms that provide speedups for commercially and scientifically relevant problems.
-\medskip
+\begin{center}
+  \textit{Algorithmic paradigms and applications}
+\end{center}
+\bigskip
 
-\noindent
-\textit{Algorithmic paradigms and applications}
-\medskip
+As demonstrated in our exposition of the Deutsch-Jozsa algorithm, the power of quantum algorithms stems from a fundamentally different approach to computation and often requires deep insights into the problem’s structure.
+To further sharpen our intuition and understanding of how the paradigm of quantum computing allows for considerable speedups compared to classical computing, we now turn to what one might call the ``big four'' quantum algorithms.
 
+\begin{thmlist}
+  \item \textbf{Deutsch--Jozsa and Simon's Algorithm:} Both address pattern recognition in functions using similar methods.
+  Deutsch--Jozsa determines whether a function is balanced or constant,
+  while Simon's problem asks to identify a hidden periodicity.
+
+  \item \textbf{Shor's Algorithm:} It provides an exponential speedup for factorising integers by utilising the  the quantum Fourier transform.
+
+  \item \textbf{Grover's Algorithm:} A probabilistic algorithm that enables efficient searching of unstructured databases, achieving a quadratic speedup over classical methods.
+
+  \item \textbf{Harrow--Hassidim--Lloyd Algorithm:}
+  Offers an efficient method for gaining insights into solutions of linear systems of equations, with the solution being encoded in the quantum state amplitudes.
+\end{thmlist}
+\bigskip
+
+\begin{center}
+  \textit{Quantum complexity theory}
+\end{center}
+\bigskip
+
+The previous algorithms suggest an advantage of quantum computers over classical machines.
+We will formalise this as a conjecture phrased in the language of complexity theory.
 \noindent
-We will study the core algorithms that form the basis for quantum advantage in search, number theory, and numerical analysis.
 \begin{itemize}
-\item \textbf{Grover's Algorithm:} An analysis of amplitude amplification providing a quadratic speedup for searching unstructured databases.
-\item \textbf{Shor's Algorithm:} The application of the quantum Fourier transform to achieve a sub-exponential speedup for integer factorization and discrete logarithms.
-\item \textbf{Linear Systems (HHL):} The methodology for solving linear equations of the form Ax=b with exponential speedup in the dimension of the matrix, under specific sparsity constraints.
+  \item \textbf{Efficient Classical Simulation:}  The \emph{Gottesman--Knill theorem} states that certain ``incomplete'' (in particular allowing only so-called Clifford states) quantum computers can be efficiently simulated by a classical computer.
+  \item \textbf{Universal Quantum computing:} In the classical world, a set of gates is universal if any algorithm (thought of as a map \(f\from 2^{n}\to 2^{m}\)) can be realised by apply these gates finitely many times.
+  In stark contrast, the ``algorithms'' for a quantum computer do not form a finite set but the topological space \(U(2^{n})\) (\ie a set with a notion of points being close to each other).
+  A finite set of quantum gates is universal if finitely many gate applications can approximate any element of \(U(2^{n})\) with arbitary precision.
+  \item \textbf{The Kitaev--Solvay theorem:} Addresses the question of whether some universal gate sets are inherently more efficient than others.
+  The theorem demonstrates under mild assumptions that, up to polynomial overhead, all universal gate sets are equivalent.
+  \item \textbf{An overview of complexity classes:} The class \(\Pclass\) consists of problems that are efficiently solvable by a classical computer.
+  The quantum analogue is the class \(\BQPclass\) (bounded-error quantum polynomial time).
+  We will formally define these classes and discuss the conjecture \(\Pclass \subsetneq \BQPclass\).
 \end{itemize}
-\medskip
+\bigskip
 
-\noindent
-To rigorously evaluate the "quantum advantage," we must categorize problems by the computational resources they require. Classical complexity theory distinguishes between problems solvable in polynomial time and those that are not; we must define the boundaries of what a quantum machine can efficiently achieve.
-\medskip
+\begin{center}
+  \textit{Quantum error-correction}
+\end{center}
+\bigskip
 
-\noindent
-\textit{Quantum complexity theory}
-\medskip
+So far, we have studied quantum computing in an idealised setting.
+However, just like classical computers, we need error-correction to pass from physical to logical qubits.
+Achieving fault-tolerant quantum computing is one of the most pressing challenges in the development of real-world quantum computers.
 
-\noindent
-We will examine the fundamental limits of quantum computation, including the conditions under which quantum systems can be simulated classically and the requirements for universal computation.
 \begin{itemize}
-\item \textbf{Universal Quantum Computing:} An analysis of the Solovay--Kitaev theorem, which establishes that a finite set of gates can approximate any unitary transformation to arbitrary precision.
-\item \textbf{Efficient Classical Simulation:} A study of the Gottesman--Knill theorem, identifying the Clifford group as a restricted class of quantum operations that can be efficiently simulated on a classical computer.
-\item \textbf{The Class BQP:} Formal definition of Bounded-error Quantum Polynomial time and its relationship to classical complexity classes such as P, NP, and PSPACE.
-\end{itemize}
-\medskip
 
-\noindent
-The Deutsch--Jozsa algorithm was presented in an idealized, noise-free environment. However, physical quantum hardware is subject to decoherence and operational errors. The long-term viability of quantum computing depends on the ability to protect information from environmental interaction.
-\medskip
+  \item \textbf{No-Cloning Theorem:}
+  Classical error correction often relies on duplicating information.
+  The no-cloning theorem shows that is approach is not possible in the quantum world, necessitating  alternative methods to achieving fault-tolerance.
 
-\noindent
-\textit{Outlook: Quantum error-correction}
-\medskip
+  \item \textbf{Threshold Theorem:}
+  The threshold theorem asserts that if the error rate per quantum gate is below a certain threshold, arbitrarily long quantum computations can be performed with arbitrarily small error, provided sufficient error correction is applied.
+  As a consequence, universal fault-tolerant quantum computing is at least theoretically possible.
 
-\noindent
-We will conclude with an introduction to the methods used to encode quantum information into larger physical systems to mitigate hardware-level faults.
-\begin{itemize}
-\item \textbf{Shor’s 9-qubit Code:} The fundamental construction demonstrating that quantum information can be protected against both bit-flip and phase-flip errors.
-\item \textbf{Topological Quantum Codes:} An examination of the Toric Code and surface codes, which utilize the global topological properties of a lattice to provide robust error suppression.
+  \item \textbf{Shor’s 9-Qubit Code:}
+  One of the first error-correcting codes,  demonstrating that quantum information can be protected against bit-flip and phase-flip errors.
+
+  \item \textbf{The toric code:}
+  A two-qubit system realised by combining geometric properties of the torus (\ie a doughnut) with group symmetries.
+  The relevant information is encoded in global properties of these systems protecting them against all local perturbations.
 \end{itemize}
 
-\cleardoublepage
+\part{The mathematics of quantum computing}
+
 \section{Linear algebra for quantum computing}\label{sec:linear-algebra-for-quantum-computing}
+In the following we recapitulate basics of linear algebra necessary to discuss the axioms of quantum computing.
+For further reading, see for example \cite{axler2024:LinearAlgebraDoneRight, treil2024:LinearAlgebraDoneWrong, blyth1990:ModuleTheoryLinearAlgebra}.
+
+\subsection{Complex numbers}\label{sec:complex-numbers}
+In contrast to the binary system of classical computing, quantum computing is based on the arithmetic of the complex numbers.
+
+\begin{definition}\label{def:complex-numbers}
+  The \emph{complex numbers} \( \mathbb{C} \) are the set \( \mathbb{R}^2 = \{(x, y) \mid x, y \in \mathbb{R}\} \), whose elements we write as \(x+iy\eqdef (x,y)\), endowed with two binary maps,
+  \begin{align*}
+    + & \from \mathbb{C} \times \mathbb{C} \to \mathbb{C}, \qquad & (a+ ib) + (x + iy) &= a+x + i(b+y), \\
+    \cdot & \from \mathbb{C} \times \mathbb{C} \to \mathbb{C}, \qquad &   (a+ ib) \cdot (x +iy) &= ax - by +i(ay + bx),
+  \end{align*}
+  called \emph{(complex) addition} and \emph{multiplication}.
+\end{definition}
+
+Note that, while not defined as additional operations, we can \emph{subtract} complex numbers and \emph{divide} complex numbers, provided we are given a non-zero denominator.
+In examples,
+given \(a+ib, c+id, x+iy \in \mathbb{C}\) with \(x+iy \neq 0\), we compute
+\begin{align*}
+  (a+ib) - (c+id)
+  & = a-c + i(b-d), \\
+  \frac{1}{x+iy}
+  & = \frac{x - iy}{x - iy} \frac{1}{x + iy}
+    = \frac{x - iy}{x^{2} - (iy)^{2}}
+    = \frac{x - iy}{x^{2}+y^{2}}.
+\end{align*}
+
+The arithmetic properties of the  complex numbers \( \mathbb{C} \) are  succinctly described by stating that \( \mathbb{C}\) forms a \emph{field}.
+That is, its addition and multiplication satisfy the following axioms for all \( a, b, c \in \mathbb{C} \):
+
+\begin{thmlist}
+  \item \emph{Associativity}: \((a + b) + c = a + (b + c)\) and \((a \cdot b) \cdot c = a \cdot (b \cdot c)\);
+  \item \emph{Commutativity}: \( a + b = b + a \) and \( a \cdot b = b \cdot a \);
+  \item \emph{Neutral elements}: \( a + 0 = a = 0 + a \) and \( a \cdot 1 = a = 1 \cdot a \);
+  \item \emph{Inverses}: For every \( a \in \mathbb{C} \), there exists \( -a \) such that \( a + (-a) = 0 \), and for every \( a \in \mathbb{C} \setminus \{0\} \), there exists \( a^{-1} \) such that \( a \cdot a^{-1} = 1 \);
+  \item \emph{Distributive law}: \( a \cdot (b + c) = a \cdot b + a \cdot c \).
+\end{thmlist}
+
+Beyond these basic algebraic properties, complex numbers have additional structure that will be essential throughout the course.
+
+\begin{definition}\label{def:some-props-of-complex-numbers}
+  Consider a complex number \( z = x + iy \in \mathbb{C} \).
+  \begin{thmlist}
+    \item Its \emph{real part} is \(\Re(z) = x\).
+    \item Its \emph{imaginiary part} is \(\Im(z) = y\).
+    \item Its \emph{complex conjugate} is \(\overline{z}\eqdef x-iy\).
+    \item Its \emph{absolute value} is \(|z| \eqdef \sqrt{z\overline{z}} = \sqrt{x^{2}+y^{2}}\).
+  \end{thmlist}
+
+  The \emph{unit circle} \(U(1)\eqdef\{z \in \mathbb{C} \mid |z| = 1\}\) consists of all complex numbers with absolute value \(1\).
+\end{definition}
+
+\begin{notation}
+  For a complex number \(z \in \mathbb{C}\) with \(\Im(z) = 0\), we use the shorthand notation \(z \geq 0\) or \(z\leq 0\) instead of \(\Re(z) \geq 0\) and \(\Re(z) \leq 0\), respectively.
+\end{notation}
+
+
+We will often use the fact that any non-zero complex number can be written as a combination of its absolute value and some angle.
+
+\begin{lemma}\label{lem:polar-form-uniqueness}
+  Consider a non-zero complex number \(z= x +iy \in \mathbb{C}\).
+  \begin{thmlist}
+    \item There exist \((r, \alpha) \in \mathbb{R}^{2}\) such that
+    \(z = re^{2\pi i \alpha}\).
+    \item For any other pair \((s, \beta)\in \mathbb{R}^{2}\), we have \(re^{2\pi i \alpha} = s e^{2 \pi i \beta}\) if and only if \(r=s\) and \(\alpha-\beta \in \mathbb{Z}\).
+    \item We have \(x = r\cos(2 \pi \alpha)\) and \(y = r\sin(2 \pi \alpha)\), implying that \(|z| = r\).
+  \end{thmlist}
+\end{lemma}
+
+This description represents a complex number as a combination of a radius and an angle, much like points on a world map: all points on the same circle  share the same radius, while the angle determines their position along that circle.
+The number \( 0= 0\cdot e^{2 \pi i \alpha}\) for any \(\alpha \in \mathbb{R}\) would correspond to a pole (radius being zero) and is the only point invariant under rotation.
+
+\begin{definition}\label{def:polar-decomposition}
+  Consider a non-zero complex number \(z=re^{2\pi i \alpha} \in \mathbb{C}\).
+  We refer to \(r e^{2\pi i \alpha}\) as its \emph{polar form}, and call \(r\) the \emph{radius} and \(\alpha\) the \emph{angle} of \(z\), respectively.
+\end{definition}
+
+While it is hard to add complex numbers in polar for, it has the unquestionable advantage of simplifying complex  multiplication and division.
+
+\begin{lemma}\label{lem:multiplication-in-polar-form}
+  Let \( c = r e^{2\pi i \alpha} \) and \( d = s e^{2\pi i \beta} \) be two non-zero complex numbers in polar form.
+  Their product is
+  \begin{equation}
+    cd = rs \; e^{2\pi i (\alpha + \beta)}.
+\end{equation}
+
+\end{lemma}
+
+\subsection{Vector spaces}\label{sec:vector-spaces}
+The building blocks for quantum computers---qubits---will be either modelled as equivalence classes of vectors in a complex vector space, or as certain complex matrices.
+
+
+\begin{definition}\label{def:complex-vector-space}
+  A \emph{complex vector space} is a set \( V \) endowed with two maps.
+  A \emph{(vector) addition} \( +\from V \times V \to V \) and a \emph{scalar multiplication} \( \cdot\from \mathbb{C} \times V \to V \) satisfying the following axioms for all \( u, v, w \in V \) and \( \alpha, \beta \in \mathbb{C} \):
+
+  \begin{thmlist}
+    \item \emph{Associativity of the addition}: \( (u + v) + w = u + (v + w) \);
+    \item \emph{Commutativity of the addition}: \( u + v = v + u \);
+    \item \emph{Additive identity}: There exists a \( 0 \in V \), called the \emph{zero vector},  such that \( v + 0 = v = 0 + v \);
+    \item \emph{Additive inverses}: For each \( v \in V \), there exists \( -v \in V \) such that \( v + (-v) = 0 = (-v) + v \);
+    \item \emph{Associativity of scalar multiplication}: \( \alpha \cdot (\beta \cdot v) = (\alpha \beta) \cdot v \);
+    \item \emph{Unitality}: \( 1 \cdot v = v \).
+    \item \emph{Distributivity}: \( (\alpha + \beta) \cdot (u + v) = \alpha \cdot u + \beta \cdot u + \alpha \cdot v + \beta \cdot v\).
+  \end{thmlist}
+  The elements of \(V\) are referred to as \emph{vectors}.
+\end{definition}
+
+A direct computation shows that the zero vector \( 0 \in V \) and additive inverses are unique. Furthermore, the existence of additive inverses can be derived from  the distributivity between scalar multiplication and vector addition.
+For any \(v\in V\) we have
+\begin{equation*}
+  v + (-1)\cdot v = 1\cdot v + (-1) \cdot v = (1 -1) \cdot v = 0,
+\end{equation*}
+implying that \(-v = (-1)\cdot v\).
+
+\begin{example}\label{ex:one-dim-vector-space}
+  The set \( \mathbb{C} \) becomes a complex vector space with its usual complex addition and multiplication as vector addition and scalar multiplication, respectively.
+  The zero vector is \( 0 \in \mathbb{C} \).
+\end{example}
+
+Given a vector \(v\in V\) and a subset \(U \subset V\), we write \(v+U\eqdef\{v+u \mid u \in U\}\).
+
+\begin{definition}\label{def:subspace-and-quotient-space}
+  Consider a complex vector space \(V\).
+  A subset \(U\subset V\) is called a \emph{subspace} of \(V\) if it is non-empty and for all \(\lambda
+  \in \mathbb{C} \) and \(x,y \in U\) we have \(\lambda x+y \in U\).
+
+  For a subspace \(S \subset V \), the \emph{quotient space} is the set \(V/S \eqdef\{x+ S \mid x \in V\}\), endowed with the vector addition and scalar multiplication
+  \begin{subequations}
+    \begin{align}
+      (x+S) + (y+ S) &\eqdef (x+y) +S, \label{eq:quotient-vector-addition} \\
+      \lambda(x + S) &\eqdef (\lambda x) + S. \label{eq:quotient-scalar-multiplication}
+    \end{align}
+  \end{subequations}
+\end{definition}
+
+\begin{proposition}\label{prop:sub-quotients-are-vs}
+  Consider a subspace \(U\) of a vector space \(V\).
+  Then \(U\) becomes a vector space by restricting the vector addition and scalar multiplication of \(V\) to \(U\).
+
+  Moreover, the quotient space \(V/U\) is a vector space with the vector addition and scalar multiplication of Equations~\eqref{eq:quotient-vector-addition}~and~\eqref{eq:quotient-scalar-multiplication}.
+\end{proposition}
+
+\begin{definition}\label{def:basis}
+  An \emph{(ordered) basis} of a complex vector space \( V \) is a tuple \( \mathcal{B} = (b_i)_{i \in I} \), where \( I \) is a totally ordered index set, such that every vector \( v \in V \) can be written as a \emph{unique} linear combination
+  \begin{equation*}
+      v = \sum_{i \in I} \lambda_i b_i,
+  \end{equation*}
+with \( \lambda_i \in \mathbb{C} \) and only finitely many \( \lambda_i \) are non-zero.
+\end{definition}
+
+One of the most fundamental theorems in linear algebra is the existence of bases.
+
+\begin{theorem}\label{thm:existence-of-bases-and-well-defd-dimension}
+  Any vector space \(V\) admits a basis \(\mathcal{B}\).
+  Moreover, any other basis \(\mathcal{A}\) satisfies \(|\mathcal{A}| = |\mathcal{B}|\).
+\end{theorem}
+
+While bases of a vector space are highly non-unique\footnote{Every complex vector space except \(\{0\}\) admits infinitely many bases.}, the cardinality of a basis does, by the above result, not depend on a choice.
+
+\begin{definition}\label{def:finite-dimensional-vs}
+  The \emph{dimension} of a vector space \(V\) is \(\dim V = | \mathcal{B}| \) for \(\mathbb{B}\) a basis of \(V\).
+
+  We call \(V\) \emph{finite-dimensional} if \(\dim V < \infty\).
+\end{definition}
+
+One of the most important examples for us will be the two-dimensional complex space \( \mathbb{C}^{2}\) used to moddel a single qubit.
+
+\begin{example}\label{ex:c2}
+  The space \( \mathbb{C}^2=\{\begin{psmallmatrix} v \\ w \end{psmallmatrix} \mid v,w \in \mathbb{C}
+  \}\) is a complex vector space with component-wise addition and scalar multiplication.
+  Its \emph{standard basis} is
+  \begin{equation*}
+    \mathcal{E}= \big(\begin{psmallmatrix} 1 \\ 0 \end{psmallmatrix},
+    \begin{psmallmatrix} 0 \\ 1 \end{psmallmatrix} \big).
+  \end{equation*}
+  In the context of quantum computing, one writes \(\ket{0} = \begin{psmallmatrix} 1 \\ 0 \end{psmallmatrix}\) and \(\ket{1} = \begin{psmallmatrix} 0 \\ 1 \end{psmallmatrix}\) and refers to \(\mathcal{B}\) as either the \emph{computational} or \emph{\(Z\)-basis}.
+\end{example}
+
+Similar to \( \mathbb{C}^{2}\), we can define a vector space \( \mathbb{C}^{n}\) for any natural number \(n \in \mathbb{N}\).
+
+\begin{example}\label{ex:cn}
+  For any  natural number \(n\in \mathbb{N}\), we can define a vector space
+  \begin{equation*}
+     \mathbb{C}^n= \left\{\begin{psmallmatrix}  v_{1}\\ \vdots \\ v_{n} \end{psmallmatrix} \mid v_{1}, \dots , v_{n} \in \mathbb{C} \right\}
+  \end{equation*}
+  with pointwise addition and scalar multiplication.
+
+  The current presentation of elements of \( \mathbb{C}^{n}\) as \emph{column vectors} is not particularly space-saving.
+  Thus, we will often write them \emph{row vectors} instead.
+  Explicitly, we set
+  \begin{equation*}
+    \begin{pmatrix}
+      v_{1}\\ \vdots \\ v_{n} \end{pmatrix}^{T}
+    \eqdef
+    ( v_{1}, \dots, v_{n} )\qquad
+    \text{for all } v=     \begin{pmatrix}
+      v_{1}\\ \vdots \\ v_{n} \end{pmatrix} \in \mathbb{C}^{n}
+  \end{equation*}
+  and call \(v^{T}\) the \emph{transpose} of \(v\).
+
+
+  Similar to \( \mathbb{C}^{2}\), it has a \emph{standard basis} \( \mathcal{E} = (e_{1}, \dots , e_{n})\) is given by
+  \begin{equation*}
+    e_{j}^{T} \eqdef
+  ( 0 , \dots , 0 , 1 , 0 , \dots , 0), \qquad \text{ with \(j\)-th entry \(1\) and all other entries \(0\).}
+\end{equation*}
+\end{example}
+
+Not all vector spaces are of the form \( \mathbb{C}^{n}\) for some \(n\in \mathbb{N}\).
+
+\begin{example}
+  Let \(S\) be a set.
+  We define a vector space structure on the collection \(\mathrm{Map}(S, \mathbb{C})\) of all  maps \(f \from S \to \mathbb{C}  \) by setting
+  \begin{equation*}
+    (f+g)s \eqdef f(s) + g(s), \qquad (\lambda f) s \eqdef \lambda (f(s))
+  \end{equation*}
+  for all \(f,g \in \mathrm{Map}(S, \mathbb{C})\) and \(s \in S\).
+
+  We refer to \(\mathrm{Map}(S, \mathbb{C})\) as the \emph{free vector space} generated by \(S\).
+  Let us choose a total order on \(S\)\footnote{
+    Without going into details, this means that for two distinct elements \(s,t\in S\) either \(s<t\) or \(t<s\).
+  }.
+  It has a basis \(\mathcal{B}= (\delta_{s})_{s\in S}\) given by the \emph{delta functions}
+  \begin{equation}
+    \delta_{s} \from S \to \mathbb{C}\qquad \delta_{s}(t) =
+    \begin{cases}
+      1 & \text{ if } s= t, \\
+      0 & \text{ otherwise}.
+    \end{cases}, \qquad \text{ for } s\in S.
+  \end{equation}
+
+  Note that we have an inclusion
+  \begin{equation*}
+    \iota_{S} \from S \to \mathrm{Map}(S, \mathbb{C}), \qquad
+    s \mapsto \delta_{s}.
+  \end{equation*}
+
+  If we identify,  by a slight abuse of notation, \(s\) with \(\iota_{S}(s) = \delta_{s}\), we can consider
+  \begin{equation*}
+    \mathrm{Map}(S, \mathbb{C}) = \left\{\sum\nolimits_{s\in S} \lambda_{s} s \mid \lambda_{s}\in \mathbb{C} \text{ with } \lambda_{s}= 0 \text{ for all but finitely many } s\in S\right\}
+  \end{equation*}
+  as the space of all (formal) linear combinations of \(S\).
+\end{example}
+
+\subsection{Matrices}\label{sec:matrices}
+Matrices will play a two-fold role for us.
+On the one hand, we will use them to model quantum gates.
+On the other hand, they will be used to describe certain measurements.
+
+
+\begin{definition}\label{def:matrices}
+  For any natural number  \(n \in \mathbb{N}\), we write
+  \begin{equation}
+    [n] \eqdef \{1, \dots , n\}.
+  \end{equation}
+
+
+  Consider numbers \(m, n \in \mathbb{N}\).
+  An \( m \times n \) \emph{matrix} \(A\) over \( \mathbb{C} \) is a collection
+  \begin{equation}
+    A= (a_{ij})_{(i, j) \in [m] \times [n]} \eqdef
+    \begin{pmatrix}
+      a_{11} & a_{12} & \dots & a_{1n} \\
+      a_{21} & a_{22} & \dots & a_{2n} \\
+      \vdots& \ddots & & \vdots\\
+      a_{m1} & a_{m2} & \dots & a_{mn}
+    \end{pmatrix}
+  \end{equation}
+  with \(a_{ij} \in \mathbb{C}\) for all \(i \in [m]\) and \(j \in [m]\).
+  The set of all such matrices is \( \Mat_{m,n}(\mathbb{C}) \).
+  For \( m = n \), we write \( \Mat_n(\mathbb{C}) \).
+\end{definition}
+
+As we will discuss below, matrices can be used to transform vectors (via the matrix-vector multiplication).
+Here, the computationally easiest case is given if all the non-zero entries of a matrix are located on the (main) diagonal.
+\begin{example}\label{ex:diagonal-matrices}
+  Let \(n\in \mathbb{N}\) and consider complex numbers \(\lambda_{1}, \dots , \lambda_{n} \in \mathbb{C}\).
+  The matrix
+  \begin{equation}
+    \mathrm{diag}(\lambda_{1}, \dots , \lambda_{n}) =
+      \begin{pmatrix}
+      \lambda_1 & 0 & \cdots & 0 \\
+      0 & \lambda_2 & & \vdots \\
+      \vdots & & \ddots & 0 \\
+      0 & \cdots & 0 & \lambda_n
+    \end{pmatrix}
+  \end{equation}
+  is called a \emph{diagonal matrix}.
+  In case \(\lambda_{1}= \dots = \lambda_{n} = 1\), we write \(I_{n}\eqdef \mathrm{diag}(1, \dots ,1)\in \Mat_{n}(\mathbb{C})\) and call it the \emph{identity matrix} of size \(n\).
+\end{example}
+
+The ``power'' of quantum computing arises from the calculus of non-diagonal matrices.
+The two examples below will be fundamental throughout the course.
+
+\begin{example}\label{ex: Hadamard-and-cnot-gate}
+  The  matrix
+  \begin{equation*}
+    \begin{pmatrix}
+      \tfrac{1}{\sqrt{2}} & \tfrac{1}{\sqrt{2}} \\
+      \tfrac{1}{\sqrt{2}} & -\tfrac{1}{\sqrt{2}}
+    \end{pmatrix}
+  \end{equation*}
+  is called the \emph{Hadamard gate} in quantum computing and will be used to create superpositions.
+
+  The \emph{CNOT}-gate is given by the matrix
+  \begin{equation*}
+    \begin{pmatrix}
+      1 & 0 & 0 & 0 \\
+      0 & 1 & 0 & 0 \\
+      0 & 0 & 0 & 1 \\
+      0 & 0 & 1 & 0
+    \end{pmatrix}.
+  \end{equation*}
+  We will later see how it can be used to flip a \emph{target qubit} depending on the behaviour of a \emph{control qubit}.
+  This will be a source of producing entanglements.
+\end{example}
+
+Another important set of matrices are the Pauli-matrices.
+\begin{definition}\label{def:Pauli-matrices}
+  The matrices
+  \begin{equation*}
+    \sigma_x =
+    \begin{pmatrix}
+      0& 1 \\ 1& 0
+    \end{pmatrix}, \qquad
+    \sigma_{y} =
+    \begin{pmatrix}
+      0 & -i \\ i & 0
+    \end{pmatrix},\qquad
+    \sigma_{z} =
+    \begin{pmatrix}
+      1 & 0 \\ 0 & -1
+    \end{pmatrix}
+  \end{equation*}
+are called \emph{Pauli matrices}.
+\end{definition}
+For convenience, we also write \(\sigma_{0} = I_{2}\eqdef
+\begin{psmallmatrix}
+  1 & 0 \\ 0 & 1
+\end{psmallmatrix}.
+\)
+
+\begin{remark}\label{rmk:matrices-are-a-vector-space}
+  The set \( \Mat_{m,n}(\mathbb{C}) \) of \( m \times n \) matrices forms a complex vector space under entry-wise addition and scalar multiplication.
+  Specifically, for \( \lambda \in \mathbb{C} \) and \( A, B \in \Mat_{m,n}(\mathbb{C}) \), we define
+  \begin{subequations}
+  \begin{gather}
+    A + B =
+    \begin{pmatrix}
+       a_{11} & \dots &  a_{1n} \\
+      \vdots & \ddots & \vdots \\
+       a_{m1} & \dots &  a_{mn}
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+       b_{11} & \dots &  b_{1n} \\
+      \vdots & \ddots & \vdots \\
+       b_{m1} & \dots &  b_{mn}
+    \end{pmatrix}
+    \eqdef \begin{pmatrix}
+      a_{11} + b_{11} & \dots & a_{1n} + b_{1n} \\
+      \vdots & \ddots & \vdots \\
+      a_{m1} + b_{m1} & \dots & a_{mn} + b_{mn}
+    \end{pmatrix}, \\
+    \lambda A =
+    \lambda
+    \begin{pmatrix}
+      a_{11} & \dots &  a_{1n} \\
+      \vdots & \ddots & \vdots \\
+      a_{m1} & \dots &  a_{mn}
+    \end{pmatrix}
+    \eqdef \begin{pmatrix}
+      \lambda a_{11} & \dots & \lambda a_{1n} \\
+      \vdots & \ddots & \vdots \\
+      \lambda a_{m1} & \dots & \lambda a_{mn}
+    \end{pmatrix}.
+  \end{gather}
+  \end{subequations}
+\end{remark}
+
+While qubits are often described as equivalence classes of vectors in a complex vector space, there is an equivalent formulation via density matrices.
+These are  matrices which are, amongst other properties, invariant under the transformations discussed in the next defintion.
+
+\begin{definition}\label{def:adjoint}
+Consider a matrix \( A = (a_{ik}) \in \Mat_{m,n}(\mathbb{C}) \).
+\begin{thmlist}
+  \item The \emph{transpose} of \( A \) is \( A^T = (a_{ki}) \in \Mat_{n,m}(\mathbb{C}) \).
+  \item The \emph{conjugate} of \( A \) is \( \overline{A} = (\overline{a_{ik}}) \in \Mat_{m,n}(\mathbb{C}) \).
+  \item The \emph{adjoint} of \( A \) is \( A^\dagger = \overline{A^T} \in \Mat_{n,m}(\mathbb{C}) \).
+\end{thmlist}
+In the case \( m = n \) and \( A = A^\dagger \), we call \( A \) \emph{self-adjoint} or \emph{Hermitian}.
+\end{definition}
+
+
+We want to perform two operations with our quantum gates:
+we want to apply them to a state and we want to compose them (i.e. apply multiple ones in sequence).
+The former operation will be modelled by matrix-vector multiplication.
+The latter by matrix-matrix multiplication.
+
+\begin{definition}\label{def:matrix-multiplication}
+  Let \( A = (a_{ik}) \in \Mat_{m,n}(\mathbb{C}) \) be a matrix.
+  \begin{thmlist}
+    \item Consider a vector \(v\in \mathbb{C}^{n}\) with \(v^{T}= (v_{1}, \dots , v_{n})\).
+    The \emph{matrix-vector multiplication} of \(A\) and \(v\) is the vector \(Av \in \mathbb{C}^{m}\) defined by
+    \begin{equation}
+      (Av)_{i} \eqdef \sum_{k=1}^{n} a_{ik} v_{k}.
+    \end{equation}
+    \item Given another matrix \( B = (b_{kj}) \in \Mat_{n,p}(\mathbb{C}) \), the \emph{matrix product} of \(A\) and \(B\) is the matrix \( AB \in \Mat_{m,p}(\mathbb{C}) \) whose entries are given for all \(1\leq i \leq m\) and \(1\leq j \leq p\) by
+    \begin{equation*}
+      (AB)_{ij} = \sum_{k=1}^n a_{ik} b_{kj}.
+    \end{equation*}
+  \end{thmlist}
+\end{definition}
+
+The above formula for the product of two matrices can be memorised as follows.
+Consider matrices \(A\in \Mat_{m,n}(\mathbb{C})\) and \(B \in \Mat_{n,p}( \mathbb{C})\).
+Suppose, we want to determine the entry \(C_{ij}\) of the product \(C= AB \in \Mat_{m,p} (\mathbb{C})\).
+To that end, we proceed in two steps.
+\begin{thmlist}
+  \item We consider the (row)  vector \(a= \begin{psmallmatrix}
+    a_{i1} & \dots & a_{in} \end{psmallmatrix}\) given by the \(i\)-th row of \(A\) and the (column) vector \(b = \begin{psmallmatrix} b_{1j}\\ \vdots \\b_{nj}  \end{psmallmatrix}
+\) given by the \(j\)-th column of \(B\).
+\item Then \( C_{ij} \) is the ``dot product'' of \( a \) and \( b \). That is,
+\begin{equation*}
+  C_{ij}=
+  \begin{pmatrix}
+    a_{i1} & a_{i2} & \dots & a_{in}
+  \end{pmatrix}
+  \begin{pmatrix}
+    b_{1j} \\
+    b_{2j} \\
+    \vdots \\
+    b_{nj}
+  \end{pmatrix}
+  =
+  a_{i1}b_{1j} + a_{i2} b_{2j} + \dots + a_{in}b_{nj}.
+\end{equation*}
+\end{thmlist}
+To see this pattern of combining columns and rows, consider the matrices
+\begin{equation*}
+  A = \begin{pmatrix}
+{\color{red}{\mathbf{a_{11}}}} & {\color{red}{\mathbf{a_{12}}}} \\
+{\color{dark blue}{a_{21}}} & {\color{dark blue}{a_{22}}}
+\end{pmatrix}, \quad
+B = \begin{pmatrix}
+{\color{dark green}{\mathbf{b_{11}}}} & {\color{pastel orange}{b_{12}}} \\
+{\color{dark green}{\mathbf{b_{21}}}} & {\color{pastel orange}{b_{22}}}
+\end{pmatrix}.
+\end{equation*}
+The product \( C = AB \) is
+\begin{equation*}
+  C =
+  \begin{pmatrix}
+    {\color{red}{\mathbf{a_{11}}}}{\color{dark green}{\mathbf{b_{11}}}} + {\color{red}{\mathbf{a_{12}}}}{\color{dark green}{\mathbf{b_{21}}}} & & {\color{red}{a_{11}}}{\color{pastel orange}{b_{12}}} + {\color{red}{a_{12}}}{\color{pastel orange}{b_{22}}} \\
+    {\color{dark blue}{a_{21}}}{\color{dark green}{b_{11}}} + {\color{dark blue}{a_{22}}}{\color{dark green}{b_{21}}} & & {\color{dark blue}{a_{21}}}{\color{pastel orange}{b_{12}}} + {\color{dark blue}{a_{22}}}{\color{pastel orange}{b_{22}}}
+  \end{pmatrix}.
+\end{equation*}
+A pure colour comparison shows that \eg the entry \(C_{11}\) of \(C\) is obtained by combining the first row of \(A\) with the first column of \(B\).
+
+\begin{lemma}\label{lem:associativity-of-matrix-multiplication}
+  Matrix multiplication is associative and unital.
+  That is, for all \(A \in \Mat_{m,n}( \mathbb{C})\), \(B \in \Mat_{n,o}( \mathbb{C})\), and \( C \in \Mat_{o,p}( \mathbb{C})\), we have
+  \begin{equation*}
+    A(BC) = (AB)C \qquad \text{and}\qquad
+      I_{m} A = A = A I_{m}.
+  \end{equation*}
+\end{lemma}
+Note however, that matrix multiplication is \emph{not} commutative.
+For every \(n\geq 2\) there are square matrices \(A, B \in \Mat_{n,n}(\mathbb{C})\), such that \(AB \neq BA\).
+
+\begin{example}\label{ex:multiplication-table}
+  The multiplication table of the Pauli matrices of Definition~\ref{def:Pauli-matrices} (with \(\sigma_{0}=I_{2}\)) is as follows:
+  \begin{equation*}
+    \begin{array}{l| c c c c}
+            & \sigma_{0} & \sigma_{x} & \sigma_{y} & \sigma_{z} \\\hline
+      \sigma_{0} & \sigma_{0} & \sigma_{x} & \sigma_{y} & \sigma_{z} \\
+      \sigma_{x} & \sigma_{x} & \sigma_{0} & i \sigma_{z} & i\sigma_{y} \\
+      \sigma_{y} & \sigma_{y} & -i \sigma_{z} & \sigma_{0} & i\sigma_{x} \\
+      \sigma_{z} & \sigma_{z} & -i \sigma_{y} & - i\sigma_{x} & \sigma_{0}
+    \end{array}
+  \end{equation*}
+\end{example}
+
+\begin{definition}\label{def:invertible-matrix}
+  Let \(n\in \mathbb{N}\) be a natural number.
+  A matrix \( A \in \Mat_n(\mathbb{C}) \) is \emph{invertible} if there exists a matrix \( B \in \Mat_n(\mathbb{C}) \) such that \( AB = I_n = BA \), where \( I_n \) is the \( n \times n \) identity matrix.
+  In this case, \( B \) is called the \emph{inverse} of \( A \) and is denoted by \( A^{-1} \).
+
+  The set of invertible matrices is \(\GL_{n}( \mathbb{C})\).
+\end{definition}
+The inverse of an invertible matrix \(A\in \Mat_{n}( \mathbb{C})\) can be computed for example by applying  Gaussian elimination to the following system of equations:
+\begin{equation*}
+  \left(\begin{array}{cccc|cccc}
+    a_{11}& a_{12} & \dots & a_{1n}& 1 & 0 & \dots & 0 \\
+    a_{21}& \ddots & \ddots & \vdots& 0 & \ddots &\ddots & \vdots \\
+    \vdots& \ddots & \ddots & a_{n-1 \;n}& \vdots & \ddots & \ddots & 0 \\
+    a_{n1}& \ddots & a_{n\; n-1} & a_{nn}& 0 & \dots & 0 & 1
+  \end{array}\right)
+\end{equation*}
+
+
+Two interconnected invariants of matrices will play a central role in the study of quantum computing: the trace and the determinant of a matrix (the latter indirectly, and mostly via its connection to eigenvalues).
+
+\begin{definition}\label{def:trace}
+  The \emph{trace} of a matrix \(A\in \Mat_{n}( \mathbb{C})\) is
+  \begin{equation}
+    \tr(A)= a_{11}+ \dots + a_{nn}.
+  \end{equation}
+\end{definition}
+
+In the density matrix formalism, traces will be used to describe measurements.
+
+\begin{lemma}\label{lem:basic-properties-of-trace}
+  Let \(A, B\in \Mat_{n}( \mathbb{C})\), \(\lambda \in \mathbb{C}\), and \(G \in \GL_{n}( \mathbb{C})\).
+  The trace  is
+  \begin{thmlist}
+    \item linear:  \(\tr(\lambda A + B) = \lambda \tr(A) + \tr(B)\),
+    \item cyclic: \(\tr(AB) = \tr(BA)\), and
+    \item invariant under conjugation: \(\tr(GAG^{-1}) = \tr(A)\).
+  \end{thmlist}
+\end{lemma}
+
+Eigenvalues will play a crucial role in quantum computing, particularly in the study of entropy.
+
+\begin{definition}\label{def:eigenvalue-and-eigenspace}
+Let \( A \in \Mat_{n}(\mathbb{C}) \). A scalar \( \lambda \in \mathbb{C} \) is called an \emph{eigenvalue} of \( A \) if there exists a non-zero vector \( v \in \mathbb{C}^n \) such that
+\begin{equation}
+  A v = \lambda v.
+\end{equation}
+
+
+The vector \( v \) is called an \emph{eigenvector} associated with \( \lambda \).
+The subspace \(\{v\in \mathbb{C}^{n} \mid Av = \lambda v\}\) is the \emph{eigenspace} of the eigenvalue \( \lambda \).
+\end{definition}
+
+For computations, it is often favourable to work with \emph{diagonal matrices}.
+That is, matrices with all off-diagonal entries being zero.
+
+\begin{definition}\label{def:diagonalisable}
+  A matrix \( A \in \Mat_{n}(\mathbb{C}) \) is \emph{diagonalisable} if there exists an invertible matrix \( P \in \Mat_{n}(\mathbb{C}) \) such that
+  \begin{equation*}
+    P^{-1} A P =
+    \begin{pmatrix}
+      \lambda_1 & 0 & \cdots & 0 \\
+      0 & \lambda_2 & & \vdots \\
+      \vdots & & \ddots & 0 \\
+      0 & \cdots & 0 & \lambda_n
+    \end{pmatrix}.
+  \end{equation*}
+  is a diagonal matrix.
+\end{definition}
+
+The connection between eigenvalues and diagonalisable matrices is due to the following result.
+
+\begin{proposition}\label{prop:diag-iff-basis-of-eigenvalues}
+  A matrix \( A \in \Mat_{n}(\mathbb{C}) \) is diagonalisable if and only if there exists a basis \( \mathcal{B} = (b_1, \dots, b_n) \) of \( \mathbb{C}^n \) consisting of eigenvectors of \( A \).
+
+  In this case, let \( B \) be the matrix whose columns are the eigenvectors \( b_1, \dots, b_n \), and set \( \lambda_k \in \mathbb{C} \)  such that \(Ab_{k}=\lambda_{k}b_{k}\) for all \(1\le k \leq n\).
+  Then,
+  \begin{equation}
+    B^{-1} A B =
+    \begin{pmatrix}
+      \lambda_1 & 0 & \cdots & 0 \\
+      0 & \lambda_2 & & \vdots \\
+      \vdots & & \ddots & 0 \\
+      0 & \cdots & 0 & \lambda_n
+    \end{pmatrix}.
+  \end{equation}
+\end{proposition}
+
+The determinant is a fundamental tool for finding the eigenvalues of a matrix.
+Specifically, eigenvalues of a matrix \(A\) correspond to roots of the so-called characteristic polynomial \(\chi_{A}(\lambda)\).
+
+\begin{definition}\label{def:permutation}
+  For a given \( n \in \mathbb{N} \), the set of all \emph{permutations} of \( \{1, \dots, n\} \) is
+  \begin{equation}
+    \Sym(n) \coloneqq \{\sigma \colon [n] \to [n] \mid \sigma \text{ is bijective}\}.
+  \end{equation}
+  The \emph{signum} of a permutation \( \sigma \) is
+  \begin{equation}
+    \sgn(\sigma) = \prod_{1\leq i<j \leq }\frac{\sigma(j)-\sigma(i)}{j-i} \in \{\pm 1\}.
+  \end{equation}
+\end{definition}
+
+The following definition of the determinant is called the \emph{ Leibnitz formula}.
+Equivalent definitions can be given in terms of the Laplace formula, or the universal property of the determinant as alternating and normalised multilinear form.
+\begin{definition}\label{def:determinant}
+  The \emph{determinant} of a matrix \( A = (a_{ij}) \in \Mat_n(\mathbb{C}) \) is
+  \begin{equation}
+    \det(A) = \sum_{\sigma \in \Sym(n)} (-1)^{\sgn(\sigma)} a_{1\sigma(1)} \cdots a_{n\sigma(n)}.
+  \end{equation}
+\end{definition}
+
+Unlike traces, the determinant is not linear\footnote{%
+  It is however, linear in the columns and rows of a matrix, respectively.}.
+
+\begin{lemma}\label{lem:basic-properties-of-determinant}
+  Consider matrices \(A, B \in\Mat_{n}( \mathbb{C}) \) and \(P \in \GL_{n}( \mathbb{C})\).
+  The determinant is
+  \begin{thmlist}
+    \item multiplicative: \(\det(AB) = \det(A) \det (B)\),
+    \item normalised: \(\det(I_{n}) = 1\), and
+    \item invariant under conjugation: \(\det(PAP^{-1})= \det(A)\).
+  \end{thmlist}
+\end{lemma}
+
+Let \(v\in \mathbb{C}^{n}\) be a vector and \(A \in \Mat_{n}( \mathbb{C})\) a matrix.
+By considering \(v^{T}= (v_{1}, \dots , v_{n})\in \Mat_{1,n}( \mathbb{C})\) as a matrix, we can compute the scalar
+\begin{equation*}
+  v^{T}Av =\sum_{i,k=1}^{n} v_{i}a_{ik}v_{k} \in \mathbb{C}.
+\end{equation*}
+
+\begin{definition}\label{def:positive-definite}
+  A matrix \(A\in \Mat_{n}( \mathbb{C})\) is \emph{positive semidefinite} if one of the following equivalent conditions hold
+  \begin{thmlist}
+    \item For all \(v\in \mathbb{C}^{n}\) we have \(v^{T}Av \geq 0\).
+    \item All eigenvalues \(\lambda\) of \(A\) are real and \(\lambda \geq 0\).
+    \item For each \( 1 \leq i \leq n \), the \emph{leading principal minor} \( A_i \)---the \( i \times i \) submatrix of \( A \) formed by its first \( i \) rows and columns---satisfies \( \det(A_i) \geq 0 \).
+  \end{thmlist}
+\end{definition}
+
+As hinted at by the previous defintion, there is a stong co connection between eigenvalues and determinant.
+
+\begin{definition}\label{def:char-poly}
+  The \emph{characteristic polynomial} of a matrix \( A \in \Mat_n(\mathbb{C}) \) is
+  \begin{equation}
+    \chi_A(t) = \det(t I_n - A).
+  \end{equation}
+\end{definition}
+
+The coefficients of the characteristic polynomial are closely connected with the invariants of matrices we have previously discussed.
+
+\begin{lemma}\label{lem:coeffs-of-char-poly}
+  The characteristic polynomial of a matrix \(A \in \Mat_{n}( \mathbb{C})\) satisfies
+  \begin{equation}
+    \chi_{A}(t) = t^{n} - \tr(A)t^{n-1} + \dots + (-1)^{n}\det(A).
+  \end{equation}
+\end{lemma}
+
+Albeit an abstract result at first glance, the Cayley--Hamilton theorem describes  many of the  structural properties of matrices, including the relationship between determinants and the invertibility of matrices.
+
+\begin{theorem}[Cayley--Hamilton]\label{thm:cayley-hamilton}
+Every matrix \( A \in \Mat_n(\mathbb{C}) \) satisfies
+\begin{equation*}
+  \chi_{A}(A) = 0 \in \Mat_{n}( \mathbb{C}).
+\end{equation*}
+\end{theorem}
+Note that \(\chi_{A}(A)\) is a matrix obtained by substituting \(t^{n}\)
+For example,  for a \(2 \times 2\)-matrix \(A =\begin{psmallmatrix} a & b \\ c & d \end{psmallmatrix}\), we have
+\begin{equation*}
+  \chi_{A}(A) = A^{2} - (a + d) A + (ad-bc) I_{2} = A^{2} - \tr(A)A + \det(A)I_{n}.
+\end{equation*}
+
+\begin{corollary}\label{cor:consequences-of-caley-hamilton}
+  Consider a square matrix \( A \in \Mat_n(\mathbb{C}) \) with characteristic polynomial \(\chi_{A}(t) = t^{n} + c_{n-1} t^{n-1} + \dots + c_{1}t + c_{0}\).
+  \begin{thmlist}
+    \item \( A \) is invertible if and only if \( \det(A) \neq 0 \).
+    In this case, the inverse is
+    \begin{equation}
+      A^{-1}= - \frac{1}{c_{0}}(A^{n-1} + c_{n-1} A^{n-2} + \dots + c_{1} I_{n}).
+    \end{equation}
+  \end{thmlist}
+  Suppose that \(\lambda_{1}, \dots , \lambda_{k}\in \mathbb{C}\) are the pairwise distinct roots of \(\chi_{A}(t)\) with multiplicities  \(m_{1}, \dots , m_{k}\in \mathbb{N}\), \ie \(\chi_{A}(t) = (t-\lambda_{1})^{m_{1}} \cdot \dots \cdot (t-\lambda_{k})^{m_{k}}\).
+  \begin{thmlist}[resume]
+    \item  The eigenvalues of \(A\) are \(\lambda_{1}, \dots , \lambda_{k}\).
+    \item  The trace of \(A\) is \(\tr(A) =  \lambda_{1}m_{1} + \dots \lambda_{k}m_{k}\).
+    \item  The determinant of \(A\) is \(\det(A) = \lambda_{1}^{m_{1}} \cdot \dots \cdot \lambda_{k}^{m_{k}}\)
+    \item The matrix \(A\) is diagonalisable if for every \(1\leq j\leq k\) the eigenspace \(E(A, \lambda_{j})\) of \(A\) for the eigenvalue \(\lambda_{j}\) has dimension \(\dim(E(A, \lambda_{k})) = m_{k}\).
+  \end{thmlist}
+\end{corollary}
+
+
+\subsection{Linear maps}\label{sec:linear-maps}
+While matrix-vector multiplication provides a way to act on vectors in \( \mathbb{C}^n \), we will later encounter more general vector spaces that cannot be canonically identified with \( \mathbb{C}^{n}\).
+This necessitates a more abstract and general notion of transformation.
+
+\begin{definition}\label{def:linear-maps}
+A \emph{map} \( f \from V \to W \) between complex vector spaces \(V\) and \(W\) is called  a \emph{linear map} or \emph{homomorphism of vector spaces } if
+  \begin{subequations}
+    \begin{align}
+      f(x + y) &= f(x) + f(y), \\
+      f(\lambda x) &= \lambda f(x),
+    \end{align}
+\end{subequations}
+for all \( x, y \in V \) and \( \lambda \in \mathbb{C} \).
+In case there exists a linear map \(g \from W \to V\) such that \(g f = \id_{V} \) and \(f g = \id_{W}\), we call \(f\) an \emph{isomorphism} and \(g\) the \emph{inverse} of \(f\).
+
+The set of all linear maps from \( V \) to \( W \) is \(\Hom_{ \mathbb{C}}(V, W) \).
+If \(V=W\), we call \(f\) an \emph{endomorphism} and write \(\End_{ \mathbb{C}}(V) \eqdef \Hom_{ \mathbb{C}}(V,V)\).
+\end{definition}
+
+In Lemma~\ref{lem:basic-properties-of-trace}, we have already seen that the trace map \(\tr \from \Mat_{n}( \mathbb{C}) \to \mathbb{C}\) is linear.
+
+
+\begin{example}\label{ex:matrices-lead-to-linear-multiplication}
+  Consider a matrix \(A\in \Mat_{m,n}( \mathbb{C})\).
+  The map
+  \begin{equation}
+    \mu_{A} \from \mathbb{C}^{n}\to \mathbb{C}^{m}, \qquad v \mapsto Av.
+  \end{equation}
+  is linear.
+
+  The image \(\mu_{A}(e_{j})\) of the \(j\)-th standard basis vector coincides with the \(j\)-th column of \(A\).
+\end{example}
+
+Similar to matrices, the collection of all linear maps between two fixed vector spaces forms again a vector space.
+
+\begin{remark}\label{rmk:vector-space-structure}
+  The set \( \Hom_{\mathbb{C}}(V, W) \) naturally forms a vector spaces under pointwise addition and scalar multiplication.
+  That is, for all \(f, g \in \Hom_{ \mathbb{C}}(V,W)\), \(\lambda \in \mathbb{C}\), and \(v\in V\) we have
+  \begin{equation*}
+    (f+g)v = f(v) + g(v)\qquad \text{ and } \qquad
+    (\lambda f)v = \lambda (f (v)).
+  \end{equation*}
+  Here, the zero vector is given by the map constant zero map
+  \begin{equation*}
+    V\to W, \qquad v \mapsto 0.
+  \end{equation*}
+\end{remark}
+
+\begin{definition}\label{def:dual space}
+   We call \(\rd*{V} \eqdef \Hom_{ \mathbb{C}}(V,   \mathbb{C} )\) the \emph{dual space} of \(V\).
+\end{definition}
+
+We now want to link linear maps to matrices.
+As an auxiliary step, we first notice that any linear map is uniquely determined by its values on a chosen basis of the domain.
+
+\begin{theorem}\label{thm:universal-property-free-vector-space}
+  Consider a vector space \(V\) with basis \( \mathcal{B}\) and let \(W\) be any vector space.
+  Any (set) map \(g \from \mathcal{B} \to W\) can be extended to a unique linear map \(f\from V \to W\) such that \(f(b) = g(b)\) for all \(b\in B\).
+\end{theorem}
+
+As an immediate consequence, we can identify any \(n\)-dimensional space (non-uniquely!) with \( \mathbb{C}^{n}\).
+
+\begin{corollary}\label{cor:basis-isomorphism}
+  For any basis \( \mathcal{B} = (b_{1}, \dots , b_{n})\)  of a vector space \(V\), the map
+    \begin{equation*}
+      \can_{\mathcal{B}} \from
+       \mathbb{C}^{n} \to V, \qquad
+      \begin{pmatrix}
+        \lambda_{1}\\ \vdots \\ \lambda_{n}
+      \end{pmatrix}
+      \mapsto
+      \lambda_{1} b_{1} + \dots + \lambda_{n} b_{n}
+    \end{equation*}
+    is an isomorphism.
+\end{corollary}
+
+One of the most powerful tools in linear algebra is to translate between linear maps and matrices by chosing bases.
+
+\begin{proposition}\label{prop:matrices-linear-maps}
+  Consider a vector space \(V\) with basis \( \mathcal{B} = (b_{1}, \dots , b_{n})\), a space \(W\) with basis \( \mathcal{C} = (c_{1}, \dots , c_{m})\), and a linear map \(f\from V \to W\).
+  \begin{thmlist}
+    \item There is a  unique matrix  \(A= (a_{ij}) \in \Mat_{m,n}( \mathbb{C})\) such that
+    \begin{equation*}
+      f(b_{j})= a_{1j}c_{1} + \dots + a_{mj} c_{m}\qquad \text{ for all } 1\leq j \leq n.
+    \end{equation*}
+    \item The following diagram commutes
+    \begin{equation*} %TODO fix labels.
+      \begin{tikzcd}[ampersand replacement=\&,cramped]
+        V \&\& W \\\\
+        {\mathbb{C}^n} \&\& {\mathbb{C}^m}
+        \arrow["f", from=1-1, to=1-3]
+        \arrow["{\can_{\mathcal{B}}}", from=3-1, to=1-1]
+        \arrow["{\mu_A}"', from=3-1, to=3-3]
+        \arrow["{\can_{\mathcal{C}}}"', from=3-3, to=1-3]
+      \end{tikzcd}
+    \end{equation*}
+    In other words, we have \(f \can_{ \mathcal{B}} = \can_{\mathcal{C}}\mu_{A}\).
+  \end{thmlist}
+\end{proposition}
+
+\begin{definition}\label{def:represeting-matrix}
+  Retain the notation of the previous proposition: \( V \)  is a vector space with basis \( \mathcal{B} \), \( W \) a space with basis \( \mathcal{C} \), and \( f \colon V \to W \) a linear map.
+  The matrix \( A \) such that \( f \circ \can_{\mathcal{B}} = \can_{\mathcal{C}} \circ \mu_A \) is called the \emph{representing matrix} of \( f \) with respect to the bases \( \mathcal{B} \) and \( \mathcal{C} \).
+
+  To emphasise the choice of bases, we also  denote this matrix by \(\leftidx{_{\mathcal{C}}}{f}{_{\mathcal{B}}} \eqdef A\).
+\end{definition}
+
+We write \(\id_{V} \from V\to V\), \(v \mapsto v\) for the identity map of a vector space \(V\).
+
+\begin{lemma}\label{lem:composition-linear-maps}
+  Let \(f \from U \to V\),  \(g \from V \to W\), and \(h \from W\to X\) be linear maps.
+  \begin{enumerate}
+    \item The composition \(g\circ f \from V \to X\) of linear maps  is a linear map.
+    \item We have \((f\circ g)\circ h = f \circ (g \circ h)\).
+    \item The composition satisfies \(\id_{V} \circ f = f = f \circ \id_{U}\).
+  \end{enumerate}
+\end{lemma}
+
+Under the identification between linear maps and matrices (once bases are chosen), the composition of linear maps corresponds to matrix multiplication.
+In particular, the representing matrix of the composition \( g \circ f \) is the product of the representing matrices of \( g \) and \( f \).
+
+\begin{proposition}\label{prop:comp-is-matrix-mult}
+  Consider linear maps \(f \from V \to W\) and \(g \from W\ \to X\) and bases \(\mathcal{B}= (b_{1}, \dots , b_{n})\) of \(V\), \(\mathcal{C}= (c_{1}, \dots , c_{m})\) of \(W\), and \(\mathcal{D} = (d_{1}, \dots , d_{p})\) of \(X\).
+  Let \(F = _{ \mathcal{C}}f_{\mathcal{B}}\) and \( G = _{\mathcal{D}} g_{\mathcal{C}}\) be representing matrices of \(f\) and \(g\), respectively.
+  Then, the following diagram commutes:
+  \begin{equation}
+    \begin{tikzcd}[ampersand replacement=\&,cramped]
+      V \&\& W \&\& X \\
+      \\
+      {\mathbb{C}^n} \&\& {\mathbb{C}^m} \&\& {\mathbb{C}^p}
+      \arrow["f", from=1-1, to=1-3]
+      \arrow["gf", curve={height=-24pt}, from=1-1, to=1-5]
+      \arrow["g", from=1-3, to=1-5]
+      \arrow["{\can_{\mathcal{B}}}", from=3-1, to=1-1]
+      \arrow["{\mu_F}"', from=3-1, to=3-3]
+      \arrow["{\mu_{GF}}"', curve={height=24pt}, from=3-1, to=3-5]
+      \arrow["{\can_{\mathcal{C}}}", from=3-3, to=1-3]
+      \arrow["{\mu_G}"', from=3-3, to=3-5]
+      \arrow["{\can_{\mathcal{D}}}"', from=3-5, to=1-5]
+    \end{tikzcd}
+ \end{equation}
+\end{proposition}
+
+We conclude our detour into linear algebra by discussing a special kind of linear map---projectors---which play a fundamental role in quantum mechanics. These will be used to represent measurement outcomes in the quantum formalism. Moreover, in the density formalism, certain states are represented by rank-1 projectors.
+
+\begin{definition}\label{def:projection}
+  A \emph{projection} onto a subspace \(U \subset V\) is a linear map \(f\from V \to V\) such that \(\im f \eqdef\{ f(v) \mid v \in V\} = U\) and \(f(u) = u \) for all \(u \in U\).
+\end{definition}
+In other words, \( f \) acts as the identity on \( U \) and maps every vector in \( V \) to its ``component'' in \( U \) (with respect to a suitable decomposition of \( V= \ker f \oplus U \)).
+
+\begin{lemma}\label{lem:equivalent-characterisations-projections}
+  Suppose \(f \from V\to V\) is linear.
+  The following are equivalent.
+  \begin{thmlist}
+    \item \(f\) is a projection onto its image \(\im f =\{f(v) \mid v\in V\}\).
+    \item\(f^{2} = f\),
+    \item for every  \(v\in V\) we have \(v\in \im(f)\) if and only if \(f(v) = v\), and
+    \item every vector \(v\in V\) can be written as a unique linear combination \(v= x+y\) with \(f(x) = 0\) and \(y\in \im(f)\).
+    In this case \(x= (\id_{V} -f) v\) and \(y = f(v)\).
+  \end{thmlist}
+\end{lemma}
+
+\section{The quantum circuit model and the SCUM axioms}\label{sec:the-quantum-circuit-model-and-the-scum-axioms}
+As suggested by their name, quantum computers rely on the basic working principles of quantum mechanics.
+Following \cite[Section~2]{kissinger-wetering2025:PicturingQuantumSoftware}, we present a simplified and tailored version of the basic axioms called in their terminology the  \emph{SCUM postulates}.
+
+
+\subsection{States}
+We will consider systems modelled by finite-dimensional unitary (and therefore in particular complex) vector spaces.
+
+
+\begin{definition}\label{def:unitary-vector-space}
+  Let \(V\) be a complex vector space.
+  An \emph{inner product} is a map \(\braket{\blank}{\bblank} \from V\times V \to \mathbb{C}\) which is
+  \begin{thmlist}
+    \item linear in the second argument: \(\braket{a}{\lambda b + c} = \lambda \braket{a}{b} + \braket{a}{c}\) for all scalars \(\lambda \in \mathbb{C}\) and vectors \(a,b,c \in V\),
+    \item Hermitian: \(\braket{a}{b} = \overline{\braket{b}{a}}\) for all \(a, b \in V\), and
+    \item positive definite: \(\braket{a}{a} \geq 0 \) and \(\braket{a}{a} = 0\) if and only if \(a = 0\).
+  \end{thmlist}
+
+  We call a pair \((V, \braket{\blank}{\bblank})\) of a complex vector space together with an inner product an \emph{inner product space}.
+\end{definition}
+
+TODO: Example C2.
+TODO: The unit sphere.
+
+\begin{definition}\label{def:orthonormal-basis}
+  An \emph{orthonormal basis} of a finite-dimensional unitary vector space \((V, \braket{\blank}{\bblank})\) is a sequence of vectors \(\mathcal{B}= (b_{1}, \dots , b_{n})\)  such that
+  \begin{thmlist}
+    \item \(\mathcal{B}\) is a basis: for every \(v\in V\) there are unique \(\lambda_{1}, \dots , \lambda_{n}\) such that \(\sum_{i=1}^{n} \lambda_{i} b_{i} = v_{i} \)
+      \item the vectors of \(\mathcal{B}\) are pairwise orthogonal: for every \(b_{i}, b_{j} \in \mathcal{B}\) with \(i \neq j\), we have \(\braket{b_{i}}{b_{j}} = 0\), and
+      \item the  vectors of \(\mathcal{B}\) are normalised: \(\braket{b_{i}}{b_{i}} = 1\) for all \(b_{i}\in \mathcal{B}\).
+  \end{thmlist}
+\end{definition}
+
+TODO: The computational basis of C2 <- also called the \emph{\(Z\)-basis}
+TODO: Terminology: Hilbert space?
+
+
+\begin{definition}\label{def:morphism-of-unitary-vector-spaces}
+  An \emph{isometry}  \(f \from (V, \braket{\blank}{\bblank})\to (W, [\blank \mid, \bblank ])\) between inner product spaces is a linear map \(f \from V\to W\) such that
+  \begin{equation*}
+    [f(v) \mid f(w) ] = \braket{v}{w} \qquad \text{ for all } v, w \in V.
+  \end{equation*}
+\end{definition}
+
+Observe that any unitary map is injective.
+Given any \(v\in \ker f \subset V\), we compute
+\begin{equation*}
+  \braket{v}{v} = [f(v) \mid f(v)] = [ 0 \mid 0 ] = 0,
+\end{equation*}
+implying that \(v=0\).
+
+Besides isometries, orthogonal projections will play a central role in our investigation.
+
+\begin{definition}\label{def:orthogonal-projection}
+  A linear map \(f\from V \to V\) is an \emph{orthogonal projection} if  \(f^{2} = f\) and \(\ker f = \im f^{\perp}\). <- TODO: We need perp.
+\end{definition}
+
+\begin{lemma}\label{lem:characterising-orthgonal-projections}
+  A linear map \(f \from V \to V\)  is an orthogonal projection if and only if \(f^{2} = f\) and \(f= f^{\dagger}\).
+  In this case \(\dim \im f = \tr (f)\).
+\end{lemma}
+\begin{proof}
+  Suppose that \(f\ \from V\to V\) satisfies \(f^{2} = f\).
+
+  If \(f=f^{*}\), we obtain for any \(v \in \ker f\) and \(x \in V\) that
+  \begin{equation*}
+    \braket{v}{f(x)} = \braket{f(v)}{x} = 0.
+  \end{equation*}
+
+  Conversely, suppose \(f\) is an orthogonal projection and \(x, y\in V\) are two vectors.
+  We observe that
+  \begin{align*}
+    0 & = \braket{(f- \id)x}{fy} = \braket{f{x}}{f{y}} - \braket{x}{fy}\\
+    0 & = \braket{fx}{(f -\id)y} = \braket{fx}{ fy} - \braket{fx}{y}.
+  \end{align*}
+  Thus, we get \(\braket{fx}{y} = \braket{x}{fy}\).
+\end{proof}
+
+
+\begin{lemma}\label{lem:canonical-iso-to-dual-space}
+  Consider a  finite-dimensional unitary vector space \((V, \braket{\blank}{\bblank})\).
+  \begin{thmlist}
+    \item The canonical map
+    \begin{equation}
+      d \from V \to \rd*{V}, \qquad v \mapsto \braket{v}{ \blank }
+    \end{equation}
+    is an isomorphism.
+    \item The dual space \(\rd*{V}\) becomes an inner product space, if we define \(\braket{\phi}{\psi} = \braket{d^{-1}(\phi)}{d^{-1}(\psi)}\).
+    In this case \(d\from V \to \rd*{V}\) is an isometry.
+  \end{thmlist}
+\end{lemma}
+
+\begin{notation}
+  To conveniently discuss inner product spaces, we will use \emph{bra-ket notation}.
+  Any vector of  \((V, \braket{\blank }{\bblank}\) will be written as a \emph{ket} \(\ket v\).
+  Similarly, a vector of the dual space \((\rd*{V}, \braket{ \blank }{ \bblank })\) is a \emph{bra} \(\bra{\phi}\).
+  The canonical pairing between \(v\) and \(\phi\) is \(\braket{\phi}{v}\eqdef \phi(v)\).
+
+  Note that via the unitary isomorphism \(d \from V \to \rd*{V}\) there exists a unique \(w\in V\) such that \(d(w) = \phi\) and
+  \begin{equation*}
+    \braket{\phi}{v} = \phi(v) = \braket{w, v}.
+  \end{equation*}
+\end{notation}
+
+TODO In pictures: a ket is a source a bra is a sink.
+
+\begin{definition}\label{def:dual-morphism}
+  The \emph{dual} of a linear map \(f\from V\to W\) is
+  \begin{equation}
+    \rd*{f}\from \rd*{W}\to \rd*{V}, \qquad
+    \phi \mapsto \phi\circ f.
+  \end{equation}
+\end{definition}
+TODO: Dualising flips pictures!
+
+
+\begin{lemma}\label{lem:dualising-is-contravariant}
+  Consider linear maps \(f\from V\to W\) and \(g \from W \to X\).
+  Then \(\rd*{gf}= \rd*{f}\rd*{f}\).
+\end{lemma}
+
+\begin{lemma}\label{lem:matrices-of-dualising-form}
+  Suppose \(f\from V\to W\) is linear, and write \(A = {_{\mathcal{C}}f_{ \mathcal{B}}}\) for the representing matrix of \(f\) with respect to the bases  \(\mathcal{B}= (b_{1}, \dots , b_{n})\)  of \(V\) and \(\mathcal{C}= (c_{1}, \dots , c_{m})\) of \(W\).
+  The following diagram commutes
+
+  \begin{equation*}
+    \begin{tikzcd}[ampersand replacement=\&,cramped]
+      {\rd*{V}} \&\& {\rd*{W}} \\
+      \\
+      {\mathbb{C}^n} \&\& {\mathbb{C}^m}
+      \arrow["{\rd*{f}}"', from=1-3, to=1-1]
+      \arrow["{\can_{\rd*{\mathcal{B}}}}", from=3-1, to=1-1]
+      \arrow["{\can_{\rd*{\mathcal{C}}}}", from=3-3, to=1-3]
+      \arrow["{A^T\cdot \blank}"', from=3-3, to=3-1]
+    \end{tikzcd}
+  \end{equation*}
+\end{lemma}
+
+TODO: plugging matrices in between: \(\braket{w}{A\mid v} = \braket{w}{Av}= \braket{wA^{T}}{v}\).
+
+
+\begin{definition}\label{def:complex-projective-space}
+  We call two normalised vectors \(v,w\in V\) \emph{equivalent up to global phase} if there exists an \(r\in \mathbb{R}\) such that \(e^{2\pi i r}v=w\).
+\end{definition}
+
+
+\begin{lemma}\label{lem:projective-space-and-phases}
+  The canonical map
+  \begin{align*}
+    \{v \in V \mid \|v\|=1\}/ \mathrm{phase} &\to\{L\subset V\mid L \text{ is a 1-dimensional subspace}\} \\
+    [v] & \mapsto \mathbb{C} v
+  \end{align*}
+  is a bijection.
+\end{lemma}
+A proof is given in~\cite[Proposition~2.2.1]{kissinger-wetering2025:PicturingQuantumSoftware}
+
+
+\begin{definition}\label{def:density-matrix}
+  The \emph{density matrix/operator?} associated to a normalised vector \(v \in V\) is the linear map
+  \begin{equation*}
+    P_{v}\eqdef\ket{v} \bra{v} \from V\to V, \qquad w \mapsto \ket{v} \braket{v}{w}.
+  \end{equation*}
+  % TODO notation?
+\end{definition}
+
+\begin{lemma}\label{lem:density-is-orthogonal-projector}
+  Let \(v, w\in V\) be  normalised vectors.
+  \begin{thmlist}
+    \item The density ??? \(P_{v}\) is an orthogonal projector.
+    \item The vectors \(v\) and \(w\) are phase equivalent, if and only if \(P_{v}= P_{w}\).
+  \end{thmlist}
+\end{lemma}
+
+\subsubsection{Qubits and the Bloch sphere}\label{sec:qubits-and-the-bloch-sphere}
+
+Recall \( \mathbb{C}^{2}\) with its \emph{computational basis} or \emph{\(Z\)-basis} \(\ket 0\) and \(\ket 1\) discussed in TODO: REF.
+
+Pauli matrices provide a convenient way of computing in \(\Mat_{2}( \mathbb{C})\).
+\begin{lemma}\label{lem:props-of-Pauli-matrices}
+  The Pauli matrices are self-adjoint and satisfy the commutation relations
+  \begin{equation*}
+    \sigma_{i}^{2} = I_{2}, \qquad
+    OTHER RELS.
+  \end{equation*}
+
+  Moreover, the tuple \((I, \sigma_{x}, \sigma_{y}, \sigma_{z})\) forms a basis of \(\Mat_{2}( \mathbb{C})\).
+\end{lemma}
+
+Now consider the density matrices
+\begin{equation*}
+  P_{\ket 0} = \ket{0}\bra{0} =
+  \begin{pmatrix}
+    1 & 0\\
+    0 & 0
+  \end{pmatrix}= \tfrac{1}{2}( I+ \sigma_{z})
+  P_{\ket 1} = \ket{1}\bra{1} =
+  \begin{pmatrix}
+    0 & 0\\
+    0 & 1
+  \end{pmatrix} = \tfrac{1}{2} (I- \sigma_{z})
+\end{equation*}
+
+If we want to describe all possible state of a single qubit, we have to study all matrices \(P_{\ket v}\) for a normalised vector \(v \in \mathbb{C}^{2}\).
+
+\begin{lemma}\label{lem:characterising-the-qubit}
+  A matrix \(P \in \Mat_{2}( \mathbb{C})\) is an orthogonal projection if and only if there are real numbers \(r_{x}, r_{y}, r_{z}\in \mathbb{R}\) satisfying \(r_{x}^{2}+ r_{y}^{2}+r_{z}^{2} = 1\) and
+  \begin{equation*}
+    P = \tfrac{1}{2}(I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})
+  \end{equation*}
+\end{lemma}
+\begin{proof}
+  First note that since Pauli matrices are self-adjoint and linearly independent,
+  \(P=\tfrac{1}{2}(I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})\) is self-adjoint if and only if \(r_{x}, r_{y}, r_{z}\) are real.
+
+  We now compute
+
+  \begin{align*}
+    (2P)^{2}
+    & = (I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})(I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})\\
+    & = (1+ r_{x}^{2} + r_{y}^{2}+ r_{z}^{2}) I_{2}
+      + (2r_{x} + i r_{y}r_{z} -i r_{y}r_{z} ) \sigma_{x}
+      + (2r_{y} + -i r_{x}r_{z} + i r_{x}r_{z}) \sigma_{y}
+      + (2r_{z}+ i r_{x}r_{y} - i r_{x}r_{y} ) \sigma_{z} \\
+    & = 4P
+  \end{align*}
+  Implying that \(P^{2}=P\) if and only if \((r_{x}^{2} + r_{y}^{2}+ r_{z}^{2}) =1\).
+  Finally notice that in this case \(\tr P = 1\) and therefore \(P\) is indeed of the form \(P_{\ket{v}}\) for some normalised \(v\in \mathbb{C}^{2}\)
+\end{proof}
+Therefore, we can model the states of \( \mathbb{C}^{2}\) as vectors in the unit sphere \(S^{2}\subset \mathbb{R}^{3}\)
+
+\begin{definition}\label{def:bloch-sphere}
+  The \emph{Bloch sphere} is
+\end{definition}
+
+\begin{lemma}\label{lem:homoeomorphism}
+  There is a bijection
+  \begin{align*}
+    f\from S^{2} & \to \{ P_{\ket w} \mid w\in \mathbb{C}^{2} \text{normalised}\}\\
+    (r_{x}, r_{y}, r_{z}) &\mapsto \tfrac{1}{2}(I_{2}+ r_{x}\sigma_{x} + r_{y}\sigma_{y} + r_{z}\sigma_{z}).
+  \end{align*}
+  TODO: NEDDED?
+
+  Moreover, for any convergent sequence \(\mathbf{r}_{i} \eqdef(r_{x,i}, r_{y,i}, r_{z,i})_{i \in \mathbb{N}}\) in the Bloch sphere, we have
+  \begin{equation*}
+    f(\lim_{i\to \infty} r_{i}) = \lim f(r_{i}).
+  \end{equation*}
+
+\end{lemma}
+
+TODO: \(Z\)-basis is the computational basis
+\(X\)-basis is \(\ket{+},\ket{-} \)
+\(Y\)-basis is \(\ket {\pm i}\)
+
+define operators
+\begin{equation*}
+  Z(\alpha) = \ket{0}\bra{0} + e^{2\pi i \alpha}\ket{1}\bra{1}
+  Z(\beta) = \ket{+}\bra{+} + e^{2\pi i \beta}\ket{-}\bra{-}
+  Z(\gamma) = \ket{+i}\bra{+i} + e^{2\pi i g}\ket{-i}\bra{-i}
+\end{equation*}
+these realise rotations on the bloch sphere
+
+TODO: We need: unitary conjugation=applying unitaries in the density matrix model.
+TODO: Inner product for density matrices = taking traces.
+
+
+\subsubsection{Measurments and the Born rule}\label{sec:measurments-and-the-born-rule}
+
+
+
+\begin{definition}\label{def:tensor-product}
+  The \emph{tensor product} of two vector spaces \(V, W\) is a pair \(V\otimes W, \blank \otimes \bblank\) comprising a vector space \(V\otimes W\) and a bilinear map
+  \begin{equation*}
+    \blank \otimes \bblank \from V \times W \to V\otimes W, \qquad (v,w) \mapsto v\otimes w
+  \end{equation*}
+  such that for every vector space \(X\) and  bilinear map \(b \from V \times W \to X\) there exists a unique linear map \(f \from V\otimes W \to X\) such that
+  \begin{equation*}
+    b(v, w) = f(v \otimes w) \qquad \text{for all } v \in V, w \in W.
+  \end{equation*}
+\end{definition}
+TODO: UP + Diag
+
+TODO: use here the  free vector space
+\begin{theorem}\label{thm:existence-and-uniqueness}
+  Consider a  pair of vector spaces \((V,W)\) with bases \(\mathcal{B}\) and \(\mathcal{C}\) and define
+  \begin{equation*}
+    V\boxtimes W \eqdef\{ \sum_{i=1}^{n}\lambda_{ij}(b_{i}\boxtimes c_{j})\}
+  \end{equation*}
+\begin{thmlist}
+  \item the map \( \blank \boxtimes \bblank \) is bilinear,
+  \item the pair \(((V \boxtimes W, \blank \boxtimes \bblank)\) is a tensor-product of \(V\) and \(W\), and
+  \item  for any other tensor product \((V\otimes W, \blank \otimes \bblank)\) there is a unique linear map \(f \from V \boxtimes W \to V\otimes W\) such that \(f(v\boxtimes w) = v\otimes w\) for all \(v\in V\) and \(w\in W\). This map is an isomorphism.
+\end{thmlist}
+\end{theorem}
+
+caps and cups
+
+\begin{lemma}\label{lem:cap-cup}
+  CAP CUP
+\end{lemma}
+
+\begin{lemma}\label{lem:tensor-flip}
+  tensor-flips
+\end{lemma}
+
+
+\begin{theorem}\label{thm:well-defd}
+  The graphical calculus is well-defined.
+\end{theorem}
+
+
+
+
 \section{Quantum mechanics}\label{sec:a-swift-introduction-to-quantum-mechanics}
 
 As suggested by their name, quantum computers rely on the basic working principles of quantum mechanics.
@@ -265,7 +1479,51 @@ Pauli operations
   \item[Relations between spiders]
 \end{description}
 
+\part{Quantum algorithms}
 \section{Quantum algorithms}\label{sec:quantum-algorithms}
+
+\begin{definition}\label{def:group}
+A \emph{group} is a pair \((G, \bullet)\) comprising a set \( G \)  and a binary map
+\begin{equation*}
+   \bullet \from G \times G \to G, \qquad (g,h) \mapsto  g\bullet h,
+ \end{equation*}
+ called \emph{multiplication} or \emph{group operation}, satisfying
+ \begin{description}
+    \item[\emph{Associativity}] \((a \bullet b) \bullet c = a \bullet (b \bullet c)\) for all \( a, b, c \in G \),
+    \item[\emph{Neutrality}] There exists an element \( e \in G \), called the \emph{neutral element} or \emph{unit} of \(G\), such that \( e \bullet a = a = a \bullet e \) for all \( a \in G \).
+    \item[\emph{Invertibility}] For each \( a \in G \), there exists an \( a^{-1} \in G \) such that \( a \bullet a^{-1} = a^{-1} \bullet a = e \).
+  \end{description}
+  We call \(G\) \emph{abelian} if  \( a\bullet b = b \bullet a \) for all \(a, b\in G\).
+\end{definition}
+
+\begin{notation}
+  Let \((G, \bullet)\) be a group.
+  \begin{thmlist}
+    \item In case its multiplication is apparent, from the context, we will identify \(G\) with the pair \((G, \bullet)\).
+    \item Moreover, we will often use the short-hand notation
+    \begin{equation*}
+      ab \eqdef a \bullet b \qquad \text{ for all } a, b \in G.
+    \end{equation*}
+    \item In order to emphasise that a group is abelian \(G\) is abelian, we will denote its group operation by
+  \begin{equation*}
+    + \from G \times G \to G, \qquad (g,h) \mapsto g + h
+  \end{equation*}
+  and its neutral element by \(0\).
+  \end{thmlist}
+\end{notation}
+
+Note that the neutral element \(e\) of a group \(G\) is unique.
+In case \(f\in G\) satisfies \(af=a=fa\) for all \(a \in G\), we have
+\begin{equation*}
+  e=ef=f.
+\end{equation*}
+
+Similarly, inverses are unique.
+Given an element \(a\in G\), and \(a^{-1}, b\in G\) such that \(a^{-1}a = e = aa^{-1}\) and \(ba = e = ab\), we have
+\begin{equation*}
+  a^{-1} = a^{-1}e = a^{-1}(ab) = (a^{-1}a)b = eb = b.
+\end{equation*}
+
 \begin{description}
   \item[Simon's algorithm]
   \item[Shor's algorithm]
@@ -273,6 +1531,8 @@ Pauli operations
   \item[HHL algorithm]
 \end{description}
 
+
+\part{Quantum complexity theory}
 \section{Quantum computing from a complexity theory perspective}\label{sec:quantum-computing-from-a-complexity-theory-perspective}
 \subsection{Some complexity theory terminology}\label{sec:some-complexity-theory-terminology}
 
@@ -391,7 +1651,7 @@ As we will see over the span of this course, they provide ways of performing tas
   While \(\Pclass \subseteq \NPclass\), we believe \(\Pclass \neq \NPclass\). Quantum computers are interesting because they can solve certain problems in \(\NPclass\) (like integer factoring) in polynomial time, whereas we suspect no such polynomial-time classical algorithm exists.
 \end{remark}
 
-
+\part{Quantum error correction}
 \section{Fault-tolerance}\label{sec:fault-tolerance}
 \begin{description}
   \item[Quantum compilation stack]
