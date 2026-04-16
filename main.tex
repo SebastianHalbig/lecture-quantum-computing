@@ -347,9 +347,9 @@ We will often use the fact that any non-zero complex number can be written as a 
 \begin{lemma}\label{lem:polar-form-uniqueness}
   Consider a non-zero complex number \(z= x +iy \in \mathbb{C}\).
   \begin{thmlist}
-    \item There exist \((r, \alpha) \in \mathbb{R}^{2}\) such that
+    \item There exist \((r, \alpha) \in \mathbb{R}^{2}\) with \(r>0\) such that
     \(z = re^{2\pi i \alpha}\).
-    \item For any other pair \((s, \beta)\in \mathbb{R}^{2}\), we have \(re^{2\pi i \alpha} = s e^{2 \pi i \beta}\) if and only if \(r=s\) and \(\alpha-\beta \in \mathbb{Z}\).
+    \item For any other pair \((s, \beta)\in \mathbb{R}^{2}\) satsifying \(s>0\), we have \(re^{2\pi i \alpha} = s e^{2 \pi i \beta}\) if and only if \(r=s\) and \(\alpha-\beta \in \mathbb{Z}\).
     \item We have \(x = r\cos(2 \pi \alpha)\) and \(y = r\sin(2 \pi \alpha)\), implying that \(|z| = r\).
   \end{thmlist}
 \end{lemma}
@@ -1418,15 +1418,21 @@ Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the follo
 
 \cleardoublepage
 \subsection{Study goals}\label{sec:lin-alg-study-goals}
-The questions below are designed to help you build a deep, conceptual understanding of the linear algebra required in this course.
+The questions below are designed to help you build a conceptual understanding of the linear algebra required in this course.
 You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
 The level of difficulty is aligned with what you can expect in the exam.
 
 \subsubsection*{Complex numbers}
 \begin{thmlist}
-  \item Express the multiplicative inverse of a complex number \(z \in \mathbb{C}\setminus\{0\}\) as  \(a + bi\) with \(a, b \in \mathbb{R}\).
+  \item Express the multiplicative inverse of a complex number \(z \in \mathbb{C}\setminus\{0\}\) as  \(a + ib\) with \(a, b \in \mathbb{R}\).
   \item What are the real and imaginary part of a complex number \(z = re^{2\pi i \alpha} \in \mathbb{C}\)?
-  \item Consider \(z=a+ib \in \mathbb{C}\) with \(a>0, b<0\) and suppose \(z = re^{2\pi i \alpha}\). What can be said about \(\alpha \in [0,1]\)?
+  \item Consider \(z=a+ib \in \mathbb{C}\) with \(a>0, b<0\) and suppose \(z = re^{2\pi i \alpha}\).
+  What can be said about \(\alpha \in [0,1]\)?
+  \item Let \(z\in \mathbb{C} \).
+  Decide which of the following numbers are real \(z + \overline{z}\), \(z - \overline{z}\), and \(z\overline{z}\).
+  Does the answer depend on properties of \(z\)?
+  \item Compute the values \(\sin(\pi/4)\), \(\cos(\pi/4)\), \(\sin(\pi/3)\) and \(\cos(\pi/3)\) by hand.
+  \item What is the polar form of \(\cos(2\pi /5)+ i \sin(2\pi /5)\)?
 \end{thmlist}
 
 \subsubsection*{Vector Spaces}
@@ -1436,6 +1442,15 @@ The level of difficulty is aligned with what you can expect in the exam.
   How do you check if they form a direct sum \(U \oplus W = \mathbb{C}^4\)?
   \item Suppose \(V\) is an \(n\)-dimensional vector space and \(\mathcal{B}=(b_{1}, \dots , b_{m})\) is a collection of vectors.
   In case \(m\geq n\), is it true that \(\lambda_{1}b_{1} + \dots + \lambda_{m} b_{m} = 0\)  if and only if \(\lambda_{1} = \dots = \lambda_{m} = 0 \).
+  \item Consider the vectors \(b_{1}, b_{2} \in \mathbb{C}^{3}\) with \(
+  b_{1} = \begin{psmallmatrix}
+    1 \\ 0 \\ 0
+  \end{psmallmatrix},
+  b_{2} = \begin{psmallmatrix}
+    1 \\ 1 \\ 0
+  \end{psmallmatrix}.
+  \)
+  Find a third vector \(b_{3}\ \in \mathbb{C}^{3}\) such that \((b_{1}, b_{2}, b_{3})\) is a basis of \( \mathbb{C}^{3}\). Justify your answer.
 \end{thmlist}
 
 \subsubsection*{Matrices}
@@ -1517,12 +1532,12 @@ The systems we consider will be modeled by finite-dimensional Hilbert spaces---c
 Combining the Hermitian symmetry of an inner product with the linearity in its second argument implies that an inner product is up-to-conjugation linear in its first argument.
 
 \begin{remark}\label{rmk:sesquilinear}
-  A  map \(\phi \from V \times W \to \mathbb{C}\) is \emph{sesquilinear} if for all \(v, v' \in V\), \(w, w' \in W\) and \(\lambda, \mu \in \mathbb{C}\), we have
+  A map \(\phi \from V \times W \to \mathbb{C}\) is \emph{sesquilinear} if for all \(v, v' \in V\), \(w, w' \in W\) and \(\lambda, \mu \in \mathbb{C}\), we have
   \begin{gather*}
     \phi(v+v', w+ w') = \phi(v,w) + \phi(v',w) + \phi(v, w') + \phi(v',w'), \\
     \phi(\lambda v, w) = \overline{\lambda} \phi(v, w) \qquad \text{ and } \phi(v, \mu w) = \mu \phi(v,w).
   \end{gather*}
-  If \(\braket{\blank}{\bblank} \from V\times V \to \mathbb{C}\) is an inner product, it is in particular sesquilinear, see Exercise~TODO
+  If \(\braket{\blank}{\bblank} \from V\times V \to \mathbb{C}\) is an inner product, it is in particular sesquilinear, see Exercise~\ref{exe:inner-product-is-sesquilinear}.
 \end{remark}
 
 
@@ -1546,31 +1561,36 @@ In this case,  we write \(\lim\limits_{n\to \infty} v_{n} \eqdef w\) and say tha
 \end{definition}
 
 In case the inner product of a Hilbert space or unitary vector space is apparent from the context, we simply write \(V\) instead of \((V, \braket{ \blank }{\bblank})\).
-\begin{lemma}\label{lem:fin-dim-implies-Hilbert}
+
+\begin{proposition}\label{prop:fin-dim-implies-Hilbert}
   Any finite-dimensional unitary vector space is a Hilbert space.
-\end{lemma}
+\end{proposition}
 In the infinite-dimensional case, there are Cauchy sequences within  unitary spaces that do not converge.
 In particular, not every unitary space is automatically a Hilbert space.
 
 \begin{convention}
-  For the rest of this section, all spaces will be finite-dimensional Hilbert spaces.
+  For the rest of these lecture notes, all spaces will be finite-dimensional Hilbert spaces unless explicitly stated otherwise.
 \end{convention}
 
-In a Hilbert space \(V\) the \emph{angle} \(\theta \in [0, \pi)\) between two non-zero vectors \(v,w \in V\) can be defined as
-\begin{equation*}
-  \theta \eqdef \cos^{-1}\left(\frac{\braket{u}{v}}{\|u\| \|v\|} \right).
-\end{equation*}
-In particular \(u\) and \(v\) are perpendicular to each other if and only if \(\braket{u}{v} = 0\).
+The inner product allows us to measure the extent to which two vectors \(v, w \in V\) have the same direction.
+In the extreme case \(\braket{v}{w} =0\), these vector do not have any ``overlap'', and we say \(v\) and \(w\) are \emph{perpendicular} or \emph{ortogonal}.
 
 \begin{definition}\label{def:orthogonal-complement}
   Consider a subspace \(U\subset V\) of a Hilbert space \(V\).
   The \emph{orthogonal complement} of \(U\) is the subspace
   \begin{equation}
-    U^{\perp} \eqdef\{v \in V \mid \braket{u}{v} = 0\} \subset V.
+    U^{\perp} \eqdef\{v \in V \mid \braket{u}{v} = 0 \text{ for all }u\in U \} \subset V.
   \end{equation}
 \end{definition}
 
-Note that  for any subspace \(U \subset V\), we have \(U \oplus U^{\perp} = V\), see Exercise~\ref{exe:orth-complement-direct-sum}.
+\begin{equation*}
+  \inputtikz{orthogonal-complement-example}
+\end{equation*}
+
+\begin{proposition}\label{prop:orthogonal-complement-direct-sum}
+  Any subspace \(U \subset V\) of a finite-dimensional Hilbert space \(V\), yields a direct sum decomposition \(U \oplus U^{\perp} = V\)
+\end{proposition}
+Exercise~\ref{exe:orth-complement-direct-sum} provides a guided version of this proof.
 
 \begin{definition}\label{def:orthonormal-basis}
   An \emph{orthonormal basis} of a finite-dimensional unitary vector space \((V, \braket{\blank}{\bblank})\) is a sequence of vectors \(\mathcal{B}= (b_{1}, \dots , b_{n})\)  such that \(\mathcal{B}\) is a basis and
@@ -1629,14 +1649,14 @@ Similar to the previous example, we can turn \( \mathbb{C}^{n}\) for all \(n\in 
 \end{example}
 
 While any Hilbert space has a basis, such a basis need not a priori be orthonormal.
-This can be achieved using Gram--Schmidt.
+
 \begin{proposition}\label{prop:existence-of-onb}
-  Let \(\mathcal{B} = (b_{1}, \dots , b_{n})\) be a vector space basis of a Hilbert space \(V\).
-  Then \(\mathcal{O} = (w_{1}, \dots , w_{n})\), given by
+  Let \(\mathcal{B} = (b_{1}, \dots , b_{n})\) be a vector space basis of a Hilbert space \(V\) and define the vectors \(w_{1}, \dots , w_{n}\in V\) inductively by
   \begin{equation*}
-    w_{i} = \frac{1}{\|w'_{i}\|} w'_{i} \qquad \text{with } w'_{i} = b_{i} - \sum_{j=1}^{i-1} \frac{\braket{ b_{i}}{ b_{j}}}{\braket{b_{j}}{b_{j}}} b_{j}
+    w_{k} = \frac{1}{\|w_{k}'\|} w_{k}', \qquad \text{ where }
+    w_{k}' = b_{k} - \sum_{j=1}^{k-1}\braket{ b_{k}}{ w_{j}}w_{j} \qquad \text{ for all } 1\leq k \leq n.
   \end{equation*}
-  is  an orthonormal basis.
+  Then \(\mathcal{O} = (w_{1}, \dots , w_{n})\)  is  an orthonormal basis.
 \end{proposition}
 Take for example the basis \(\mathcal{B} = \left(
   \begin{psmallmatrix}
@@ -1646,12 +1666,19 @@ Take for example the basis \(\mathcal{B} = \left(
     0 \\ 1
   \end{psmallmatrix}
 \right)\) of \( \mathbb{C}^{2}\).
-The procedure of the previous proposition, called the \emph{Gram-Schmidt procedure}, produces the vectors
+The procedure of the previous proposition, called the \emph{Gram-Schmidt process}, produces the vectors
 \begin{equation*}
   w_{1}'=
   \begin{pmatrix}
     1 \\ 1
   \end{pmatrix}, \qquad \text{ and }\qquad
+    w_{1} = \frac{1}{\sqrt{2}}
+  \begin{pmatrix}
+    1 \\ 1
+  \end{pmatrix},
+\end{equation*}
+and in the second step
+\begin{equation*}
   w_{2}' =
   \begin{pmatrix}
     0 \\ 1
@@ -1662,20 +1689,13 @@ The procedure of the previous proposition, called the \emph{Gram-Schmidt procedu
   = \frac{1}{2}
   \begin{pmatrix}
     -1 \\ 1
-  \end{pmatrix}
-\end{equation*}
-After normalisation, this leads to the orthonormal basis \(\mathcal{O}=(w_{1}, w_{2})\) with
-\begin{equation*}
-  w_{1} = \frac{1}{\sqrt{2}}
-  \begin{pmatrix}
-    1 \\ 1
   \end{pmatrix}, \qquad \text{ and } \qquad
   w_{2} = \frac{1}{\sqrt{2}}
   \begin{pmatrix}
     -1 \\ 1
   \end{pmatrix}.
 \end{equation*}
-In pictures this process can be visualised as follows.
+In pictures, this process can be visualised as follows.
 \begin{equation*}
   \inputtikz{gram-schmidt-example}
 \end{equation*}
@@ -1693,7 +1713,7 @@ Recall that the adjoint \(A^{\dagger} = \overline{A}^{T}\) of a matrix  \(A \in 
     \braket{v}{A \mid w} \qquad \text{ for all } v\in \mathbb{C}^{m}, w \in \mathbb{C}^{n} \text{, and }A \in \Mat_{m,n}( \mathbb{C}).
   \end{equation}
   In particular, one can show that a square matrix \(A\in \Mat_{n}( \mathbb{C})\) is self-adjoint (\ie \(A^{\dagger} = A\)) if and only if
-  \(\braket{ v }{Aw} = \braket{Av}{w}\) for all \(v, w \in \mathbb{C}^{n}\).
+  \(\braket{ v }{Aw} = \braket{Av}{w}\) for all \(v, w \in \mathbb{C}^{n}\), see Exercise~\ref{exe:char-of-self-adjoint}
 \end{remark}
 
 We now want to describe the interaction between inner products and linear transformations more abstractly.
@@ -1701,9 +1721,9 @@ We now want to describe the interaction between inner products and linear transf
 \begin{definition}\label{def:adjoint-of-linear-map}
   Let \(f\from V \to W\) be a linear map between two Hilbert spaces \((V, \braket{ \blank }{ \bblank})\) and \((W, [ \blank \mid \bblank])\).
   We call a linear map \(f^{\dagger} \from W \to V\) an \emph{adjoint} of \(f\) if
-  \begin{equation*}
+  \begin{equation}
     \braket{f^{\dagger}(w)}{v} = [w\mid f(v)]\qquad\quad \text{ for all } v\in V \text{ and } w\in W.
-  \end{equation*}
+  \end{equation}
 
   In case \(g\from V\to V\) satisfies \(g^{\dagger} = g\), we call \(g\) \emph{self-adjoint}.
 \end{definition}
@@ -1716,27 +1736,29 @@ This notion recovers our previously discussed concept of adjoint matrices.
   That is, \(A^{\dagger} = B\) and \(B^{\dagger} =A\).
 \end{proposition}
 \begin{proof}
-  Let us first show by that \(f\) has at most one adjoint.
+  Let us first show that \(f\) has at most one adjoint.
   Suppose both \(g,h \from W\to V\) are adjoints of \(f\).
   For all \(w\in W\) we have
   \begin{align*}
     \braket{g(w)- h(w)}{g(w) - h(w)}
     & = \braket{g(w)}{g(w) - h(w)} - \braket{h(w)}{g(w) - h(w)}\\
-    & = \braket{w}{f(g(w) - h(w))} - \braket{w}{f(g(w) - h(w))}
+    & = [w\mid f(g(w) - h(w))] - [w \mid f(g(w) - h(w))]
       = 0.
   \end{align*}
   This implies  \(g(w) = h(w)\) for all \(w\in W\) and so \(g = h\).
 
-  To prove existence, let \( \mathcal{B} = (b_1, \dots, b_n) \) and \( \mathcal{C} = (c_1, \dots, c_m) \) be orthonormal bases for \( V \) and \( W \), respectively. The canonical maps \( \can_{\mathcal{B}} \from \mathbb{C}^n \to V \) and \( \can_{\mathcal{C}} \from \mathbb{C}^m \to W \) satisfy
+  To prove existence, let \( \mathcal{B} = (b_1, \dots, b_n) \) and \( \mathcal{C} = (c_1, \dots, c_m) \) be orthonormal bases for \( V \) and \( W \), respectively.
+  Since \( \mathcal{B}\) is orthonormal, the canonical map \( \can_{\mathcal{B}} \from \mathbb{C}^n \to V \) satisfies
   \begin{equation*}
-    \braket{\can_{\mathcal{B}}(v)}{\can_{\mathcal{B}}(w)} = \braket{v}{w}_{\mathrm{std}} \quad \text{for all } v, w \in \mathbb{C}^n,
+    \braket{\can_{\mathcal{B}}(x)}{\can_{\mathcal{B}}(y)} = \braket{x}{y}_{\mathrm{std}} \quad \text{for all } x, y \in \mathbb{C}^n,
   \end{equation*}
-  and similarly for \( \can_{\mathcal{C}} \).
+  and similarly for  and \( \can_{\mathcal{C}} \from \mathbb{C}^m \to W \) .
 
   Let \(A= {}_{\mathcal{C}}f_{\mathcal{B}}\) be the transformation matrix of \(f\) with respect to the bases \(\mathcal{B}\) and \(\mathcal{C}\).
-  We define \(f^{\dagger} = \can_{\mathcal{B}} \circ \mu_{A^{\dagger}} \circ \can_{\mathcal{C}}^{-1}\) as the composition
+  We define \(f^{\dagger}\) such that \(_{\mathcal{B}}f^{\dagger}{}_{\mathcal{C}} = A^{\dagger}\).
+  Explicitly,
   \begin{equation*}
-    W \xrightarrow{\can_{\mathcal{C}}^{-1}} \mathbb{C}^{m}\xrightarrow{\mu_{A^{\dagger}}} \mathbb{C}^{n}\xrightarrow{\can_{\mathcal{B}}} V.
+    f^{\dagger }= W \xrightarrow{\can_{\mathcal{C}}^{-1}} \mathbb{C}^{m}\xrightarrow{\mu_{A^{\dagger}}} \mathbb{C}^{n}\xrightarrow{\can_{\mathcal{B}}} V.
   \end{equation*}
   Now, consider \(v \in V\) and \(w\in W\).
   Using that there are unique \(x \in \mathbb{C}^{n}\) and \(y \in \mathbb{C}^{m}\) such that
@@ -1744,106 +1766,174 @@ This notion recovers our previously discussed concept of adjoint matrices.
   \begin{align*}
     \braket{f^{\dagger}(w)}{v}
     & = \braket{f^{\dagger} (\can_{\mathcal{C}}(y))}{\can_{\mathcal{B}}(x)}
-      = \braket{(\can_{\mathcal{B}} \circ \mu_{A^{\dagger}} \circ \can_{\mathcal{C}}^{-1}) (\can _{C} (y))}{\can_{B}(x)} \\
-    & = \braket{A^{\dagger}(y)}{x}_{\mathrm{std}}
+      = \braket{(\can_{\mathcal{B}} \circ \mu_{A^{\dagger}} \circ \can_{\mathcal{C}}^{-1}) (\can _{\mathcal{C}} (y))}{\can_{\mathcal{B}}(x)} \\
+    & = \braket{A^{\dagger}y}{x}_{\mathrm{std}}
       = \braket{y}{Ax}_{\mathrm{std}}
-      = [\can_{\mathcal{C}}(y) \mid \can_{\mathcal{C}}(Ax)]\\
-    & = [\can_{\mathcal{C}}(y) \mid (\can_{\mathcal{C}}\circ \mu_{A} \circ \can_{\mathcal{B}}^{-1})(x)]
-      = [w\mid f(v)].
+      = [\can_{\mathcal{C}}(y) \mid \can_{\mathcal{C}}(Ax)] = [w\mid f(v)]. \qedhere
   \end{align*}
-  By construction, we have \(_{\mathcal{B}}f^{\dagger}{}_{\mathcal{C}} = A^{\dagger}\) which concludes the proof.
 \end{proof}
 
 We can now define a notion of positive-semidefiniteness for linear maps by mimicking the matrix version of Definition~\ref{def:positive-semidefinite}.
 \begin{definition}\label{def:positive-semidiefinite-maps}
   A self-adjoint map \(f\from V \to V\) is positive semidefinite if
-  \begin{equation*}
+  \begin{equation}
     \braket{v}{f(v)} \geq 0\qquad \text{ for all } v\in V.
-  \end{equation*}
+  \end{equation}
 \end{definition}
 
-A key fact about self-adjoint operators is the spectral theorem.
-\begin{theorem}\label{thm:spectral-theorem}
+\begin{example}\label{ex:self-adjoint-pos-definite}
+  Consider the map
+  \begin{equation*}
+    f \from \mathbb{C}^{2} \to \mathbb{C}^{2},\qquad
+    \begin{pmatrix}
+      x \\ y
+    \end{pmatrix} \mapsto
+    \begin{pmatrix}
+      2 x + y \\ x + 2y
+    \end{pmatrix}.
+  \end{equation*}
+  Its transformation matrix with respect to the standard basis is
+  \begin{equation*}
+    A=
+    \begin{pmatrix}
+      2 & 1 \\ 1 & 2
+    \end{pmatrix} \in \Mat_{2}( \mathbb{C}).
+  \end{equation*}
+  Clearly, \(A\) is self-adjoint.
+  To show that it is positive semidefinite, we observe that its first principal minor (the \(1\times 1\) matrix \((2)\)) has determinant \(2\) and its second principal minor (which is all of \(A\)) has  \(\det A = 4-1=3\).
+
+  Note that \(A\) has the eigenvalues \(3\) and \(1\) with eigenvectors \(
+  \begin{pmatrix}
+    1 \\ 1
+  \end{pmatrix}
+  \) and \(
+  \begin{pmatrix}
+    1 \\ -1
+  \end{pmatrix}
+  \), respectively.
+  These vectors are orthogonal.
+\end{example}
+The spectral theorem, stated below, shows that the observations of the previous example hold more generally: eigenvectors  of distinct eigenvalues of a self-adjoint map are orthogonal.
+
+\begin{theorem}[spectral theorem]\label{thm:spectral-theorem}
   Any self-adjoint map \(f\from V\to V\) admits an orthonormal basis of eigenvectors \(\mathcal{B}=(b_{1}, \dots , b_{n})\) with real eigenvalues \(\lambda_{1}\geq \dots \geq \lambda_{n}\).
 
-  Moreover, \(f\) is self-adjoint if and only if \(\lambda_{1} \geq \dots \geq \lambda_{n}\geq 0\).
+  Moreover, \(f\) is positive semidefinite if and only if \(\lambda_{1} \geq \dots \geq \lambda_{n}\geq 0\).
 \end{theorem}
-The proof of the spectral theorem can be done in an inductive fashion.
-Suppose the statement holds for all self-adjoint maps \(f\from V \to V\) between \(n\)-dimensional spaces and let \(g\from W\to W\) be a self-adjoint map on an \(n+1\)-dimensional space.
-Since \( \mathbb{C}\) is algebraically closed, it must have a maximal eigenvalue \(\lambda\).
-We pick a normalised eigenvector \(v \in W\)  with respect to the eigenvalue \(\lambda\) and set \(V=\{w\in W\mid \braket{w}{v} = 0\}\).
-A direct computation shows that \(g(V)\subset V\).
-Using the induction hypothesis, we chose an orthonormal basis \(\mathcal{C} = (c_{1}, \dots , c_{n})\) of \(V\) given by eigenvectors of \(g\) and set \(\mathcal{B} = (v, c_{1}, \dots , c_{n})\).
+\begin{proof}[Proof (sketch).]
+  We show the claim by induction on the dimension of \(V\).
+  Clearly, if \(V\) is \(0\)-dimensional, the claim holds.
+
+  Now suppose the statement holds for all self-adjoint maps \(f\from V \to V\) between \(n\)-dimensional spaces and let \(g\from W\to W\) be a self-adjoint map on an \(n+1\)-dimensional space.
+  Since \( \mathbb{C}\) is algebraically closed, \(g\) must have a maximal eigenvalue \(\lambda\).
+  We pick a normalised eigenvector \(v \in W\)  with respect to the eigenvalue \(\lambda\) and define the subspace \(V=\{w\in W\mid \braket{w}{v} = 0\}\).
+  For any \(w\in V\), we have
+  \begin{equation*}
+    \braket{g(w)}{v} = \braket{g^{\dagger}(w)}{v} = \braket{w}{g(v)} = \lambda \braket{w}{v} = 0,
+  \end{equation*}
+  implying that \(g(V) \subset V\).
+  Using the induction hypothesis, we choose an orthonormal basis \(\mathcal{C} = (c_{1}, \dots , c_{n})\) of \(V\) given by eigenvectors of \(g\) and set \(\mathcal{B} = (v, c_{1}, \dots , c_{n})\).
+  The claim follows.
+\end{proof}
+
+One can show that a version of the spectral theorem even holds for the broader class of \emph{normal}  endomorphisms \(f \from V\to V\).
+However, in this case, the eigenvalues need not be real anymore.
 
 \begin{remark}\label{rmk:spectral-theorem-results}
   Our formulation of the spectral theorem does not require eigenvalues to be mutually distinct.
-  In particular, there can be linearly independent (non-zero) vectors \(v\in V\) such that for the same eigenvalue \(\lambda \in \mathbb{C}\), we have  \(f(v) = \lambda v\) and \(f(w)= \lambda w\).
-  That is, both \(v\) and \(w\) are eigenvectors for the eigenvalue \(\lambda \in \mathbb{C}\).
+  An extreme example in that direction is the identity map \(\id_{V} \from V\ \to V\).
+  Here every non-zero vector is an eigenvector for the (only) eigenvalue \(1\).
+  Hence,  any orthonormal basis \(\mathcal{B}\) of \(V\) is a basis of eigenvectors of \(\id_{V}\).
 
-  Moreover, the choice to arrange the eigenvalues in descending order is purely for convenience and not a mathematical necessity.
+  We also note that the choice to arrange the eigenvalues in descending order is purely for convenience and not a mathematical necessity.
 \end{remark}
 
 
 Our approach to quantum computing is based on the study of three interconnected types of maps between Hilbert spaces.
-We will discuss these both abstractly as linear map \(f \from V \to W\) and concretely as matrices \(A \in \Mat_{m,n}( \mathbb{C})\).
+We will discuss these both abstractly as linear maps \(f \from V \to W\) and concretely as matrices \(A \in \Mat_{m,n}( \mathbb{C})\).
 
 \begin{definition}\label{def:orthogonal-projection}
   Consider a Hilbert space \(V\).
-  An \emph{orthogonal projection} onto a subspace \( U \subset V \) is a linear map \( p \from V \to V \) such that
+  An \emph{orthogonal projection} onto a subspace \( U \subset V \) is a linear map \( e\from V \to V \) such that
   \begin{thmlist}
-    \item \( p(v) \in U \) for all \( v \in V \), and
-    \item \( \braket{p(v) - v}{u} = 0 \) for all \( v \in V \) and \( u \in U \).
+    \item \( e(v) \in U \) for all \( v \in V \), and
+    \item \( \braket{e(v) - v}{u} = 0 \) for all \( v \in V \) and \( u \in U \).
   \end{thmlist}
 \end{definition}
 
-The above definition is equivalent to \( p \) being a projection (\ie \( p^2 = p \)) with the additional property that \( \im(p) \) is orthogonal to \( \ker(p) \).
+As is discussed in Exercise~\ref{exe:alternative-defn-orthogonal-projection}, the above definition is equivalent to \( e\from V\to V \) being a projection (\ie \( e^2 = e \)) with the additional property that \( \im(e) \) is orthogonal to \( \ker(e) \).
 
 \begin{lemma}\label{lem:representing-orthogonal-projection}
-  A linear map \( p \from V \to V \) is an orthogonal projection onto its image if and only if, for any orthonormal basis \( \mathcal{B} \) of \( V \), the transformation matrix \( A = {_{\mathcal{B}}} f_{\mathcal{B}}\) satisfies \(A^{2} = A\) and \(A^{\dagger} = A\).
+  A linear map \( e \from V \to V \) is an orthogonal projection onto its image if and only if, for any orthonormal basis \( \mathcal{B} \) of \( V \), the transformation matrix \( A = {_{\mathcal{B}}} e_{\mathcal{B}}\) satisfies \(A^{2} = A\) and \(A^{\dagger} = A\).
 \end{lemma}
 
 \begin{proof}
-  From Lemma~\ref{lem:equivalent-characterisations-projections}, we know that \( p \) is a projection if and only if \( A^2 = A \).
-  It remains to show that the orthogonality condition \( \ker(p) = (\im(p))^\perp \) is equivalent to \( A \) being self-adjoint.
-  To that end, we note that \(A\) is self-adjoint if and only if \(\braket{p(v)}{w} = \braket{v}{p(w)}\) for all \(v,w \in V\).
+  From Lemma~\ref{lem:equivalent-characterisations-projections}, we know that \( e \) is a projection if and only if \( A^2 = A \).
+  It remains to show that the orthogonality condition \( \ker(p) = (\im(e))^\perp \) is equivalent to \( A \) being self-adjoint.
+  To that end, we note that \(A\) is self-adjoint if and only if \(\braket{e(v)}{w} = \braket{v}{e(w)}\) for all \(v,w \in V\).
 
   \begin{description}
     \item[(\( \Rightarrow \))]
-    Suppose \( p \) is an orthogonal projection.
+    Suppose \( e \) is an orthogonal projection.
     For any \( v, w \in V \), we have
     \begin{equation*}
-      \braket{p(v)}{w}
-      = \braket{p(v)}{p(w) + (w - p(w))}
-      = \braket{p(v)}{p(w)} + \braket{p(v)}{w - p(w)}.
+      \braket{e(v)}{w}
+      = \braket{e(v)}{e(w) + (w - e(w))}
+      = \braket{e(v)}{e(w)} + \braket{e(v)}{w - e(w)}.
     \end{equation*}
-    Since \( p(v) \in \im(p) \) and \( w - p(w) \in \ker(p) \), and \( \im(p)^{\perp} = \ker(p) \), it follows that \( \braket{p(v)}{w - p(w)} = 0 \).
+    Since \( e(v) \in \im(e) \) and \( w - e(w) \in \ker(e) \), and \( \im(e)^{\perp} = \ker(e) \), it follows that \( \braket{e(v)}{w - e(w)} = 0 \).
     Thus,
     \begin{equation*}
-      \braket{p(v)}{w} = \braket{p(v)}{p(w)} = \braket{v}{p(w)},
+      \braket{e(v)}{w} = \braket{e(v)}{e(w)} = \braket{v}{e(w)},
     \end{equation*}
     which shows that \( A \) is self-adjoint.
 
     \item[(\( \Leftarrow \))]
     Suppose \( A \) is self-adjoint.
-    For any \( v \in V \) and \( u \in \im(p) \), we have:
+    For any \( v \in V \) and \( u \in \im(e) \), we have:
     \begin{equation*}
-      \braket{p(v) - v}{u}
-      = \braket{p(v)}{u} - \braket{v}{u}
-      = \braket{v}{p(u)} - \braket{v}{u}
+      \braket{e(v) - v}{u}
+      = \braket{e(v)}{u} - \braket{v}{u}
+      = \braket{v}{e(u)} - \braket{v}{u}
       = \braket{v}{u} - \braket{v}{u}
       = 0,
     \end{equation*}
-    since \( p(u) = u \) for \( u \in \im(p) \).
-    This shows that \( p(v) - v \in (\im(p))^\perp \), and thus \( p \) is an orthogonal projection. \qedhere
+    since \( e(u) = u \) for \( u \in \im(e) \).
+    This shows that \( e(v) - v \in (\im(e))^\perp \), and thus \( e \) is an orthogonal projection. \qedhere
   \end{description}
 \end{proof}
 
-The second kind of map we are interested in is defined by being inner-product on a subspace of its domain.
+Projections play a central role for measurements.
+\begin{example}\label{ex:proj-onto-0-ket}
+  The linear map
+  \begin{equation*}
+    e \from \mathbb{C}^{2} \to \mathbb{C}^{2}, \qquad
+    \begin{pmatrix}
+      x \\ y
+    \end{pmatrix}
+    \mapsto
+    \begin{pmatrix}
+      x \\ 0
+    \end{pmatrix}
+  \end{equation*}
+  is an orthogonal projection with image \( \mathbb{C} \ket 0\) and kernel \( \mathbb{C} \ket 1\).
+  The vector \(v = \tfrac{1}{\sqrt{2}}(\ket 0 + \ket 1)\) is a linear combination  of ``equal parts'' of \(\ket 0\) and \(\ket 1\) and indeed, we compute
+  \begin{equation*}
+    \braket{v}{e \mid v}
+    = \braket{v}{e(v)}
+    = (\frac{1}{\sqrt{2}})^{2} \braket[\big]{(\ket 0 + \ket 1)}{e(\ket 0 + \ket 1)}
+    = \frac{1}{2} \braket[\big]{(\ket 0 + \ket 1)}{\ket{0}}
+    = \frac{1}{2}.
+  \end{equation*}
+\end{example}
+\bigskip
+
+The second kind of map we are interested in is defined by preserving the inner-product on a subspace of its domain.
 \begin{definition}\label{def:partial-isometry}
   A \emph{partial isometry}  \(f \from (V, \braket{\blank}{\bblank})\to (W, [\blank \mid \bblank ])\) between Hilbert spaces is a linear map \(f \from V\to W\) such that
-  \begin{equation*}
+  \begin{equation}
     [f(v) \mid f(w) ] = \braket{v}{w} \qquad \text{ for all } v, w \in \ker f^{\perp}\subset V.
-  \end{equation*}
+  \end{equation}
   In case \(\ker f =\{0\}\), we call \(f\) a \emph{(linear) isometry}.
 \end{definition}
 
@@ -1852,13 +1942,13 @@ There exists an orthogonal projection \( p \from V \to V \) onto \( U \) and an 
 
 \begin{lemma}\label{lem:transformation-matrix-of-isometry}
   Consider a linear map \(f \from V\to W\) between an \(n\)-dimensional space \(V\) and an \(m\)-dimensional space \(W\).
-  Moreover, let \(\mathcal{B}\) and \(\mathcal{C}\) be orthonormal bases of \(V\) and \(W\), respectively, and \(A={}_{\mathcal{C}}f_{\mathcal{B}}\) the transformation matrix of \(f\) with respect to \(\mathcal{B}\) and \(\mathcal{C}\).
+  Moreover, let \(\mathcal{B}\) and \(\mathcal{C}\) be orthonormal bases of \(V\) and \(W\), respectively, and let \(A={}_{\mathcal{C}}f_{\mathcal{B}}\) be the transformation matrix of \(f\) with respect to \(\mathcal{B}\) and \(\mathcal{C}\).
   Then, \(f\) is a partial isometry if and only if \(P= A^{\dagger} A\) satisfies \(P^{2}= P\).
 \end{lemma}
 \begin{proof}
   We write \(U = \ker f^{\perp}\) for the orthogonal complement of \(\ker f\).
   First, let us show that for any linear map \(f\from V \to W\), the image of \(f^{\dagger}f\) is contained in \(U\).
-  To that end, consider a vector \(v\in V\) and \(w \in \ker f\).
+  To that end, consider  vectors \(v\in V\) and \(w \in \ker f\).
   We compute
   \begin{equation*}
     \braket{f^{\dagger}f(v)}{w}
@@ -1877,7 +1967,7 @@ There exists an orthogonal projection \( p \from V \to V \) onto \( U \) and an 
   Therefore, \(f\) is a partial isometry if and only if \(f^{\dagger}f\) is an orthogonal projection onto \(U\) and the claim follows from Lemma~\ref{lem:representing-orthogonal-projection} and Proposition~\ref{prop:adjoint-morph-is-adjoint-matrix}.
 \end{proof}
 
-Third kind of map, is a special case of an isometry \(f\from V\to V\)  with equal domain and codomain.
+Lastly, the third kind of map, is a special case of an isometry \(f\from V\to V\)  whose domain and codomain coincide.
 
 \begin{definition}\label{def:unitary-matrix}
   Consider a Hilbert space \(V\).
@@ -1888,23 +1978,27 @@ Third kind of map, is a special case of an isometry \(f\from V\to V\)  with equa
   \begin{equation}
     A^\dagger A = I_n = A A^\dagger.
   \end{equation}
-  We denote the set of all \( n \times n \) unitary matrices by \( U(n) \).
+  We denote the set of all unitary \( n \times n \) matrices by \( U(n) \).
 \end{definition}
-One easily verifies that upon chosing orthonormal bases, any unitary map is represented by a unitary matrix, see Exercise~\ref{exe:unitary-matrix-unitary-map}.
+One easily verifies that upon choosing orthonormal bases, any unitary map is represented by a unitary matrix, see Exercise~\ref{exe:unitary-matrix-unitary-map}.
+\bigskip
 
 
-The concept of the dual space arises naturally in the context of Hilbert spaces.
-Fixing a vector \( v \in V \) in the first entry of the inner product \( \braket{v}{\blank} \) defines a linear map \( \delta_{v}\from V \to \mathbb{C} \).
+The concept of dual spaces arises naturally in the context of Hilbert spaces.
+By inserting a vector \( v \in V \) into the first entry of the inner product, we obtain a linear map
+\begin{equation*}
+    V \to \mathbb{C}, \qquad w \mapsto \braket{v}{w} .
+\end{equation*}
 It ``measures'' the projection of any vector \( u \in V \) onto \( v \), and is a prototypical element of the dual space \( \rd*{V}= \Hom_{ \mathbb{C}}(V, \mathbb{C})\).
 
 \begin{lemma}\label{lem:canonical-iso-to-dual-space}
   Consider a finite-dimensional Hilbert space \((V, \braket{\blank}{\bblank})\) and the
   Riesz-map
-  \begin{equation*}
-    d \from V \to \rd*{V}, \qquad v \mapsto \braket{v}{\blank}.
-  \end{equation*}
+  \begin{equation}
+    d \from V \to \rd*{V}, \qquad v \mapsto \braket{v}{\bblank}.
+  \end{equation}
   \begin{thmlist}
-    \item There Riesz-map is well-defined and anti-linear. That is,
+    \item The Riesz-map is well-defined and anti-linear. That is,
     \begin{equation}
       d(\lambda v+w ) = \overline{\lambda} d(v) + d(w), \qquad \text{ for all }\lambda\in \mathbb{C}, v, w \in V.
     \end{equation}
@@ -1919,13 +2013,13 @@ Exercise~\ref{exe:proof-of-lem-canonical-iso-to-dual-space} provides a guided pr
 
 
 \begin{notation}\label{not:bra-ket}
-  Following physics literature, we will use \emph{bra-ket notation}.
-  Any vector of a Hilbert space  \((V, \braket{\blank }{\bblank})\) will be written as a \emph{ket} \(\ket v\).
+  Following physics literature, we will occasionally use \emph{bra-ket notation}.
+  Hre, a vector of a Hilbert space \((V, \braket{\blank }{\bblank})\) will be written as a \emph{ket} \(\ket v\).
   Similarly, a vector of the dual space \((\rd*{V}, \braket{ \blank }{ \bblank })\) is written as a \emph{bra} \(\bra{\phi}\).
 
   To keep our notation concise, we write \(f \ket v\eqdef f(\ket v)\) for any linear map \(f\from V\to W\) and \(\ket v\in V\).
   This has the additional advantage that the \emph{canonical pairing}, also called \emph{evaluation},
-  between \(\ket{v}\in V\) and \(\bra{\phi}\in \rd*{V}\) will be written as
+  between \(\ket{v}\in V\) and \(\bra{\phi}\in \rd*{V}\) will be
   \begin{equation*}
     \braket{\phi}{v}\eqdef \bra{\phi} \big( \ket v\big)
   \end{equation*}
@@ -1945,47 +2039,24 @@ Exercise~\ref{exe:proof-of-lem-canonical-iso-to-dual-space} provides a guided pr
 \end{notation}
 
 \subsection{States}
-
-In the simplest case, quantum algorithms follow the same three-step pattern highlighted in the previous string diagram.
-First, we prepare a state \(\ket{v}\), then we apply a unitary transformation \(f\), and finally, we measure the outcome.
-Even at this superficial level we have an oddity to consider.
-Everything we did was \emph{deterministic}: applying a linear transformation to some vector will always yield the same result.
-But in quantum computing we will utilise the probabilistic nature of quantum mechanics\footnote{
-  The proclaimed advantages of quantum computing over classical computing arise not just from probabilistic effects, but from the intricate interplay of superposition, entanglement, and interference in compound quantum systems.
-  In the language of complexity theory, the class \(\BQPclass\) of polynomial-time problems solvable by quantum computers is believed to properly include those solvable by probabilistic Turing machines, denotes \(\BPPclass\)
-}.
-
-As a motivational example we apply the the Hadamard gate \(H= \tfrac{1}{\sqrt{2}}
-\begin{psmallmatrix}
-  1 & 1 \\ 1 & -1
-\end{psmallmatrix}
-\) to the vector \(\ket{s} = \ket{0} \in \mathbb{C}^{2}\).
-The resulting vector \(\ket{t} = H\ket{s}= \tfrac{1}{\sqrt{2}}(\ket 0 + \ket 1)\) is neither \(\ket{0}\) nor \(\ket{1}\).
-Instead, following the Copenhagen interpretation its probability to be \(\ket{0}\) is
-\begin{equation*}
-  \|\braket{0}{t}\|^{2} = \|\tfrac{1}{\sqrt{2}}\|^{2} = \tfrac{1}{2}
-\end{equation*}
-and similarly \(\ket{t}\) is with probability \(\tfrac{1}{2}\) in state \(\ket{1}\).
-While we will discuss measurements in more detail in Section~\ref{sec:measurements-and-the-born-rule}, these computations motivate two observations:
-First, for the probabilities to sum to \(1\) the vector \(\ket{t}\) must have length \(1\).
-Second, if we replace \(\ket{t}\) with \(e^{2\pi \alpha}\ket{t}\) the outcomes of measurement remain unchanged \ie such scalars are not ``witnessed'' by measurements.
+In quantum computing, states serve as the fundamental representation of quantum information.
 
 \begin{definition}\label{def:states}
   Consider a Hilbert space \(V\).
   \begin{thmlist}
-    \item A vector \(\ket{v}\in V\) is \emph{normalised} if \(\|\ket{v}\| = 1\).
-    \item Two normalised vectors \(\ket{v},\ket{w}\in V\) are \emph{equivalent up to global phase} if there exists an \(\alpha\in \mathbb{R}\) such that \(e^{2\pi i \alpha}\ket{v} = \ket{w}\).
-    \item The equivalence class \([\ket{v}]\eqdef \{ e^{2\pi i \alpha} \ket{v}\}\) of a normalised vector \(\ket{v} \in V\) is called a \emph{(pure) state}.
+    \item A vector \(v\in V\) is \emph{normalised} if \(\braket{v}{v} = 1\).
+    \item Two normalised vectors \(v,w\in V\) are \emph{equivalent up to global phase} if there exists an \(\alpha\in \mathbb{R}\) such that \(e^{2\pi i \alpha}v = w\).
+    \item The equivalence class \([v]\eqdef \{ e^{2\pi i \alpha} v \mid \alpha \in \mathbb{R}\}\) of a normalised vector \(v \in V\) is called a \emph{(pure) state}.
   \end{thmlist}
 \end{definition}
 
-In quantum mechanics,the choice of basis \(\mathcal{B}\) for a Hilbert space is often motivated by the physical interpretation of the system.
-For example, in the context of qubits, the standard basis \( \{\ket{0}, \ket{1}\} \) corresponds to classical binary states, and measurements are typically performed with respect to this basis.
-Superposition describes the idea of having a state \([\ket{v}]\) that cannot be represented by a single basis vector alone.
+The choice of basis \(\mathcal{B}\) for a Hilbert space is often motivated by the physical interpretation of the system.
+For example, in the context of qubits, the standard basis \( \{\ket{0}, \ket{1}\} \) corresponds to classical binary states, and measurements are often performed with respect to this basis.
+Superposition describes the idea of having a state \([v]\) that cannot be represented by a single basis vector alone.
 
 \begin{definition}\label{def:superposition} %TODO ket-ify the vectors
-  Let \(V\) be a Hilbert space and \(\mathcal{B}= (\ket{b_1}, \dots, \ket{b_n})\) a basis.
-  A state \([\ket{v}]\) is in a \emph{superposition} with respect to \(\mathcal{B}\) if  \(\ket{v} = \lambda_{1} \ket{b_{1}} + \dots +\lambda_{n}\ket{b_{n}}\) and \(\lambda_{i}, \lambda_{j}\neq 0\) for some \(i\neq j\).
+  Let \(V\) be a Hilbert space and \(\mathcal{B}= (b_1, \dots, b_n)\) a basis.
+  A state \([v]\) is in a \emph{superposition} with respect to \(\mathcal{B}\) if  \(v = \lambda_{1} b_{1} + \dots +\lambda_{n}b_{n}\) and \(\lambda_{i}, \lambda_{j}\neq 0\) for some \(i\neq j\).
 \end{definition}
 
 We will now discuss two equivalent ways of describing states, eliminating the ambiguity introduced by global phase factors.
@@ -1994,33 +2065,33 @@ We will now discuss two equivalent ways of describing states, eliminating the am
   The canonical map
   \begin{equation}
     \mathrm{pro} \from \{\text{states in } V\} \to\{L\subset V\mid L \text{ is a 1-dimensional subspace}\} \qquad
-    [\ket{v}]\mapsto \mathbb{C} \ket{v} %or some \otimesher nate \instead of pro...
+    [v]\mapsto \mathbb{C} v %or some \otimesher nate \instead of pro...
   \end{equation}
   is a bijection.
 \end{lemma}
 \begin{proof}
   We construct the inverse map explicitly.
-  For each \(1\)-dimensional subspace \( L \subset V \), choose a non-zero vector \( \ket{v} \in L \setminus \{0\} \).
-  There exists a unique positive real number \( \lambda \in \mathbb{R}_{>0} \) such that \( \|\lambda \ket{v}\| = 1 \).
+  For each \(1\)-dimensional subspace \( L \subset V \), choose a non-zero vector \( v \in L \setminus \{0\} \).
+  There exists a unique positive real number \( \lambda \in \mathbb{R}_{>0} \) such that \( \|\lambda v\| = 1 \).
   We define the inverse map via
   \begin{equation*}
-    \mathrm{st} \from \{L\subset V\mid L \text{ is a 1-dimensional subspace}\} \to \{\text{states in } V\} \qquad L \mapsto [\lambda \ket{v}].
+    \mathrm{st} \from \{L\subset V\mid L \text{ is a 1-dimensional subspace}\} \to \{\text{states in } V\} \qquad L \mapsto [\lambda v].
   \end{equation*}
-  Given a \(1\)-dimensional subspace \( L = \mathbb{C} \ket{v} \), we compute
+  Given a \(1\)-dimensional subspace \( L = \mathbb{C} v \), we compute
   \begin{equation*}
-    \mathrm{pro}(\mathrm{st}(L)) = \mathrm{pro}([\lambda \ket{v}]) = \mathbb{C} \lambda \ket{v} = \mathbb{C} \ket{v}.
+    \mathrm{pro}(\mathrm{st}(L)) = \mathrm{pro}([\lambda v]) = \mathbb{C} \lambda v = \mathbb{C} v.
   \end{equation*}
 
-  Conversely, if \([\ket{v}]\) is a state, we get
+  Conversely, if \([v]\) is a state, we get
   \begin{equation*}
-    \mathrm{st}(\mathrm{pro}[\ket{v}]) = \mathrm{st}( \mathbb{C} \ket{v}) = [\lambda \ket{v}']
+    \mathrm{st}(\mathrm{pro}[v]) = \mathrm{st}( \mathbb{C} v) = [\lambda v']
   \end{equation*}
-  where \(\ket{v}' =\beta \ket{v}\).
-  Since \( \|\ket{v}\| = 1 \), we have
+  with \(\lambda v' =\beta v\) for some \(\beta \in \mathbb{C}\).
+  Since \( \|v\| = 1 \), we have
   \begin{equation*}
-    \|\beta\| = \|\beta\| \;\|\ket{v}\| = \|\beta \ket{v}\| = \|\lambda \ket{v}'\| = 1.
+    |\beta| = |\beta| \;\|v\| = \|\beta v\| = \|\lambda v'\| = 1.
   \end{equation*}
-  Thus, \( \beta = e^{2\pi i \alpha} \) for some \( \alpha \in \mathbb{R} \), and \( [\ket{v}] = [\lambda \ket{v}'] \).
+  Thus, \( \beta = e^{2\pi i \alpha} \) for some \( \alpha \in \mathbb{R} \), and \( [v] = [\lambda v'] \).
 \end{proof}
 
 The set \( \mathbb{C}P^{n-1} =\{L \subset \mathbb{C}^{n}\mid \dim L = 1\} \) is called the \emph{complex projective space}.
@@ -2032,19 +2103,19 @@ A different perspective on states is given by viewing them as matrices.
 \begin{definition}\label{def:mixed-state-density-matrix}
   A \emph{mixed state} is a self-adjoint, positive semidefinite map \(\rho\from V\to V\) satisfying \(\tr \rho = 1\).
 
-  A \emph{density matrix} is a self-adjoint, positive definite matrix \(A \in \Mat_{n}( \mathbb{C})\) with \(\tr(A)=1\).
+  A \emph{density matrix} is a self-adjoint, positive semidefinite matrix \(A \in \Mat_{n}( \mathbb{C})\) with \(\tr(A)=1\).
 \end{definition}
 
 \begin{remark}\label{rmk:density-matrices-are-mixed-states}
   Let \(\mathcal{B}=(b_{1}, \dots , b_{n})\) be an orthonormal basis of \(V\).
-  By construction, a linear map \(f\from V\to V\) is a mixed state if and only if \(_{\mathcal{B}}f_{\mathcal{B}} \in \Mat_{n}{ \mathbb{C}}\) is a density matrix.
+  By construction, a linear map \(f\from V\to V\) is a mixed state if and only if \(_{\mathcal{B}}f_{\mathcal{B}} \in \Mat_{n}(\mathbb{C})\) is a density matrix.
 \end{remark}
 
 
 Consider any  vector \(\ket{v}= a \ket{0} + b \ket{1} \in \mathbb{C}^{2}\).
 A direct computation shows that
 \begin{equation*}
-  \rho_{\ket v}\eqdef\ket{v}\bra{v} \from \mathbb{C}^{2} \to \mathbb{C}^{2}, \qquad \ket{w} \mapsto (\braket{v}{w})\ket{v}.
+  \rho_{\ket v}\eqdef\ket{v}\bra{v} \from \mathbb{C}^{2} \to \mathbb{C}^{2}, \qquad \ket{w} \mapsto \braket{v}{w}\; \ket{v}
 \end{equation*}
 is self-adjoint and positive semidefinite.
 Moreover the trace of \(\rho_{\ket{v}}\) is
@@ -2060,16 +2131,17 @@ Thus, \(\tr(\rho_{\ket v})=1\) is equivalent to \(\ket{v}\) being normalised.
 \begin{proposition}\label{prop:density-matrix-perspective}
   There is an injective map
   \begin{equation*}
-    \rho:\{\text{states of }V\}\to\{ \text{density matrices on } V\}, \qquad \ket{v} \mapsto \rho_{\ket{v}} \eqdef \ket{v}\bra{v}
+    \rho:\{\text{pure states of }V\}\to\{ \text{mixed stated of } V\}, \qquad \ket{v} \mapsto \rho_{\ket{v}} \eqdef \ket{v}\bra{v}
   \end{equation*}
-  Its image coincides with the rank 1 density matrices.
+  Its image coincides with the rank \(1\) mixed states.
 \end{proposition}
 \begin{proof}
-  Let \( \mathcal{B} = (\ket{v}, \ket{b_2}, \dots, \ket{b_n}) \) be an orthonormal basis containing \( \ket{v} \). The transformation matrix of \( \rho_{\ket{v}} \) with respect to \( \mathcal{B} \) is \( \mathrm{diag}(1, 0, \dots, 0)\), which is clearly self-adjoint, positive semidefinite, and of rank 1.
+  Let \(\ket v \in V\) be normalised and let \( \mathcal{B} = (\ket{v}, \ket{b_2}, \dots, \ket{b_n}) \) be an orthonormal basis containing \( \ket{v} \).
+  The transformation matrix of \( \rho_{\ket{v}} \) with respect to \( \mathcal{B} \) is \( \mathrm{diag}(1, 0, \dots, 0)\), which is clearly self-adjoint, positive semidefinite, and of rank 1.
 
-  Conversely, assume that \(\varrho \in \End(V)\) is a rank 1 density matrix.
-  By the spectral Theorem~\ref{thm:spectral-theorem}, there exists an orthonormal basis \(\mathcal{B}= (b_{1}, b_{2}, \dots , b_{n})\) of eigenvalues \(\lambda_{1}\geq  \dots \geq \lambda_{n} \geq 0\) of \(\varrho\).
-  Since \(\rk \varrho\) coincides with the number of non-zero eigenvalues and \(\tr(\varrho) = \lambda_{1} + \dots + \lambda_{n} = 1\), we have \(\lambda_{1} = 1\) and \(\lambda_{2} = \dots = \lambda_{n} = 0\).
+  Conversely, assume that \(\varrho \in \End(V)\) is a rank 1 mixed state.
+  By the spectral Theorem~\ref{thm:spectral-theorem}, \(V\) admits an orthonormal basis \(\mathcal{B}= (\ket{b_{1}}, \ket{b_{2}}, \dots , \ket{b_{n}})\) of eigenvectors of \(\varrho\) corresponding to the eigenvalues \(\lambda_{1}\geq  \dots \geq \lambda_{n} \geq 0\).
+  Since \(\rk \varrho\) coincides with the number of non-zero eigenvalues (counting multiplicities) and \(\tr(\varrho) = \lambda_{1} + \dots + \lambda_{n} = 1\), we have \(\lambda_{1} = 1\) and \(\lambda_{2} = \dots = \lambda_{n} = 0\).
   In particular \(_{\mathcal{B}}\varrho_{\mathcal{B}} = \mathrm{diag}(1,0, \dots , 0) = {}_{\mathcal{B}}{\rho_{\ket{b_{1}}}}_{\mathcal{B}}\) which implies that \(\varrho = \rho_{\ket{b_{1}}}\).
 
 
@@ -2085,12 +2157,12 @@ Thus, \(\tr(\rho_{\ket v})=1\) is equivalent to \(\ket{v}\) being normalised.
   \begin{equation*}
     \ket{v} = \ket{v} \braket{v}{v} = \ket{w} \braket{w}{v}.
   \end{equation*}
-  Setting \(\lambda = \braket{w}{v}\), we observe that  \(\lambda \ket{w}= \ket{v}|\).
+  Thus,  \(\lambda \ket{w}= \ket{v}|\) with \(\lambda = \braket{w}{v}\).
   Moreover, since \(\ket{w}\) and \(\ket{v}\) are normalised, we obtain
   \begin{equation*}
-    \|\lambda\| = \|\lambda\| \; \|\ket{w}\| = \|\lambda \ket{w}\| = \|v\| = 1
+    |\lambda| = |\lambda| \; \|\ket{w}\| = \|\lambda \ket{w}\| = \|v\| = 1
   \end{equation*}
-  implying that \([\ket v] = [\ket w]\).
+  and therefore \([\ket v] = [\ket w]\).
 \end{proof}
 
 In string diagrams, the density matrix of a pure state is given as follows.
@@ -2102,7 +2174,7 @@ In string diagrams, the density matrix of a pure state is given as follows.
 \subsubsection*{Qubits and the Bloch sphere}\label{sec:qubits-and-the-bloch-sphere}
 
 As the name suggests, a \emph{qubit} is the quantum analogue of a bit.
-It is modelled by a system with two degrees of freedom andtypically represented by the Hilbert space \( \mathbb{C}^2 \).
+It is modelled by a system with two degrees of freedom and represented by the Hilbert space \( \mathbb{C}^2 \).
 
 \begin{definition}\label{def:qubit}
   A \emph{(pure) qubit state} is a state of \( \mathbb{C}^2 \).
@@ -2153,18 +2225,18 @@ We will now describe arbitrary states as linear combinations of \(I_{2}\) and th
 \begin{proof}
   Let \(P=\tfrac{1}{2}(r_{0}I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})\in \Mat_{2}( \mathbb{C})\) be any matrix.
   Since Pauli matrices are self-adjoint, \(P = P^{\dagger}\) if and only if the scalars \(r_{0}, r_{x}, r_{y}, r_{z}\) are real.
-  Moreover, since the trace is linear and Pauli matrices are trace-less, \(\tr(P) = 1\) is equivalent to \(r_{0} = 1\).
+  Moreover, since the trace is linear and Pauli matrices are trace-less, \(1 = \tr(P) = r_{0}\) is equivalent to \(r_{0} = 1\).
   We now compute
   \begin{align*}
     (2P)^{2}
     & = (I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})(I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})\\
     & = (1+ r_{x}^{2} + r_{y}^{2}+ r_{z}^{2}) I_{2}
       + (2r_{x} + i r_{y}r_{z} -i r_{y}r_{z} ) \sigma_{x}\\
-    &\qquad  + (2r_{y} + -i r_{x}r_{z} + i r_{x}r_{z}) \sigma_{y}
+    &\qquad  + (2r_{y}  -i r_{x}r_{z} + i r_{x}r_{z}) \sigma_{y}
       + (2r_{z}+ i r_{x}r_{y} - i r_{x}r_{y} ) \sigma_{z} \\
-    & = 4P
+    & =  (1+ r_{x}^{2} + r_{y}^{2}+ r_{z}^{2}) I_{2} + 2\sigma_{x} + 2\sigma_{y} + 2\sigma_{z},
   \end{align*}
-  Implying that \(P^{2}=P\) if and only if \((r_{x}^{2} + r_{y}^{2}+ r_{z}^{2}) =1\).
+  implying that \(P^{2}=P\) if and only if \(r_{x}^{2} + r_{y}^{2}+ r_{z}^{2} =1\).
 \end{proof}
 
 Therefore, we can model the states of \( \mathbb{C}^{2}\) as unit vectors of \( \mathbb{R}^{3}\).
@@ -2176,9 +2248,13 @@ Therefore, we can model the states of \( \mathbb{C}^{2}\) as unit vectors of \( 
 The following corollary is a reformulation of Lemma~\ref{lem:characterising-the-qubit}
 
 \begin{corollary}\label{cor:Bloch-sphere-pure-state}
-  There is a bijection between the Bloch sphere and the states of \( \mathbb{C}^{2}\) given by
+  There is a bijection between the Bloch sphere and the  states of \( \mathbb{C}^{2}\) given by
   \begin{equation*}
-    S^{2} \mapsto\{ p \in \Mat_{2}( \mathbb{C}) \mid p \text{ density matrix, } \rk(p) = 1\}, % <- the last bracket could be two lines below each \otimesher... replace \mid \blank by vert...
+    S^{2} \mapsto\left\{ p \in \Mat_{2}( \mathbb{C}) \;\middle\vert\;
+      \begin{gathered}
+      p \text{ density matrix,}\\
+       \rk(p) = 1
+      \end{gathered}\right\},
     \qquad
     \begin{pmatrix}
       r_{x} \\
@@ -2189,7 +2265,7 @@ The following corollary is a reformulation of Lemma~\ref{lem:characterising-the-
   \end{equation*}
 \end{corollary}
 
-The figure below show the Bloch sphere with \(\ket{0}\) and \(\ket{1}\) as north and south pole and the \(X\)- and \(Y\)-basis as points on the equator.
+The figure below shows the Bloch sphere with \(\ket{0}\) and \(\ket{1}\) as north and south pole and the \(X\)- and \(Y\)-basis as points on the equator.
 
 \begin{equation*}
   \inputtikz{bloch-sphere}
@@ -2795,7 +2871,7 @@ To address the first issue, we need to look at the dual of a space \(V\).
 \end{proof}
 
 The space \(\End_{ \mathbb{C}}(V)\) has a distinguished element, namely \(\id_{V}\).
-By chosing a basis \(\mathcal{B}\) of \(V\), this corresponds under the isomorphism \(\mathrm{dk}^{-1} \from \End_{ \mathbb{C}}(V) \to \rd*{V} \otimes V\) to \(\sum_{i=1}^{n} \beta_{i}\otimes b_{i}\).
+By choosing a basis \(\mathcal{B}\) of \(V\), this corresponds under the isomorphism \(\mathrm{dk}^{-1} \from \End_{ \mathbb{C}}(V) \to \rd*{V} \otimes V\) to \(\sum_{i=1}^{n} \beta_{i}\otimes b_{i}\).
 
 Moreover, we can associate to any endomorphism \(f\in \End_{ \mathbb{C}}(V) \) its trace \(\tr(f) \in \mathbb{C}\).
 By applying \(\mathrm{dk}^{-1}\from \End_{ \mathbb{C}}(V) \to \rd*{V} \to V\), it is not difficult to see that this corresponds to the assignment \(\gamma \otimes v \mapsto \gamma(v)\).
@@ -3244,7 +3320,7 @@ These groups have natural analogues in the setting of linear maps of finite-dime
   Another set of examples where the group operation is matrix multiplication is given below.
   \begin{thmlist}
     \item The group of scalar matrices \( \{\lambda I_n \mid \lambda \in  \mathbb{C}\setminus\{0\}\} \);
-    \item The group \( \{\lambda I_n \mid \lambda \in \mathbb{C} \text{ and } \|\lambda\| = 1\} \) of scalar matrices of norm \(1\);
+    \item The group \( \{\lambda I_n \mid \lambda \in \mathbb{C} \text{ and } |\lambda| = 1\} \) of scalar matrices of norm \(1\);
     \item The group of scalar matrices with entries that are \(n\)-th roots of unity.
     That is, \( \{\lambda I_n \mid \lambda \in \mathbb{C} \text{ and } \lambda^n = 1\} \).
   \end{thmlist}
@@ -3331,10 +3407,10 @@ By Lemma~\ref{lem:mixed-state-action}, conjugation by unitary matrices yields an
 
 \begin{example}\label{ex:group-action-factor-through}
   Consider two unitary matrices \(A, B \in U(n)\) such that \([A] = [B]\).
-  Then ,there exists a \(\lambda \in \mathbb{C}\) with \(\|\lambda \| = 1\) and \(\lambda A = B\).
+  Then ,there exists a \(\lambda \in \mathbb{C}\) with \(|\lambda | = 1\) and \(\lambda A = B\).
   For any \(M \in \Mat_{n}( \mathbb{C})\), we have
   \begin{equation*}
-    BMB^{\dagger} = (\lambda A) M (\lambda A)^{\dagger} = \lambda \lambda^{\dagger} AMA^{\dagger} = \|\lambda\| AMA^{\dagger}.
+    BMB^{\dagger} = (\lambda A) M (\lambda A)^{\dagger} = \lambda \lambda^{\dagger} AMA^{\dagger} = |\lambda| AMA^{\dagger}.
   \end{equation*}
   Therefore, \(PU(n) \cong PSU(n)\) acts by conjugation on all matrices, and, by restriction, on density matrices.
   \begin{equation*}
@@ -3492,6 +3568,8 @@ The big advantage about mixed states in the context of  measurements is that we 
 \cleardoublepage
 \subsection{Exercises}\label{sec:basics-exercises}
 
+\subsubsection*{Hilbert spaces}
+
 \begin{exercise}\label{exe:inner-product-is-sesquilinear}
   Show that an inner product \(\braket{\blank}{\bblank} \from V\times V \to \mathbb{C}\) is sesquilinear.
 
@@ -3504,8 +3582,35 @@ The big advantage about mixed states in the context of  measurements is that we 
 \end{exercise}
 
 \begin{exercise}\label{exe:orth-complement-direct-sum}
-  Let \(U\subset V\) be a subspace of a Hilbert space.
-  Show that \(U\oplus U^{\perp} = V\)
+  Let \(U\subset V\) be a subspace of a finite-dimensional Hilbert space.
+  Show that \(U\oplus U^{\perp} = V\) by proceeding as follows.
+  \begin{thmlist}
+    \item Show that if \(u_{1} + u_{2} = r_{1} + r_{2} \) with \(u_{1}, r_{1} \in U\) and \(u_{2}, r_{2} \in U^{\perp}\) then \(u_{1} = r_{1}\) and \(u_{2} = r_{2}\).
+
+    \textit{Hint:} What is the value of \(\braket{u_{1}-r_{1}}{u_{1} -r_{1}}\)?
+    \item Show that \((U+ U^{\perp})^{\perp} =\{0\}\).
+    \item Use that \(\{0\}^{\perp} = V\) to conclude the proof.
+  \end{thmlist}
+\end{exercise}
+
+\begin{exercise}\label{exe:char-of-self-adjoint}
+  Let  \(A \in \Mat_{m,n} ( \mathbb{C})\) be a matrix.
+  \begin{thmlist}
+    \item Show that \(\braket{v}{Aw} = \braket{A^{\dagger} v}{w}\) for all \(v\in \mathbb{C}^{m}\) and \(w \in \mathbb{C}^{n}\).
+    \item Suppose now that \(A\) is a \(n\times n\) square matrix.
+    Prove that \(A= A^{\dagger}\) if and only if \(\braket{v}{Aw} = \braket{Av}{w}\) for all \( v,w \in \mathbb{C}^{n}\).
+
+    \textit{Hint:} Let \(e_{j}, e_{k}\in \mathbb{C}^{n}\) be two standard basis vectors.
+    What is \(\braket{e_{j}}{A e_{k}}\)?
+  \end{thmlist}
+\end{exercise}
+
+\begin{exercise}\label{exe:alternative-defn-orthogonal-projection}
+  Consider a linear map \(p \from V\to V\) between finite-dimensional Hilbert spaces.
+  \begin{thmlist}
+    \item Show that if \(p\) is an orthogonal projection onto a subspace \(U\), it has \(\im p = U\), \(\ker p = U^{\perp}\) and \(p^{2}= p\).
+    \item Conversely, assume \(p^{2}=p\) and \(\im p^{\perp} = \ker p\). Prove that \(p\) is an orthogonal projection.
+  \end{thmlist}
 \end{exercise}
 
 \begin{exercise}\label{exe:unitary-matrix-unitary-map}
@@ -3525,7 +3630,9 @@ The big advantage about mixed states in the context of  measurements is that we 
   \end{thmlist}
 \end{exercise}
 
-% TODO TENSOR PRODUCTS
+\subsubsection*{States}
+
+\subsubsection*{Compound systems}
 \begin{exercise}\label{exe:bilinear-vs-linear-hom}
   Show that there is a bijection
   \begin{align*}
@@ -3544,11 +3651,70 @@ The big advantage about mixed states in the context of  measurements is that we 
 
   Show that a map \( \phi \from V \times V \to \mathbb{C} \) is sesquilinear if and only if the map \( \psi \from \overline{V} \times V \to \mathbb{C} \) defined by \( \psi(\overline{v}, w) = \phi(v, w) \) is bilinear.
 \end{exercise}
+\subsubsection*{Unitary transformations}
 
+\subsubsection*{Measurement}
 
 
 \cleardoublepage
 \subsection{Study goals}\label{sec:study-goals}
+The questions below are designed to help you build a conceptual understanding of the SCUM-axioms.
+You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
+The level of difficulty is aligned with what you can expect in the exam.
+
+\subsubsection*{Hilbert spaces}
+\begin{thmlist}
+\item Compute \(\braket{
+\begin{psmallmatrix}
+2 \\3
+\end{psmallmatrix}}{
+\begin{psmallmatrix}
+5 \\ 2
+\end{psmallmatrix}
+}_{\mathrm{std}}. \)
+\item Find vectors \(v, w \in \mathbb{C}^{3}\) such that \(\braket{v}{w} = 3i\).
+\item Suppose \(v\in \mathbb{C}^{3}\) satisifes \(\braket{v}{v}_{\mathrm{std}} = 0\).
+What can be said about \(v\)?
+\item Let \(U, W\) be \(2\) and \(5\)-dimensional subspaces of a vector space \(V\), respectively.
+Whose orthogonal complement has a bigger dimension?
+\item Are there scalars \(\lambda, \mu \in \mathbb{C}\) such that
+\(\left(
+  \lambda
+  \begin{psmallmatrix}
+    1 \\ 2
+  \end{psmallmatrix},
+  \mu
+  \begin{psmallmatrix}
+    -2 \\ 1
+  \end{psmallmatrix}
+\right)\)
+is an orthonormal basis of \( \mathbb{C}^{2}\)?
+\item Consider a linear map \(f \from \mathbb{C}^{2} \to \mathbb{C}^{3}\). Is \(ff^{\dagger}\) self-adjoint?
+\item Define an orthonormal projection \(e \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) onto
+\(\left\{
+  \begin{psmallmatrix}
+    z \\ - z
+  \end{psmallmatrix} \; \middle\vert\; z\in \mathbb{C}
+\right\}\).
+\item Show that the eigenvalues of a self-adjoint map \(f \from V \to V\) are real.
+\item Decide which of the following properties hold for the matrix \(H=
+\tfrac{1}{\sqrt{2}}
+\begin{psmallmatrix}
+  1 & 1 \\ 1 & -1
+\end{psmallmatrix}
+\):
+Is it unitary, self-adjoint, or positive semidefinite? Multiple answers can be true.
+\item Let \(\mathcal{B}=(b_{1}, b_{2}, b_{3})\) be a basis of \( \mathbb{C}^{3}\).
+Is \((d(b_{1}), d(b_{2}), d(b_{3}))\) a basis of \(\rd*{ \mathbb{C}^{3}}\)?
+\end{thmlist}
+\subsubsection*{States}
+
+\subsubsection*{Compound systems}
+
+\subsubsection*{Unitary transformations}
+
+\subsubsection*{Measurement}
+
 
 \cleardoublepage
 \section{Quantum computation via the zx calculus}\label{sec:quantum-computation-via-the-zx-calculus}
