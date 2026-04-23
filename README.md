@@ -4,7 +4,7 @@ These are lecture notes for a graduate-level course on some mathematical aspects
 
 # What (not) to expect
 
-Here, you get the most recent version of the notes. This may include some sketched and incomplete section and parts that are under development. Proceed with caution. 
+Here, you get the most recent version of the notes. This may include some sketched and incomplete sections and parts that are under development. Proceed with caution. 
 
 # Compilation Instructions
 
