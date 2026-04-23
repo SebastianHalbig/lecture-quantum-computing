@@ -1,0 +1,417 @@
+% --- commands ---
+
+% --- common abbreviations ---
+\newcommand*{\eg}{e.g.\xspace}
+\newcommand*{\ie}{i.e.\xspace}
+\newcommand*{\etal}{et.~al.\xspace}
+\newcommand*{\etc}{etc.\xspace}
+
+% --- names ---
+\newcommand*{\Benabou}{Bénabou\xspace}
+\newcommand*{\Bruguieres}{Bruguières\xspace}
+\newcommand*{\EilenbergMoore}{Eilenberg--Moore\xspace}
+\newcommand*{\Grothendieck}{Grothendieck\xspace}
+\newcommand*{\GV}{Grothendieck--Verdier\xspace}
+\newcommand*{\Malcev}{Mal'cev\xspace}
+\newcommand*{\Moerdijk}{Moerdijk\xspace}
+\newcommand*{\TannakaKrein}{Tannaka--Krein\xspace}
+\newcommand*{\YangBaxter}{Yang--Baxter\xspace}
+\newcommand*{\YetterDrinfeld}{Yetter--Drinfeld\xspace}
+
+% --- Long arrows ---
+\ifx\ST@font\ST@lib%
+  % Add a little bit of negative space for libertine.
+  \renewcommand*{\colon}{\!\nobreak\mskip2mu\mathpunct{}\nonscript%
+    \mkern-\thinmuskip{:}\mskip6muplus1mu\relax%
+  }
+\fi
+\newcommand*{\from}{\ensuremath{\colon}} % As in $f\from A \to B$.
+\newcommand{\trightarrow}[2][]{\ensuremath{\xrightarrow[\;\;#1\;\;]{#2}}} %A wider version of xrightarrow.
+\newcommand{\tleftarrow}[2][]{\ensuremath{\xleftarrow[\;\;#1\;\;]{#2}}} %A wider version of xleftarrow.
+\newcommand{\nt}{\ensuremath{\Longrightarrow}}
+\newcommand*{\yo}{\text{\begin{CJK}{UTF8}{min}よ\end{CJK}}} % Yoneda embedding
+\newcommand*{\longhookrightarrow}{\ensuremath{\lhook\joinrel\longrightarrow}}
+\newcommand*{\longtwoheadrightarrow}{\ensuremath{\relbar\joinrel\twoheadrightarrow}}
+\renewcommand*{\to}{\ensuremath{\longrightarrow}}
+\renewcommand*{\mapsto}{\ensuremath{\longmapsto}}
+\newcommand*{\inj}{\ensuremath{\longhookrightarrow}}
+\newcommand*{\emb}{\ensuremath{\longhookrightarrow}}
+\newcommand*{\sur}{\ensuremath{\longtwoheadrightarrow}}
+\newcommand*{\proj}{\ensuremath{\longtwoheadrightarrow}}
+\ifx\ST@font\ST@lib%
+  \newcommand*{\iso}{\overset{\smash{\raisebox{-0.65ex}{\ensuremath{\scriptstyle\sim}}}\,}{\to}}
+\else
+  \newcommand*{\iso}{\overset{\smash{\raisebox{-0.55ex}{\ensuremath{\scriptstyle\sim}}}\,}{\to}}
+\fi
+
+\ifx\ST@font\ST@cm%
+  % There is no 12pt symbols font for CM, so \Longrightarrow looks bad there; fix this.
+  \DeclareFontFamily{OT1}{cmrx}{}
+  \DeclareFontShape{OT1}{cmrx}{m}{n}{<->cmr10}{}
+  \let\saveLongrightarrow\Longrightarrow%
+  \renewcommand*{\Longrightarrow}{%
+    \mathrel{\rlap{\fontfamily{cmrx}\fontencoding{OT1}\selectfont=}%
+      \hphantom{\saveLongrightarrow}%
+      \llap{$\m@th\Rightarrow$}}}
+\fi
+
+% --- Categories
+\newcommand*{\cat}[1]{\ensuremath{\mathcal{#1}}} % A category
+
+\newcommand*{\ConcreteCat}[1]{\ensuremath{\mathsf{#1}}\xspace}
+
+\newcommand*{\finset}{\ConcreteCat{set}}
+\newcommand*{\Set}{\ConcreteCat{Set}}
+\newcommand*{\Vect}{\ConcreteCat{Vect}}
+\newcommand*{\vect}{\ConcreteCat{vect}}
+\newcommand{\Cat}{\ConcreteCat{Cat}}
+\newcommand*{\MCCat}{\ConcreteCat{MCCat}}
+\newcommand*{\mky}{\ConcreteCat{Mky}}
+\newcommand*{\mkyfin}{\ConcreteCat{mky}}
+\newcommand*{\Ab}{\ConcreteCat{Ab}}
+\newcommand*{\sSet}{\ConcreteCat{sSet}}
+\newcommand*{\Top}{\ConcreteCat{Top}}
+\newcommand*{\kVect}{\@ifnextchar\bgroup{\@kVectWithArgs}{\Vect_{\Bbbk}}}
+\newcommand*{\@kvectWithArgs}[1]{\vect_{#1}}
+\newcommand*{\kvect}{\@ifnextchar\bgroup{\@kvectWithArgs}{\vect_{\Bbbk}}}
+\newcommand*{\@kVectWithArgs}[1]{\Vect_{#1}}
+\newcommand*{\Sp}[1]{\ensuremath{\mathbb{S}\mathsf{p}_{#1}}\xspace}
+\newcommand*{\Module}{\ConcreteCat{Mod}}
+\newcommand*{\module}{\ConcreteCat{mod}}
+\newcommand*{\Comodule}{\ConcreteCat{Comod}}
+\newcommand*{\comodule}{\ConcreteCat{comod}}
+
+% We build a factory for categories such as G-sets, V-Cats, etc.
+\newcommand*{\specialcat}[3][]{%
+  \expandafter\newcommand\csname #2#3\endcsname{%
+    \ensuremath{#1{#2}\text{-}\!\operatorname{#3}}
+  }%
+}
+
+\specialcat{G}{Set}
+\specialcat{H}{Set}
+\specialcat{K}{Set}
+\specialcat[\cat]{U}{Cat}
+\specialcat[\cat]{V}{Cat}
+
+\newcommand*{\simp}{\ensuremath{\mathbf{\Delta}}\xspace}
+\newcommand*{\ind}[1]{\ensuremath{\mathrm{ind}\,{#1}}}
+
+
+\newcommand*{\BiCat}[1]{%
+  \ensuremath{%
+    \mathbb{\ST@firstletter #1@}\mathsf{\ST@restletters #1@}%
+  }\xspace%
+}
+
+\DeclareMathOperator*{\Ob}{Ob}         % The class of objects
+\DeclareMathOperator*{\Mor}{Mor}       % The class of morphisms
+\DeclareMathOperator*{\Fun}{Fun}       % The class of functors
+\DeclareMathOperator*{\Nat}{Nat}       % The class of natural transformations
+\DeclareMathOperator*{\MonCat}{MonCat} % The category of monoidal categories
+\DeclareMathOperator*{\ModCat}{ModCat} % The category of module categories
+\DeclareMathOperator{\Com}{Com}        % The category of comodule endofunctors
+
+% --- Centres
+\NewDocumentCommand{\buildCenter}{m o o m o}{
+  \IfBooleanTF{#1}
+  {\ensuremath{\mathsf{#2} \prescript{}{\mathsf{#3}}{(#4)}_{\mathsf{#5}}}\xspace}
+  {\ensuremath{\mathsf{#2} \prescript{}{\mathsf{#3}}{(\cat{#4})}_{\mathsf{#5}}}\xspace}
+}
+\NewDocumentCommand{\cent}{s O{} m O{}}{\buildCenter{#1}[Z][#2]{#3}[#4]}
+\newcommand*{\tcf}[2]{\buildCenter*[Z]{#1}[#2]}
+\newcommand*{\tc}[1]{\tcf{#1}{T}}
+\NewDocumentCommand{\ZCat}{s O{} m O{}}{\buildCenter{#1}[Z][#2]{#3}[#4]} % The center of a category
+\NewDocumentCommand{\ACat}{s O{} m O{}}{\buildCenter{#1}[A][#2]{#3}[#4]} % Right twisted center
+\NewDocumentCommand{\QCat}{s O{} m O{}}{\buildCenter{#1}[Q][#2]{#3}[#4]} % Left twisted center
+\NewDocumentCommand{\SZCat}{s O{} m O{}}{\buildCenter{#1}[SZ][#2]{#3}[#4]} % The center of a category
+
+% --- Modules
+\newcommand{\lmod}[1]{\ensuremath{#1\textnormal{-}\module}}
+\newcommand{\lMod}{\@ifstar{\ST@lMd}{\ST@@lMd}}
+\newcommand\ST@lMd[1]{\ensuremath{\prescript{}{#1}{\cat{M}}}}
+\newcommand\ST@@lMd[1]{\ensuremath{{#1}\textnormal{-}{\Module}}}
+
+\newcommand{\lcomod}[1]{\ensuremath{#1\textnormal{-}\comodule}}
+\newcommand{\lComod}{\@ifstar\ST@lCmd\ST@@lCmd}
+\newcommand\ST@lCmd[1]{\ensuremath{\prescript{#1}{}{\cat{M}}}}
+\newcommand\ST@@lCmd[1]{\ensuremath{{#1}\textnormal{-}{\Comodule}}}
+
+\newcommand{\rmod}[1]{\ensuremath{\module\textnormal{-}#1}}
+\newcommand{\rMod}{\@ifstar{\ST@rMd}{\ST@@rMd}}
+\newcommand\ST@rMd[1]{\ensuremath{{\cat{M}}_{#1}}}
+\newcommand\ST@@rMd[1]{\Module\textnormal{-}#1}
+
+\newcommand{\rcomod}[1]{\ensuremath{\comodule\textnormal{-}#1}}
+\newcommand{\rComod}{\@ifstar\ST@rCmd\ST@@rCmd}
+\newcommand\ST@rCmd[1]{\ensuremath{{\cat{M}}^{#1}}}
+\newcommand\ST@@rCmd[1]{\Comodule\textnormal{-}#1}
+
+
+\newcommand{\bimod}[2][]{%
+  \ifstrempty{#1}{#2\textnormal{-}\module\textnomral{-}#2} {#1\textnormal{-}\module\textnormal{-}#2}}
+\newcommand{\biMod}{\@ifstar\ST@biMd\ST@@biMd}
+\newcommand{\ST@biMd}[2][]{
+  \ifstrempty{#1}
+    {\ensuremath{\prescript{}{#2}{\cat{M}}_{#2}}}
+    {\ensuremath{\prescript{}{#1}{\cat{M}}_{#2}}}}
+\newcommand{\ST@@biMd}[2][]{
+  \ifstrempty{#1}
+    {#2\textnormal{-}\Module\textnormal{-}#2}
+    {#1\textnormal{-}\Module\textnormal{-}#2}}
+
+ \newcommand{\bicomod}[2][]{
+   \ifstrempty{#2\textnormal{-comod-}#2}
+     {#1\textnormal{-}\comodule\textnormal{-}#2}}
+ \newcommand{\biComod}{\@ifstar\ST@biCmd\ST@@biCmd}
+ \newcommand{\ST@biCmd}[2][]{
+   \ifstrempty{#1}{\ensuremath{\prescript{#2}{}{\cat{M}}^{#1}}}
+     {\ensuremath{\prescript{#2}{}{\cat{M}}^{#2}}}}
+ \newcommand{\ST@@biCmd}[2][]{
+   \ifstrempty{#1}
+     {#2\textnormal{-}\Comodule\textnormal{-}#2}
+     {#1\textnormal{-}\Comodule\textnormal{-}#2}}
+
+ \newcommand{\YD}[1]{\ensuremath{\prescript{#1}{#1}{\mathsf{YD}}}\xspace} %Category of left-left Yetter-Drinfeld modules (possibly with charge)
+ \newcommand{\AYD}[1]{\ensuremath{\prescript{#1}{#1}{a\mathsf{YD}}}\xspace} %Category of left-left anti-Yetter-Drinfeld modules
+\newcommand{\Tetra}[1]{\ensuremath{\prescript{#1}{#1}{\cat{M}}_{#1}^{#1}}\xspace} %Category of tetra modules
+\newcommand{\ATetra}[1]{\ensuremath{\prescript{#1}{#1}{a\cat{M}}_{#1}^{#1}}\xspace} %Category of anti-tetra Modules
+
+\newcommand{\lmodcat}[2]{ensuremath{\prescript{}{\cat{#1}}{\cat{#2}}}}
+\newcommand{\rmodcat}[2]{\ensuremath{\cat{#1}_{\cat{#2}}}}
+\newcommand{\bimodcat}[3][]{
+  \ifstrempty{#1}{\ensuremath{\prescript{}{\cat{#2}}{\cat{#3}}_{\cat{#2}}}}
+    {\ensuremath{\prescript{}{\cat{#1}}{\cat{#3}}_{\cat{#2}}}}}
+
+\newcommand*{\lact}{\mathchoice
+  {\raisebox{0.065 em}{\,\scaleobj{0.75}{\rhd}}\,}% \displaystyle
+  {\raisebox{0.065 em}{\,\scaleobj{0.75}{\rhd}}\,}% \textstyle
+  {\raisebox{0.04 em}{\scaleobj{0.5}{\rhd}}}%       \scriptstyle
+  {\raisebox{0.043 em}{\scaleobj{0.33}{\rhd}}}%     \scriptscriptstyle
+}
+\newcommand*{\ract}{\mathchoice
+  {\raisebox{0.065 em}{\,\scaleobj{0.75}{\lhd}}\,}%
+  {\raisebox{0.065 em}{\,\scaleobj{0.75}{\lhd}}\,}%
+  {\raisebox{0.04 em}{\scaleobj{0.5}{\lhd}}}%
+  {\raisebox{0.043 em}{\scaleobj{0.33}{\lhd}}}%
+}
+\newcommand*{\blact}{\mathchoice
+  {\raisebox{0.065 em}{\scaleobj{0.75}{\blacktriangleright}}}%
+  {\raisebox{0.065 em}{\scaleobj{0.75}{\blacktriangleright}}}%
+  {\raisebox{0.04 em}{\scaleobj{0.5}{\blacktriangleright}}}%
+  {\raisebox{0.043 em}{\scaleobj{0.33}{\blacktriangleright}}}%
+}
+\newcommand*{\bract}{\mathchoice
+  {\raisebox{0.065 em}{\scaleobj{0.75}{\blacktriangleleft}}}%
+  {\raisebox{0.065 em}{\scaleobj{0.75}{\blacktriangleleft}}}%
+  {\raisebox{0.04 em}{\scaleobj{0.5}{\blacktriangleleft}}}%
+  {\raisebox{0.043 em}{\scaleobj{0.33}{\blacktriangleleft}}}%
+}
+
+% --- Monads
+\newcommand*{\monad}[1]{\ensuremath{(#1, \mu^{#1}, \eta^{#1})}\xspace}
+
+% We define a factory for generating monads
+\newcommand*{\lettermonad}[1]{%
+  \expandafter\newcommand\csname #1monad\endcsname{%
+    \monad{#1}
+  }%
+}
+
+\lettermonad{B} % A monad called B, to use it type \Bmonad
+\lettermonad{H} % A monad called H, to use it type \Bmonad
+\lettermonad{S} % A monad called S, to use it type \Bmonad
+\lettermonad{T} % A monad called T, to use it type \Bmonad
+\newcommand*{\stdmonad}{\Tmonad}
+
+% --- Heaps
+\DeclareMathOperator{\pic}{Pic}
+\DeclareMathOperator{\qpiv}{QPiv}
+
+% --- Arrows
+\newcommand*{\id}{\mathrm{id}} % id function
+\newcommand*{\Id}{\mathrm{Id}} % id functor
+\newcommand*{\prof}[4]{#1 \colon #2^{\op} \times #3 \to #4}
+\newcommand*{\Homset}[1][\cat{C}]{\prof{\Hom}{#1}{#1}{\Set}}
+\newcommand*{\VHom}[1][\cat{C}]{\prof{\Hom}{#1}{#1}{\cat{V}}}
+
+% --- Special functors
+\DeclareMathOperator{\Forg}{Forg} % The forgetful functor
+\DeclareMathOperator{\Ext}{Ext}   % The Ext functor
+\DeclareMathOperator{\Tor}{Tor}   % The Tor functor
+\DeclareMathOperator{\Ad}{Ad}
+
+% --- Adjunctions
+\newcommand*{\adj}[4]{\ensuremath{#1 \colon #3 \rightleftarrows #4 \cocolon #2}\xspace}
+% TODO: Make a \longrightleftarrows version
+\newcommand*{\stdadj}{\adj{F}{U}{\cc}{\dd}}
+
+\ifx\equal\ST@type\ST@poster
+  \newcommand*{\adjspace}{\;}
+\else
+  \ifx\ST@type\ST@beamer
+    \newcommand*{\adjspace}{\;}
+  \else
+    \newcommand*{\adjspace}{\,}
+  \fi
+\fi
+
+\newcommand*{\adjoint}{\adjspace\dashv\adjspace}  % L ⊣ R
+\newcommand*{\lad}{\adjoint}
+\newcommand*{\radjoint}{\adjspace\vdash\adjspace} % L ⊢ R
+\newcommand*{\rad}{\radjoint}
+
+% --- Duals
+
+\def\ld{\@ifstar\@ldstar\@ldnostar}           % the left dual
+\def\@ldstar#1{\ensuremath{{#1}^{\ast}}}
+\def\@ldnostar#1{\ensuremath{\prescript{\vee}{}{\!#1}}}
+\def\lld{\@ifstar\@lldstar\@lldnostar}        %the left double dual
+\def\@lldstar#1{\ensuremath{{#1}^{\ast\ast}}}
+\def\@lldnostar#1{\ensuremath{\prescript{\vee\vee}{}{\!#1}}}
+\def\rd{\@ifstar\@rdstar\@rdnostar}           % the right dual
+\def\@rdstar#1{\ensuremath{{#1}^{\ast}}}
+\def\@rdnostar#1{\ensuremath{{#1}^{\vee}}}
+\def\rrd{\@ifstar\@rrdstar\@rrdnostar}        %the right double dual
+\def\@rrdstar#1{\ensuremath{{#1}^{\ast\ast}}}
+\def\@rrdnostar#1{\ensuremath{{#1}^{\vee\vee}}}
+\newcommand*{\ev}{\mathrm{ev}}          %   evaluation of the left  dual
+\newcommand*{\evr}{\widetilde{\ev}}     %   evaluation of the right dual
+\newcommand*{\coev}{\mathrm{coev}}      % coevaluation of the left  dual
+\newcommand*{\coevr}{\widetilde{\coev}} % coevaluation of the right dual
+\newcommand*{\ldual}[1]{(\ld{#1}, \ev_{#1}, \coev_{#1})}
+\newcommand*{\rdual}[1]{(\rd{#1}, \evr_{#1}, \coevr_{#1})}
+
+% --- (Di-)natural transformations
+\newcommand*{\dinat}[1]{\ensuremath{\mathrm{DINAT}\left(#1\right)}\xspace}
+\newcommand{\din}
+{\mathrel{%
+    \tikzsetnextfilename{DIEEXBUUEH6Z6VP3}
+    \begin{tikzpicture}[baseline=-0.58ex]
+      \begin{scope}[line cap=round, thin]
+        \draw[yshift=-.25mm] (0,0) -- (-.450,0);  % 0.275
+        \draw[yshift= .25mm] (0,0) -- (-.450,0);
+      \end{scope}
+      \filldraw[ rounded corners=.25pt
+      , thin
+      , rotate around={45:(0,0)}
+      , fill=white
+      ] (-.60mm,-.60mm) rectangle (.60mm,.60mm); % 0.45
+    \end{tikzpicture}%
+  }}
+
+
+% --- Special sets and spaces ---
+\let\ker\relax
+\DeclareMathOperator{\ker}{ker}      % The kernel
+\DeclareMathOperator{\coker}{coker}  % The cokernel
+\DeclareMathOperator{\im}{im}        % The image
+\DeclareMathOperator{\coim}{coim}    % The coimage
+\DeclareMathOperator{\spanset}{span} % The (vector)span of a set
+\DeclareMathOperator{\Hom}{Hom}      % The homomorphisms
+\DeclareMathOperator{\End}{End}      % The endomorphisms
+\DeclareMathOperator{\Aut}{Aut}      % The automorphisms
+\DeclareMathOperator{\Iso}{Iso}      % The (natural) isomorphisms
+\DeclareMathOperator{\inv}{inv}      % The invariants
+\DeclareMathOperator{\coinv}{coinv}  % The coinvariants
+\DeclareMathOperator{\Inv}{Inv}      % The set of invertible objects
+\DeclareMathOperator{\Pic}{Pic}      % The Picard group/heap of a rigid category
+\DeclareMathOperator{\Piv}{Piv}      % The pivotal structures of a rigid category.
+\DeclareMathOperator{\QPiv}{QPiv}    % The set of isomorphism classes of quasi-pivotal structures.
+
+% --- Hopf algebraic terms
+\DeclareMathOperator{\Gr}{Gr}     % Group of group-likes
+\DeclareMathOperator{\Char}{Char} % Group of characters
+\let\Pr\relax
+\DeclareMathOperator{\Pr}{Pr}     % The Lie algebra of Primitives
+\DeclareMathOperator{\LInt}{L}    % The space of left integral
+\DeclareMathOperator{\op}{op}     % The opposite
+\DeclareMathOperator{\cop}{cop}   % The coopposite
+\DeclareMathOperator{\gr}{gr}     % The associated graded algebra
+\newcommand*{\B}{\ensuremath{\mathcal{B}}}  % The Nichols algebra of a Hopf algebra
+\DeclareMathOperator{\U}{U}       % Universal enveloping
+
+\def\low{\@ifstar\@low\@@low}
+\def\@low#1#2{{#1}_{[{#2}]}}
+\def\@@low#1#2{{#1}_{({#2})}}
+
+% -- Groups
+\DeclareMathOperator{\GL}{GL}        % The general linear group
+% \DeclareMathOperator{\U}{U}        % The group of unitary matrices (\U already exists)
+\DeclareMathOperator{\SU}{SU}        % The group of special unitary matrices
+\DeclareMathOperator{\sgn}{sgn}      % The sign map
+\DeclareMathOperator{\Sym}{Sym}      % The group of symmetries
+
+% -- Linear Algebra terms
+
+\DeclareMathOperator{\Mat}{Mat}      % The space of matrices
+\DeclarePairedDelimiter\bra{\langle}{\rvert}    % A bra 〈\phi|
+\DeclarePairedDelimiter\ket{\lvert}{\rangle}    % A ket |v〉
+
+\DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1\,\delimsize\vert\,\mathopen{}#2}  % Automatic bra-ket notation
+
+
+% --- Numbers
+\newcommand*{\real}{\mathbf{R}}
+\newcommand*{\nat}{\mathbf{N}}
+\newcommand*{\rat}{\mathbf{Q}}
+\newcommand*{\complex}{\mathbf{C}}
+\newcommand*{\integer}{\mathbf{Z}}
+
+
+% --- Misc
+\newcommand{\mathscale}[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
+\DeclareMathOperator{\characteristic}{char} % The characteristic
+\DeclareMathOperator{\ord}{ord}             % The order
+\DeclareMathOperator{\fin}{fin}             % Finite-dimensional
+\DeclareMathOperator{\can}{can}             % A canonical morphism
+\DeclareMathOperator{\rk}{rk}               % For the rank
+\DeclareMathOperator{\tr}{tr}               % The trace
+\DeclareMathOperator{\T}{T}                 % The transpose
+\DeclareMathOperator{\ad}{ad}               % The adjoint
+\DeclareMathOperator{\colim}{colim}         % The colimit
+\DeclareMathOperator{\eq}{eq}               % The equaliser
+\DeclareMathOperator{\coeq}{coeq}           % The coequaliser
+\DeclareMathSymbol{\mathhyphen}{\mathord}{operators}{`\-} % Short hyphen for math mode
+\newcommand*{\blank}{{-}}                   % A unspecified variable
+\newcommand*{\bblank}{{=}}                  % A unspecified variable
+\newcommand*{\bbblank}{%                    % A unspecified variable
+  {\ooalign{\hss\(\bblank\)\hss\cr \hss\(\blank\)\hss}}
+}
+\newcommand*{\ox}{\otimes}                        % The tensor product
+\newcommand*{\oxo}{\ox^{\op}}               % The opposite tensor product
+\newcommand*{\tensorop}{\oxo}               % An alias for the opposite tp
+
+% Proper ≔
+\ifx\ST@type\ST@poster
+  \newcommand*{\defeq}{\coloneq}
+\else
+  \newcommand*{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+        \hbox{\scriptsize.}\hbox{\scriptsize.}}}%
+    =}
+\fi
+
+% Like \colon, but for the other side.
+\ifx\ST@font\ST@lib
+  \newcommand{\ST@colon}{:\!}
+\else
+  \newcommand{\ST@colon}{:}
+\fi
+\newcommand*{\cocolon}{%
+  \nobreak
+  \mskip6mu plus1mu
+  \mathpunct{}%
+  \nonscript
+  \mkern-\thinmuskip
+  {\ST@colon}%
+  \mskip2mu
+  \relax
+}
+
+% workaround diagup factor
+\newcommand{\quotient}[2]{
+  \let\olddiagup\diagup\relax
+  \def\diagup{\raisebox{-0.25em}{\scalebox{2.0}{/}}}
+  \faktor{\left\langle \mathfrak{s}_{a, b} \mid a,b \in \mathbb{N}\right\rangle}{\left( \mathfrak{s}_{a,b}^{2} \mid a,b \in \mathbb{N}\right)}.
+  \def\diagup{\olddiagup}
+}

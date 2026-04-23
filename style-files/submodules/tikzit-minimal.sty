@@ -1,0 +1,164 @@
+% --- Minimal replacement of tikzit ---
+\pgfdeclarelayer{edgelayer}
+\pgfdeclarelayer{nodelayer}
+\ifx\ST@type\ST@poster \pgfsetlayers{backgroundlayer,main,notelayer,edgelayer,nodelayer}
+\else
+  \pgfsetlayers{background,edgelayer,nodelayer,main}
+\fi
+
+% --- Externalising Tikz-Pictures ---
+\ifST@externalise
+  \tikzexternalize[prefix=figures/]
+  \AtBeginEnvironment{tikzcd}{\tikzexternaldisable} %TO AVOID A CONFICT WITH TIKZCD
+  \AtEndEnvironment{tikzcd}{\tikzexternalenable}
+\fi
+
+\pgfkeys{/pgf/images/include external/.code=\includegraphics{#1}} % We let graphix load the images.
+
+\newcommand{\inputtikz}[1]{%
+  \ifST@externalise\tikzsetnextfilename{#1}\fi%
+  \input{\expandonce{\ST@figureFolder}/#1.tikz}%
+}
+
+% --- Externalise Tikzcd-Pictures ---
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Externalise tikz-cd as best as possible
+%
+% Source: https://tex.stackexchange.com/questions/171931/are-the-tikz-libraries-cd-and-external-incompatible-with-one-another/362104#362104
+% Source: https://tex.stackexchange.com/questions/15595/problem-with-environment-expansion-and-the-tikz-external-library
+%
+% This nests a tikzcd picture inside a tikzpicture, which is
+% unbelievably horrible and will probably come crashing down at some
+% point.  However, for now it works and it brings compilation times down
+% quite significantly.
+
+\def\temp{&} \catcode`&=\active \let&=\temp
+
+\newcommand{\mytikzcdcontext}[2]{
+  \begin{tikzpicture}[baseline=(maintikzcdnode.base)]
+      \node (maintikzcdnode) [inner sep=0, outer sep=0] {\begin{tikzcd}[#2]
+            #1
+        \end{tikzcd}};
+  \end{tikzpicture}}
+
+% Correctly regenerate the picture if the md5 hash changes.
+\NewEnviron{mytikzcd}[1][]{%
+  % In the following, we need \BODY to expanded before \mytikzcdcontext
+  % such that the md5 function gets the tikzcd content with \BODY
+  % expanded.  However, expand it only once, because the \tikz-macros
+  % aren't defined at this point yet.  The same thing holds for the
+  % arguments to the tikzcd-environment.
+  \def\myargs{#1}%
+  \edef\mydiagram{
+    \noexpand\mytikzcdcontext{\expandonce\BODY}{\expandonce\myargs}
+  }%
+  \mydiagram%
+}
+
+%-------------------------------- TikZ -------------------------------%
+
+% --- Global options ---
+\tikzset{baseline=(current bounding box.center)}
+\tikzset{label distance=-0.15cm}
+\tikzset{font=\scriptsize}
+\tikzset{>=stealth}
+\tikzset{
+  dot diameter/.store in=\dot@diameter,
+  dot diameter=2pt,
+  dot spacing/.store in=\dot@spacing,
+  dot spacing=10pt,
+  dots/.style={
+    line width=\dot@diameter,
+    line cap=round,
+    dash pattern=on 0pt off \dot@spacing
+  }
+}
+
+% --- String diagrams ---
+
+% --- Node styles ---
+\tikzstyle{none} = [inner sep=3pt,outer sep=0pt]
+\tikzstyle{morphism} = [rectangle, fill=white, draw=black, line width=1pt, font=\scriptsize]
+\tikzset{
+    vector/.style={
+      isosceles triangle,
+      isosceles triangle stretches,
+      fill=white,
+      draw=black,
+      text width=0.25em,
+      line width=1pt,
+      font=\scriptsize,
+    },
+    dual/.style={
+      shape border rotate=180,
+      execute at begin node=\hspace{-1em}
+    }
+}
+\tikzset{
+    dagger-morph/.style={
+        trapezium,
+        trapezium left angle=90,
+        trapezium right angle=75,
+        shape border rotate=90, % Default: points left
+        fill=white,
+        draw=black,
+        line width=1pt,
+        font=\scriptsize
+    },
+    % Option 1: Transpose (flips the rotation)
+    transpose/.style={
+      shape border rotate=270,
+    },
+    adjoint/.style={
+      shape border rotate=270,
+      trapezium left angle=75,
+      trapezium right angle=90,
+    },
+    % Option 2: Conjugate (thickens the "top" border)
+    % Note: In a rotated trapezium, the 'top' is technically the 'trapezium left side'
+    conjugate/.style={
+      trapezium left angle=75,
+      trapezium right angle=90,
+    }
+}
+\tikzstyle{intersection-pt} = [fill=white, inner sep = 2.5pt]
+\tikzstyle{fullblackdot}=[fill=black, draw, shape=circle, scale=0.7]
+\tikzstyle{blackdot}=[fill=white, draw, shape=circle, scale=0.3]
+\tikzstyle{PP}=[draw={rgb,255:red,102;green,41;blue,163}, shape=circle, fill={rgb,255:red,102;green,41;blue,163}, scale=0.5]
+
+% Edge styles
+\tikzstyle{object}=[-, very thick, black]
+\tikzstyle{directed} = [-, object, decoration = {markings, mark=at position 0.5 with {\arrow{>}}}, postaction=decorate]
+\tikzstyle{comodule-edge}=[-, object, pastel purple]
+\tikzstyle{ddd}=[-, object, dash dot dot]
+\tikzstyle{unit}=[-,object, densely dotted]
+\tikzstyle{cilium} = [-, draw=red!50!yellow]
+\tikzstyle{inclusion} = [-, very thick, right hook->,midway,right]
+\tikzstyle{Front}=[-, draw=black, fill=white, opacity=0.5]
+\tikzstyle{Hidden}=[-, draw=black, fill=white, opacity=0.5]
+
+\tikzset{
+  gradient-object/.style 2 args={
+    -, object,
+    postaction={
+      decorate,
+      decoration={
+        markings,
+        mark=between positions 0 and \pgfdecoratedpathlength step 0.1pt with {
+          \pgfmathsetmacro\myval{multiply(
+            divide(
+            \pgfkeysvalueof{/pgf/decoration/mark info/distance from start}, \pgfdecoratedpathlength
+            ),
+            100
+            )}
+          \pgfsetfillcolor{#1!\myval!#2}
+          \pgfpathrectangle{\pgfpoint{-0.6pt}{-0.6pt}}{\pgfpoint{1.2pt}{1.2pt}}
+          \pgfusepath{fill}}
+        }}
+    }
+}
+\tikzstyle{AQEval} = [-,gradient-object={qyd-color}{ayd-color}]
+\tikzstyle{QAEval} = [-,gradient-object={ayd-color}{qyd-color}]
+\tikzstyle{AQCoeval} = [-,gradient-object={qyd-color}{ayd-color}]
+\tikzstyle{QACoeval} = [-,gradient-object={ayd-color}{qyd-color}]

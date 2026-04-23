@@ -1,0 +1,138 @@
+% --------------------------------- OPTIONS ---------------------------------%
+
+\usetheme[\ST@beamerOptions]{moloch} % -> Moloch
+
+% ---------------------------------- SETUP ----------------------------------%
+
+% --- colours
+\colorlet{metropolis-fg}{mDarkTeal}
+\colorlet{metropolis-bg}{black!2}
+
+\setbeamercolor{frametitle}{
+  use=normal text,
+  fg=normal text.bg!60!normal text.fg!50!normal text.bg
+}
+
+\setbeamercolor{block title}{
+  use=normal text,
+  fg=normal text.fg,
+  bg=normal text.bg!65!normal text.fg
+}
+
+\setbeamercolor{block body}{
+  use={block title, normal text},
+  bg=block title.bg!70!normal text.bg
+}
+
+\setbeamercolor{background canvas}{
+  use=normal text,
+  bg=normal text.bg!95!normal text.fg!60!normal text.bg
+}
+
+\setbeamercolor{example text}{
+  use=block title,
+  fg=block title.fg,
+  bg=block title.bg
+}
+
+% --- Title page
+
+% A command to give a text- and qr-code based reference to the main source.
+\newcommand{\mainref}[2][]{
+  \long\def\insertmainref{#2 \hfil
+  \ifx{#1}\@empty\else\qrcode[height=3\baselineskip]{#1}\fi
+  }}
+\mainref{}
+
+
+\setbeamertemplate{mainref}{
+  {\insertmainref\smallskip}
+  \vspace*{-0.5em}
+}
+
+\setbeamertemplate{date}{
+  \vspace{-0.3\baselineskip}
+  \centering{\footnotesize\insertdate}%
+  \par%
+}
+
+% We want to scale the title depending on its length.
+% As a heuristic we count its characters.
+
+\newcount\charcount%
+\let\oldchar\char%
+\def\gobblechar{\let\char= }
+\def\countunlessnil{%
+  \ifx\char\nil \let\next=\relax%
+  \else%
+    \let\next=\auxcountchar%
+    \advance\charcount by 1%
+  \fi\next%
+}%
+
+\def\auxcountchar{%
+  \afterassignment\countunlessnil\gobblechar%
+}
+\def\countchar#1{\edef\xx{#1}\charcount=0 \expandafter\auxcountchar\xx\nil
+\let\char\oldchar}
+
+
+% We have to patch the title command to count the title length.
+\renewcommand{\title}{\@dblarg\beamer@title}
+\long\def\beamer@title[#1]#2{%
+  \countchar{#2}
+  \def\inserttitle{#2}%
+  \def\beamer@shorttitle{#1}%
+  }
+\title{}
+
+% We generate the title line
+\setbeamertemplate{title}{
+  \raggedright%
+  \linespread{1.0}%
+  \ifnum\charcount>25
+    {\large\resizebox{\textwidth}{!}{\inserttitle}}%
+  \else
+    \centering{\Huge\inserttitle}%
+  \fi
+  \par%
+  \vspace*{0.5em}
+}
+
+% We generate the subtitle
+\setbeamertemplate{subtitle}{\centering
+  {\normalsize\insertsubtitle}%
+  \par%
+  \vspace*{0.5em}
+}
+
+% We build the titlepage
+\setbeamertemplate{title page}{
+  \begin{minipage}[b][\paperheight]{\textwidth}
+    \ifx\inserttitlegraphic\@empty\else\usebeamertemplate*{title graphic}\fi
+    \vfill%
+    \ifx\inserttitle\@empty\else\usebeamertemplate*{title}\fi
+    \ifx\insertsubtitle\@empty\else\usebeamertemplate*{subtitle}\fi
+    \ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
+    \ifx\insertmainref\@empty\else\usebeamertemplate*{mainref}\fi
+    \usebeamertemplate*{title separator}
+    \ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+    \vfill
+    {\centering\ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi}
+    \vspace*{3mm}
+  \end{minipage}
+}
+
+% --- TikZ-Settings
+\tikzset{external/only named=true}
+\tikzstyle{beamerdot}=[fill={metropolis-bg!90!metropolis-fg}, draw, shape=circle, scale=0.3]
+
+
+\newcommand{\comment}[1]{\textcolor{black!40!white!85!orange}{#1}}%
+\newcommand{\standout}[1]{\textcolor{black}{\textbf{#1}}}%
+
+\renewcommand{\to}{\longrightarrow}
+\renewcommand{\k}{\mathbb{k}}
+
+\tikzset{morphism/.style={fill=normal text.bg!95!normal text.fg!60!normal text.bg, draw=black, thick}}
+\tikzset{intersection-pt/.style={fill=normal text.bg!95!normal text.fg!60!normal text.bg}}

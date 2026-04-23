@@ -1,0 +1,468 @@
+% EMACS NAVIGATION:
+% ALL COMMENTS: M-x occur "^% -"
+% ONLY GUIDING COMMENTS: M-x occur "^% --"
+
+% This file is intended to give a coherent, usable, flexible and configurable
+%setup for articles and beamer presentations.
+
+% --------------------------------- OPTIONS ---------------------------------%
+% -*-----------------------------------------------------------------------*-%
+% ---------------------- Complementary boolean options ----------------------%
+% ---draft, final ---------- % Draft enables TODO handeling -----------------%
+% ---noext, externalise ---- % Externalisation of TikZ pictures -------------%
+% ----------------------------- String options ------------------------------%
+% ---type ------------------ % Default:paper, beamer, poster, org -----------%
+% ---font -------------------% Options: computer-modern(default),libertine --%
+% ---beamerOptions ----------% Input is passed to the beamer-options pkg ----%
+% ---figureFolder----------- % Default: tikzfigures -------------------------%
+% ---pkgOptions------------- % Input is pkg1=options1, pkg2=options2,... ----%
+% -*-----------------------------------------------------------------------*-%
+
+% -*- Enabling options for the package ---
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{style}
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{family=ST,prefix=ST@}
+
+\DeclareBoolOption{draft}
+\DeclareComplementaryOption{final}{draft}
+
+\DeclareBoolOption{externalise}
+\DeclareComplementaryOption{noext}{externalise}
+
+\DeclareStringOption[tikzfigures]{figureFolder}[tikzfigures]
+
+\DeclareStringOption[paper]{type}
+  \edef\DocType{\ST@type}
+  \newcommand*{\ST@paper}{paper}
+  \newcommand*{\ST@beamer}{beamer}
+  \newcommand*{\ST@poster}{poster}
+  \newcommand*{\ST@org}{org}
+
+\DeclareStringOption[libertine]{font}
+\edef\DocFont{\ST@font}
+\newcommand*{\ST@lib}{libertine}
+\newcommand*{\ST@cm}{computer-modern}
+
+\DeclareStringOption[normal]{math}
+\edef\DocFont{\ST@math}
+\newcommand*{\ST@normal}{normal}
+\newcommand*{\ST@euler}{euler}
+\newcommand*{\ST@fancy}{fancy}
+
+\DeclareBoolOption{sidenotes}
+\DeclareComplementaryOption{footnotes}{sidenotes}
+
+\DeclareStringOption{beamerOptions}[]
+
+\DeclareStringOption{pkgOptions}[]
+
+\ProcessKeyvalOptions*
+
+% --------------------------------- PACKAGES ---------------------------------%
+
+% --- Utilities
+\RequirePackage{ifthen}     % Handles if-then-else clauses.
+\RequirePackage{xparse}     % For complicated macros. E.g handling [] vs {}.
+\RequirePackage{etoolbox}   % For the compatibility between tikzcd and externalise.
+
+% --- Automatic handling of package options (has to be preloaded)
+% ---- Standard options
+\PassOptionsToPackage{utf8}{inputenc}
+\PassOptionsToPackage{T1}{fontenc}
+\PassOptionsToPackage{tracking=true}{microtype}
+\PassOptionsToPackage{sb}{libertinus}
+\PassOptionsToPackage{amsthm,
+                      upint,
+                      lcgreekalpha}{libertinust1math}
+\PassOptionsToPackage{varqu,varl}{zi4}
+\PassOptionsToPackage{cal=euler,
+                      frak=euler}{mathalfa}
+\PassOptionsToPackage{cal=boondoxo,
+                      calscaled=0.96,
+                      frak=esstix,
+                      frakscaled=0.93}{mathalfa}
+\PassOptionsToPackage{style=alphabetic,
+                      natbib=true,
+                      maxbibnames=2}{biblatex}
+\PassOptionsToPackage{colorlinks,
+                      linktoc=page,
+                      linkcolor={TUDblue},
+                      citecolor={TUDblue},
+                      urlcolor={TUDblue}}{hyperref}
+\PassOptionsToPackage{normalem}{ulem}
+% ---- Autohandling
+\ifx\ST@pkgOptions\empty\else
+
+  \RequirePackage{trimspaces} % there is only so much I want to build by hand
+  \def\ST@trim#1{\trim@spaces@noexp{#1}}
+
+  % We will use etoolbox to pull this trick off.
+  % Our input is a list of the form
+  % foo = {a=1,b=2,c=3}, bar = e, ...
+  % we split this at each outer "," using tje pkgparser defined below
+  % then we have a new list(split by "=") of the form pkg = options.
+  % we sanitise the pkg string(remove whitespaces) and then options to the package.
+  % This is achieved by a counter logic.
+  %First items are always pkgs and second items are always the options
+  \newcounter{pkgoptcount}
+  \newcommand*\temppkgname{}
+
+  \def\parsepkg#1{%
+    \setcounter{pkgoptcount}{0}
+    \optionparser{\ST@process@option}{#1}
+  }
+
+  \def\ST@process@option#1{%
+    \stepcounter{pkgoptcount}%
+    \ifnum\value{pkgoptcount}=1\relax
+      \edef\temppkgname{\ST@trim{#1}}%
+    \else
+      \PassOptionsToPackage{#1}{\temppkgname}%
+      \setcounter{pkgoptcount}{0}%
+      \renewcommand*\temppkgname{}%
+    \fi
+  }
+
+  \def\ST@execute@pkgparser#1{\pkgparser{\parsepkg}{#1}}
+
+  \DeclareListParser*{\optionparser}{=}
+  \DeclareListParser*{\pkgparser}{,}
+
+  \expandafter\ST@execute@pkgparser\expandafter{\ST@pkgOptions}
+\fi
+
+\RequirePackage{environ}    % Define environments
+
+% --- Page layout
+\RequirePackage{geometry} % For a better modification of the page layout.
+
+% --- Graphics and colour handling
+\PassOptionsToPackage{final}{graphix} % We explicitly load graphics in final mode.
+\RequirePackage{adjustbox}
+\RequirePackage{submodules/user-colours}   % Some usable colours for LaTeX
+
+% --- Typesetting
+\RequirePackage{inputenc} % UTF-8 input encoding
+\RequirePackage{fontenc}    % Better output encoding
+\RequirePackage{microtype} % Better layouts
+\SetTracking   % Slightly space out small caps
+  {encoding=T1, shape=sc}
+  {10}
+\SetProtrusion % Protrude sub- and superscripts at the right margin
+  {encoding=T1,size={7,8}}
+  {1={ ,750},2={ ,500},3={ ,500},4={ ,500},5={ ,500},
+    6={ ,500},7={ ,600},8={ ,500},9={ ,500},0={ ,500}}
+
+% --- Font
+\ifx\ST@font\ST@lib
+  \RequirePackage{libertinus}
+  \RequirePackage{textcomp}
+  \RequirePackage[varqu,varl]{inconsolata}% inconsolata for mono, not LibertineMono
+  \RequirePackage{libertinust1math}
+\else
+  \RequirePackage{lmodern}
+\fi
+% --- Mathcal font
+\ifx\ST@math\ST@euler
+  \RequirePackage{mathalfa}
+\fi\ifx\ST@math\ST@fancy
+  \RequirePackage{mathalfa}
+\fi
+
+% --- Languages
+\RequirePackage{csquotes}       % Consistent quotation styles
+\RequirePackage{CJKutf8}        % よ for the Yoneda embedding
+\RequirePackage{epigraph}       % For better quotations
+
+% --- Hyphenation
+\RequirePackage{hyphenat}       % advanced hyphenation
+\hyphenation{auto-nomous}
+
+% --- Bibliography and reference handling
+\RequirePackage{biblatex}
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+      \step[fieldset=urldate, null]
+      \step[fieldset=language, null]
+      \step[fieldset=primaryClass, null]
+      \step[fieldset=note, null]
+      \step[fieldset=issn, null]
+      \step[fieldset=isbn, null]
+    }
+  }
+}
+\DefineBibliographyStrings{english}{%
+  and       = {\addcomma\space},
+  in        = {},
+}
+
+\def\bibfont{\footnotesize}
+
+% The order of loading should be
+%
+%     hyperref -> amsthm -> cleveref
+%
+% evil reasons. Interestingly,
+%   https://tex.stackexchange.com/questions/250904/destination-with-the-same-identifier-warning-with-shared-counters-cleveref-an/253694#253694
+%
+% says this should not work, but it does! This leaves me a bit
+% confused.
+\ifthenelse{\equal\ST@type\ST@paper}{
+  \RequirePackage{hyperref}
+  \RequirePackage{amsthm} % AMS environments
+}{
+  \ifthenelse{\equal\ST@type\ST@poster}{
+    % XXX: Hyperref + tikzposter + microtype result in some ridiculous
+    % incompatibility. Of the three, hyperref seems the least important,
+    % so exclude it here.
+    \RequirePackage{amsthm}
+  }{}
+}
+
+% --- Maths
+\RequirePackage{mathtools}  % Extension of amsmath
+\RequirePackage{amssymb}    % For math symbols
+\RequirePackage{bussproofs} % For adjunction lines.
+\RequirePackage{scalerel}   % \scaleobj
+\RequirePackage{faktor}     % quotient objects
+\RequirePackage{xfrac}      % \sfrac yields a slanted version of \frac
+
+
+% --- TikZ
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\RequirePackage{tikz}           % Vector graphics package
+\usetikzlibrary{
+  arrows,
+  arrows.meta,
+  backgrounds,
+  calc,
+  cd,
+  decorations.text,
+  decorations.markings,
+  external,
+  fit,
+  intersections,
+  pgfplots.fillbetween,
+  scopes,
+  shapes,
+  shapes.geometric,
+  shapes.misc
+}
+
+\RequirePackage{tikz-cd}
+\ifx\ST@font\ST@lib
+  % One should prefer 'arrow style=math font', but this looks horribly
+  % "tacked on" with Libertine. Straight Barb is at least better than the
+  % default CM-type arrows.
+  \tikzcdset{
+    arrow style=tikz,
+    diagrams={>={Straight Barb}}
+  }
+\fi
+
+% --- Quiver.io sty
+%%%%% quiver.sty for q.uiver.app
+% `amssymb` is necessary for `\lrcorner` and `\ulcorner`.
+\ifx\ST@font\ST@lib\else
+  \RequirePackage{amssymb}
+\fi
+% `pathmorphing` is necessary to draw squiggly arrows.
+\usetikzlibrary{decorations.pathmorphing}
+% A TikZ style for curved arrows of a fixed height, due to AndréC.
+\tikzset{%
+  curve/.style={%
+    settings={#1},
+    to path={%
+      (\tikztostart)
+      .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+      .. (\tikztotarget)\tikztonodes%
+    }%
+  },
+  settings/.code={\tikzset{quiver/.cd,#1}
+    \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}
+  },
+  quiver/.cd,pos/.initial=0.35,height/.initial=0%
+}
+% TikZ arrowhead/tail styles.
+\tikzset{tail reversed/.code={\pgfsetarrowsstart{tikzcd to}}}
+\tikzset{2tail/.code={\pgfsetarrowsstart{Implies[reversed]}}}
+\tikzset{2tail reversed/.code={\pgfsetarrowsstart{Implies}}}
+% TikZ arrow styles.
+\tikzset{no body/.style={/tikz/dash pattern=on 0 off 1mm}}
+
+% --- tikzit settings
+\RequirePackage{submodules/tikzit-minimal}
+
+% --- Misc
+\RequirePackage{caption}        % For captions outside of float environments
+\RequirePackage{subfiles}       % Easier subfile handling
+\RequirePackage{xspace}         % Define commands that don't eat spaces
+\RequirePackage{ulem} % Underlining options
+\ifx\ST@type\ST@beamer
+  \RequirePackage{qrcode}       % Generates a QR code that could link to notes/papers.
+  \RequirePackage{appendixnumberbeamer} % To "hide" appendices in the slide numberings
+  \RequirePackage{submodules/beamer-options}
+\else% beamer doesn't like these
+  \RequirePackage{enumitem}
+\fi
+\RequirePackage{aligned-overset} % See https://tex.stackexchange.com/questions/257529/overset-and-align-environment-how-to-get-correct-alignment
+
+% --- Sidenotes
+\ifthenelse{\equal\ST@type\ST@paper}{%
+  \RequirePackage{sidenotes}
+  \ifST@sidenotes
+    \RequirePackage{mparhack}
+    \renewcommand*{\marginfont}{\footnotesize}
+    \newcommand{\note}[1]{%
+      \sidenote{%
+        \footnotesize
+        \if@twoside        % Two sided layout
+          \checkoddpage
+          \ifoddpage
+            \raggedright
+          \else
+            \raggedleft
+          \fi
+        \else              % One sided layout
+          \raggedright
+        \fi
+        {#1}%
+      }%
+    }
+  \else
+    \newcommand{\note}[1]{\footnote{#1}}
+  \fi
+}
+
+% ------------------------------- PAGE-LAYOUT --------------------------------%
+
+\ifx\ST@type\ST@paper
+  % --- Whitespaces at the bottom of the page
+  \raggedbottom%           % Whitespaces between paragraphs are constant.
+\fi
+
+% --------------------------------- STYLING ----------------------------------%
+
+% --- small roman lists
+\ifx\ST@type\ST@paper%            % Lists with roman enumeration: (i), (ii), ...
+  \newlist{thmlist}{enumerate}{1}
+  \setlist[thmlist]{label=(\roman{thmlisti}), ref=\thetheorem.(\roman{thmlisti}), noitemsep}
+  \newlist{thmlist*}{enumerate}{1}
+  \setlist[thmlist*]{label=(\roman{thmlist*i}), ref=(\roman{thmlist*i}), noitemsep}
+\fi
+
+% --- Equation numbering
+\ifx\ST@type\ST@paper
+  \numberwithin{equation}{section}
+  \renewcommand*{\theequation}{\thesection.\arabic{equation}}
+\fi
+
+% --- More pronounced emphasis in poster
+\ifx\ST@type\ST@poster
+  \let\emph\relax               % there is no \RedeclareTextFontCommand
+  \DeclareTextFontCommand{\emph}{\bfseries}
+\fi
+
+% --- Split a longer document into different parts ---
+
+\ifx\ST@type\ST@paper
+  \def\part{\cleardoublepage\thispagestyle{empty}%
+    \null\vfil \markboth{}{}\secdef\@part\@spart}
+
+  \def\paperheader{\cleardoublepage\thispagestyle{empty}%
+    \null\vfil \markboth{}{}\@spaper}
+  \def\@spaper#1{
+    \addtocontents{toc}{\protect\addvspace{0.25\baselineskip}}
+    \addcontentsline{toc}{part}{\protect\noindent#1}%
+    \addtocontents{toc}{\protect\addvspace{1\baselineskip}}
+    \begin{center}
+      \fontsize{\@xviipt}{15}\scshape#1
+    \end{center}
+  }
+
+  % Code from `amsbooks'
+
+  \def\@part[#1]#2{%
+    \ifnum\c@secnumdepth >-2\relax \refstepcounter{part}%
+      \addtocontents{toc}{\protect\addvspace{0.125\baselineskip}}
+      \addcontentsline{toc}{section}{
+        \textbf{\partname\ \thepart.
+          \protect\enspace\protect\noindent#1}
+      }
+      \addtocontents{toc}{\protect\addvspace{0.125\baselineskip}}
+      %
+    \else
+      \addcontentsline{toc}{section}{#1}
+    \fi
+    \begingroup\centering
+    \ifnum\c@secnumdepth >-2\relax
+      {\fontsize{\@xviipt}{15}\scshape
+        \partname\ \thepart:} \vskip 15\p@
+    \fi
+    \fontsize{\@xviipt}{15}\scshape
+    #1\vfil\vfil
+    \endgroup
+    \newpage
+    \thispagestyle{empty}
+  }
+  \def\@spart#1{
+    \addcontentsline{toc}{part}{\protect\noindent#1}%
+    \begingroup\centering
+    \fontsize{\@xviipt}{15}\scshape#1\vfil\vfil
+    \endgroup
+    \newpage
+    \thispagestyle{empty}
+  }
+
+  % To remove certain items from the table of contents:
+  \DeclareRobustCommand{\SkipTocEntry}[5]{}
+\fi
+
+% ------------------------------- Environments --------------------------------
+
+\ifthenelse{\NOT\equal\ST@type\ST@org}{
+  \theoremstyle{plain}
+  \ifthenelse{\equal\ST@type\ST@paper \OR \equal\ST@type\ST@poster}{
+    \newtheorem{theorem}{Theorem}
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{corollary}[theorem]{Corollary}
+    \newtheorem{proposition}[theorem]{Proposition}
+  }{}
+  \newtheorem*{proposition*}{Proposition}
+  \newtheorem*{conjecture}{Conjecture}
+
+  \theoremstyle{definition}
+  \ifthenelse{\equal\ST@type\ST@paper \OR \equal\ST@type\ST@poster}{
+    \newtheorem*{theorem*}{Theorem}
+    \newtheorem{definition}[theorem]{Definition}
+    \newtheorem*{definition*}{Definition}
+    \newtheorem{example}[theorem]{Example}
+    \newtheorem{exercise}[theorem]{Exercise}
+    \newtheorem{remark}[theorem]{Remark}
+    \newtheorem{notation}[theorem]{Notation}
+    \newtheorem{question}[theorem]{Question}
+  }{}
+  \newtheorem*{question*}{Question}
+  \newtheorem*{remark*}{Remark}
+  \newtheorem*{convention}{Convention}
+}{}
+
+% ---------------------------------- Commands ---------------------------------
+
+\RequirePackage{submodules/commands}
+
+% ------------------------------ Helpful macros -------------------------------
+
+\def\ST@firstletter#1#2@{#1}
+\def\ST@restletters#1#2@{#2}
+
+\ifx\ST@type\ST@paper
+  \pdfoutput=1
+\fi
+\endinput
