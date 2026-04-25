@@ -245,7 +245,7 @@ We will formalise this as a conjecture phrased in the language of complexity the
 \begin{thmlist}
   \item \textbf{Efficient Classical Simulation:}  The \emph{Gottesman--Knill theorem} shows that certain ``incomplete'' (in particular allowing only so-called Clifford gates) quantum computers can be efficiently simulated by a classical computer.
   \item \textbf{Universal Quantum computing:} In the classical world, a set of gates is universal if any algorithm (thought of as a map \(f\from 2^{n}\to 2^{m}\)) can be realised by applying these gates finitely many times.
-  In stark contrast, the ``algorithms'' for a quantum computer do not form a finite set but the topological space \(U(2^{n})\) (\ie a set with a notion of points being close to each other).
+  In stark contrast, the ``algorithms'' for a quantum computer do not form a finite set but the topological space \(\U(2^{n})\) (\ie a set with a notion of points being close to each other).
   A finite set of quantum gates is universal if finitely many gate applications can approximate any element of \(U(2^{n})\) with arbitrary precision.
   \item \textbf{The Kitaev--Solvay theorem:} Addresses the question of whether some universal gate sets are inherently more efficient than others.
   The theorem demonstrates under mild assumptions that, up to logarithmic overhead, all universal gate sets are equivalent.
@@ -359,7 +359,7 @@ We will often use the fact that any non-zero complex number can be written as a 
 \end{equation*}
 
 \begin{definition}\label{def:polar-decomposition}
-  Consider a non-zero complex number \(z=re^{2\pi i \alpha} \in \mathbb{C}\).
+  Consider a non-zero complex number \(z=re^{2\pi i \alpha} \in \mathbb{C}\) with \(r>0\) and \(\alpha\in \mathbb{R}\).
   We refer to \(r e^{2\pi i \alpha}\) as its \emph{polar form}, and call \(r\) the \emph{radius} and \(\alpha\) the \emph{angle} of \(z\), respectively.
 \end{definition}
 
@@ -1899,12 +1899,16 @@ As is discussed in Exercise~\ref{exe:alternative-defn-orthogonal-projection}, th
     \item[(\( \Rightarrow \))]
     Suppose \( e \) is an orthogonal projection.
     For any \( v, w \in V \), we have
-    \begin{equation*}
+    \begin{align*}
       \braket{e(v)}{w}
-      = \braket{e(v)}{e(w) + (w - e(w))}
-      = \braket{e(v)}{e(w)} + \braket{e(v)}{w - e(w)}.
-    \end{equation*}
+      & = \braket{e(v)}{e(w) + (w - e(w))}
+        = \braket{e(v)}{e(w)} + \braket{e(v)}{w - e(w)}, \\
+      \braket{v}{e(w)}
+      & = \braket{e(v) + (v - e(v))}{e(w)}
+        = \braket{e(v)}{e(w)} + \braket{v-e(v)}{e(w)}.
+    \end{align*}
     Since \( e(v) \in \im(e) \) and \( w - e(w) \in \ker(e) \), and \( \im(e)^{\perp} = \ker(e) \), it follows that \( \braket{e(v)}{w - e(w)} = 0 \).
+    Similarly, we observe that \(\braket{v- e(v)}{e(w)} = 0\).
     Thus,
     \begin{equation*}
       \braket{e(v)}{w} = \braket{e(v)}{e(w)} = \braket{v}{e(w)},
@@ -1921,8 +1925,7 @@ As is discussed in Exercise~\ref{exe:alternative-defn-orthogonal-projection}, th
       = \braket{v}{u} - \braket{v}{u}
       = 0,
     \end{equation*}
-    since \( e(u) = u \) for \( u \in \im(e) \).
-    This shows that \( e(v) - v \in (\im(e))^\perp \), and thus \( e \) is an orthogonal projection. \qedhere
+    since \( e(u) = u \) for \( u \in \im(e) \).\qedhere
   \end{description}
 \end{proof}
 
@@ -1966,11 +1969,17 @@ There exists an orthogonal projection \( p \from V \to V \) onto \( U \) and an 
 \begin{lemma}\label{lem:transformation-matrix-of-isometry}
   Consider a linear map \(f \from V\to W\) between an \(n\)-dimensional space \(V\) and an \(m\)-dimensional space \(W\).
   Moreover, let \(\mathcal{B}\) and \(\mathcal{C}\) be orthonormal bases of \(V\) and \(W\), respectively, and let \(A={}_{\mathcal{C}}f_{\mathcal{B}}\) be the transformation matrix of \(f\) with respect to \(\mathcal{B}\) and \(\mathcal{C}\).
-  Then, \(f\) is a partial isometry if and only if \(P= A^{\dagger} A\) satisfies \(P^{2}= P\).
+  The following are equivalent
+  \begin{thmlist}
+    \item \(f\) is a partial isometry,
+    \item \(f^{\dagger} f\from V\to V\) is an orthogonal projection onto \((\ker f)^{\perp}\), and
+    \item  \(P \eqdef A^{\dagger}A\) satisfies \(P^{2} = P\).
+  \end{thmlist}
 \end{lemma}
 \begin{proof}
+  First, let us show \((i) \iff (ii)\).
   We write \(U = \ker f^{\perp}\) for the orthogonal complement of \(\ker f\).
-  First, let us show that for any linear map \(f\from V \to W\), the image of \(f^{\dagger}f\) is contained in \(U\).
+  For any linear map \(f\from V \to W\), the image of \(f^{\dagger}f\) is contained in \(U\).
   To that end, consider  vectors \(v\in V\) and \(w \in \ker f\).
   We compute
   \begin{equation*}
@@ -1987,17 +1996,26 @@ There exists an orthogonal projection \( p \from V \to V \) onto \( U \) and an 
     = \braket{f^{\dagger}f(v)}{u} - \braket{v}{u}
     = [f(v) | f(u)] - \braket{v}{u} = 0 \iff [f(v) | f(u)] = \braket{v}{u}.
   \end{equation*}
-  Therefore, \(f\) is a partial isometry if and only if \(f^{\dagger}f\) is an orthogonal projection onto \(U\) and the claim follows from Lemma~\ref{lem:representing-orthogonal-projection} and Proposition~\ref{prop:adjoint-morph-is-adjoint-matrix}.
+  Therefore, \(f\) is a partial isometry if and only if \(f^{\dagger}f\) is an orthogonal projection onto \(U\).
+  \medskip
+
+  Since \(f^{\dagger} f\) is a projection, its transformation matrix \(P\) needs to satisfy \(P^{2} = P\) and therefore \((ii) \implies (iii)\).
+  \medskip
+
+  Conversely, assume \((iii)\) holds.
+  Since \(P^{2} = P\) and \(P^{\dagger} = (A^{\dagger} A)^{\dagger} = A^{\dagger}(A^{\dagger})^{\dagger} = A^{\dagger} A = P\), the map \(f^{\dagger} f \from V\to V\) is an orthogonal projection onto its image by Lemma~\ref{lem:representing-orthogonal-projection}.
+  Moreover, Theorem~\ref{thm:spectral-theorem} implies that \(\im (f^{\dagger} f) = \ker(f^{\dagger} f)^{\perp}\) (using that the kernel is the eigenspace of the eigenvalue \(0\) and that the image is spanned by the eigenvectors of the non-zero eigenvalues).
+  Finally, \(\ker (f) \subset \ker(f^{\dagger} f)\) and for any  \(v\in \ker (f^{\dagger} f)  \), we have
+  \begin{equation*}
+    \braket{f(v)}{f(v)} = \braket{v}{f^{\dagger}f(v)} = 0.
+  \end{equation*}
+  Thus \(v \in \ker f\) and \(\ker(f^{\dagger} f) = \ker f \).
 \end{proof}
 
-\begin{remark}\label{rmk:isometries-vs-partial-isometries}
-  If  \(f \from V\to W\) is a partial isometry, the above proof shows that the map \(f^{\dagger} f \from V\to V\) is an orthogonal projection onto
-  \begin{equation*}
-    \ker f^{\perp} = \big\{v\in V \;\big\vert\; \braket{v}{w} = 0 \text{ for all } w\in W \text{ with } f(w) = 0 \big\}.
-  \end{equation*}
-  In case \(f\) is a (linear) isometry \(\ker f =\{0\}\) and therefore \(\ker f^{\perp} = V\), implying that \(f^{\dagger} f = \id_{V}\).
 
-  Put succinctly: a linear map \(g \from V \to W\) is an isometry if and only if \(g^{\dagger} g =\id_{V}\).
+\begin{remark}\label{rmk:isometries-vs-partial-isometries}
+  The above result gives a particularly simple characterisation of linear isometries:
+  a linear map \(f \from V \to W\) is an isometry if and only if \(f^{\dagger} f =\id_{V}\).
 \end{remark}
 
 
@@ -2012,7 +2030,7 @@ Lastly, the third kind of map, is a special case of an isometry \(f\from V\to V\
   \begin{equation}
     A^\dagger A = I_n = A A^\dagger.
   \end{equation}
-  We denote the set of all unitary \( n \times n \) matrices by \( U(n) \).
+  We denote the set of all unitary \( n \times n \) matrices by \( \U(n) \).
 \end{definition}
 One easily verifies that upon choosing orthonormal bases, any unitary map is represented by a unitary matrix, see Exercise~\ref{exe:unitary-matrix-unitary-map}.
 
@@ -2789,7 +2807,7 @@ Moreover, as a direct application, we obtain that we can move boxes freely along
   \inputtikz{exchange-order-matrices}
 \end{equation*}
 
-Let us now discuss some some fundamental properties of the Kronecker product.
+Let us now discuss some fundamental properties of the Kronecker product.
 
 \begin{lemma}\label{lem:props-of-tensor-products}
   Let \( A \in \Mat_{m,n}(\mathbb{C}) \) and \( B \in \Mat_{p,q}(\mathbb{C}) \).
@@ -3265,7 +3283,7 @@ Partial traces allow us to reduce a composite system to a smaller subsystem.
 
 To see this procedure in action, we apply it to a  state on \( \mathbb{C}^{2}\otimes \mathbb{C}^{2}\).
 \begin{example}
-  Consider the the Bell state
+  Consider the Bell state
   \begin{equation*}
     \ket{\Phi^+} = \frac{1}{\sqrt{2}}(\ket{00} + \ket{11})
   \end{equation*}
@@ -3382,16 +3400,8 @@ Unitary transformations are fundamental building blocks in quantum algorithms, s
   Moreover, for any pair of states \( [v] \) and \( [w] \), there exists a unitary map \( f \from V\to V\) such that \( [fv] = [w] \).
 \end{lemma}
 \begin{proof}
-  Since a state is an equivalence class of normalised vectors, we need to verify that \( f \) preserves norms and respects the equivalence relation.
-  For any \( v \in V \)
-  \begin{equation*}
-    \|f(v)\|^2
-    = \braket{f(v)}{f(v)}
-    = \braket{v}{f^\dagger f(v)}
-    = \braket{v}{v}
-    = \|v\|^2.
-  \end{equation*}
-  Moreover, if \( v = \lambda w \), then \( f(v) = \lambda f(w) \), so the induced map is well-defined.
+  By Remark~\ref{rmk:unitaries-are-isometrics}, \(f\from V\to V\) is an isometry and therefore maps a normalised vector \(v\in V\) to the normalised vector \(f(v)\).
+  Moreover, if \( v = \lambda w \), then \( f(v) = \lambda f(w) \), so the induced map on states is well-defined.
 
   To show the existence of a unitary map between any two states, consider two normalised vectors \( v \) and \( w \).
   We fix  orthonormal bases \( (b_1, b_2, \dots, b_n) \) and \((c_1, c_2, \dots, c_n)\) of \(V\) where \(b_{1} = v\) and \(c_{1} =  w\).
@@ -3426,17 +3436,17 @@ We now want to translate the action of unitaries on states to an operation on mi
 \end{remark}
 
 \begin{lemma}\label{lem:mixed-state-action}
-  Let \(m, f\in \End(V)\) be a mixed state and a unitary map, respectively.
-  Then \(fmf^{\dagger}\) is again a mixed state
+  Let \(m, f\in \End_{ \mathbb{C}}(V)\) be a mixed state and a unitary map, respectively.
+  Then \(f\circ m\circ f^{\dagger} \from V \to V\) is again a mixed state.
 \end{lemma}
 \begin{proof}
-  Since \((fmf^{\dagger})^{\dagger} = {f^{\dagger}}^{\dagger}m^{\dagger} f^{\dagger} = f m f^{\dagger}\), we have that \(fmf^{\dagger}\) is self-adjoint.
-  To show that \(fmf^{\dagger}\) is positive semi-definite, we observe that
+  Since \((f\circ m\circ f^{\dagger})^{\dagger} = {f^{\dagger}}^{\dagger}\circ m^{\dagger}\circ f^{\dagger} = f\circ  m\circ f^{\dagger}\), we have that \(f \circ m \circ f^{\dagger}\) is self-adjoint.
+  To show that \(f \circ m \circ f^{\dagger}\) is positive semi-definite, we observe that
   \begin{equation*}
-    \braket{v}{fmf^{\dagger} \mid v} = \braket{f^{\dagger } v}{m \mid f v} \geq 0
+    \braket{v}{f \circ m \circ f^{\dagger} \mid v} = \braket{f^{\dagger } v}{m \mid f^{\dagger} v} \geq 0
   \end{equation*}
-  for all \(\ket{v}\in V\).
-  Finally, we have \(\tr(fmf^{\dagger}) = \tr(f^{\dagger} f m ) = \tr(m) = 1\).
+  for all \(v\in V\).
+  Finally, we note  \(\tr(f \circ m \circ f^{\dagger}) = \tr(f^{\dagger} \circ f\circ m ) = \tr(m) = 1\).
 \end{proof}
 
 \subsubsection{Quantum Gates on the Bloch Sphere}\label{sec:quantum-gates-on-the-bloch-sphere}
@@ -3453,69 +3463,127 @@ To develop intuition for how unitaries affect quantum states, we focus on a sing
   \end{subequations}
   the \(Z\), \(X\), and \(Y\)-\emph{phase gate}, respectively.
 \end{definition}
+With respect to the computational basis \((\ket{0}, \ket{1})\) of \( \mathbb{C}^{2}\), the transformation matrices of \(Z(\alpha)\), \((X(\beta))\) and \(Y(\gamma)\) are given by
+\begin{equation}\label{eq:trafo-matrices-of-z-x-y-gates}
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & e^{2\pi i \alpha}
+  \end{pmatrix}, \qquad
+  \frac{1}{2}
+  \begin{pmatrix}
+    1+ e^{2\pi i \beta}  & 1 - e^{2\pi i \beta} \\
+    1 - e^{2\pi i \beta} & 1 +  e^{2\pi i \beta}
+  \end{pmatrix}, \qquad
+  \frac{1}{2}
+  \begin{pmatrix}
+    1 + e^{2\pi i \gamma}  & -i + ie^{2 \pi i \gamma} \\
+    i - ie^{2\pi i \gamma} & 1 + e^{2 \pi i \gamma}
+  \end{pmatrix}.
+\end{equation}
+Note that in particular, \(\sigma_{x} = X(\tfrac{1}{2})\), \(\sigma_{y} = Y(\tfrac{1}{2})\), and \(\sigma_{z} = Z(\tfrac{1}{2})\).
 
 \begin{lemma}\label{lem:xyz-gates-are-unitary}
   The gates \(Z(\alpha), X(\beta), Y(\gamma) \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) are unitary for all \(\alpha,\beta, \gamma \in \mathbb{R}\).
 \end{lemma}
 \begin{proof}
-  We explicitly verify unitarity for the \( Z(\alpha) \) gate.
-  The adjoint of \( Z(\alpha) \) is
+  It suffices to note that with respect to the \(Z\)-, \(X\)-, and \(Y\)-basis, the transformation matrices of \(Z(\alpha)\), \(X(\beta)\), and \(Y(\gamma)\) are respectively given by
   \begin{equation*}
-    Z(\alpha)^\dagger = \ket{0}\bra{0} + e^{-2\pi i \alpha}\ket{1}\bra{1}
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & e^{2\pi i \alpha}
+    \end{pmatrix}, \qquad
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & e^{2\pi i \beta}
+    \end{pmatrix},\qquad
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & e^{2\pi i \gamma}
+    \end{pmatrix}. \qedhere
   \end{equation*}
-  and we compute
-  \begin{align*}
-    Z(\alpha) Z(\alpha)^\dagger
-    & = (\ket{0}\bra{0} + e^{2\pi i \alpha}\ket{1}\bra{1})(\ket{0}\bra{0} + e^{-2\pi i \alpha}\ket{1}\bra{1})\\
-    & = \ket{0} \braket{0}{0} \bra{0}
-    + e^{-2\pi i \alpha}\ket{0}\braket{0}{1}\bra{1}
-    + e^{2\pi i \alpha}\ket{1}\braket{1}{0}\bra{0}
-      + \ket{1}\braket{1}{1}\bra{1}\\
-    & = \ket{0}\bra{0} + \ket{1}\bra{1} = I_2,
-  \end{align*}
-  and similarly \( Z(\alpha)^\dagger Z(\alpha) = I_2 \).
-  Thus, \( Z(\alpha) \) is unitary.
+\end{proof}
 
-  Ana analogous computation for the \(X(\beta)\) and \(Y(\gamma)\) gates concludes the proof.
+\begin{lemma}\label{lem:additivity-of-z-x-y-gates}
+  For any real numbers \(\alpha, \beta \in \mathbb{R}\), we have
+  \begin{equation}\label{eq:additivity-of-z-x-y-gates}
+    Z(\alpha+\beta) = Z(\alpha)Z(\beta), \qquad
+    X(\alpha+\beta) = X(\alpha)X(\beta), \qquad
+    Y(\alpha+\beta) = Y(\alpha)Y(\beta).
+  \end{equation}
+  Moreover, \(Z(0) = X(0) = Y(0) = \id_{ \mathbb{C}^{2}}\).
+\end{lemma}
+\begin{proof}
+  We compute
+  \begin{align*}
+    Z(\alpha)Z(\beta)
+    & =
+      \big(\ket{0}\bra{0} + e^{2\pi i \alpha}\ket{1}\bra{1} \big)
+      \big(\ket{0}\bra{0} + e^{2\pi i \beta}\ket{1}\bra{1} \big) \\
+    & =
+      \ket{0}\braket{0}{0}\bra{0} + e^{2\pi i \alpha}\ket{1}\braket{1}{0}\bra{0} +
+      e^{2\pi i \beta} \ket{0}\braket{0}{1}\bra{1} +
+      e^{2\pi i \beta}e^{2\pi i \alpha}\ket{1}\braket{1}{1}\bra{1} \\
+    & = \ket{0}\bra{0} + e^{2 \pi i (\alpha + \beta)} \ket{1}\bra{1}
+      = Z(\alpha + \beta).
+  \end{align*}
+  Clearly \(Z(0) = \id_{ \mathbb{C}^{2}} \from \mathbb{C}^{2} \to \mathbb{C}^{2}\).
+  Analogous computations for the \(X\) and \(Y\)-gates complete the proof.
 \end{proof}
 
 To visualise the action of the \( Z \), \( X \), and \( Y \) gates on the Bloch sphere,
 we introduce the following rotations around the \( z \), \( x \), and \( y \)-axes
 \begin{subequations}
   \begin{align}
-    z(\alpha) \colon \mathbb{R}^3 &\to \mathbb{R}^3, \quad (x, y, z) \mapsto (x \cos(2\pi \alpha) + y \sin(2\pi \alpha), - x \sin(2\pi \alpha) + y \cos(2\pi \alpha), z), \\
-    x(\beta) \colon \mathbb{R}^3 &\to \mathbb{R}^3, \quad (x, y, z) \mapsto TODO\\
-    y(\gamma) \colon \mathbb{R}^3 &\to \mathbb{R}^3, \quad (x, y, z) \mapsto TODO
+    z(\alpha) \colon \mathbb{R}^3 &\to \mathbb{R}^3,
+    &&
+       \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
+       \begin{pmatrix}
+         \cos 2\pi \alpha &-\sin 2\pi \alpha &0\\
+         \sin 2\pi \alpha &\cos 2\pi \alpha &0\\
+         0&0&1
+       \end{pmatrix}
+       \begin{pmatrix} x \\ y \\ z \end{pmatrix},
+    \\
+    x(\beta) \colon \mathbb{R}^3 &\to \mathbb{R}^3,
+    &&
+       \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
+       \begin{pmatrix}
+         1&0&0\\
+         0&\cos 2\pi \beta &-\sin 2\pi \beta \\
+         0&\sin 2\pi \beta &\cos 2\pi \beta
+       \end{pmatrix}
+       \begin{pmatrix} x \\ y \\ z \end{pmatrix},
+    \\
+    y(\gamma) \colon \mathbb{R}^3 &\to \mathbb{R}^3,
+    &&
+       \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
+       \begin{pmatrix}
+         \cos 2\pi \gamma &0&\sin 2\pi \gamma \\
+         0&1&0\\
+         -\sin 2\pi \gamma &0&\cos 2\pi \gamma
+       \end{pmatrix}
+       \begin{pmatrix} x \\ y \\ z \end{pmatrix}.
   \end{align}
 \end{subequations}
 
-\begin{lemma}\label{lem:xyz-gates-are-rotations}
-  Given a state \(\ket{v} \in \mathbb{C}^{2}\), we write \(r_{\ket v} \in \mathbb{R}^{3}\) for the corresponding point in the Bloch sphere.
+\begin{proposition}\label{prop:xyz-gates-are-rotations}
+  Given a state \([v]\) of \( \mathbb{C}^{2}\), we write \(r_{[v]} \in \mathbb{R}^{3}\) for the corresponding point in the Bloch sphere.
   For any \( \alpha, \beta, \gamma \in \mathbb{R} \), we have
   \begin{align*}
-    r_{Z(\alpha) \ket{v}} = z(\alpha)r_{\ket{v}}, \qquad
-    r_{X(\beta) \ket{v}} = x(\beta)r_{\ket{v}}, \qquad
-    r_{Y(\gamma) \ket{v}} = y(\gamma)r_{\ket{v}}.
+    r_{[Z(\alpha) v]} = z(\alpha)r_{[v]}, \qquad
+    r_{[X(\beta) v]} = x(\beta)r_{[v]}, \qquad
+    r_{[Y(\gamma) v]} = y(\gamma)r_{[v]}. \qedhere
   \end{align*}
-\end{lemma}
+\end{proposition}
 
 \begin{proof}
-  We prove the claim for the \( Z(\alpha) \) gate.
-  The matrix representation of \( Z(\alpha) \) with respect to the standard basis is
+  Let \( v \in \mathbb{C}^2 \) be normalised.
+  By Lemma~\ref{lem:characterising-the-qubit}, the associated density matrix is
   \begin{equation*}
-    Z(\alpha) = \begin{pmatrix}
-      1 & 0 \\
-      0 & e^{2\pi i \alpha}
-    \end{pmatrix}.
+    \rho_{v} = \frac{1}{2}(I_2 + r_x \sigma_x + r_y \sigma_y + r_z \sigma_z),
   \end{equation*}
-  Let \( \ket{v} \in \mathbb{C}^2 \) be a state, and let \( \rho_{\ket{v}} = \ket{v}\bra{v} \) be its associated density matrix.
-  By Lemma~\ref{lem:characterising-the-qubit}, we have
-  \begin{equation*}
-    \rho_{\ket{v}} = \frac{1}{2}(I_2 + r_x \sigma_x + r_y \sigma_y + r_z \sigma_z),
-  \end{equation*}
-  where \( r_{\ket{v}} = (r_x, r_y, r_z) \).
-
-  The density matrix of the transformed state \( Z(\alpha)\ket{v} \) is given by \(\rho_{Z(\alpha)\ket{v}} = Z(\alpha) \rho_{\ket{v}} Z(\alpha)^\dagger\).
+  and \( r_{[v]} = (r_x, r_y, r_z)^{T}\in \mathbb{R}^{3}\) is the associated point on the Bloch sphere.
+  The density matrix of the transformed state \( [Z(\alpha)v] \) is given by \(\rho_{Z(\alpha)v} = Z(\alpha) \rho_{v} Z(\alpha)^\dagger\).
 
   We now compute the conjugation of each Pauli matrix by \( Z(\alpha) \).
   \begin{align*}
@@ -3585,25 +3653,139 @@ we introduce the following rotations around the \( z \), \( x \), and \( y \)-ax
       \end{pmatrix}
       = -\sin(2\pi \alpha) \sigma_x + \cos(2\pi \alpha) \sigma_y.
   \end{align*}
-  Thus, we get \(r_{Z(\alpha) \ket{v}} = z(\alpha)r_{\ket{v}}\).
+  Thus, we get \(r_{[Z(\alpha) v]} = z(\alpha)r_{[v]}\).
+  The cases for the \(X\) and \(Y\)-gates are similar.
 \end{proof}
 
 We have already seen that any state can be transformed into any other state via a unitary map.
-However, this unitary is far from unique.
-In the single-qubit case, the \( Z \) and \( X \) phase gates suffice to generate all single-qubit unitaries.
+For density matrices, this is implemented by mapping \(M\) to \( U M U^{\dagger} \).
+However, different unitaries can yield the same transformation.
+For example, given \( \lambda \in \mathbb{C} \) with \( |\lambda| = 1 \), set \(V = \lambda U\).
+Then \(V M V^{\dagger} = U M U^{\dagger}\).
 
-\begin{lemma}\label{lem:euler-decomposition-of-rotation}
-  For any unitary map \( f \from \mathbb{C}^2 \to \mathbb{C}^2 \), there exist \( \alpha, \beta, \gamma \in [0,1) \) such that
+\begin{lemma}\label{lem:standard-form-su2}
+  There is a bijection
   \begin{equation}
-    e^{2\pi i \lambda} f = Z(\alpha) X(\beta) Z(\gamma) ,\qquad\quad \text{ for some } \lambda \in \mathbb{R}.
+    \begin{aligned}
+      \big\{ (a, b) \in \mathbb{C}^2 \mid |a|^2 + |b|^2 = 1 \big\}
+      & \to \big\{ U \in \U(2) \mid \det(U) = 1 \big\}, \\
+      \begin{pmatrix} a \\ b \end{pmatrix}
+      & \mapsto
+        \begin{pmatrix}
+          a & b \\
+          -\overline{b} & \overline{a}
+        \end{pmatrix}
+    \end{aligned}.
   \end{equation}
 \end{lemma}
+
 \begin{proof}
-  TODO: Easy proof idea:
-  Mercator projection:
-  Map from \([0,1]^{2} \to S^{2}\) such that rotation by \(z(\alpha)\) horizontal movement
-  rotation by \(x(\beta)\) vertical movement.
-  Clearly any point in \([0,1]^{2}\) can be reached by...
+  For complex numbers \( a, b \) such that \( |a|^2 + |b|^2 = 1 \), a direct computation shows that the matrix
+  \(
+  \begin{psmallmatrix}
+    a & b \\
+    -\overline{b} & \overline{a}
+  \end{psmallmatrix}
+  \)
+  is unitary and has determinant \(1\).
+
+  Conversely, let \( U \) be a unitary matrix with \(\det(U) = 1\).
+  Let \( u_1 \) and \( u_2 \) be the rows of \( U \).
+  Then, \( u_1 = (a, b) \) with \( a, b \in \mathbb{C} \) satisfying \(|a|^{2} + |b|^{2} = 1\).
+  Moreover, \( u_2 \) must be orthogonal to \( u_1 \) and thus \( u_2 = \lambda (-\overline{b}, \overline{a}) \) for some \( \lambda \in \mathbb{C} \).
+  The proof is concluded by observing that \(\det(U) = 1\) forces \( \lambda = 1 \).
+\end{proof}
+
+\begin{proposition}\label{prop:euler-decomposition-of-rotation}
+  For any unitary map \( f \colon \mathbb{C}^2 \to \mathbb{C}^2 \) there exist \( \alpha, \beta, \gamma, \lambda \in \mathbb{R} \) such that
+  \begin{equation}\label{eq:euler-decomposition-of-rotation}
+    f = e^{2 \pi i \lambda} Z(\alpha) X(\beta) Z(\gamma).
+  \end{equation}
+\end{proposition}
+\begin{proof}
+  First, multiply \( f \) by a scalar \( e^{2\pi i \mu} \in \mathbb{C} \) with \( \mu \) real such that \( \det(e^{2\pi i \mu} f) = 1 \).
+  By Lemma~\ref{lem:standard-form-su2}, the transformation matrix of \( e^{2\pi i \mu} f \) with respect to the computational basis \( \mathcal{B} \) is of the form
+  \begin{equation*}
+    {}_{\mathcal{B}}(e^{2\pi i \mu} f)_{\mathcal{B}} =
+    \begin{pmatrix}
+      a & b \\
+      -\overline{b} & \overline{a}
+    \end{pmatrix},
+  \end{equation*}
+  where \( |a|^2 + |b|^2 = 1 \).
+  If we express \( a \) and \( b \) in polar coordinates, we get
+  \begin{equation*}
+    a = \cos(\pi \beta) e^{2\pi i \phi}, \quad b = \sin(\pi \beta) e^{2\pi i \psi}
+  \end{equation*}
+  and therefore the transformation matrix of \(e^{2\pi i \mu} f\) becomes
+  \begin{equation*}
+    \begin{pmatrix}
+      \cos(\pi \beta) e^{2\pi i \phi} & \sin(\pi \beta) e^{2\pi i \psi} \\
+      -\sin(\pi \beta) e^{-2\pi i \psi} & \cos(\pi \beta) e^{-2\pi i \phi}
+    \end{pmatrix}.
+  \end{equation*}
+  Next, recall that the transformation matrix of \(X(\beta)\) is
+  \begin{align*}
+    \frac{1}{2}
+    \begin{pmatrix}
+      1+ e^{2\pi i \beta}  & 1 - e^{2\pi i \beta} \\
+      1 - e^{2\pi i \beta} & 1 +  e^{2\pi i \beta}
+    \end{pmatrix}
+    & =
+    \frac{e^{\pi i \beta}}{2}
+    \begin{pmatrix}
+      e^{-\pi i \beta} + e^{\pi i \beta} & e^{- \pi i \beta} - e^{\pi i \beta} \\
+      e^{- \pi i \beta} - e^{\pi i \beta} & e^{-\pi i \beta} + e^{\pi i \beta}
+    \end{pmatrix} \\
+    & =
+    e^{\pi i \beta}
+    \begin{pmatrix}
+      \cos( \pi \beta) & -i \sin (\pi \beta) \\
+      -i \sin ( \pi \beta) & \cos(\pi \beta)
+    \end{pmatrix}.
+  \end{align*}
+  Finally, we  observe that \( -i = e^{-\pi i / 2} \), set \( \alpha = -(\phi + \psi + 1/4) \) and \( \gamma = -(\phi - \psi - 1/4) \), and compute
+  \begin{align*}
+    e^{-\pi i(\alpha + \beta + \gamma)} Z(\alpha) X(\beta) Z(\gamma)
+    & =
+      e^{-\pi i(\alpha + \gamma)}
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & e^{2\pi i \alpha}
+    \end{pmatrix}
+    \begin{pmatrix}
+      \cos( \pi \beta) & -i \sin (\pi \beta) \\
+      -i \sin ( \pi \beta) & \cos(\pi \beta)
+    \end{pmatrix}
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & e^{2\pi i \gamma}
+    \end{pmatrix}\\
+    & =
+    \begin{pmatrix}
+      e^{-\pi i \alpha} & 0 \\
+      0 & e^{\pi i \alpha}
+    \end{pmatrix}
+    \begin{pmatrix}
+      \cos( \pi \beta) & -i \sin (\pi \beta) \\
+      -i \sin ( \pi \beta) & \cos(\pi \beta)
+    \end{pmatrix}
+    \begin{pmatrix}
+      e^{-\pi i \gamma} & 0 \\
+      0 & e^{\pi i \gamma}
+    \end{pmatrix} \\
+    & =
+    \begin{pmatrix}
+      \cos(\pi \beta) e^{-i\pi(\alpha+\gamma)} & -i \sin(\pi \beta) e^{-i\pi(\alpha-\gamma)} \\
+      -i \sin(\pi \beta) e^{i\pi(\alpha-\gamma)} & \cos(\pi \beta) e^{i\pi(\alpha+\gamma)}
+    \end{pmatrix}
+    \\
+    & =
+      \begin{pmatrix}
+      \cos(\pi \beta) e^{2\pi i \phi} & \sin(\pi \beta) e^{2\pi i \psi} \\
+      -\sin(\pi \beta) e^{-2\pi i \psi} & \cos(\pi \beta) e^{-2\pi i \phi}
+    \end{pmatrix}. \qedhere
+  \end{align*}
 \end{proof}
 
 \subsubsection{Translating Classical Algorithms to Quantum Algorithms}\label{sec:translating-classical-algorithms-to-quantum-algorithms}
@@ -4129,8 +4311,8 @@ The big advantage about mixed states in the context of  measurements is that we 
 \begin{exercise}
   Prove for  finite-dimensional vector spaces \(V, W\)  the following identities and represent them as string diagrams.
   \begin{thmlist}
-    \item \(\coev_{V} = \tau_{V,\rd*{V}}\tilde{\coev}_{V}\)
-    \item \(\ev_{V} = \tilde{\ev}_{V}\tau_{V,\rd*{V}}\)
+    \item \(\coev_{V} = \tau_{V,\rd*{V}}\widetilde{\coev}_{V}\)
+    \item \(\ev_{V} = \widetilde{\ev}_{V}\tau_{V,\rd*{V}}\)
     \item \(\tau_{W,V}\tau_{V,W} = \id_{V,W}\)
   \end{thmlist}
 \end{exercise}
@@ -4167,7 +4349,7 @@ The big advantage about mixed states in the context of  measurements is that we 
     \item Show that \(\coev_{V\otimes W} = (\id_{V} \otimes \coev_{W}\otimes \id_{\rd*{V}})\coev_{V}\)
     \item Fill in the correct letters such that the following equation holds
     \begin{equation*}
-      \tilde{\ev}_{{V\otimes W}} = (\tilde{\ev}_{\square})(\square \otimes \tilde{\ev}_{\square} \otimes \square).
+      \widetilde{\ev}_{{V\otimes W}} = (\widetilde{\ev}_{\square})(\square \otimes \widetilde{\ev}_{\square} \otimes \square).
     \end{equation*}
 
     \item Prove diagrammatically that for any pair of linear maps \(f\from V\to V\) and \(g \from W \to W\), we have \(\tr(f \otimes g) = \tr(f)\tr(g)\).
