@@ -13,6 +13,8 @@ pkgOptions={
 }
 ]{style}
 
+\usepackage{tcolorbox}
+
 \addbibresource{local-bib.bib}
 \usetikzlibrary{babel} % TODO: WIESO?!?
 \pdfoutput=1
@@ -3365,17 +3367,17 @@ We draw the tensor flip as a crossing.
 \end{proof}
 
 \begin{remark}\label{rmk:partial-traces-at-arbitrary-inputs}
-  Suppose we are given a linear map \( \rho \colon W \otimes V \to X \otimes V \).
+  Suppose we are given a linear map \( \rho \from W \otimes V \to X \otimes V \).
   Using the tensor flip, we can define the partial trace for the \( W \)-component as the composition
   \begin{equation}
-    \mathrm{Tr}^{W}_{V,X}(\tau_{X,W} \circ \rho \circ \tau_{V,W}) \colon V \to X.
+    \mathrm{Tr}^{W}_{V,X}(\tau_{X,W} \circ \rho \circ \tau_{V,W}) \from V \to X.
   \end{equation}
   In string diagrams, this is simply:
   \begin{equation*}
     \inputtikz{partial-trace-flip}
   \end{equation*}
 
-  More generally, we can iteratively apply tensor flips to compute the partial trace of the \( k \)-th component of a map \( g \colon V_1 \otimes V_2 \otimes \dots \otimes V_n \to V_1 \otimes V_2 \otimes \dots \otimes V_n \).
+  More generally, we can iteratively apply tensor flips to compute the partial trace of the \( k \)-th component of a map \( g \from V_1 \otimes V_2 \otimes \dots \otimes V_n \to V_1 \otimes V_2 \otimes \dots \otimes V_n \).
   By the braid relations, see Exercise~\ref{exe:braid-relations}, the result does not depend on the specific sequence of flips used.
   To simplify notation, we write
    \begin{equation}
@@ -3405,7 +3407,7 @@ Unitary transformations are fundamental building blocks in quantum algorithms, s
 
   To show the existence of a unitary map between any two states, consider two normalised vectors \( v \) and \( w \).
   We fix  orthonormal bases \( (b_1, b_2, \dots, b_n) \) and \((c_1, c_2, \dots, c_n)\) of \(V\) where \(b_{1} = v\) and \(c_{1} =  w\).
-  Next, we define the linear map \( f \colon V \to V \) by
+  Next, we define the linear map \( f \from V \to V \) by
   \begin{equation*}
         f (b_i) = c_i \qquad  \text{for all } i = 1, \dots, n.
   \end{equation*}
@@ -3534,7 +3536,7 @@ To visualise the action of the \( Z \), \( X \), and \( Y \) gates on the Bloch 
 we introduce the following rotations around the \( z \), \( x \), and \( y \)-axes
 \begin{subequations}
   \begin{align}
-    z(\alpha) \colon \mathbb{R}^3 &\to \mathbb{R}^3,
+    z(\alpha) \from \mathbb{R}^3 &\to \mathbb{R}^3,
     &&
        \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
        \begin{pmatrix}
@@ -3544,7 +3546,7 @@ we introduce the following rotations around the \( z \), \( x \), and \( y \)-ax
        \end{pmatrix}
        \begin{pmatrix} x \\ y \\ z \end{pmatrix},
     \\
-    x(\beta) \colon \mathbb{R}^3 &\to \mathbb{R}^3,
+    x(\beta) \from \mathbb{R}^3 &\to \mathbb{R}^3,
     &&
        \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
        \begin{pmatrix}
@@ -3554,7 +3556,7 @@ we introduce the following rotations around the \( z \), \( x \), and \( y \)-ax
        \end{pmatrix}
        \begin{pmatrix} x \\ y \\ z \end{pmatrix},
     \\
-    y(\gamma) \colon \mathbb{R}^3 &\to \mathbb{R}^3,
+    y(\gamma) \from \mathbb{R}^3 &\to \mathbb{R}^3,
     &&
        \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
        \begin{pmatrix}
@@ -3674,8 +3676,8 @@ Then \(V M V^{\dagger} = U M U^{\dagger}\).
         \begin{pmatrix}
           a & b \\
           -\overline{b} & \overline{a}
-        \end{pmatrix}
-    \end{aligned}.
+        \end{pmatrix}.
+    \end{aligned}
   \end{equation}
 \end{lemma}
 
@@ -3696,8 +3698,11 @@ Then \(V M V^{\dagger} = U M U^{\dagger}\).
   The proof is concluded by observing that \(\det(U) = 1\) forces \( \lambda = 1 \).
 \end{proof}
 
+We can now describe  unitary maps \(f \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) up to scalars \(e^{2\pi i \lambda} \in \mathbb{C}\), with \(\lambda \in \mathbb{R}\) in terms of \(Z\) and \(X\)-phase gates.
+This is called the \emph{Euler decomposition} of \(f\).
+
 \begin{proposition}\label{prop:euler-decomposition-of-rotation}
-  For any unitary map \( f \colon \mathbb{C}^2 \to \mathbb{C}^2 \) there exist \( \alpha, \beta, \gamma, \lambda \in \mathbb{R} \) such that
+  For any unitary map \( f \from \mathbb{C}^2 \to \mathbb{C}^2 \) there exist \( \alpha, \beta, \gamma, \lambda \in \mathbb{R} \) such that
   \begin{equation}\label{eq:euler-decomposition-of-rotation}
     f = e^{2 \pi i \lambda} Z(\alpha) X(\beta) Z(\gamma).
   \end{equation}
@@ -3724,7 +3729,7 @@ Then \(V M V^{\dagger} = U M U^{\dagger}\).
       -\sin(\pi \beta) e^{-2\pi i \psi} & \cos(\pi \beta) e^{-2\pi i \phi}
     \end{pmatrix}.
   \end{equation*}
-  Next, recall that the transformation matrix of \(X(\beta)\) is
+  The transformation matrix of \(X(\beta)\) can be written as
   \begin{align*}
     \frac{1}{2}
     \begin{pmatrix}
@@ -3744,7 +3749,7 @@ Then \(V M V^{\dagger} = U M U^{\dagger}\).
       -i \sin ( \pi \beta) & \cos(\pi \beta)
     \end{pmatrix}.
   \end{align*}
-  Finally, we  observe that \( -i = e^{-\pi i / 2} \), set \( \alpha = -(\phi + \psi + 1/4) \) and \( \gamma = -(\phi - \psi - 1/4) \), and compute
+  We  observe that \( -i = e^{-\pi i / 2} \), set \( \alpha = -(\phi + \psi + 1/4) \) and \( \gamma = -(\phi - \psi - 1/4) \), and compute
   \begin{align*}
     e^{-\pi i(\alpha + \beta + \gamma)} Z(\alpha) X(\beta) Z(\gamma)
     & =
@@ -3776,8 +3781,8 @@ Then \(V M V^{\dagger} = U M U^{\dagger}\).
     \end{pmatrix} \\
     & =
     \begin{pmatrix}
-      \cos(\pi \beta) e^{-i\pi(\alpha+\gamma)} & -i \sin(\pi \beta) e^{-i\pi(\alpha-\gamma)} \\
-      -i \sin(\pi \beta) e^{i\pi(\alpha-\gamma)} & \cos(\pi \beta) e^{i\pi(\alpha+\gamma)}
+      \cos(\pi \beta) e^{-\pi i(\alpha+\gamma)} & -i \sin(\pi \beta) e^{\pi i(\gamma- \alpha)} \\
+      -i \sin(\pi \beta) e^{-\pi i(\gamma - \alpha)} & \cos(\pi \beta) e^{\pi i(\alpha+\gamma)}
     \end{pmatrix}
     \\
     & =
@@ -3789,20 +3794,28 @@ Then \(V M V^{\dagger} = U M U^{\dagger}\).
 \end{proof}
 
 \subsubsection{Translating Classical Algorithms to Quantum Algorithms}\label{sec:translating-classical-algorithms-to-quantum-algorithms}
-To understand how quantum algorithms generalise classical ones, we outline a non-trivial process for transforming classical computations into quantum computations.
+% The main?
+A main component of quantum algorithms is the transformation of input states using unitary operations.
+These operations are invertible, which contrasts with classical algorithms.
+Think for example of the search problem: ``Is \( x \) in the list \( l \)?''. From the answer we cannot possibly reconstruct the whole list.
+
+Nonetheless, we will show that an (idealised) quantum machine can at least theoretically execute  every classical algorithm.
+This necessitates  a non-trivial process for transforming classical algorithms into unitary maps.
 At this stage, and without going into further details, we adopt a high-level perspective on classical algorithms, and simply model them as maps \(f \from \{0,1\}^n \to \{0,1\}^m\).
 
 \begin{definition}\label{def:addition-modulo-2}
   The \emph{addition modulo 2} is the operation
   \begin{equation}
-    \boxplus \from\{0,1\}^{2} \to\{0,1\}, \qquad (a, b) \mapsto
+    \boxplus \from\{0,1\}\times\{0,1\} \to\{0,1\}, \qquad (a, b) \mapsto
     \begin{cases}
       1 & a=1, b=0 \text{ or } a= 0, b=1 \\
       0 & a=0, b=0 \text{ or } a = 1, b= 1.
     \end{cases}
   \end{equation}
+  This operation is also known as the \emph{exclusive or} (in short \emph{XOR}).
 \end{definition}
-We extend this addition to \(m\)-tuples of bits and write
+
+We extend this addition component-wise to \(m\)-tuples of bits and write
 \begin{equation*}
   \boxplus \from \{0,1\}^{m} \times \{0,1\}^{m} \to \{0,1\}^{m}, \qquad
   (a_{1}, \dots , a_{m}, b_{1}, \dots , b_{m}) \mapsto (a_{1} \boxplus b_{1}, \dots , a_{m} \boxplus b_{m}).
@@ -3811,10 +3824,11 @@ We extend this addition to \(m\)-tuples of bits and write
 The method described below, called \emph{Bennett's trick}, is the first step for turning classical algorithms into quantum ones.
 
 \begin{remark}\label{rmk:Bennetts-trick}
-  We associate  any map \( f \from \{0,1\}^n \to \{0,1\}^m \), the map
+  We associate to any \( f \from \{0,1\}^n \to \{0,1\}^m \), the map
   \begin{equation*}
     B(f) \from \{0,1\}^{n+m} \to \{0,1\}^{n+m}, \qquad (x,y) \mapsto (x, f(x) \boxplus y),
   \end{equation*}
+
   Note that
   \begin{equation*}
     (B(f) \circ B(f))(x,y) = (x, f(x) \boxplus y) = (x, f(x) \boxplus f(x) \boxplus y) = (x,y)
@@ -3823,40 +3837,41 @@ The method described below, called \emph{Bennett's trick}, is the first step for
 \end{remark}
 
 Using the computational basis \(( \ket 0, \ket 1 )\) of  the qubit \( \mathbb{C}^{2}\),
-we may now lift \(B(f)\) to a linear map.
+we may lift \(B(f)\) to a linear map.
 To that end, given \((x,y)= (x_{1}, \dots , x_{n}, y_{1}, \dots , y_{m}) \in\{0,1\}^{n+m}\), we write
-\(\ket{x,y}\eqdef \ket{x_{1}\dots x_{n}y_{1}\dots y_{m}}\).
+\begin{equation}
+  \ket{x,y}\eqdef \ket{x_{1}\dots x_{n}y_{1}\dots y_{m}} \in ( \mathbb{C}^{2})^{n+m}.
+\end{equation}
+
 
 \begin{definition}\label{def:associated-unitary}
-To any map \( f \from \{0,1\}^n \to \{0,1\}^m \), we associate the linear map
-\begin{equation}
+  Given a function \( f \from \{0,1\}^n \to \{0,1\}^m \), we define the linear map
+  \begin{equation}
     UB(f) \from (\mathbb{C}^2)^{\otimes (n+m)} \to (\mathbb{C}^2)^{\otimes (n+m)}, \qquad \ket{x,y} \mapsto \ket{x, f(x) \boxplus y}.
-\end{equation}
+  \end{equation}
 \end{definition}
 
 To prove that \(UB(f)\) can be part of a quantum algorithm, we need to show that it is unitary.
 
-\begin{lemma}\label{lem:associated-unitary-is-unitary}
-  For any \( f \from \{0,1\}^n \to \{0,1\}^m \), the associated map \( UB(f) \) is unitary.
-\end{lemma}
+\begin{proposition}\label{prop:associated-unitary-is-unitary}
+  Consider the function \( f \from \{0,1\}^n \to \{0,1\}^m \).
+  Then, the associated linear map \( UB(f) \from ( \mathbb{C}^{2})^{\otimes (n+m)} \to ( \mathbb{C}^{2})^{\otimes (n+m)} \) is unitary.
+\end{proposition}
+
 \begin{proof}
   Since \(UB(f)\) is unitary if and only if it is an isometry, we simply need to verify that it preserves the inner product.
   Let \( \ket{x_1, y_1} \) and \( \ket{x_2, y_2} \) be basis vectors in \( (\mathbb{C}^2)^{\otimes (n+m)} \).
-  Their scalar product is
+  Their inner product is the product of Kronecker deltas
   \begin{equation*}
-    \braket{x_1, y_1}{x_2, y_2} = \delta_{x_1,x_2} \delta_{y_1,y_2}.
+    \braket{x_1, y_1}{x_2, y_2} = \delta_{x_1,x_2} \delta_{y_1,y_2},
   \end{equation*}
+  where \(\delta_{a, b} = 1\) if \(x_{1} = x_{2}\) and zero otherwise, and \(\delta_{y_{1}, y_{2}} \in\{0,1\}\) is defined analogously.
   Conversely, we get
   \begin{equation*}
-    = \ket{x_1, f(x_1) \boxplus y_1}, \quad UB(f)\ket{x_2, y_2} = \ket{x_2, f(x_2) \boxplus y_2}.
+    \braket{UB(f)(x_1, y_1)}{UB(f)(x_2, y_2)}
+    = \braket{x_1, f(x_1) \boxplus y_1}{x_2, f(x_2) \boxplus y_2}= \delta_{x_{1}, x_{2}} \delta_{f(x_1) \boxplus y_1, f(x_2) \boxplus y_2}.
   \end{equation*}
-  The inner product of the transformed vectors is
-  \begin{equation*}
-    \braket{UB(f)\ket{x_1, y_1}}{UB(f)\ket{x_2, y_21}}
-    = \braket{x_1, f(x_1) \boxplus y_1}{x_2, f(x_2) \boxplus y_2}
-    = \delta_{x_1,x_2} \delta_{f(x_1) \boxplus y_1, f(x_2) \boxplus y_2}.
-  \end{equation*}
-  Since \( x_1 = x_2 \) implies \( f(x_1) = f(x_2) \), this simplifies to \(\delta_{x_1,x_2} \delta_{y_1,y_2}\) and concludes the proof.
+  Since \( x_1 = x_2 \) implies \( f(x_1) = f(x_2) \), this simplifies to \(\delta_{x_1,x_2} \delta_{y_1,y_2}\), concluding the proof.
 \end{proof}
 
 To get a first idea why quantum algorithms believed to be more powerful than their classical analogues, it suffices to study transformations of a single bit.
@@ -3870,17 +3885,17 @@ To get a first idea why quantum algorithms believed to be more powerful than the
       0 & 1 & 0 & 0 \\
       0 & 0 & 1 & 0 \\
       0 & 0 & 0 & e^{2\pi i \alpha}
-    \end{pmatrix}.
+    \end{pmatrix} \in \Mat_{4}( \mathbb{C}).
   \end{equation*}
   Moreover \( Z(\alpha) = Z(\beta)\) if and only if \(\alpha- \beta \in \mathbb{Z}\).
 \end{remark}
 
 \subsubsection{The (projective) unitary group}\label{sec:the-(projective)-unitary-group}
-We conclude our discussion of unitary transformations with some abstract considerations.
-We begin by formalising some basic observations about unitary maps, such as the associativity of their composition.
+We conclude our discussion of unitary transformations with some supplementary advanced considerations.
+The topics below will not be included in an examination and are not part of the core content.
 
 \begin{definition}\label{def:group}
-  A \emph{group} is a set \( G \) together with a binary operation \( \cdot \colon G \times G \to G \), called \emph{multiplication}, satisfying the following axioms.
+  A \emph{group} is a set \( G \) together with a binary operation \( \cdot \from G \times G \to G \), called the \emph{group operation} or \emph{multiplication}, satisfying the following axioms.
   \begin{thmlist}
     \item \emph{Associativity:} For all \( a, b, c \in G \), we have \( (a \cdot b) \cdot c = a \cdot (b \cdot c) \).
     \item \emph{Identity element:} There exists an element \( e \in G \) such that \( a \cdot e = a = e \cdot a \) for all \( a \in G \).
@@ -3888,51 +3903,110 @@ We begin by formalising some basic observations about unitary maps, such as the 
   \end{thmlist}
 \end{definition}
 
-We begin with some matrix-based examples of groups.
+We have already encountered groups in this course.
+For instance, any vector space \( V \) forms a group with vector addition as group operation.
+Here the identity element is the zero vector \(0 \in V\) and the inverse of a vector \( v \in V \) is its additive inverse \( -v\in V \).
+\bigskip
 
+Another large class of examples comes from certain subsets of matrices.
 \begin{example}\label{ex:invertible-matrices}
   Let \(n\in \mathbb{N}\) be a natural number.
   \begin{thmlist}
-    \item The set of invertible \( n \times n \) matrices over \( \mathbb{C} \), denoted \( GL_{n}(\mathbb{C}) \), forms the \emph{general linear group} under matrix multiplication.
-    \item The unitary \( n \times n \) matrices, denoted \( U(n) \), forms  the \emph{unitary group} with  matrix multiplication as group operation.
-    \item The \emph{special unitary group} \(SU(n)\) has as elements all unitary \( n \times n \) matrices \(A\) such that \(\det A =1\).
-    Again, the group operation of \(SU(n)\) is given by matrix multiplication.
+    \item The set of invertible \( n \times n \) matrices over \( \mathbb{C} \), denoted \( \GL_{n}(\mathbb{C}) \), forms the \emph{general linear group} under matrix multiplication.
+    \item The unitary \( n \times n \) matrices, denoted \( \U(n) \), forms  the \emph{unitary group} with  matrix multiplication as group operation.
+    \item The \emph{special unitary group} \(\SU(n)\) has as elements all unitary \( n \times n \) matrices of determinant \(1\).
+    Again, the multiplication of \(\SU(n)\) is simply matrix multiplication.
   \end{thmlist}
 \end{example}
+
 These groups have natural analogues in the setting of linear maps of finite-dimensional Hilbert spaces, such as the group of invertible linear transformations, the group of unitary transformations, and the group of special unitary transformations.
 
-\begin{example}\label{ex:central-stuff}
-  We fix a natural number \(n\in \mathbb{N}\).
-  Another set of examples where the group operation is matrix multiplication is given below.
-  \begin{thmlist}
-    \item The group of scalar matrices \( \{\lambda I_n \mid \lambda \in  \mathbb{C}\setminus\{0\}\} \);
-    \item The group \( \{\lambda I_n \mid \lambda \in \mathbb{C} \text{ and } |\lambda| = 1\} \) of scalar matrices of norm \(1\);
-    \item The group of scalar matrices with entries that are \(n\)-th roots of unity.
-    That is, \( \{\lambda I_n \mid \lambda \in \mathbb{C} \text{ and } \lambda^n = 1\} \).
-  \end{thmlist}
-\end{example}
+\begin{definition}\label{def:group-action}
+  A \emph{group action} of a group \( G \) on a set \( X \) is a map
+  \begin{equation*}
+    G \times X \to X, \qquad (g, x) \mapsto g \lact x,
+  \end{equation*}
+  such that for all \(x\in X\) and \(g,h \in G\) we have \( e \lact x = x \) and \( g \lact (h \lact x) = (gh) \lact x \).
 
-In the context of quantum computing both of these sets of groups play a central role.
-To that end, we need to define an equivalence relation on the set of (special) unitary matrices
-\begin{equation}
-  A\sim B \iff \text{there exists a } \lambda \in \mathbb{C} \text{ such that } \lambda I_{n} A= B.
-\end{equation}
-We write \([A] =\{ \lambda A \mid \lambda \in \mathbb{C}\setminus\{0\} \}\).
-Matrix mult extends to these equivalence classes.
-That is, we set
-\begin{equation}\label{eq:mult-on-quotient}
-  [A] \cdot [B] \eqdef [AB] \qquad \text{ for all } A, B \in \Mat_{n} ( \mathbb{C}).
-\end{equation}
-A direct computation shows that this operation does not  depend on the choice of representative.
-\begin{definition}\label{def:pun-sun}
-  Let \(n\in \mathbb{N}\).
-  The \emph{ projective unitary group} is the set \(\{[A] \mid A \in U(n)\}\) endowed with the multiplication of Equation~\ref{eq:mult-on-quotient}.
-
-  Similarly, the \emph{projective special unitary group} is the set \(\{[A] \mid A \in SU(n)\}\) endowed with the multiplication of Equation~\ref{eq:mult-on-quotient}.
+  It is \emph{transitive} if for all \(x, y\in X\) there is a \(g\ in G\) such that \(g\lact x = y\).
 \end{definition}
 
+The example below can be considered a reformulation of Lemma~\ref{lem:induced-map-on-states}.
+
+\begin{example}\label{ex:states}
+  The group \(\U(n) \) acts transitively on the pure states of \( \mathbb{C}^n \) by matrix-vector multiplication
+  \begin{equation*}
+    \U(n) \times\{\text{states of } \mathbb{C}^{n}\}, \qquad   U\lact [v] \eqdef [Uv].
+  \end{equation*}
+\end{example}
+
+By Lemma~\ref{lem:mixed-state-action}, conjugation by unitary matrices yields an action on density matrices.
+
+\begin{example}\label{ex:group-action-on-mixed-states}
+  The group \( U(n) \) acts on the set of density matrices of \( \mathbb{C}^n \) by conjugation
+  \begin{equation*}
+    \U(n) \times\{\text{density matrices of } \mathbb{C}^{n}\}, \qquad
+    U\lact \rho \mapsto U\rho U^{\dagger}.
+  \end{equation*}
+  This action is not transitive.
+  If \(\rho\) and \(\varrho\) have different ranks, there is no  \(U\) such that \(U\rho U^{\dagger} = \varrho\).
+\end{example}
+
+For \(U, V \in \U(n)\) (special) unitary matrices, a density matrix  \(\rho \in \Mat_{n}( \mathbb{C})\) and a scalar \(\lambda \in \mathbb{C}\) such that \(V= \lambda U\),
+we have \(U\rho U^{\dagger} = V \rho V^{\dagger}\).
+This observation motivates us to define the following equivalence relation on the set of (special) unitary matrices:
+\begin{equation}
+  U\sim V \iff \text{there exists a } \lambda \in \mathbb{C} \text{ such that } \lambda U= V.
+\end{equation}
+We denote the equivalence class of \( U \) by \( [U] \) and set
+\begin{equation*}
+  \mathrm{PU}(n) \eqdef \U(n)/\sim, \quad \mathrm{PSU}(n) \eqdef \SU(n)/\sim.
+\end{equation*}
+
+\begin{lemma}\label{lem:projective-unitary-iswell-defd-group}
+  The sets \(\mathrm{PU}(n)\) and \(\mathrm{PSU}(n)\) form groups under the operation
+  \begin{equation*}
+    [U] \cdot [V] \eqdef [UV]
+  \end{equation*}
+  The neutral element is \([I_{n}]\).
+\end{lemma}
+\begin{proof}
+  Suppose \( U \sim U' \) and \( V \sim V' \), then \( U' = \lambda U \) and \( V' = \mu V \) for some \( \lambda, \mu \in \mathbb{C} \).
+  Thus,
+  \begin{equation*}
+    U'V' = (\lambda U)(\mu V) = (\lambda \mu) (UV) \sim UV
+  \end{equation*}
+  showing that the group operation is well-defined.
+
+  Associativity as well as the existence of inverses an the  existence of an identity element follow directly from the properties of matrix multiplication.
+\end{proof}
+
+\begin{definition}\label{def:pun-sun}
+  Let \(n\in \mathbb{N}\).
+  The \emph{projective unitary group} is the set \(\mathrm{PU}(n)\)  endowed with the group operation \([U] \cdot [V] = [UV]\).
+
+  Similarly, the \emph{projective special unitary group} is the set \( \mathrm{PSU}(n) \) with \([U] \cdot [V] = [UV]\) as multiplication.
+\end{definition}
+
+We can now look back at our action on density matrices.
+
+\begin{example}\label{ex:psun-acts-on-density-matrices}
+  Both, the projective unitary and the projective special unitary group of size \(n\) act by conjugation on the set of \(n\times n\) density matrices:
+  \begin{align*}
+    \mathrm{PU}(n) &\times\{\text{density matrices of } \mathbb{C}^{n}\}, \qquad
+                     U\lact \rho \mapsto U\rho U^{\dagger}, \\
+    \mathrm{PSU}(n) &\times\{\text{density matrices of } \mathbb{C}^{n}\}, \qquad
+                      V\lact \rho \mapsto V\rho V^{\dagger}.
+  \end{align*}
+\end{example}
+Note that any equivalence class \([U]\in \mathrm{PU}(n)\) has a representative \(U \in \SU(n)\).
+Conversely if \([U]\in \mathrm{PSU}(n)\) then \([U]\in \mathrm{PU}(n)\).
+Raises the question how similar these groups are.
+
 \begin{definition}\label{def:group-homomorphism}
-  A \emph{group homomorphism} between groups \( G \) and \( H \) is a map \( f \colon G \to H \) such that \(f(a \cdot b) = f(a) \cdot f(b)\) for all \( a, b \in G \).
+  A \emph{group homomorphism} between groups \( G \) and \( H \) is a map \( f \from G \to H \) such that \(f(a \cdot b) = f(a) \cdot f(b)\) for all \( a, b \in G \).
+
+  It is an \emph{isomorphism} if \(f\) is bijective.
 \end{definition}
 
 When scaling a problem, we often want to extend the input size \( n \) to a possibly larger input size \( n + m \).
@@ -3948,178 +4022,354 @@ When scaling a problem, we often want to extend the input size \( n \) to a poss
   \end{equation*}
 \end{example}
 
-Note that this partially highlights the special role of entanglement since not every matrix in \( U(2^n) \) comes from a matrix of \( U(2)^{\times n} \).
-
-\begin{example}\label{ex:equiv-of-pun-sun}
-  The map \( PSU(n) \to PU(n) \) defined by
-  \begin{equation*}
-    PSU(n) \to PU(n), \qquad  [A] \mapsto [A],
-  \end{equation*}
-  is an isomorphism of groups.
-\end{example}
-
-\begin{definition}\label{def:group-action}
-  A \emph{group action} of a group \( G \) on a set \( X \) is a map \( G \times X \to X \), denoted by \( (g, x) \mapsto g \cdot x \), such that for all \(x\in X\) and \(g,h \in G\) we have \( e \cdot x = x \) and \( g \cdot (h \cdot x) = (gh) \cdot x \).
-\end{definition}
-
-The example below can be considered a reformulation of Lemma~\ref{lem:induced-map-on-states}.
-\begin{example}\label{ex:states}
-  The group \( U(n) \) acts on the states of \( \mathbb{C}^n \) by matrix-vector multiplication
-  \begin{equation*}
-    U(n) \times\{\text{states of } \mathbb{C}^{n}\}, \qquad   A \cdot [\ket{v}] = [A\ket{v}].
-  \end{equation*}
-\end{example}
-
-By Lemma~\ref{lem:mixed-state-action}, conjugation by unitary matrices yields an action on density matrices.
-\begin{example}\label{ex:group-action-on-mixed-states}
-  The group \( U(n) \) acts on the set of density matrices of \( \mathbb{C}^n \) by conjugation
-  \begin{equation*}
-    U(n) \times\{\text{density matrices of } \mathbb{C}^{n}\}, \qquad
-    (A, \rho) \mapsto A\rho A^{\dagger}.
-  \end{equation*}
-\end{example}
-
-\begin{lemma}\label{lem:grp-homomorphism}
-  There is a group homomorphism
-  \begin{equation*}
-    \pi \from U(n) \to PSU(n), \qquad A \mapsto [A].
-  \end{equation*}
+\begin{lemma}\label{lem:equiv-of-pun-sun}
+  The map \( \mathrm{PSU}(n) \to \mathrm{PU}(n) \), \([U] \mapsto [U]\), is an isomorphism of groups.
 \end{lemma}
+
 \begin{proof}
- Observe that for any \(A \in U(n)\) there exists a \(\lambda\in \mathbb{C}\) such that \(\det(\lambda A)= \lambda^{n} \det(A) = 1\).
- Since, \([A] = [\lambda A]\), the map \(\pi\from U(n) \to PSU(n)\) is well-defined.
- Moreover, since \(\pi(AB) = [AB] = [A][B] = \pi(A) \pi(B)\).
+  One immediately verifies that the map is a well-defined injective group homomorphism.
+  For surjectivity, observe that for any \( U \in \U(n) \) with \( \det(U) = e^{2\pi i \alpha} \), the matrix \( e^{-2\pi i \tfrac{\alpha}{n}} U \) lies in \( \SU(n) \).
 \end{proof}
 
-\begin{example}\label{ex:group-action-factor-through}
-  Consider two unitary matrices \(A, B \in U(n)\) such that \([A] = [B]\).
-  Then ,there exists a \(\lambda \in \mathbb{C}\) with \(|\lambda | = 1\) and \(\lambda A = B\).
-  For any \(M \in \Mat_{n}( \mathbb{C})\), we have
-  \begin{equation*}
-    BMB^{\dagger} = (\lambda A) M (\lambda A)^{\dagger} = \lambda \lambda^{\dagger} AMA^{\dagger} = |\lambda| AMA^{\dagger}.
-  \end{equation*}
-  Therefore, \(PU(n) \cong PSU(n)\) acts by conjugation on all matrices, and, by restriction, on density matrices.
-  \begin{equation*}
-    PSU(n) \times\{\text{density matrices of } \mathbb{C}^{n}\} \to\{\text{density matrices of } \mathbb{C}^{n}\},\qquad
-    ([A], \rho) \mapsto A\rho A^{\dagger}.
-  \end{equation*}
-\end{example}
+\begin{remark}\label{rmk:reducing-action-to-special-unitary}
+  While we  model the transformations of states by unitaries, Lemma~\ref{lem:equiv-of-pun-sun} and Example~\ref{ex:psun-acts-on-density-matrices} show that it suffices to restrict ourselves
+  to (projective) special unitary matrices.
+  This offers us some theoretical advantages since the group \(\SU(n)\) is particularly well-behaved.
+\end{remark}
 
-While this goes beyond the content of this lecture the fact that transformations are governed by \(SU(n)\) (and not just \(U(n)\)) have a few theoretical advantages.
-In particular \(SU(n)\) is a connected and simply-connected Lie group which means that it is---in a certain sense---completely determined by its associated Lie algebra \(\mathfrak{su}_{n}\).
+Our main application of this exploration into abstract algebra is to provide insights into when we can execute "all" quantum algorithms.
+This question leads us into the realm of Lie theory.
+For a more detailed textbook account, see, e.g.,~\cite{hall2015:LieGroupsLieAlgebrasRepresentations}.
+Below, we will use the concepts of real and rational vector spaces, which are defined analogously to complex vector spaces but with scalars restricted to real or rational numbers, respectively.
+\bigskip
+
+\noindent
+\setlength{\fboxrule}{4pt}
+\fbox{
+  \begin{minipage}{1.0\linewidth-4\fboxsep-4\fboxrule}
+    \medskip
+
+    \textbf{Note:} The following material is advanced and intended as an outlook to motivate further study. It is not part of the core course content, and we will only sketch the main ideas without detailed proofs.
+    \medskip
+
+
+  \end{minipage}
+}
+\bigskip
+
+Suppose we want to build a quantum computer.
+Realistically, we do not have an infinite set of gates at our disposal---let alone the entire groups \( \SU(n) \) or \(\U(n)\).
+Instead, assume we have a finite list of gates \( \mathcal{U} \) consisting of special unitary matrices.
+For a given \( Q \in \SU(n) \) and \( \varepsilon > 0 \), we may ask whether there exists a finite sequence \( (U_i)_{i \in I} \) with \( U_i \in \mathcal{U} \) such that
+\begin{equation*}
+  \left\| \prod\nolimits_{i\in I} U_{i} - Q\right\| \eqdef \sup_{v\in \mathbb{C}\setminus\{0\}}\frac{1}{\|v\|}{\left\|\left( \prod\nolimits_{i\in I} U_{i} - Q\right)v\right\|} < \varepsilon.
+\end{equation*}
+Here, the matrix norm \( \| \prod_{i \in I} U_i - Q \| \) measures the distance between the operations \( \prod_{i \in I} U_i \) and \( Q \).
+Smaller values indicate that the operations are closer together.
+Colloquially, the above formula means we can approximate \(Q\) with arbitrary precision using our gate-set \( \mathcal{U} \).
+We write \(\overline{\langle \mathcal{U} \rangle}\) for the set of all matrices that can be approximated by products of \(\mathcal{U}\).
+In case \(\overline{\langle \mathcal{U} \rangle} = \SU(n)\), we say that \( \mathcal{U} \) \emph{generates} \( \SU(n) \).
+To find such sets \( \mathcal{U} \), we need to understand the ``directions'' in which we can move within \( \SU(n)\).
+It turns out, these are governed by another set of particularly well-behaved matrices.
+\begin{definition}\label{def:lie-algebra-su(n)}
+  We set \( \mathfrak{su}(n)=\{ A \in \Mat_n(\mathbb{C}) \mid A + A^\dagger = 0, \ \mathrm{tr}(A) = 0 \}\).
+\end{definition}
+This set forms a \emph{real} vector space.
+Moreover, \(\mathfrak{su}(n)\)  is equipped with an additional operation called the \emph{commutator bracket}.
+Given \(A, B \in \mathfrak{su}(n)\) we have
+\begin{equation*}
+  [A, B] = AB - BA \in \mathfrak{su}(n).
+\end{equation*}
+The pair \( (\mathfrak{su}(n), [ \blank , \bblank]) \) is an example of what is called  a \emph{Lie algebra}.
+
+\begin{definition}\label{def:generating-subset}
+  A set \( \mathcal{G} = \{ u_1, \dots, u_k \} \subset \mathfrak{su}(n) \) is a \emph{generating subset} if for any subspace \(V \subset \mathfrak{su}(n)\)  such that \(\mathcal{G} \subset V\) and \(AB- BA \in V\) for all \(A,B\in V\) we have \(V = \mathfrak{su(n)}\).
+\end{definition}
+
+In analogy to the real or complex case, we may be tempted, to construct an exponential map for matrices.
+Given \( A \in \mathfrak{su}(n) \), we set
+\begin{equation}
+  \exp(A) = \sum_{k=0}^\infty \frac{A^k}{k!}.
+\end{equation}
+One can prove in a relatively straightforward manner that this infinite sum converges and that \( \exp(A) \in \SU(n)\).
+Moreover, we can recover \(A\) by
+\begin{equation*}
+  \left.\exp(tA) \frac{d}{dt}\right\vert_{t=0} = A.
+\end{equation*}
+
+For any \(t\in \mathbb{R}\) and \(A \in \mathfrak{su}(n)\), we have \(\exp(tA) \in SU(n)\), so we may ask the arguably more modest question: what do we need to know about \(A\) to ensure that \(\exp(tA)\) can be approximated by matrices of the form \(\exp(A)^{k} = \exp(kA)\) for \(k\in \mathbb{N}\).
+This is answered by the following variation of the \emph{Kronecker density theorem}.
+
+\begin{lemma}\label{lem:kronecker-density-theorem}
+  Consider \(v=(v_{1}, \dots , v_{k})^{T} \in \mathbb{R}^{k}\).
+  The following are equivalent
+  \begin{thmlist}
+    \item the \( \mathbb{Q}\)-vector space \(\mathrm{Map}(\{v_{1}, \dots , v_{k}, \pi\}, \mathbb{Q})\) has dimension \(k+1\),
+    \item for every \(w= (w_{1}, \dots , w_{k})^{T} \in \mathbb{R}^{k}\) and \(\varepsilon> 0\) there exists an \(n \in \mathbb{N}\) such that
+    \begin{equation*}
+      \left\|
+        \begin{pmatrix}
+          e^{i  v_1} & 0 & \dots & 0 \\
+          0 & e^{i  v_2} & \dots & 0 \\
+          \vdots & \vdots & \ddots & \vdots \\
+          0 & 0 & \dots & e^{i  v_k}
+        \end{pmatrix}^{n} -
+        \begin{pmatrix}
+          e^{i w_1} & 0 & \dots & 0 \\
+          0 & e^{i w_2} & \dots & 0 \\
+          \vdots & \vdots & \ddots & \vdots \\
+          0 & 0 & \dots & e^{i w_k}
+        \end{pmatrix} \right\| < \varepsilon.
+    \end{equation*}
+  \end{thmlist}
+\end{lemma}
+\begin{proof}
+  This is a variant of the classical Kronecker density theorem, where the coefficients are restricted to natural numbers instead of integers
+  In particular, it suffices to show that if we can approximate any diagonal unitary matrix by integer powers, then we can approximate it by natural powers.
+  This follows directly, if we can approximate \(\mathrm{diag}(e^{-i v_1}, \dots, e^{-i v_k})\).
+
+  We write \(U(v) = \mathrm{diag}(e^{i v_1}, \dots, e^{i v_k})\).
+  By Bolzano--Weierstrass, the sequence \((U(v)^{n})_{n\in \mathbb{N}}\) has a convergent subsequence.
+  Thus, for any \(\varepsilon> 0 \) there are \( m > n \geq 2\) such that \(\|U(v)^{m} - U^{n}\| <\varepsilon\).
+  Therefore
+  \begin{align*}
+    \|U(v) U(v)^{m-n-1} - I_{k}\|
+    & = \|U(v)^{m-n} - U(v)^{n-n}\|
+      = \|(U(v)^{m} - U(v)^{n})U(v)^{-n}\| \\
+    & \leq \| U(v)^{m} - U(v)^{n}\|\|U(v)^{-n}\|
+      = \| U(v)^{m} - U(v)^{n}\| < \varepsilon. \qedhere
+  \end{align*}
+\end{proof}
+
+Consider a matrix \( A \in \mathfrak{su}(n) \).
+By the spectral theorem for normal matrices, there exists a unitary \( P \in \U(n) \) such that
+\begin{equation*}
+  P^\dagger A P = \mathrm{diag}(i \theta_1, \dots, i \theta_n), \qquad  P \exp(A) P^\dagger = \mathrm{diag}(e^{i \theta_1}, \dots, e^{i \theta_n}).
+\end{equation*}
+The Kronecker density result allows us to determine when, for a given \( t \in \mathbb{R} \), the matrix \( \exp(tA) \) can be approximated by matrices of the form \( \exp(A)^k = \exp(kA) \) for \( k \in \mathbb{N} \).
+
+\begin{theorem}
+  Let \( G = \{ A_1, \dots, A_k \} \subset \mathfrak{su}(n) \) generate \(\mathfrak{su}(n) \) as a Lie algebra
+  and assume that \(i \pi\) is linearly independent over \( \mathbb{Q}\) from the set of eigenvalues of \(A_{j}\) for each \(1\leq j \leq k\).
+  Then \(\exp{G} =\{ \exp(A_{1}), \dots , \exp(A_{k})\}\) generates \(\SU(n)\).
+\end{theorem}
+
+\begin{proof}[Proof(sketch).]
+  To simply our arguments, we will only consider the case where for all matrices \(A_{j}\) the eigenvalues are linearly independent over \( \mathbb{Q}\).
+  Using the spectral theorem there is a diagonal matrix \(A'=\mathrm{diag}(i \theta_1, \dots, i \theta_n)\) and a unitary \(P\in U(n)\) such that \(P^{\dagger} A P = A'\).
+  Using the continuous map \( \mathbb{R}^{n} \to\{ X \in \Mat_{n}( \mathbb{C}) \mid X \text{ is diagonal}\}\), \(v \mapsto \mathrm{diag}(v)\) and the Kronecker density theorem of Lemma~\ref{lem:kronecker-density-theorem}, we observe that
+  \begin{equation*}
+    P e^{t A'} P^{\dagger}  = e^{P t A' P^{\dagger}} = e^{tA}\in \overline{\langle \exp{G} \rangle} \qquad \text{ for all } t \in \mathbb{R}.
+  \end{equation*}
+  Since \(\overline{\langle \exp{G} \rangle}\) is a closed subgroup, it is a Lie group by Cartan's theorem.
+  Moreover, \(\{e^{tA_{j}}| t \in \mathbb{R}\} \subset \overline{\langle \exp{G} \rangle}\) and therefore its associated Lie algebra \( \mathfrak{h} \subset \mathfrak{su}(n) \) contains \( \{ A_1, \dots, A_k\}\).
+  As \(G\) generates \( \mathfrak{su}(n)\), it follows that \( \mathfrak{h} = \mathfrak{su}(n)\).
+
+  The final step uses standard topological arguments, which are discussed in detail in any textbook on Lie groups, see \eg~\cite{hall2015:LieGroupsLieAlgebrasRepresentations}.
+  Using the fact that the exponential map is locally diffeomorphic, one shows that \( \overline{\langle \exp{G} \rangle} \) is an open subset of \( \SU(n) \).
+  By construction, \( \overline{\langle \exp{G} \rangle} \) is also closed.
+  Since \( \SU(n) \) is connected, it follows that \( \overline{\langle \exp{G} \rangle} = \SU(n) \).
+\end{proof}
+
+Note that similar ideas are discussed in~\cite{lloyd1995:AlmostAnyLogicGateUniversal}.
 
 \subsection{Measurements and the Born rule}\label{sec:measurements-and-the-born-rule}
 In the simplest case, a quantum algorithm consists of three main steps: state preparation, application of unitary gates, and measurement of the outcomes. Having discussed states and unitaries, we now focus on measurements.
-In our interpretation of quantum mechanics (specifically, the Copenhagen interpretation), measurements are represented by orthogonal projections.
+In our interpretation of quantum mechanics (specifically, the Copenhagen interpretation), measurements of observables are represented by orthogonal projections.
+
+\subsubsection{Pairwise orthogonal projections}\label{sec:pairwise-orthogonal-projections}
+
+We begin by some elementary considerations on how projections and probabilities are connected.
 
 \begin{lemma}\label{lem:orthogonal-projections-and-probabilities}
-  For any normalised vector \(\ket{v} \in V\) and orthogonal projection \(e \from V \to V\) an orthogonal projection.
+  For any normalised vector \(v \in V\) and orthogonal projection \(e \from V \to V\) an orthogonal projection.
   The number \(\braket{v}{e \mid v}\) is real and satisfies \(0 \leq \braket{v}{e \mid v}\leq 1\).
 \end{lemma}
 \begin{proof}
-  % TODO: Fix the \ket issue here!
   Since \( e \) is an orthogonal projection, it satisfies \( e^2 = e \) and \( e = e^\dagger \).
   Therefore,
   \begin{equation*}
-    \braket{v}{e \mid v} = \braket{v}{e^2 \mid v} = \braket{e^\dagger v}{e v} = \braket{e v}{e v} \geq 0.
+    \braket{v}{e \mid v} = \braket{v}{e^2 \mid v} = \braket{e^\dagger v}{e v} = \braket{e(v)}{e(v)} \geq 0.
   \end{equation*}
-  To show that \(1\) is an upper bound, we decompose \( \ket{v} \) into two summands \( \ket{v} = e\ket{v} + (\ket{v} - e\ket{v}) \).
+  To show that \(1\) is an upper bound, we decompose \( v \) into two summands \( v = e(v) + (v - e(v)) \).
   These are orthogonal, as a direct computation shows
   \begin{equation*}
-    \braket{e\ket{v}}{\ket{v} - e\ket{v}} = \braket{e\ket{v}}{\ket{v}} - \braket{e\ket{v}}{e\ket{v}} = \braket{e\ket{v}}{\ket{v}} - \braket{e\ket{v}}{\ket{v}} = 0.
+    \braket{e(v)}{v - e(v)}
+    = \braket{e(v)}{v} - \braket{e(v)}{e(v)}
+    = \braket{e(v)}{v} - \braket{e(v)}{v}
+    = 0.
   \end{equation*}
   Therefore
   \begin{equation*}
-      0 \leq \braket{e\ket{v}}{e\ket{v}} \leq \braket{e\ket{v}}{e\ket{v}} + \braket{\ket{v} - e\ket{v}}{\ket{v} - e\ket{v}} = \braket{\ket{v}}{\ket{v}} = 1. \qedhere
+    0
+    \leq \braket{e(v)}{e(v)}
+    \leq \braket{e(v)}{e(v)} + \braket{v - e(v)}{v - e(v)}
+    = \braket{v}{v}
+    = 1. \qedhere
   \end{equation*}
 \end{proof}
+
+Projections will be used to model the probabilistic aspects of our quantum systems.
+Naturally, we require that any event \(A\) has  a counter-event \(\neg A\), and if \(A\) has the probability \(p\), then \(\neg A\) should have probability  \(1-p\).
+This kind of complementarity translates to a notion of orthogonality between projectors.
 
 \begin{definition}\label{def:orthogonal-idempotent}
   A set \(\{e_{1}, \dots , e_{n}\}\) of projections \(e_{1}, \dots , e_{n} \from V\to V\) is \emph{(pairwise) orthogonal} if \(e_{i}e_{j} = 0 =  e_{j}e_{i}\) for all \(1\leq i< j \leq n\).
 \end{definition}
 
+There is an unfortunate clash in nomenclature concerning projectors.
+While a single projector \(e \from V\to V\) on a Hilbert space \(V\) is \emph{orthogonal} if its kernel and image are orthogonal complements of each other,
+a pair of projectors \(e_{1}, e_{2}\) are \emph{pairwise orthogonal} if \(e_{1}e_{2} = 0 = e_{2}e_{1}\).
+In particular, we will later on consider sets \(\{e_{1}, \dots , e_{n}\}\) of orthogonal projectors \(V\to V\) that are moreover pairwise orthogonal.
+
 \begin{lemma}\label{lem:part-of-1-means-orth}
-  Consider projections  \(e_{1}, \dots , e_{n} \from V\to V\) such that \(e_{1} + \dots + e_{n} = \id_{V}\).
-  Then,  \(\{e_{1}, \dots , e_{n}\}\) is pairwise orthogonal.
+Consider projections \( e_1, \dots, e_n \colon V \to V \) such that \( e_1 + \dots + e_n = \id_V \). Then, the set of projections \( \{ e_1, \dots, e_n \} \) is pairwise orthogonal.
 \end{lemma}
+
 \begin{proof}
-  Fix \(1\leq i \leq n\).
-  We have
+  Let \( V_i = \im(e_i) \) denote the image of the \( i \)-th projector.
+  Since \( e_1 + \dots + e_n = \id_V \), we have \( \sum_{i=1}^n V_i = V \).
+  That is,any vector \( v \in V \) can be written (not necessarily uniquely) as \( v = \sum_{i=1}^n e_i(v) \).
+
+  By Lemma~\ref{lem:equivalent-characterisations-projections}, each \( e_i \) satisfies \( e_i^2 = e_i \), so \( V_i \) is the eigenspace of \( e_i \) with eigenvalue \(1\) and \( \tr(e_i) = \dim V_i \).
+
+  We compute
   \begin{equation*}
-    e_i = e_i \id_V = e_i \left( \sum_{k=1}^n e_k \right) = e_i^2 + \sum_{k \neq i} e_i e_k = e_i + \sum_{k \neq i} e_i e_k.
+    \dim V = \tr(\id_V)
+    = \tr\left(\sum\nolimits_{i=1}^n e_i\right)
+    = \sum\nolimits_{i=1}^n \tr(e_i)
+    = \sum\nolimits_{i=1}^n \dim V_i.
   \end{equation*}
-  Subtracting \( e_i \) from both sides yields \(0 = \sum_{k \neq i} e_i e_k\).
-  Since \(\tr(e_{i} e_{k}) = \dim (\im e_{k} \cap \im e_{i})\geq 0\), we have \(e_i e_k = 0\) for all \( k \neq i \).
-  % TODO: Make more explicit \(V = U \oplus U' \) and \(V = W \oplus W'\) for \(U =\im p_{i}\) and \(W = \im p_{k}\). Then  \(P_{i}p_{k}\) operates on\(U \cap W\)... trace is dimension
+  By the dimension formula, we have
+  \begin{equation*}
+    \dim \big(V \cap \sum\nolimits_{j\neq i} V_{j}\big) = \dim \big(\sum\nolimits_{i=1}^{n} V_{i}\big) - \dim V_{i} - \dim \big(\sum\nolimits_{j\neq i} V_{j} \big) =0,
+  \end{equation*}
+  implying that \( V = V_1 \oplus \dots \oplus V_n \).
+  Therefore, for \( i \neq j \), we have \( V_i \subset \ker(e_j) \) and \( V_j \subset \ker(e_i) \), which entails \( e_i e_j = 0 = e_j e_i \).
 \end{proof}
 
-Let \(\ket{v} \in V\) be a normalised vector and consider  \(\alpha\in \mathbb{R}\).
-Then,
+\subsubsection{Observables and projection-valued measures}\label{sec:observables-and-projection-valued-measures}
+
+We now briefly motivate how projectors arise in quantum mechanics in the context of observable phenomena.
+
+\begin{notation}
+  In the following we identify self-adjoint endomorphisms \(f\from V\to V\) of a Hilbert space with \emph{observables}.
+  The eigenvalues of \(f\) play the role of \emph{measurable values}.
+\end{notation}
+
+In our finite-dimensional setting, the spectral theorem allows us to decompose an observable \(f\from V \to V\) as a sum
 \begin{equation*}
-  \braket{v}{e \mid v} = \braket{ e^{2\pi i \alpha}v}{e \mid e^{2\pi i \alpha}v}.
+  f = \sum_{i=1}^{n} \lambda_{i} e_{i} \from V\to V,
 \end{equation*}
-Thus, the number \(\braket{v}{e \mid v}\) only depends on the state \([\ket v] \in V\) and not the representative.
+where the \(\lambda_{i}\in \mathbb{R}\) are the (real) distinct eigenvalues of \(f\) and the \(e_{i} \from V\to V\) are the orthogonal projectors onto the corresponding eigenspaces.
+These projectors sum to the identity and are therefore pair-wise orthogonal.
+
+We often want to ask questions about ranges of outcomes:
+``What is the probability that the measured value of \( f \) lies in  \(X=[x,y]\)?''
+To answer this, we consider the set of all possible events \(2^{\mathrm{spec}(f)}\eqdef\{ X \mid X \subseteq \mathrm{spec}(f)\}\) and assign to each \(X \in 2^{\mathrm{spec}(f)}\)  a projector \(E(X)\).
+The projector \(E(X)\), in conjunction with the inner product, will allow us to compute the probability of the outcome falling within \(X\).
+\bigskip
+
+Given a Hilbert space \(V\), we write \(\mathrm{Proj}(V)\) for the set of orthogonal projectors on \(V\).
 
 \begin{definition}\label{def:projective-measurement}
-  Let \( V \) be a Hilbert space.
-  A \emph{projective measurement} is a set \( E=\{e_1, \dots, e_n\} \) of pairwise orthogonal projections such that
+  Let \( V \) be a Hilbert space and \(\Lambda\) a finite non-empty set whose element we call \emph{elementary events}.
+  A \emph{projection-valued measure} is an assignment
   \begin{equation*}
-    e_1 + \dots + e_n = \id_V.
+    E \from \{ X \subseteq \Lambda\} \to \mathrm{Proj}(V), \qquad X \mapsto \sum_{\lambda\in X} e(\lambda),
   \end{equation*}
+  where \(e \eqdef \Lambda \to\mathrm{Proj}(V)\) is a function such that \(\sum_{\lambda\in \Lambda} e(\lambda) = \id_{V}\).
 \end{definition}
 
-The below defined way for computing the probability of measuring the \(i\)-th outcome is known as  the \emph{Born rule}.
+The above definition generalises the concept of classical probability measures to the quantum setting.
 
-\begin{definition}\label{def:born-rule}
-  Let \(H\) be a Hilbert state and \( E=\{e_1, \dots, e_n\} \) a projective measurement.
-  For a given state \( \ket{v} \in V \), the probability of obtaining the \( i\)-th outcome upon measurement is
+\begin{remark}\label{rmk:consequences-of-projective-measurement}
+  A projection-valued measure \(E \from \Lambda \to\text{Proj}(V)\), satisfies analogues of the Kolmogorov axioms for probability measures.
+  In particular
+  \begin{thmlist}
+    \item \(E(\emptyset) = 0\),
+    \item \(E(X)\) is positive semidefinite, and
+    \item \(E(X \cup Y)= E(X) + E(Y)\) for disjoint \(X, Y \subseteq \Lambda\).
+  \end{thmlist}
+\end{remark}
+The prime example for projection-valued measures comes from observables.
+
+\begin{example}\label{ex:pvm-from-observable}
+  Consider an observable described by the self-adjoint map \(f\from V \to V\).
+  We associate to \(f\) the projection-valued measure
   \begin{equation*}
-    \braket{v}{e_i \mid v}.
+    E_{f} \from\{X \subseteq \mathrm{spec}(f)\} \to \mathrm{Proj}(V), \qquad X \mapsto \sum_{\lambda\in X} e(\lambda),
   \end{equation*}
-\end{definition}
+  where \(e(\lambda) \from V\to V\) is the projection onto the eigenspace of \(f\) for the eigenvalue \(\lambda \in \mathbb{R}\).
+\end{example}
+\subsubsection{The Born rule}\label{sec:the-born-rule}
 
-Now, measuring with \(M\) an getting outcome \(i\), corresponds to the map
+Suppose that our quantum system, modelled by the Hilbert space \(V\), is in a state \([v]\), and that \(E \from \{X \subseteq \Lambda\} \to \mathrm{Proj}(V)\) is a projection valued-measure.
+For any \(X\subset \Lambda\) and \(\alpha\in \mathbb{R}\), we have
 \begin{equation*}
-  \{\text{states of }V\} \to\{ \text{states of }V\}, \qquad \ket {v} \mapsto \frac{1}{\sqrt{\braket{v}{e_{i}\mid v}}} e_{i}\ket v.
+  \braket{v}{E(X) \mid v} = \braket{ e^{2\pi i \alpha}v}{E(X) \mid e^{2\pi i \alpha}v}.
 \end{equation*}
-This way of updating a state after measuring is called \emph{Lüders' rule}.
+Thus, the number \(\braket{v}{E(X) \mid v}\) depends only on the state \([v]\) and not the representative.
+\bigskip
+
+The following definition formalises the way to compute the probability of measuring an outcome in a subset \( X \subseteq \Lambda \).
+This is known as the \emph{Born rule}.
+\begin{definition}\label{def:born-rule}
+  Let \(V\) be a Hilbert space and \( E \from\{X \subseteq \Lambda\} \to \mathrm{Proj}(V)\) a projection-valued measure.
+  For a given \(X \subseteq \Lambda\) and state \( [v]\), with \(v\in V\), the \emph{probability} of observing an outcome in \( X \) is
+  \begin{equation}
+    0 \leq \braket{v}{E(X) \mid v}\leq 1.
+  \end{equation}
+\end{definition}
+
+In quantum mechanics, measurements paradoxically change the system.
+Suppose we are in a state \([v]\) and \(E \from\{X \subset \Lambda\} \to \mathrm{Proj}(V)\) is a projection-valued measure, we update \([v]\) according to  \emph{Lüders' rule}
+\begin{equation}
+  [v] \mapsto \left[\frac{1}{\sqrt{\braket{v}{E(X)\mid v}}} E(X)v \right].
+\end{equation}
 
 \begin{example}\label{ex:onb-measures}
   Consider a Hilbert space \( V \) with an orthonormal basis \( \mathcal{B} = (\ket{b_1}, \dots, \ket{b_n}) \).
-  The maps \( e_i = \ket{b_i}\bra{b_i} \colon V \to V \) are orthogonal projections, and satisfy \(\sum_{i=1}^n e_i = \id_V\).
+  The maps \( e_i = \ket{b_i}\bra{b_i} \from V \to V \) are orthogonal projections and satisfy \(\sum_{i=1}^n e_i = \id_V\).
+  We can form the projection-valued measure \(E \from\{X \subseteq\{1, \dots , n\}\} \to \mathrm{Proj}(V)\) given by
+  \begin{equation*}
+    X \mapsto E(X) = \sum_{i \in X} e_{i}.
+  \end{equation*}
 
-  This measurement provides detailed information about the system, but at the expense of ``collapsing'' the state: after measurement, any state will be mapped to one of the basis vectors in \( \mathcal{B} \).
+  This measurement provides detailed information about the system,  at the expense of ``collapsing'' the state: after measurement, any state will be mapped to one of the basis vectors in \( \mathcal{B} \).
 
-  At the other extreme, consider the trivial projective measurement \( M = (\id_V) \).
+  At the other extreme, consider the ``trivial'' projection-valued measure where
+  \(\Lambda =\{\mathrm{pt}\}\) and \(E \from\{X \subseteq \Lambda\} \to V\) is given by \(E(\emptyset)= 0\) and \(E(\{\mathrm{pt}\}) = \id_{V}\).
   This measurement does not alter the state of the system, but it also provides no information.
 
   In practice, we will often use measurements that balance between these two extremes.
 \end{example}
 
+
 \subsubsection{Measurements for mixed states}\label{sec:measurements-for-mixed-states}
-Consider a state \(\ket{v}\) with associated density matrix \(\rho_{\ket{v}}\).
+Consider a mixed state \(\rho_{v} = \ket{v}\bra{v}\from V \to V\).
 We fix an orthonormal basis \( \mathcal{B}= (b_{1}, \dots , b_{n})\) of \(V\) with \(b_{1} = v\).
-For any orthogonal projection \(f \from V \to V\), we have
+For any orthogonal projection \(e \from V \to V\), we have
 \begin{equation*}
-  \tr(\rho_{v} f)
-  = \tr(\ket{v} \bra{v\mid f})
-  =\sum_{i=1}^n \braket{b_i}{v} \braket{v}{ f \mid b_i}
-  = \braket{v}{v} \braket{v}{v\mid f}
-  = \braket{v}{f \mid v}.
+  \tr(\rho_{v} e)
+  = \tr\big((\ket{v} \bra{v})e\big)
+  =\sum_{i=1}^n \braket{b_i}{v} \braket{v}{ e \mid b_i}
+  = \braket{v}{v} \braket{v}{e\mid v}
+  = \braket{v}{e \mid v}.
 \end{equation*}
 
 \begin{lemma}\label{lem:get-prob-values}
-  Let \(e\from V\to V\) be an orthogonal projection on a Hilbert space and \(\rho \from V \to V\) a mixed stated.
-  Then \(0\leq \tr(e\rho) \leq 1\) is a real number.
+  Consider an orthogonal projection \(e\from V\to V\)  on a Hilbert space and a mixed state \(\rho \from V \to V\).
+  Then \(\tr(e\rho) \) is a real number and \(0 \leq \tr(e\rho) \leq 1\).
 \end{lemma}
 \begin{proof}
-  Since \( e \) is an orthogonal projection, it is positive semi-definite and satisfies \( p^2 = p \).
-  The mixed state \( \rho \) is self-adjoint, positive semi-definite and has trace 1.
+  Since \( e \) is an orthogonal projection, it is positive semi-definite and satisfies \( e^2 = e \).
+  The mixed state \( \rho \) is self-adjoint, positive semi-definite and has trace \(1\).
   Thus, by the spectral theorem, there exists an orthonormal basis \(\mathcal{B}= (\ket{b_{1}}, \dots , \ket{b_{n}})\) of \(V\) such that
   \begin{equation*}
     \rho = \sum_i \lambda_i \ket{b_{i}} \bra{b_{i}}
   \end{equation*}
-  with  \( 0 \leq \lambda_i  \in \mathbb{R}\) and \( \sum_i \lambda_i = 1 \).
+  with real numbers \( 0 \leq \lambda_i\leq 1\) satisfying \( \sum_i \lambda_i = 1 \).
   We compute
   \begin{equation*}
     \tr(e\rho)
@@ -4127,28 +4377,29 @@ For any orthogonal projection \(f \from V \to V\), we have
     \sum_i \lambda_i \braket{b_i}{e \mid b_i}
   \end{equation*}
 
-  Since \( 0 \leq \braket{b_i}{p \mid b_i} \leq 1 \) for each \( 1\leq i \leq n \), it follows that \( 0 \leq \tr(e\rho) \leq 1 \).
+  Since \( 0 \leq \braket{b_i}{e \mid b_i} \leq 1 \) for each \( 1\leq i \leq n \), it follows that \( 0 \leq \tr(e\rho) \leq 1 \).
 \end{proof}
 
 The definition below is known as the \emph{Born rule for mixed states}.
+
 \begin{definition}\label{def:Born-rule-for-projective-measurment}
-  Let \(M= (e_{1}, \dots , e_{k})\) be a projective measurement on a Hilbert space \(V\).
-  The  probability of measuring the \(i\)-th outcome for the mixed state \(\rho \from V\to V\) is
-  \begin{equation*}
-    \tr(e_{i}\rho).
-  \end{equation*}
+  Consider the Hilbert space \(V\) and let \( E \from\{X \subseteq \Lambda\} \to \mathrm{Proj}(V)\) a projection-valued measure.
+  For a given \(X \subseteq \Lambda\) and mixed state \(\rho \from V \to V\), the \emph{probability} of observing an outcome in \( X \) is
+  \begin{equation}
+    \tr(E(X)\rho).
+  \end{equation}
 \end{definition}
 
-To update a mixed state after a measurement, one uses the following variant of \emph{Lüders' Rule }
-\begin{equation*}
-  \{\text{ mixed states of } V\} \to\{ \text{ mixed states of } V\}, \qquad
-  \rho \mapsto \tfrac{e_{i}\rho e_{i}}{\tr{\rho e_{i}}}.
-\end{equation*}
+Let \(\rho\from V\to V\) be a mixed state and \(E \from\{X \subseteq \Lambda\} \to \mathrm{Proj}(V)\) a projection-valued measure.
+\emph{Lüders' rule} for updating \(\rho\) upon measuring an outcome in \(X \subseteq \Lambda\) is
+\begin{equation}
+  \rho \mapsto \frac{E(X)\rho E(X)}{\tr{ E(X)\rho}}.
+\end{equation}
 
 
 The big advantage about mixed states in the context of  measurements is that we can draw them as traces.
 \begin{equation*}
-  % TODO \inputtikz{GENERIC TRACE PIC}
+  \inputtikz{traces-probability}
 \end{equation*}
 
 \cleardoublepage
@@ -4340,7 +4591,6 @@ The big advantage about mixed states in the context of  measurements is that we 
     (\id_{\rd*{V}}\otimes f)\coev_{V} = (\rd*{f} \otimes \id_{V})\coev_{V}, \qquad
     \ev_V (f \otimes \id_{\rd*{V}}) = \ev_{V}(\id_{V}\otimes \rd*{f})
   \end{equation*}
-
 \end{exercise}
 
 \begin{exercise}
@@ -4375,12 +4625,72 @@ The big advantage about mixed states in the context of  measurements is that we 
   \end{equation*}
 \end{exercise}
 
-
-
-
 \subsubsection*{Unitary transformations}
 
+\begin{exercise}
+  Show that for two density matrices \(\rho, \varrho \in \Mat_{n}( \mathbb{C})\) there is a unitary \(U \in \U(n)\) such that \(U\rho U^{\dagger} = \varrho\) if and only if the characteristic polynomials  \(\chi_{\rho}(t)\) and \(\chi_{\varrho}(t)\) are equal.
+\end{exercise}
+
+\begin{exercise}
+  Compute the Euler decomposition of  \(Y(\gamma)\from \mathbb{C}^{2}\to \mathbb{C}^{2}\) for all \(\gamma \in \mathbb{R}\).
+\end{exercise}
+
+\begin{exercise}
+  Prove or disprove: given \(\alpha, \beta,\in \mathbb{R}\), there are\(\gamma\in \mathbb{R}\) and \(\lambda \in \mathbb{C}\) such that \(Z(\alpha)X(\beta) - X(\beta) Z(\alpha) = \lambda Y(\gamma)\).
+\end{exercise}
+
+\begin{exercise}
+  Determine the transformation matrix with respect to the computational basis of \((\mathbb{C}^{2})^{\otimes 2}\) of the map \(UB(\tau) \from (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) associated to the function \(\tau \from \{0,1\}\to\{0,1\}\), \(x \mapsto x \boxplus 1\).
+\end{exercise}
+
+\begin{exercise}
+  Consider the following unitary matrix:
+  \begin{equation*}
+    U= \begin{pmatrix}
+      1 & 0 & 0 & 0 \\
+      0 & 1 & 0 & 0 \\
+      0 & 0 & \tfrac{\sqrt{3}}{2}i & \tfrac{1}{2} \\
+      0 & 0 & - \tfrac{1}{2} & -\tfrac{\sqrt{3}}{2}i
+    \end{pmatrix}.
+  \end{equation*}
+  Show that there is no map \(f \from\{0,1\}\to\{0,1\}\) and basis \(\mathcal{B}\) of \(( \mathbb{C}^{2})^{\otimes 2}\) such that \(U = {}_{\mathcal{B}}(UB(f))_{\mathcal{B}}\).
+\end{exercise}
+
+\begin{exercise}
+  Show that for each pair \(\mathcal{B} = (b_{1}, \dots , b_{n})\) and \(\mathcal{C} = (c_{1}, \dots , c_{n})\) of orthonormal bases of \(V\) there is a unitary map \(f \from V\to V\) such that \(f(b_{j}) = c_{j}\) for all \(1 \leq j \leq n\).
+\end{exercise}
 \subsubsection*{Measurement}
+
+\begin{exercise}
+  Let \( V \) be a finite-dimensional Hilbert space and consider \( \End(V) \) as a Hilbert space via the inner product
+  \begin{equation*}
+    \braket{f}{g} = \tr(f^{\dagger}g).
+  \end{equation*}
+  Prove that for two \(e_{i}, e_{j}\from V\to V\), we have
+  \(e_{i} e_{j} =0 = e_{j} e_{i}\) if and only if \(\braket{e_{i}}{e_{j}} = 0\).
+
+  \textit{Hint:} Let \(\mathcal{B}\) be a (well-chosen) orthonormal basis of \(V\).
+  Express \(\tr(e_{i} e_{j})\) using \(\mathcal{B}\) the inner product of \(V\) to conclude that if
+  \(\tr(e_{i} e_{j}) =0\) the image of \(e_{i}\) must be contained in the orthogonal complement of the image of \(e_{j}\).
+\end{exercise}
+
+\begin{exercise}\label{exe:orthogonal-eigenspaces}
+  Consider an observable \(f\from V\to V\) on a finite dimensional Hilbert space, \(\mathrm{spec}(f)= \{\lambda_{1}, \dots , \lambda_{n}\}\) the distinct eigenvalues of \(f\) and \(f = \sum_{i=1}^{n} \lambda_{i} e_{i}\) for \(e_{i} \from V\to V\) the projectors onto the \(i\)-th eigenspaces.
+  Show that \(e_{i}e_{j}=0= e_{j}e_{i}\) for \(i \neq j\).
+\end{exercise}
+
+\begin{exercise}
+  Let \(\Lambda, \Gamma\) be finite sets, \(V, W\) Hilbert spaces and \(E\from\{X \subseteq \Lambda\} \to \mathrm{Proj}(V)\) as well as \(F \from\{Y \subseteq \Gamma\} \to \mathrm{Proj}(W)\) projection-valued measures.
+  Show that we have a projection-valued measure
+  \begin{equation*}
+    \{Z \from \Lambda \times \Gamma\} \to \mathrm{Proj}(V),\qquad Z\mapsto \sum_{(x,y) \in Z} E(x)\otimes F(y).
+  \end{equation*}
+\end{exercise}
+
+\begin{exercise}
+  Let \(e_{1}, e_{2} \from V\to V\) be two orthogonal projectors.
+  Prove that their sum is an orthogonal projector if and only if \(e_{1}e_{2}= 0 = e_{2}e_{1}\).
+\end{exercise}
 
 
 \cleardoublepage
@@ -4504,8 +4814,36 @@ Is \((d(b_{1}), d(b_{2}), d(b_{3}))\) a basis of \(\rd*{ \mathbb{C}^{3}}\)?
 \end{thmlist}
 
 \subsubsection*{Unitary transformations}
+\begin{thmlist}
+  \item Show that any eigenvalue \(\lambda \in \mathbb{C}\) of a unitary transformation \(f \from V\to V\) must satisfy \(|\lambda| = 1\).
+  \item Determine a unitary map \(f\from \mathbb{C}^{2} \to \mathbb{C}^{2}\) such that \(f (\ket{0}\bra{0}) f^{\dagger} = \ket{+}\bra{+}\).
+  \item Explain the induced rotation on the Bloch sphere of the map \(Z(\tfrac{1}{4}) X(\tfrac{1}{4}) Z(\tfrac{1}{4})\).
+  \item What is the unitary map \(UB(f) \from (\mathbb{C}^{2})^{\otimes 3}\to (\mathbb{C}^{2})^{\otimes 3}\) corresponding by Bennett's trick to \(f \from\{0,1\} \to\{0,1\}^{2}\), \(x \mapsto (x, x)\).
+\end{thmlist}
 
 \subsubsection*{Measurement}
+\begin{thmlist}
+  \item Let \(e_{1}, e_{2} \from V\to V\) be orthogonal projections. Does \(e_{1} e_{2} = 0 \) imply \(e_{2} e_{1}=0\)?
+  \item Define the projection-valued measure associated to the positive self-adjoint matrix \(
+  \begin{pmatrix}
+    2 & -1 \\  -1 & 2
+  \end{pmatrix}
+  \).
+  \item Given the projection \(e_{1} \from \mathbb{C}^{2} \to \mathbb{C}^{2}\), \(
+  \begin{psmallmatrix}
+    x\\ y
+  \end{psmallmatrix}
+  \mapsto \tfrac{1}{2}
+  \begin{psmallmatrix}
+    x + y \\ x + y
+  \end{psmallmatrix},
+  \)
+  find, with respect to the standard basis, the transformation matrix of the projection \(e_{2} \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) such that \(e_{1} + e_{2} = \id_{ \mathbb{C}^{2}}\).
+  \item With \(e_{1}\) and \(e_{2}\) as before. What are the images of \(e_{1}\) and \(e_{2}\)?
+  \item Consider the Hilbert space \( \mathbb{C}^{2}\) and let \(\Lambda =\{0,1\}\) and the projection-valued measure \( E \from\{X \subseteq \Lambda\} \to \mathrm{Proj}(V)\) be defined by \(E(\{0\}) =e_{0}\) and \(E(\{1\}) =e_{1}\), where \(e_{0}, e_{1} \from \mathbb{C}\to \mathbb{C}\) are the orthogonal projections onto \(\{\lambda \ket{0} \mid \lambda \in \mathbb{C}\}\) and \(\{ \lambda \ket{1} \mid \lambda \in \mathbb{C}\}\), respectively.
+  What is the probability of observing the outcome \(\{1\}\) upon measuring for the state \(\ket{+}\)?
+ \item Retain the notion of the previous question. Suppose we observed  the outcome \(\{1\}\) for the state \(\ket{+}\). What is the updated state?
+\end{thmlist}
 
 
 \cleardoublepage
