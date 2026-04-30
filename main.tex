@@ -3580,7 +3580,7 @@ we introduce the following rotations around the \( z \), \( x \), and \( y \)-ax
 
 \begin{proof}
   Let \( v \in \mathbb{C}^2 \) be normalised.
-  By Lemma~\ref{lem:characterising-the-qubit}, the associated density matrix is
+  By Theorem~\ref{thm:characterising-the-qubit}, the associated density matrix is
   \begin{equation*}
     \rho_{v} = \frac{1}{2}(I_2 + r_x \sigma_x + r_y \sigma_y + r_z \sigma_z),
   \end{equation*}
@@ -3658,6 +3658,9 @@ we introduce the following rotations around the \( z \), \( x \), and \( y \)-ax
   Thus, we get \(r_{[Z(\alpha) v]} = z(\alpha)r_{[v]}\).
   The cases for the \(X\) and \(Y\)-gates are similar.
 \end{proof}
+
+% TODO Example show the z, x, y rotation on the Bloch sphere.
+% TODO Highlight problem with the maximally entangled state: it is invariant under rotations!
 
 We have already seen that any state can be transformed into any other state via a unitary map.
 For density matrices, this is implemented by mapping \(M\) to \( U M U^{\dagger} \).
@@ -3865,7 +3868,7 @@ To prove that \(UB(f)\) can be part of a quantum algorithm, we need to show that
   \begin{equation*}
     \braket{x_1, y_1}{x_2, y_2} = \delta_{x_1,x_2} \delta_{y_1,y_2},
   \end{equation*}
-  where \(\delta_{a, b} = 1\) if \(x_{1} = x_{2}\) and zero otherwise, and \(\delta_{y_{1}, y_{2}} \in\{0,1\}\) is defined analogously.
+  where \(\delta_{x_{1}, x_{2}} = 1\) if \(x_{1} = x_{2}\) and zero otherwise, and \(\delta_{y_{1}, y_{2}} \in\{0,1\}\) is defined analogously.
   Conversely, we get
   \begin{equation*}
     \braket{UB(f)(x_1, y_1)}{UB(f)(x_2, y_2)}
@@ -3874,10 +3877,10 @@ To prove that \(UB(f)\) can be part of a quantum algorithm, we need to show that
   Since \( x_1 = x_2 \) implies \( f(x_1) = f(x_2) \), this simplifies to \(\delta_{x_1,x_2} \delta_{y_1,y_2}\), concluding the proof.
 \end{proof}
 
-To get a first idea why quantum algorithms believed to be more powerful than their classical analogues, it suffices to study transformations of a single bit.
+To get a first idea why quantum algorithms are believed to be more powerful than their classical analogues, it suffices to study transformations of a single bit.
 
 \begin{remark}\label{rmk:only-few-trafos-are-quantum}
-  While there are only four maps \(\{0,1\}\to\{0,1\}\), and therefore only four corresponding unitary transformations \( (\mathbb{C}^{2})^{\otimes 2} \to ( \mathbb{C}^{2})^{\otimes 2}\), we get for every real number \(\alpha \in \mathbb{R}\) a unitary map
+  While there are only four maps \(\{0,1\}\to\{0,1\}\), and therefore only four corresponding unitary transformations \( (\mathbb{C}^{2})^{\otimes 2} \to ( \mathbb{C}^{2})^{\otimes 2}\), we get for every real number \(\alpha \in \mathbb{R}\) a ``controlled Z-phase gate'' given by the unitary map
   \begin{equation*}
     Z(\alpha) =
     \begin{pmatrix}
@@ -3928,7 +3931,7 @@ These groups have natural analogues in the setting of linear maps of finite-dime
   \end{equation*}
   such that for all \(x\in X\) and \(g,h \in G\) we have \( e \lact x = x \) and \( g \lact (h \lact x) = (gh) \lact x \).
 
-  It is \emph{transitive} if for all \(x, y\in X\) there is a \(g\ in G\) such that \(g\lact x = y\).
+  It is \emph{transitive} if for all \(x, y\in X\) there is a \(g \in G\) such that \(g\lact x = y\).
 \end{definition}
 
 The example below can be considered a reformulation of Lemma~\ref{lem:induced-map-on-states}.
@@ -3949,7 +3952,7 @@ By Lemma~\ref{lem:mixed-state-action}, conjugation by unitary matrices yields an
     U\lact \rho \mapsto U\rho U^{\dagger}.
   \end{equation*}
   This action is not transitive.
-  If \(\rho\) and \(\varrho\) have different ranks, there is no  \(U\) such that \(U\rho U^{\dagger} = \varrho\).
+  If \(\rho\) and \(\zeta\) have different ranks, there is no  \(U\) such that \(U\rho U^{\dagger} = \zeta\).
 \end{example}
 
 For \(U, V \in \U(n)\) (special) unitary matrices, a density matrix  \(\rho \in \Mat_{n}( \mathbb{C})\) and a scalar \(\lambda \in \mathbb{C}\) such that \(V= \lambda U\),
@@ -3963,7 +3966,7 @@ We denote the equivalence class of \( U \) by \( [U] \) and set
   \mathrm{PU}(n) \eqdef \U(n)/\sim, \quad \mathrm{PSU}(n) \eqdef \SU(n)/\sim.
 \end{equation*}
 
-\begin{lemma}\label{lem:projective-unitary-iswell-defd-group}
+\begin{lemma}\label{lem:projective-unitary-is-well-defd-group}
   The sets \(\mathrm{PU}(n)\) and \(\mathrm{PSU}(n)\) form groups under the operation
   \begin{equation*}
     [U] \cdot [V] \eqdef [UV]
@@ -3978,7 +3981,7 @@ We denote the equivalence class of \( U \) by \( [U] \) and set
   \end{equation*}
   showing that the group operation is well-defined.
 
-  Associativity as well as the existence of inverses an the  existence of an identity element follow directly from the properties of matrix multiplication.
+  Associativity as well as the existence of inverses and the  existence of an identity element follow directly from the properties of matrix multiplication.
 \end{proof}
 
 \begin{definition}\label{def:pun-sun}
@@ -4048,11 +4051,9 @@ Below, we will use the concepts of real and rational vector spaces, which are de
 \fbox{
   \begin{minipage}{1.0\linewidth-4\fboxsep-4\fboxrule}
     \medskip
-
-    \textbf{Note:} The following material is advanced and intended as an outlook to motivate further study. It is not part of the core course content, and we will only sketch the main ideas without detailed proofs.
+    \textbf{Note:} The following material is advanced and intended as an outlook to motivate further study.
+    It is not part of the core course content, and we will only sketch the main ideas without detailed proofs.
     \medskip
-
-
   \end{minipage}
 }
 \bigskip
@@ -4062,7 +4063,7 @@ Realistically, we do not have an infinite set of gates at our disposal---let alo
 Instead, assume we have a finite list of gates \( \mathcal{U} \) consisting of special unitary matrices.
 For a given \( Q \in \SU(n) \) and \( \varepsilon > 0 \), we may ask whether there exists a finite sequence \( (U_i)_{i \in I} \) with \( U_i \in \mathcal{U} \) such that
 \begin{equation*}
-  \left\| \prod\nolimits_{i\in I} U_{i} - Q\right\| \eqdef \sup_{v\in \mathbb{C}\setminus\{0\}}\frac{1}{\|v\|}{\left\|\left( \prod\nolimits_{i\in I} U_{i} - Q\right)v\right\|} < \varepsilon.
+  \left\| \prod\nolimits_{i\in I} U_{i} - Q\right\| \eqdef \sup_{v \neq 0}\frac{1}{\|v\|}{\left\|\left( \prod\nolimits_{i\in I} U_{i} - Q\right)v\right\|} < \varepsilon.
 \end{equation*}
 Here, the matrix norm \( \| \prod_{i \in I} U_i - Q \| \) measures the distance between the operations \( \prod_{i \in I} U_i \) and \( Q \).
 Smaller values indicate that the operations are closer together.
@@ -4155,9 +4156,9 @@ The Kronecker density result allows us to determine when, for a given \( t \in \
 \end{theorem}
 
 \begin{proof}[Proof(sketch).]
-  To simply our arguments, we will only consider the case where for all matrices \(A_{j}\) the eigenvalues are linearly independent over \( \mathbb{Q}\).
+  To simplify our arguments, we will only consider the case where for all matrices \(A_{j}\) the eigenvalues are linearly independent over \( \mathbb{Q}\).
   Using the spectral theorem there is a diagonal matrix \(A'=\mathrm{diag}(i \theta_1, \dots, i \theta_n)\) and a unitary \(P\in U(n)\) such that \(P^{\dagger} A P = A'\).
-  Using the continuous map \( \mathbb{R}^{n} \to\{ X \in \Mat_{n}( \mathbb{C}) \mid X \text{ is diagonal}\}\), \(v \mapsto \mathrm{diag}(v)\) and the Kronecker density theorem of Lemma~\ref{lem:kronecker-density-theorem}, we observe that
+  Using the continuous map \( \mathbb{R}^{n} \to \Mat_{n}( \mathbb{C})\), \(v \mapsto \mathrm{diag}(v)\) and the Kronecker density theorem of Lemma~\ref{lem:kronecker-density-theorem}, we observe that
   \begin{equation*}
     P e^{t A'} P^{\dagger}  = e^{P t A' P^{\dagger}} = e^{tA}\in \overline{\langle \exp{G} \rangle} \qquad \text{ for all } t \in \mathbb{R}.
   \end{equation*}
@@ -4223,7 +4224,7 @@ a pair of projectors \(e_{1}, e_{2}\) are \emph{pairwise orthogonal} if \(e_{1}e
 In particular, we will later on consider sets \(\{e_{1}, \dots , e_{n}\}\) of orthogonal projectors \(V\to V\) that are moreover pairwise orthogonal.
 
 \begin{lemma}\label{lem:part-of-1-means-orth}
-Consider projections \( e_1, \dots, e_n \colon V \to V \) such that \( e_1 + \dots + e_n = \id_V \). Then, the set of projections \( \{ e_1, \dots, e_n \} \) is pairwise orthogonal.
+Consider projections \( e_1, \dots, e_n \from V \to V \) such that \( e_1 + \dots + e_n = \id_V \). Then, the set of projections \( \{ e_1, \dots, e_n \} \) is pairwise orthogonal.
 \end{lemma}
 
 \begin{proof}
@@ -4413,7 +4414,7 @@ The big advantage about mixed states in the context of  measurements is that we 
   \textit{Hint:} Use the Hermitian symmetry to move arguments from the first to the second position and vice versa.
 \end{exercise}
 
-\begin{exercise}\label{exe:orthogonal-proj-equivalent}
+\begin{exercise}\label{exe:alternative-defn-orthogonal-projection}
   Suppose \(V\) is a Hilbert space.
   Show that a linear map \(f \from V\to V\) is an orthogonal projection onto a subspace \(U \subset V\) if and only if \(f^{2} = f\), \(\im f = U\), and \(\ker f = U^{\perp}\).
 \end{exercise}
@@ -4442,13 +4443,7 @@ The big advantage about mixed states in the context of  measurements is that we 
   \end{thmlist}
 \end{exercise}
 
-\begin{exercise}\label{exe:alternative-defn-orthogonal-projection}
-  Consider a linear map \(p \from V\to V\) between finite-dimensional Hilbert spaces.
-  \begin{thmlist}
-    \item Show that if \(p\) is an orthogonal projection onto a subspace \(U\), it has \(\im p = U\), \(\ker p = U^{\perp}\) and \(p^{2}= p\).
-    \item Conversely, assume \(p^{2}=p\) and \(\im p^{\perp} = \ker p\). Prove that \(p\) is an orthogonal projection.
-  \end{thmlist}
-\end{exercise}
+
 
 \begin{exercise}\label{exe:unitary-matrix-unitary-map}
   Suppose \(V\) is a Hilbert space with orthonormal basis \(\mathcal{B}\) and \(f\from V\to V\) is a linear map.
@@ -4494,17 +4489,6 @@ The big advantage about mixed states in the context of  measurements is that we 
   Show that \(p_{v} = - p_{w}\).
 \end{exercise}
 
-\begin{exercise}
-  Consider a mixed state \(\varrho \from V\to V\).
-  Show that there are pure states \([v_{1}], \dots , [v_{n}]\) of \(V\) such that the associated mixed states \(\rho_{v_{1}}, \dots , \rho_{v_{n}}\) satisfy \(\varrho = \rho_{v_{1}}+ \dots + \rho_{v_{n}}\).
-\end{exercise}
-
-\begin{exercise}
-  Show that a mixed state \(\varrho \from V\to V\) corresponds to a  pure state \([\ket{v}]\) of \(V\) (that is, \(\varrho = \ket{v}\bra{v} \from V \to V \) if and only if \(\tr(\varrho^{2}) = 1\)).
-
-  \textit{Hint:} What do you know about the eigenvalues of \(\varrho\)?
-\end{exercise}
-
 \subsubsection*{Compound systems}
 \begin{exercise}\label{exe:bilinear-vs-linear-hom}
   Show that there is a bijection
@@ -4531,8 +4515,6 @@ The big advantage about mixed states in the context of  measurements is that we 
   That is, \((A')_{ij} =0 \) if \(i<j\).
 
   \textit{Hint:} The diagonal entries of \(A'\) must be the eigenvalues of \(A\) (counted with multiplicities).
-
-  \textit{Hint:} Can we give another good hint? Quotient spaces are not too good what about scalar products?
 \end{exercise}
 
 \begin{exercise}
@@ -4576,7 +4558,7 @@ The big advantage about mixed states in the context of  measurements is that we 
     (\id_{X}\otimes \tau_{V,W})(\tau_{V,X} \otimes \id_{W})(\id_{V}\otimes \tau_{W,X}).
   \end{equation*}
 
-  Let \(s \from\{1, \dots , n\} \to \{1, \dots , n\}\) be a bijection and consider two maps linear maps \(\chi, \zeta \from V_{1} \otimes \dots \otimes V_{n} \to V_{s(1)} \otimes \dots \otimes V_{s(n)}\) which are compositions of tensor flips and  with identities.
+  Let \(s \from\{1, \dots , n\} \to \{1, \dots , n\}\) be a bijection and consider two maps linear maps \(\chi, \zeta \from V_{1} \otimes \dots \otimes V_{n} \to V_{s(1)} \otimes \dots \otimes V_{s(n)}\) which are compositions of tensor flips and  identities.
   Specifically, each component in the composition is of the form
   \begin{equation*}
     \id_{V_1} \otimes \dots \otimes \id_{V_{k-1}} \otimes \tau_{V_k, V_{k+1}} \otimes \id_{V_{k+2}} \otimes \dots \otimes \id_{V_n}.
@@ -4628,7 +4610,7 @@ The big advantage about mixed states in the context of  measurements is that we 
 \subsubsection*{Unitary transformations}
 
 \begin{exercise}
-  Show that for two density matrices \(\rho, \varrho \in \Mat_{n}( \mathbb{C})\) there is a unitary \(U \in \U(n)\) such that \(U\rho U^{\dagger} = \varrho\) if and only if the characteristic polynomials  \(\chi_{\rho}(t)\) and \(\chi_{\varrho}(t)\) are equal.
+  Show that for two density matrices \(\rho, \zeta \in \Mat_{n}( \mathbb{C})\) there is a unitary \(U \in \U(n)\) such that \(U\rho U^{\dagger} = \zeta\) if and only if the characteristic polynomials  \(\chi_{\rho}(t)\) and \(\chi_{\zeta}(t)\) are equal.
 \end{exercise}
 
 \begin{exercise}
@@ -4881,7 +4863,7 @@ Is \((d(b_{1}), d(b_{2}), d(b_{3}))\) a basis of \(\rd*{ \mathbb{C}^{3}}\)?
   Let \((G, \bullet)\) be a group.
   \begin{thmlist}
     \item In case its multiplication is apparent, from the context, we will identify \(G\) with the pair \((G, \bullet)\).
-    \item Moreover, we will often use the short-hand notation
+    \item Moreover, we will often use the shorthand notation
     \begin{equation*}
       ab \eqdef a \bullet b \qquad \text{ for all } a, b \in G.
     \end{equation*}
