@@ -165,7 +165,7 @@ In contrast to the classical solution which grows exponentially in \(n\), a quan
   \begin{description}
     \item [Constructive] In case \(f\) is constant, it treats all inputs the same.
     Because of the way we set up our control qubit, this results in the components of our superposition ``adding up''.
-    \item [Destructive] In contrast, if \(f\) is balanced, it treats one half of our superposition differently than the other resulting in ``cancellations''.
+    \item [Destructive] In contrast, if \(f\) is balanced, it treats one half of our superposition differently than the other, resulting in ``cancellations''.
   \end{description}
 
 
@@ -181,7 +181,7 @@ For a classical computer, even a relatively small \(n=300\) would require more o
   The number of atoms in the observable universe is estimated to be around \(10^{80}\). % TODO Some source
 }, whereas a quantum computer could determine the type of \(f\) in merely \(603\) steps (601  Hadamard gates, 1 application of \(f\), and 1 measurement).
 
-It is precisely this potential for exponential speedups, that explains the excitement around quantum computing.
+It is precisely this potential for exponential speedups that explains the excitement around quantum computing.
 
 
 
@@ -246,10 +246,10 @@ We will formalise this as a conjecture phrased in the language of complexity the
 \noindent
 \begin{thmlist}
   \item \textbf{Efficient Classical Simulation:}  The \emph{Gottesman--Knill theorem} shows that certain ``incomplete'' (in particular allowing only so-called Clifford gates) quantum computers can be efficiently simulated by a classical computer.
-  \item \textbf{Universal Quantum computing:} In the classical world, a set of gates is universal if any algorithm (thought of as a map \(f\from 2^{n}\to 2^{m}\)) can be realised by applying these gates finitely many times.
-  In stark contrast, the ``algorithms'' for a quantum computer do not form a finite set but the topological space \(\U(2^{n})\) (\ie a set with a notion of points being close to each other).
-  A finite set of quantum gates is universal if finitely many gate applications can approximate any element of \(U(2^{n})\) with arbitrary precision.
-  \item \textbf{The Kitaev--Solvay theorem:} Addresses the question of whether some universal gate sets are inherently more efficient than others.
+  \item \textbf{Universal Quantum computing:} In the classical world, a set of gates is universal if any algorithm (thought of as a map \(f\from \{0,1\}^{n}\to \{0,1\}^{m}\)) can be realised by applying these gates finitely many times.
+  In stark contrast, the ``algorithms'' for a quantum computer do not form a finite set but the topological space \(\SU(2^{n})\)  (\ie a set with a notion of points being close to each other).
+  A finite set of quantum gates is universal if finitely many gate applications can approximate any element of \(\SU(2^{n})\) with arbitrary precision.
+  \item \textbf{The Solvay--Kitaev theorem:} Addresses the question of whether some universal gate sets are inherently more efficient than others.
   The theorem demonstrates under mild assumptions that, up to logarithmic overhead, all universal gate sets are equivalent.
   \item \textbf{An overview of complexity classes:} The class \(\Pclass\) consists of problems that are efficiently solvable by a classical computer.
   The quantum analogue is the class \(\BQPclass\) (bounded-error quantum polynomial time).
@@ -280,7 +280,7 @@ Achieving fault-tolerant quantum computing is one of the most pressing challenge
   One of the first error-correcting codes,  demonstrating that quantum information can be protected against bit-flip and phase-flip errors.
 
   \item \textbf{The toric code:}
-  A two-qubit system realised by combining geometric properties of the torus (\ie a doughnut) with group symmetries.
+  A  system with two logical qubits, realised by combining geometric properties of the torus (\ie a doughnut) with group symmetries.
   The relevant information is encoded in global properties of these systems protecting them against all local perturbations.
 \end{itemize}
 
@@ -534,7 +534,7 @@ Similar to \( \mathbb{C}^{2}\), we can define a vector space \( \mathbb{C}^{n}\)
   \end{equation*}
   with pointwise addition and scalar multiplication.
 
-  The current presentation of elements of \( \mathbb{C}^{n}\) as \emph{column vectors} is not particularly space-saving.
+  Representing elements of \( \mathbb{C}^{n}\) as \emph{column vectors} is not particularly space-saving.
   Thus, we will often write them as \emph{row vectors} instead.
   Explicitly, we set
   \begin{equation*}
@@ -571,8 +571,8 @@ Not all vector spaces are of the form \( \mathbb{C}^{n}\) for some \(n\in \mathb
     \delta_{s} \from S \to \mathbb{C}\qquad \delta_{s}(t) =
     \begin{cases}
       1 & \text{ if } s= t, \\
-      0 & \text{ otherwise}.
-    \end{cases}, \qquad \text{ for } s\in S.
+      0 & \text{ otherwise},
+    \end{cases} \qquad \text{ for } s\in S.
   \end{equation}
 
   Note that we have an inclusion
@@ -586,6 +586,14 @@ Not all vector spaces are of the form \( \mathbb{C}^{n}\) for some \(n\in \mathb
     \mathrm{Map}(S, \mathbb{C}) = \left\{\sum\nolimits_{s\in S} \lambda_{s} s \mid \lambda_{s}\in \mathbb{C} \text{ with } \lambda_{s}= 0 \text{ for all but finitely many } s\in S\right\}
   \end{equation}
   as the space of all (formal) linear combinations of \(S\).
+
+  \textit{Mental picture for students of a computer science background:}
+  We can think of the vectors in \( \mathrm{Map}(S, \mathbb{C}) \) as dictionaries (or associative arrays) with keys from the set \( S \) and values in \( \mathbb{C} \).
+  For example in a Python-like pseudocode, if \( v= \texttt{ \{s: l\_s for s in S\}} \) and \(w= \texttt{ \{s: r\_s for s in S\}} \) are two vectors, then addition and scalar multiplication (by a scalar \(\lambda \in \mathbb{C}\))  would look like:
+\begin{verbatim}
+  v_plus_w = {s: v[s] + w[s] for s in S}
+  lambda_v = {s: lambda * v[s] for s in S}
+\end{verbatim}
 \end{example}
 
 \subsection{Matrices}\label{sec:matrices}
@@ -989,7 +997,7 @@ Specifically, eigenvalues of a matrix \(A\) correspond to roots of the so-called
   \end{equation}
 \end{definition}
 
-The following definition of the determinant is called the \emph{ Leibnitz formula}.
+The following definition of the determinant is called the \emph{ Leibniz formula}.
 Equivalent definitions can be given in terms of the Laplace formula, or the universal property of the determinant as alternating and normalised multilinear form.
 \begin{definition}\label{def:determinant}
   The \emph{determinant} of a matrix \( A = (a_{ij}) \in \Mat_n(\mathbb{C}) \) is
@@ -1020,7 +1028,7 @@ Then
 \end{equation*}
 Since \(0 \neq v\) the matrix \(\lambda I_{n} - A\) cannot be invertible and \(\det (\lambda I_{n} - A) = 0\).
 Thus, we want to systematically find all \(t \in \mathbb{C}\) such that  \(\det(t I_{n} - A) = 0\).
-c
+
 \begin{definition}\label{def:char-poly}
   The \emph{characteristic polynomial} of a matrix \( A \in \Mat_n(\mathbb{C}) \) is
   \begin{equation}
@@ -1051,9 +1059,26 @@ By considering \(v^{\dagger}= (\overline{v_{1}}, \dots , \overline{v_{n}})\in \M
   \begin{thmlist}
     \item For all \(v\in \mathbb{C}^{n}\) we have \(v^{\dagger}Av \geq 0\).
     \item All eigenvalues \(\lambda\) of \(A\) are real and \(\lambda \geq 0\).
-    \item For each \( 1 \leq i \leq n \), the \emph{leading principal minor} \( A_i \)---the \( i \times i \) submatrix of \( A \) formed by its first \( i \) rows and columns---satisfies \( \det(A_i) \geq 0 \).
+    \item For every \(0\leq i\leq n-1\), every \emph{i-th principal minor} is non-negative.
+    The \(i\)-th principal minors are the determinants \(\det A_{i}\) of  the \( i \times i \) submatrices of \(A\) obtained by deleting the same \( n-i \) rows \(l_{1}, \dots , l_{i}\) and columns \(l_{1}, \dots , l_{i}\) from \( A \).
   \end{thmlist}
 \end{definition}
+The criterion involving principal minors requires checking \emph{all} possible \( i \times i \) principal minors for each \( i \), not just the leading principal minors (those formed by the first \( i \) rows and columns).
+For example, for a \( 2 \times 2 \) matrix
+\begin{equation*}
+  A = \begin{pmatrix}
+    a & b \\
+    c & d
+  \end{pmatrix},
+\end{equation*}
+the principal minors are:
+\begin{thmlist}
+\item \( i = 0 \): we consider the whole matrix and have \( \det(A) = ad - bc \),
+\item \( i = 1 \): we delete the first row and first column, and get the matrix \((a)\) whose determinant is \( \det(a)=a \),
+\item \( i = 1 \): we delete the second row and second column, leading to the matrix \((d)\) with  determinant \( \det(d)=d\).
+\end{thmlist}
+Cases like deleting the first row and the second column are not considered.
+\bigskip
 
 Albeit an abstract result at first glance, the Cayley--Hamilton theorem describes many of the structural properties of matrices.
 \begin{theorem}[Cayley--Hamilton]\label{thm:cayley-hamilton}
@@ -1097,7 +1122,7 @@ While matrix-vector multiplication provides a way to act on vectors in \( \mathb
 This necessitates a more abstract and general notion of transformation.
 
 \begin{definition}\label{def:linear-maps}
-  A \emph{map} \( f \from V \to W \) between complex vector spaces \(V\) and \(W\) is called  a \emph{linear map} or \emph{homomorphism of vector spaces } if
+  A \emph{map} \( f \from V \to W \) between complex vector spaces \(V\) and \(W\) is called  a \emph{linear map} or \emph{homomorphism of vector spaces} if
   \begin{subequations}
     \begin{align}
       f(x + y) &= f(x) + f(y), \\
@@ -1258,7 +1283,7 @@ This naturally raises the question, how \({}_{\mathcal{C}}f_{\mathcal{B}}\) tran
   \begin{equation}
     \inputtikz{lin-maps-as-string-diags}
   \end{equation}
-  Similar to the identity matrix, we ommit a box for the identity map \(\id_{V} \from V \to V\).
+  Similar to the identity matrix, we omit a box for the identity map \(\id_{V} \from V \to V\).
 
   Compositions of linear maps(\ie multiplying their transformation matrices) is given by horizontally concatenating diagrams.
   \begin{equation}
@@ -1340,7 +1365,7 @@ In other words, \( f \) acts as the identity on \( U \) and maps every vector in
 Any transformation matrix \(_{\mathcal{B}}f_{\mathcal{B}}\) of a projector must square to itself.
 Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the following result.
 \begin{proposition}\label{prop:matrix-representation-of-projection}
-  For any projector \(f\from V \to V\) on an \(n\)-dimensional space \(V\), there exists a basis \(\mathcal{B}\) of \(V\) such that \(_{\mathcal{B}}f_{\mathcal{B}} = \mathrm{diag}(1, \dots , 1, 0, \dots , 0)\) is a diagonal matrices with \(\dim \im f\) diagonal entries equal to \(1\).
+  For any projector \(f\from V \to V\) on an \(n\)-dimensional space \(V\), there exists a basis \(\mathcal{B}\) of \(V\) such that \(_{\mathcal{B}}f_{\mathcal{B}} = \mathrm{diag}(1, \dots , 1, 0, \dots , 0)\) is a diagonal matrix with \(\dim \im f\) diagonal entries equal to \(1\).
 \end{proposition}
 
 
@@ -1349,11 +1374,11 @@ Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the follo
 \begin{exercise}
   Let \(z_1 = 3 + 4i\) and \(z_2 = 1 - i\).
   \begin{thmlist}
-    \item Express \(z_1 + z_2\), \(z_1 z_2\), and \(z_1 / z_2\) in Cartesian form (\ie as linear combinations \(a + ib \in \mathbb{C})\).
+    \item Express \(z_1 + z_2\), \(z_1 z_2\), and \(z_1 / z_2\) in Cartesian form (\ie as linear combinations \(a + ib \in \mathbb{C}\)).
     \item Write \(z_2\) in polar form \(re^{2\pi i \alpha}\).
     \item Find a complex number \(u\) such that \(u^{3}= z_{2}\).
     \item Determine \emph{integers} \(p,q \in \mathbb{Z}\) such that \(z_{1}^{2} + p z_{1} + q = 0\).
-    \item Prove that for any \(z \in \mathbb{C}\setminus\{0\}\), we have \(z^{-1} = \tfrac{\overline{z}}{||z||}\).
+    \item Prove that for any \(z \in \mathbb{C}\setminus\{0\}\), we have \(z^{-1} = \tfrac{\overline{z}}{|z|^{2}}\).
   \end{thmlist}
 \end{exercise}
 
@@ -1406,7 +1431,7 @@ Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the follo
     \begin{equation*}
       \chi_{A}(t) = t^{3} - \alpha t^{2} + \beta t - \gamma = (t- \lambda_{1})(t- \lambda_{2})(t-\lambda_{3})
     \end{equation*}
-    Determine the coefficient \(\beta\) as a combination of the \(\lambda_{i}\)s.
+    Determine the coefficient \(\beta\) as a combination of the \(\lambda_{i}\)'s.
     \item Using the previous exercise, compute  \(\tr(A)^{2}\) and \(\tr(A^{2})\).
     Express \(\beta\)  in terms of \(\tr(A)^{2}\) and \(\tr(A^{2})\).
     \item Now use the connection between \(\alpha\) and \(\gamma\) and the trace and characteristic polynomial of \(A\) to conclude the proof.
@@ -1423,7 +1448,8 @@ Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the follo
   Let \(V = \mathbb{C}^2\) with the computational basis \(\mathcal{B} = (\ket{0}, \ket{1})\).
   Let \(H\) be the Hadamard gate (Example~\ref{ex:Hadamard-and-cnot-gate}).
   \begin{thmlist}
-    \item Determine the linear map \(\mu_{H}\from \mathbb{C}^{2}\to \mathbb{C}^{2}\).
+    \item Determine the image of a vector \( \begin{psmallmatrix}x \\ y\end{psmallmatrix}
+\in \mathbb{C}^{2}\) under the linear map \(\mu_{H}\from \mathbb{C}^{2}\to \mathbb{C}^{2}\).
     \item Let \(\mathcal{B}' = (\ket{+}, \ket{-})\) where \(\ket{+} = H\ket{0}\) and \(\ket{-} = H\ket{1}\).
     Show that \(\mathcal{B}'\) is a basis.
     \item Find the change-of-basis matrix \(P = {}_{\mathcal{B}}\id_{\mathcal{B}'}\).
@@ -1450,7 +1476,7 @@ The level of difficulty is aligned with what you can expect in the exam.
 \subsubsection*{Complex numbers}
 \begin{thmlist}
   \item Express the multiplicative inverse of a complex number \(z \in \mathbb{C}\setminus\{0\}\) as  \(a + ib\) with \(a, b \in \mathbb{R}\).
-  \item What are the real and imaginary part of a complex number \(z = re^{2\pi i \alpha} \in \mathbb{C}\)?
+  \item What are the real and imaginary parts of a complex number \(z = re^{2\pi i \alpha} \in \mathbb{C}\)?
   \item Consider \(z=a+ib \in \mathbb{C}\) with \(a>0, b<0\) and suppose \(z = re^{2\pi i \alpha}\).
   What can be said about \(\alpha \in [0,1]\)?
   \item Let \(z\in \mathbb{C} \).
@@ -1463,7 +1489,7 @@ The level of difficulty is aligned with what you can expect in the exam.
 \subsubsection*{Vector Spaces}
 \begin{thmlist}
   \item Is the set of all \(n \times n\) Hermitian matrices a complex subspace of \(\Mat_n(\mathbb{C})\)?
-  \item Consider two matrices \(A, B \in \Mat_{4}( \mathbb{C})\) and let \(U =\{v \in \mathbb{C}^{4} \mid Uv = 0\}\) and \(W =\{Bv \mid v \in \mathbb{C}^{4}\}\).
+  \item Consider two matrices \(A, B \in \Mat_{4}( \mathbb{C})\) and let \(U =\{v \in \mathbb{C}^{4} \mid Av = 0\}\) and \(W =\{Bv \mid v \in \mathbb{C}^{4}\}\).
   How do you check if they form a direct sum \(U \oplus W = \mathbb{C}^4\)?
   \item Suppose \(V\) is an \(n\)-dimensional vector space and \(\mathcal{B}=(b_{1}, \dots , b_{m})\) is a collection of vectors.
   In case \(m\geq n\), is it true that \(\lambda_{1}b_{1} + \dots + \lambda_{m} b_{m} = 0\)  if and only if \(\lambda_{1} = \dots = \lambda_{m} = 0 \).
@@ -1488,7 +1514,7 @@ The level of difficulty is aligned with what you can expect in the exam.
   For \(\lambda \in \mathbb{C}\), under what conditions is \(\lambda A\) self-adjoint?
   \item State two equivalent conditions for a self-adjoint matrix to be positive semidefinite.
   \item Is the matrix \(\begin{psmallmatrix} 1 & 2 \\ 2 & -1 \end{psmallmatrix}\) positive semidefinite?
-  \item Suppose \(A\) is conjugate to the diagonal matrix \(\mathrm{diag}(\lambda, \mu)\). What is \(\tr(A)\)?
+  \item Suppose \(P^{-1}AP\) is the diagonal matrix \(\mathrm{diag}(\lambda, \mu)\). What is \(\tr(A)\)?
   \item Can a matrix \(A\) with eigenvalues \(\{1, 2, 3\}\) be a projection?
 \end{thmlist}
 
@@ -1531,7 +1557,6 @@ The level of difficulty is aligned with what you can expect in the exam.
 \cleardoublepage
 
 \section{The quantum circuit model and the SCUM axioms}\label{sec:the-quantum-circuit-model-and-the-scum-axioms}
-% TODO Norm in \mathbb{C} is |z| not \|z\|!
 As suggested by their name, quantum computers rely on the principles of quantum mechanics.
 Following \cite[Section~2]{kissinger-wetering2025:PicturingQuantumSoftware}, we present a simplified and tailored version of the basic axioms called in their terminology the  \emph{SCUM postulates}.
 
@@ -1598,7 +1623,7 @@ In particular, not every unitary space is automatically a Hilbert space.
 \end{convention}
 
 The inner product allows us to measure the extent to which two vectors \(v, w \in V\) have the same direction.
-In the extreme case \(\braket{v}{w} =0\), these vector do not have any ``overlap'', and we say \(v\) and \(w\) are \emph{perpendicular} or \emph{ortogonal}.
+In the extreme case \(\braket{v}{w} =0\), these vector do not have any ``overlap'', and we say \(v\) and \(w\) are \emph{perpendicular} or \emph{orthogonal}.
 
 \begin{definition}\label{def:orthogonal-complement}
   Consider a subspace \(U\subset V\) of a Hilbert space \(V\).
@@ -1799,7 +1824,7 @@ This notion recovers our previously discussed concept of adjoint matrices.
 \end{proof}
 
 We can now define a notion of positive-semidefiniteness for linear maps by mimicking the matrix version of Definition~\ref{def:positive-semidefinite}.
-\begin{definition}\label{def:positive-semidiefinite-maps}
+\begin{definition}\label{def:positive-semidefinite-maps}
   A self-adjoint map \(f\from V \to V\) is positive semidefinite if
   \begin{equation}
     \braket{v}{f(v)} \geq 0\qquad \text{ for all } v\in V.
@@ -1945,7 +1970,7 @@ Projections play a central role for measurements.
     \end{pmatrix}
   \end{equation*}
   is an orthogonal projection with image \( \mathbb{C} \ket 0\) and kernel \( \mathbb{C} \ket 1\).
-  The vector \(v = \tfrac{1}{\sqrt{2}}(\ket 0 + \ket 1)\) is a linear combination  of ``equal parts'' of \(\ket 0\) and \(\ket 1\) and indeed, we compute
+  The vector \(v = \tfrac{1}{\sqrt{2}}(\ket 0 + \ket 1)\) is a linear combination of ``equal parts'' of \(\ket 0\) and \(\ket 1\) and indeed, we compute
   \begin{equation*}
     \braket{v}{e \mid v}
     = \braket{v}{e(v)}
@@ -1958,9 +1983,9 @@ Projections play a central role for measurements.
 
 The second kind of map we are interested in is defined by preserving the inner-product on a subspace of its domain.
 \begin{definition}\label{def:partial-isometry}
-  A \emph{partial isometry}  \(f \from (V, \braket{\blank}{\bblank})\to (W, [\blank \mid \bblank ])\) between Hilbert spaces is a linear map \(f \from V\to W\) such that
+  A \emph{partial isometry} \(f \from (V, \braket{\blank}{\bblank}_{V})\to (W, \braket{\blank}{ \bblank}_{W})\) between Hilbert spaces is a linear map \(f \from V\to W\) such that
   \begin{equation}
-    [f(v) \mid f(w) ] = \braket{v}{w} \qquad \text{ for all } v, w \in \ker f^{\perp}\subset V.
+    \braket{f(v)}{f(w)}_{W} = \braket{v}{w}_{V} \qquad \text{ for all } v, w \in \ker f^{\perp}\subset V.
   \end{equation}
   In case \(\ker f =\{0\}\), we call \(f\) a \emph{(linear) isometry}.
 \end{definition}
@@ -1985,19 +2010,21 @@ There exists an orthogonal projection \( p \from V \to V \) onto \( U \) and an 
   To that end, consider  vectors \(v\in V\) and \(w \in \ker f\).
   We compute
   \begin{equation*}
-    \braket{f^{\dagger}f(v)}{w}
-    = [f(v) \mid f(w)]
-    = [f(v) \mid 0 ]
+    \braket{f^{\dagger}f(v)}{w}_{V}
+    = \braket{f(v) }{ f(w)}_{W}
+    = \braket{f(v) }{ 0 }_{W}
     = 0,
   \end{equation*}
   implying that \(f(v) \in U\).
 
   Next, given \(v \in V\) and \(u\in U\), we observe that
-  \begin{equation*}
-    \braket{f^{\dagger}f(v) - v}{u}
-    = \braket{f^{\dagger}f(v)}{u} - \braket{v}{u}
-    = [f(v) | f(u)] - \braket{v}{u} = 0 \iff [f(v) | f(u)] = \braket{v}{u}.
-  \end{equation*}
+  \begin{align*}
+    \braket{f^{\dagger}f(v) - v}{u}_{V}
+    & = \braket{f^{\dagger}f(v)}{u}_{V} - \braket{v}{u}_{V}
+      = \braket{f(v)}{f(u)}_{W} - \braket{v}{u}_{V} \\
+    & = 0 \iff \braket{f(v)}{f(u)}_{W}
+      = \braket{v}{u}_{V}.
+  \end{align*}
   Therefore, \(f\) is a partial isometry if and only if \(f^{\dagger}f\) is an orthogonal projection onto \(U\).
   \medskip
 
@@ -2009,7 +2036,7 @@ There exists an orthogonal projection \( p \from V \to V \) onto \( U \) and an 
   Moreover, Theorem~\ref{thm:spectral-theorem} implies that \(\im (f^{\dagger} f) = \ker(f^{\dagger} f)^{\perp}\) (using that the kernel is the eigenspace of the eigenvalue \(0\) and that the image is spanned by the eigenvectors of the non-zero eigenvalues).
   Finally, \(\ker (f) \subset \ker(f^{\dagger} f)\) and for any  \(v\in \ker (f^{\dagger} f)  \), we have
   \begin{equation*}
-    \braket{f(v)}{f(v)} = \braket{v}{f^{\dagger}f(v)} = 0.
+    \braket{f(v)}{f(v)}_{W} = \braket{v}{f^{\dagger}f(v)}_{V} = 0.
   \end{equation*}
   Thus \(v \in \ker f\) and \(\ker(f^{\dagger} f) = \ker f \).
 \end{proof}
@@ -2073,15 +2100,22 @@ Exercise~\ref{exe:proof-of-lem-canonical-iso-to-dual-space} provides a guided pr
 
 \begin{notation}\label{not:bra-ket}
   Following physics literature, we will occasionally use \emph{bra-ket notation}.
-  Hre, a vector of a Hilbert space \((V, \braket{\blank }{\bblank})\) will be written as a \emph{ket} \(\ket v\).
+  Here, a vector of a Hilbert space \((V, \braket{\blank }{\bblank})\) will be written as a \emph{ket} \(\ket v\).
   Similarly, a vector of the dual space \((\rd*{V}, \braket{ \blank }{ \bblank })\) is written as a \emph{bra} \(\bra{\phi}\).
-
-  To keep our notation concise, we write \(f \ket v\eqdef f(\ket v)\) for any linear map \(f\from V\to W\) and \(\ket v\in V\).
+  Recall that the Riesz-map \(d \from V\to \rd*{V}\) establishes a bijection between \(V\) and its dual space.
+  As a shorthand notation, we write \(\bra{v} \eqdef d(\ket{v})\).
   This has the additional advantage that the \emph{canonical pairing}, also called \emph{evaluation},
-  between \(\ket{v}\in V\) and \(\bra{\phi}\in \rd*{V}\) will be
+  between \(\ket{w}\in V\) and \(\bra{v}\in \rd*{V}\) will be
   \begin{equation*}
-    \braket{\phi}{v}\eqdef \bra{\phi} \big( \ket v\big)
+    d\big(\ket{v}\big) \ket{w} = \braket{v}{w}.
   \end{equation*}
+
+
+  To keep our notation concise, we write \(f \ket v\eqdef f(\ket v)\) for any linear map \(f\from V\to W\) and \(\ket v\in V\), leading to ``sandwiched'' terms
+  \begin{equation*}
+    \braket{w}{f \mid v}_{W} \eqdef \braket[\big]{w}{f(\ket{v})}_{W}, \qquad \text{ where } \ket{v} \in V, \ket{w} \in W.
+  \end{equation*}
+
 
   While we considered in our diagrammatic calculus vectors \(\ket{v}\) as linear maps \( \mathbb{C} \to V\), \(\lambda \mapsto \lambda \ket{v}\),
   vectors of the dual space are---by definition---linear maps \(\bra{\phi} \from V \to \mathbb{C}\).
@@ -2096,6 +2130,20 @@ Exercise~\ref{exe:proof-of-lem-canonical-iso-to-dual-space} provides a guided pr
     \inputtikz{init-transform-eval}
   \end{equation}
 \end{notation}
+
+We conclude our discussion by a ``practitioners guide to dual spaces''.
+\begin{remark}\label{rmk:the-practicioners-guide-to-dual-spaces}
+  Consider a vector \( \ket{v} \in \mathbb{C}^n \), which we can represent as a column vector
+  \begin{equation*}
+        \ket{v} = \begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{pmatrix}.
+      \end{equation*}
+      For intuition purposes, we want to think of \( \ket{v} \) as an \( n \times 1 \) matrix.
+      The dual space of \( \mathbb{C}^n \) consists of linear maps \( \mathbb{C}^n \to \mathbb{C} \), or equivalently, \( 1 \times n \) matrices.
+      Thus, the dual vector \( \bra{v} = d(\ket{v}) \) corresponding to \( \ket{v} \) is given by the \(1 \times n\) matrix
+      \begin{equation*}
+        \bra{v} = \begin{pmatrix} \overline{v_1} & \overline{v_2} & \dots & \overline{v_n} \end{pmatrix}.
+  \end{equation*}
+\end{remark}
 
 \subsection{States}
 In quantum computing, states serve as the fundamental representation of quantum information.
@@ -2113,7 +2161,7 @@ The choice of basis \(\mathcal{B}\) for a Hilbert space is often motivated by th
 For example, in the context of qubits, the standard basis \( \{\ket{0}, \ket{1}\} \) corresponds to classical binary states, and measurements are often performed with respect to this basis.
 Superposition describes the idea of having a state \([v]\) that cannot be represented by a single basis vector alone.
 
-\begin{definition}\label{def:superposition} %TODO ket-ify the vectors
+\begin{definition}\label{def:superposition}
   Let \(V\) be a Hilbert space and \(\mathcal{B}= (b_1, \dots, b_n)\) a basis.
   A state \([v]\) is in a \emph{superposition} with respect to \(\mathcal{B}\) if  \(v = \lambda_{1} b_{1} + \dots +\lambda_{n}b_{n}\) and \(\lambda_{i}, \lambda_{j}\neq 0\) for some \(i\neq j\).
 \end{definition}
@@ -2130,27 +2178,26 @@ We will now discuss two equivalent ways of describing states, eliminating the am
 \end{lemma}
 \begin{proof}
   We construct the inverse map explicitly.
-  For each \(1\)-dimensional subspace \( L \subset V \), choose a non-zero vector \( v \in L \setminus \{0\} \).
-  There exists a unique positive real number \( \lambda \in \mathbb{R}_{>0} \) such that \( \|\lambda v\| = 1 \).
+  For each \(1\)-dimensional subspace \( L \subset V \), we choose a normalised  \( v_{L} \in L\).
   We define the inverse map via
   \begin{equation*}
-    \mathrm{st} \from \{L\subset V\mid L \text{ is a 1-dimensional subspace}\} \to \{\text{states in } V\} \qquad L \mapsto [\lambda v].
+    \mathrm{st} \from \{L\subset V\mid L \text{ is a 1-dimensional subspace}\} \to \{\text{states in } V\} \qquad L \mapsto [v_{L}].
   \end{equation*}
   Given a \(1\)-dimensional subspace \( L = \mathbb{C} v \), we compute
   \begin{equation*}
-    \mathrm{pro}(\mathrm{st}(L)) = \mathrm{pro}([\lambda v]) = \mathbb{C} \lambda v = \mathbb{C} v.
+    \mathrm{pro}(\mathrm{st}(L)) = \mathrm{pro}([v_{L}]) = \mathbb{C}  v_{L} = L.
   \end{equation*}
 
   Conversely, if \([v]\) is a state, we get
   \begin{equation*}
-    \mathrm{st}(\mathrm{pro}[v]) = \mathrm{st}( \mathbb{C} v) = [\lambda v']
+    \mathrm{st}(\mathrm{pro}[v]) = \mathrm{st}( \mathbb{C} v) = [v_{L}]
   \end{equation*}
-  with \(\lambda v' =\beta v\) for some \(\beta \in \mathbb{C}\).
-  Since \( \|v\| = 1 \), we have
+  and  \(v =\beta v_{L}\) for some \(\beta \in \mathbb{C}\).
+  Since \( \|v_{L}\| = 1 = \|v\| \), we have
   \begin{equation*}
-    |\beta| = |\beta| \;\|v\| = \|\beta v\| = \|\lambda v'\| = 1.
+    |\beta| = |\beta| \;\|v_{L}\| = \|\beta v_{L}\| = \|v\| = 1.
   \end{equation*}
-  Thus, \( \beta = e^{2\pi i \alpha} \) for some \( \alpha \in \mathbb{R} \), and \( [v] = [\lambda v'] \).
+  Thus, \( \beta = e^{2\pi i \alpha} \) for some \( \alpha \in \mathbb{R} \), and \( [v] = [v_{L}]\).
 \end{proof}
 
 The set \( \mathbb{C}P^{n-1} =\{L \subset \mathbb{C}^{n}\mid \dim L = 1\} \) is called the \emph{complex projective space}.
@@ -2183,45 +2230,36 @@ Moreover the trace of \(\rho_{\ket{v}}\) is
   & = \braket{0}{\rho_{\ket v}(\ket 0)} + \braket{1}{\rho_{\ket v}(\ket{1})}
     = (\braket{v}{0}\braket{0}{v}) + \braket{v}{1}\braket{1}{v} \\
   & = \|\braket{v}{0}\|^{2} + \|\braket{v}{1}\|^{2}
-    = a^{2} + b^{2} = \|\ket{v}\|^{2}.
+    = |a|^{2} + |b|^{2} = \|\ket{v}\|^{2}.
 \end{align*}
 Thus, \(\tr(\rho_{\ket v})=1\) is equivalent to \(\ket{v}\) being normalised.
 
 \begin{proposition}\label{prop:density-matrix-perspective}
   There is an injective map
   \begin{equation}
-    \{\text{pure states of }V\}\to\{ \text{mixed stated of } V\}, \qquad \ket{v} \mapsto \rho_{\ket{v}} \eqdef \ket{v}\bra{v}
+    \varrho \from \{\text{pure states of }V\}\to\{ \text{mixed states of } V\}, \qquad [\ket{v}] \mapsto \rho_{\ket{v}} \eqdef \ket{v}\bra{v}
   \end{equation}
   Its image coincides with the rank \(1\) mixed states.
 \end{proposition}
 \begin{proof}
   Let \(\ket v \in V\) be normalised and let \( \mathcal{B} = (\ket{v}, \ket{b_2}, \dots, \ket{b_n}) \) be an orthonormal basis containing \( \ket{v} \).
-  The transformation matrix of \( \rho_{\ket{v}} \) with respect to \( \mathcal{B} \) is \( \mathrm{diag}(1, 0, \dots, 0)\), which is clearly self-adjoint, positive semidefinite, and of rank 1.
+  The transformation matrix of \( \rho_{\ket{v}} \) with respect to \( \mathcal{B} \) is \( \mathrm{diag}(1, 0, \dots, 0)\), which is clearly self-adjoint, positive semidefinite, and has trace \(1\) and rank \(1\).
 
-  Conversely, assume that \(\varrho \in \End(V)\) is a rank \(1\) mixed state.
-  By the spectral Theorem~\ref{thm:spectral-theorem}, \(V\) admits an orthonormal basis \(\mathcal{B}= (\ket{b_{1}}, \ket{b_{2}}, \dots , \ket{b_{n}})\) of eigenvectors of \(\varrho\) corresponding to the eigenvalues \(\lambda_{1}\geq  \dots \geq \lambda_{n} \geq 0\).
-  Since \(\rk \varrho\) coincides with the number of non-zero eigenvalues (counting multiplicities) and \(\tr(\varrho) = \lambda_{1} + \dots + \lambda_{n} = 1\), we have \(\lambda_{1} = 1\) and \(\lambda_{2} = \dots = \lambda_{n} = 0\).
-  In particular \(_{\mathcal{B}}\varrho_{\mathcal{B}} = \mathrm{diag}(1,0, \dots , 0) = {}_{\mathcal{B}}{\rho_{\ket{b_{1}}}}_{\mathcal{B}}\) which implies that \(\varrho = \rho_{\ket{b_{1}}}\).
+  To show that \(\varrho\) is well-defined and injective it suffices to observe that for normalised vectors \(\ket{v}, \ket{w} \in V\) we observe that
+  \begin{align*}
+    \ket{w}\bra{w} = \ket{v}\bra{v}
+    &\iff
+      \ket{w}\braket{w}{x} = \ket{v}\braket{v}{x} \quad \text{for all } \ket{x} \in V\\
+    &
+     \xLeftrightarrow[\text{\(\impliedby:\) \(\ket{w} \mapsto \bra{w}\) is anti-linear}]{\text{\(\implies:\) take \(\ket{x} = \ket{v}\)}}
+      \text{there is an  }\alpha \in \mathbb{R} \text{ such that} \ket{w} = e^{2\pi i \alpha} \ket{v}.
+  \end{align*}
 
 
-  To show injectivity, suppose \( \rho_{\ket{v}} = \rho_{\ket{w}} \) for two normalised vectors \(\ket{v}, \ket{w} \in V\).
-  For any \( \ket{x} \in V \), we obtain
-  \begin{equation*}
-    \ket{v} \braket{v}{x}
-    = \rho_{\ket{v}}(\ket{x})
-    = \rho_{\ket{w}}(\ket{x})
-    = \ket{w} \braket{w}{x}.
-  \end{equation*}
-  Choosing \( \ket{x} = \ket{v} \), we get
-  \begin{equation*}
-    \ket{v} = \ket{v} \braket{v}{v} = \ket{w} \braket{w}{v}.
-  \end{equation*}
-  Thus,  \(\lambda \ket{w}= \ket{v}|\) with \(\lambda = \braket{w}{v}\).
-  Moreover, since \(\ket{w}\) and \(\ket{v}\) are normalised, we obtain
-  \begin{equation*}
-    |\lambda| = |\lambda| \; \|\ket{w}\| = \|\lambda \ket{w}\| = \|v\| = 1
-  \end{equation*}
-  and therefore \([\ket v] = [\ket w]\).
+  It remains to show that if \(\zeta \in \End(V)\) is a rank \(1\) mixed state, it lies in the image of \(\rho\).
+  By the spectral Theorem~\ref{thm:spectral-theorem}, \(V\) admits an orthonormal basis \(\mathcal{B}= (\ket{b_{1}}, \ket{b_{2}}, \dots , \ket{b_{n}})\) of eigenvectors of \(\zeta\) corresponding to the eigenvalues \(\lambda_{1}\geq  \dots \geq \lambda_{n} \geq 0\).
+  Since \(\rk \zeta\) coincides with the number of non-zero eigenvalues and \(\tr(\zeta) = \lambda_{1} + \dots + \lambda_{n} = 1\), we have \(\lambda_{1} = 1\) and \(\lambda_{2} = \dots = \lambda_{n} = 0\).
+  In particular \(_{\mathcal{B}}\zeta_{\mathcal{B}} = \mathrm{diag}(1,0, \dots , 0) = {}_{\mathcal{B}}{\rho_{\ket{b_{1}}}}_{\mathcal{B}}\) which implies that \(\zeta = \rho_{\ket{b_{1}}}\).
 \end{proof}
 
 In string diagrams, the density matrix of a pure state is given as follows.
@@ -2229,8 +2267,28 @@ In string diagrams, the density matrix of a pure state is given as follows.
   \inputtikz{density-matrix-example}
 \end{equation*}
 
+\begin{remark}\label{rmk:mixed-states-are-convex-coms-of-pure-state}
+  Consider a mixed state \(\zeta \from V\to V\).
+  By the spectral theorem, there exists an orthonormal basis
+  \(\mathcal{B}= (\ket{b_{1}}, \ket{b_{2}}, \dots , \ket{b_{n}})\) of eigenvectors of \(\zeta\).
+  These eigenvectors correspond to the eigenvalues \(1\geq\lambda_{1}\geq  \dots \geq \lambda_{n} \geq 0\) (counted with multiplicities), where the upper bound \(1\geq \lambda_{1}\) follows from \(\tr(\zeta) = 1\).
+  Thus, \(\zeta\) can be expressed as a \emph{convex combination}\footnote{%
+    A convex combination is a linear combination \(\lambda_{1} v_{1} + \dots + \lambda_{n} v_{n}\) where \(\lambda_{1}, \dots , \lambda_{n}\) are non-negative real numbers and \(\lambda_{1} + \dots + \lambda_{n} =1\).
+  } of pure states
+  \begin{equation*}
+    \zeta = \lambda_{1}\rho_{\ket{b_{1}}} + \lambda_{2}\rho_{\ket{b_{2}}} + \dots + \lambda_{n}\rho_{\ket{b_{n}}}.
+  \end{equation*}
 
-\subsubsection*{Qubits and the Bloch sphere}\label{sec:qubits-and-the-bloch-sphere}
+  Realising \(\zeta\) as a combination of pure states leads to a simple tool for detecting whether it is pure or genuinely mixed.
+  For any real number \(0 \leq \gamma \leq 1\) we have \(\gamma^{2}\leq \gamma\) with equality if and only if \(\gamma \in\{0,1\}\) and therefore
+  \begin{equation*}
+    \tr(\zeta^{2}) = \lambda_{1}^{2} + \lambda_{2}^{2} + \dots + \lambda_{n}^{2} \leq 1 \qquad
+  \end{equation*}
+  This implies that \(\zeta = \rho_{\ket{b_{1}}}\) is pure if and only if \(\tr(\zeta^{2}) = 1\).
+\end{remark}
+
+
+\subsubsection{Qubits and the Bloch sphere}\label{sec:qubits-and-the-bloch-sphere}
 
 As the name suggests, a \emph{qubit} is the quantum analogue of a bit.
 It is modelled by a system with two degrees of freedom and represented by the Hilbert space \( \mathbb{C}^2 \).
@@ -2259,10 +2317,10 @@ To do this, we use that pure states are precisely the rank-1 density matrices, s
     P_{\ket{1}} = \ket{1}\bra{1} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} = \tfrac{1}{2}(I_2 - \sigma_z).
   \end{equation*}
 
-  The \( Y \)-basis \( (\ket{i+}, \ket{i-}) \), with \( \ket{i\pm} = \frac{1}{\sqrt{2}}(\ket{0} \pm i\ket{1}) \), yields
+  The \( Y \)-basis \( (\ket{+i}, \ket{-i}) \), with \( \ket{i\pm} = \frac{1}{\sqrt{2}}(\ket{0} \pm i\ket{1}) \), yields
   \begin{equation*}
-    P_{\ket{i+}} = \ket{i+}\bra{i+} = \tfrac{1}{2} \begin{pmatrix} 1 & -i \\ i & 1 \end{pmatrix} = \tfrac{1}{2}(I_2 + \sigma_y), \quad
-    P_{\ket{i-}} = \ket{i-}\bra{i-} = \tfrac{1}{2} \begin{pmatrix} 1 & i \\ -i & 1 \end{pmatrix} = \tfrac{1}{2}(I_2 - \sigma_y).
+    P_{\ket{+i}} = \ket{+i}\bra{+i} = \tfrac{1}{2} \begin{pmatrix} 1 & -i \\ i & 1 \end{pmatrix} = \tfrac{1}{2}(I_2 + \sigma_y), \quad
+    P_{\ket{-i}} = \ket{-i}\bra{-i} = \tfrac{1}{2} \begin{pmatrix} 1 & i \\ -i & 1 \end{pmatrix} = \tfrac{1}{2}(I_2 - \sigma_y).
   \end{equation*}
 
 
@@ -2275,39 +2333,49 @@ To do this, we use that pure states are precisely the rank-1 density matrices, s
 
 We will now describe arbitrary states as linear combinations of \(I_{2}\) and the Pauli matrices.
 
-\begin{lemma}\label{lem:characterising-the-qubit}
-  A matrix \(P \in \Mat_{2}( \mathbb{C})\) is a density matrix of a pure state if and only if there are real numbers \(r_{x}, r_{y}, r_{z}\in \mathbb{R}\) with \(r_{x}^{2}+ r_{y}^{2}+r_{z}^{2} = 1\) such that
-  \begin{equation*}
-    P = \tfrac{1}{2}(I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})
-  \end{equation*}
-\end{lemma}
+\begin{theorem}\label{thm:characterising-the-qubit}
+  A matrix \(P \in \Mat_{2}( \mathbb{C})\) is a density matrix  if and only if there are real numbers \(r_{x}, r_{y}, r_{z}\in \mathbb{R}\) with \(r_{x}^{2}+ r_{y}^{2}+r_{z}^{2} \leq 1\) such that
+  \begin{equation}
+    P = \tfrac{1}{2}(I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z}).
+  \end{equation}
+  Moreover, \(P\) represents a pure state if and only if
+  \begin{equation}
+    r_{x}^{2}+ r_{y}^{2}+r_{z}^{2} = 1.
+  \end{equation}
+\end{theorem}
 \begin{proof}
   Let \(P=\tfrac{1}{2}(r_{0}I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})\in \Mat_{2}( \mathbb{C})\) be any matrix.
-  Since Pauli matrices are self-adjoint, \(P = P^{\dagger}\) if and only if the scalars \(r_{0}, r_{x}, r_{y}, r_{z}\) are real.
-  Moreover, since the trace is linear and Pauli matrices are trace-less, \(1 = \tr(P) = r_{0}\) is equivalent to \(r_{0} = 1\).
-  We now compute
-  \begin{align*}
-    (2P)^{2}
-    & = (I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})(I_{2} +r_{x}\sigma_{x} + r_{y}\sigma_{y}+ r_{z}\sigma_{z})\\
-    & = (1+ r_{x}^{2} + r_{y}^{2}+ r_{z}^{2}) I_{2}
-      + (2r_{x} + i r_{y}r_{z} -i r_{y}r_{z} ) \sigma_{x}\\
-    &\qquad  + (2r_{y}  -i r_{x}r_{z} + i r_{x}r_{z}) \sigma_{y}
-      + (2r_{z}+ i r_{x}r_{y} - i r_{x}r_{y} ) \sigma_{z} \\
-    & =  (1+ r_{x}^{2} + r_{y}^{2}+ r_{z}^{2}) I_{2} + 2\sigma_{x} + 2\sigma_{y} + 2\sigma_{z},
-  \end{align*}
-  implying that \(P^{2}=P\) if and only if \(r_{x}^{2} + r_{y}^{2}+ r_{z}^{2} =1\).
+  Since the identity and the Pauli matrices are self-adjoint, \(P = P^{\dagger}\) if and only if the scalars \(r_{0}, r_{x}, r_{y}, r_{z}\) are real.
+  Since the trace is linear and Pauli matrices are traceless, we have \(1 = \tr(P) = r_{0}\) is equivalent to \(r_{0} = 1\).
+
+  Let \(\lambda_{1} \geq \lambda_{2}\) be the eigenvalues of \(P\).
+  From \(1=\tr(P) = \lambda_{1}+ \lambda_{2}\), we conclude that \(\lambda_{1}> 0\).
+  Thus, \(\lambda_{2} \geq 0 \) is equivalent to \(\det(2P) = 4\lambda_{1}\lambda_{2} \geq 0\).
+  We compute
+  \begin{equation*}
+    \det (2 P)
+    =\det
+    \begin{pmatrix}
+      1 + r_{z} & r_{x} - i r_{y} \\
+      r_{x} + i r_{y} & 1- r_{z}
+    \end{pmatrix}
+    = (1+r_{z})(1- r_{z}) - (r_{x} -i r_{y})(r_{x} + i r_{y})
+    = 1 -r_{z}^{2} - r_{x}^{2} - r_{y}^{2}.
+  \end{equation*}
+  In other words, \(P\) is positive semidefinite if and only if \(r_{x}^{2} + r_{y}^{2} + r_{z}^{2} \leq 1\).
+  Finally, note that \(P\) having rank \(1\) is equivalent to \(\det(P) = 0\) which holds if and only if \(r_{x}^{2} + r_{y}^{2} + r_{z}^{2} = 1\).
 \end{proof}
 
-Therefore, we can model the states of \( \mathbb{C}^{2}\) as unit vectors of \( \mathbb{R}^{3}\).
+We can model the pure states of \( \mathbb{C}^{2}\) as unit vectors of \( \mathbb{R}^{3}\).
 
 \begin{definition}\label{def:bloch-sphere}
   We call  \(S^{2}=\{(r_{x}, r_{y}, r_{z})^{T} \in \mathbb{R}^{3} \mid r_{x}^{2}+ r_{y}^{2}+ r_{z}^{2}=1\}\) the \emph{Bloch sphere}.
 \end{definition}
 
-The following corollary is a reformulation of Lemma~\ref{lem:characterising-the-qubit}
+The following corollary is a reformulation of Theorem~\ref{thm:characterising-the-qubit}
 
 \begin{corollary}\label{cor:Bloch-sphere-pure-state}
-  There is a bijection between the Bloch sphere and the  states of \( \mathbb{C}^{2}\) given by
+  There is a bijection between the Bloch sphere and the pure states of \( \mathbb{C}^{2}\):
   \begin{equation}
     S^{2} \mapsto\left\{ p \in \Mat_{2}( \mathbb{C}) \;\middle\vert\;
       \begin{gathered}
@@ -2330,6 +2398,17 @@ The figure below shows the Bloch sphere with \(\ket{0}\) and \(\ket{1}\) as nort
   \inputtikz{bloch-sphere}
 \end{equation*}
 
+\begin{remark}\label{rmk:Bloch-ball}
+  If we include genuinely mixed states of \( \mathbb{C}^2 \) into the picture, we obtain the \emph{Bloch ball} \( D^3 \).
+  Here, the coordinate \( (0, 0, 0)^{T} \in \mathbb{R}^3 \) corresponds to the maximally mixed state
+  \begin{equation*}
+    \frac{1}{2}
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & 1
+  \end{pmatrix}.
+\end{equation*}
+\end{remark}
 
 \subsection{Compound systems}\label{sec:compound-systems}
 Having established a single qubit, we now want to discuss the mathematical foundations for multi-qubit systems.
@@ -2350,7 +2429,7 @@ Spelling out the details of this construction leads to the following definition.
 
 \begin{definition}\label{def:bilinear-map}
   Let \(V,W,X\) be three vector spaces.
-  A map \(b \from V\times W\to X\) is called \emph{bilinear} if for all \(\lambda, \mu \in \mathbb{C}\), \(v,v' \in V\), and \(w,w \in W\) we have
+  A map \(b \from V\times W\to X\) is called \emph{bilinear} if for all \(\lambda, \mu \in \mathbb{C}\), \(v,v' \in V\), and \(w, w' \in W\) we have
   \begin{subequations}
     \begin{gather}
       b(v+v', w+w') = b(v, w) + b(v, w') + b(v', w) + b(v', w'), \\
@@ -2421,7 +2500,7 @@ Alternatively, \(b\from V\times W \to X\) is a bilinear map if and only if the a
 
 \begin{remark}\label{rmk:bilinear-uniquely-def-by-values-on-basis}
   Let \( V \) and \( W \) be vector spaces with bases \( \mathcal{B} \) and \( \mathcal{C} \), respectively, and let \( X \) be a vector space.
-  A direct computation shows that any bilinear map \(f\from V\times W \to X\) is uniquely determined by its value on \(\mathcal{B}\times \mathcal{C}\).
+  A direct computation shows that any bilinear map \(f\from V\times W \to X\) is uniquely determined by its values on \(\mathcal{B}\times \mathcal{C}\).
   Conversely, any function \( g \from \mathcal{B} \times \mathcal{C} \to X \) extends uniquely to a bilinear map
   \begin{equation*}
     \widehat{g} \from V \times W \to X, \quad \big(\sum_{b\in \mathcal{B}}\lambda_{b} b, \sum_{c \in \mathcal{C}} \mu_{c}c\big) \mapsto \sum_{b\in \mathcal{B}} \sum_{c\in \mathcal{C}} \lambda_{b} \mu_{c}\; g(b,c).
@@ -2433,7 +2512,7 @@ Alternatively, \(b\from V\times W \to X\) is a bilinear map if and only if the a
     \widehat{g} &\longmapsfrom g.
   \end{align*}
 \end{remark}
-If functions \(\mathcal{B}\times \mathcal{C}\to X\) determine bilinear maps and the tensor product of \(V\) and \(W\) is ought to have a basis behaving like \(\mathcal{B}\times \mathcal{C}\), it needs to turn bilinear maps into linear ones.
+If functions \(\mathcal{B}\times \mathcal{C}\to X\) determine bilinear maps and the tensor product of \(V\) and \(W\) is intended to have a basis behaving like \(\mathcal{B}\times \mathcal{C}\), it needs to turn bilinear maps into linear ones.
 
 \begin{definition}\label{def:tensor-product}
   The \emph{tensor product} of two vector spaces \(V, W\) is a pair \((V\otimes W, \blank \otimes \bblank)\) comprising a vector space \(V\otimes W\) and a bilinear map
@@ -2527,11 +2606,51 @@ We have already seen such a construction  in the context of free vector spaces d
   \end{thmlist}
 \end{proof}
 
+
 Due to the above theorem, tensor products are unique up to unique isomorphism.
 \begin{notation}
   Consider two vector spaces \(V\), \(W\).
   From now onwards we will, by a slight abuse of notation, speak of \emph{the} tensor product of \(V\) and \(W\) and denote it by \((V\otimes W, \blank \otimes \bblank)\).
 \end{notation}
+
+By combining Remark~\ref{rmk:realisation-of-tensor-products} with Theorem~\ref{thm:tensor-product-existence-and-uniqueness}, we can characterise bases and the dimension of a tensor product \( V \otimes W \) in terms of the two components \(V\) and \(W\).
+
+\begin{corollary}\label{cor:immediate-consequences-of-existence-of-tp}
+  Let \(\mathcal{B}= (b_{1}, \dots , b_{n})\) and \( \mathcal{C} = (c_{1}, \dots , c_{m})\) be bases of the two vector spaces \(V\) and \(W\), respectively.
+  Then, \((b_{i} \otimes c_{j})_{(i,j)\in [n]\times [m]}\) is a basis of \(V\otimes W\).
+  In particular,
+  \begin{equation}
+    \dim(V\otimes W) = \dim V \cdot \dim W.
+  \end{equation}
+
+\end{corollary}
+
+\begin{example}\label{ex:tensor-products-merging-of-dicts}
+  Suppose \( V \) and \( W \) are vector spaces with bases \( \mathcal{B} \) and \( \mathcal{C} \), respectively.
+  From a programming perspective, we can think of a vector \( v \in V \) as being represented by a dictionary \( v = \texttt{\{b: l\_b for b in B\}} \) with keys from the set \( \mathcal{B} \) and values in \( \mathbb{C} \).
+  Similarly, let \( w = \texttt{\{c: r\_c for c in C\}} \).
+  Then, the tensor product \( v \otimes w \) can be represented as:
+  \begin{verbatim}
+  v_otimes_w = {(b, c): l_b * r_c for (b, c) in B × C}
+  \end{verbatim}
+\end{example}
+
+The parallels between tensor products and matrices suggested by the dimension formula of Corollary~\ref{cor:immediate-consequences-of-existence-of-tp} are not coincidental.
+Indeed, the ``outer product'' map
+\begin{equation*}
+  \phi \from \mathbb{C}^m \times \mathbb{C}^n \to \Mat_{m,n}(\mathbb{C}), \qquad
+  \begin{pmatrix} r_1 \\ \vdots \\ r_m \end{pmatrix} \times
+  \begin{pmatrix} c_1 \\ \vdots \\ c_n \end{pmatrix} =
+  \begin{pmatrix}
+    r_1 c_1 & r_1 c_2 & \dots & r_1 c_n \\
+    \vdots & \vdots & \ddots & \vdots \\
+    r_m c_1 & r_m c_2 & \dots & r_m c_n
+  \end{pmatrix}
+\end{equation*}
+is bilinear  and \( (\Mat_{m,n}(\mathbb{C}), \phi) \) is a tensor product of \( \mathbb{C}^m \) and \( \mathbb{C}^n \).
+The image of \(\phi\) contains only rank \(1\) matrices.
+So most matrices are not of this elementary form but can be assembled from these pieces.
+We now develop an analogous notion for (abstract) tensor products.
 
 \begin{definition}\label{def:elementary-tensors}
   Let \((V \otimes W, \blank \otimes \bblank)\) be the tensor product of \(V \otimes W\).
@@ -2565,8 +2684,8 @@ However, every tensor in \( V \otimes W \) can be expressed as a finite sum of e
   When defining a map \( f \) in this way, one must verify that \( f \) is well-defined by ensuring that it respects the bilinearity relations of Equations~\eqref{eq:tensor-additive} and~\eqref{eq:tensor-scalar-mult}.
 \end{remark}
 
-
 Let us now examine the tensor product \( \mathbb{C}^2 \otimes \mathbb{C}^2 \).
+
 \begin{example}\label{ex:c2-otimes-c2}
   Given vectors \(\ket{v}, \ket{w} \in \mathbb{C}^{2}\), we set \(\ket{vw} \eqdef \ket{v} \otimes \ket{w}\).
   By Theorem~\ref{thm:tensor-product-existence-and-uniqueness} and Remark~\ref{rmk:realisation-of-tensor-products}, the tensor product \( \mathbb{C}^2 \otimes \mathbb{C}^2 \) is four-dimensional and has a basis \( (\ket{00}, \ket{01}, \ket{10}, \ket{11}) \).
@@ -2592,48 +2711,8 @@ We want to iterate this procedure in order to describe multi-qubit systems.
   where \( i_1, i_2, \ldots, i_n \in \{1, 2, \ldots, k\} \), forms a basis for \( V^{\otimes n} \).
 \end{remark}
 
-A pragmatic view on iterated tensors comes from computer science.
-\begin{remark}\label{rem:tensors-as-lists-of-lists-of-lists}
-  From a data structures perspective, we may visualise any vector \(v\in \mathbb{C}^{n}\) as a list \(\mathtt{ v = [s_{1}, \dots , s_{n}]}\) of \(n\) (complex) \emph{numbers}.
-  Obviously, lists can contain all sorts of information and in particular vectors themselves.
-  Equivalently, this gives us a list of lists of numbers such as
-  \begin{equation*}
-    \mathtt{t} = \mathtt{[v_{1}, \dots , v_{m}]}
-    = \mathtt{[[s_{11}, \dots , s_{n1}], \dots , [s_{m1}, \dots , s_{mn}]]}.
-  \end{equation*}
-  Given any \(k\in \mathbb{N}\), let us write \((b_{1}, \dots , b_{n})\) for the standard basis of \( \mathbb{C}^{k}\).
-  Then \(\mathtt{t}\) can be used to represent the tensor \(\sum_{i=1}^{m}\sum_{j=1}^{n} s_{ij}e_{i}\otimes e_{j} \in \mathbb{C}^{m}\otimes \mathbb{C}^{n}\).
 
-  By iterating this procedure we can even incorporate higher tensor products.
-  A list of lists of lists of numbers
-  \begin{align*}
-    \mathtt{
-      x} & = \mathtt{[t_{1}, \dots , t_{p}]}
-          =  \mathtt{[[v_{11}, \dots , v_{1m}], \dots , [v_{p1}, \dots , v_{pm}]]} \\
-         & =
-           \begin{aligned}[t]
-              \mathtt{[}
-             & \mathtt{[[s_{111}, \dots , s_{11n}], \dots , [s_{1m1}, \dots , s_{1mn}]],} \\
-             & \mathtt{[[s_{211}, \dots , s_{21n}], \dots , [s_21m1], \dots , s_{2mn}]],} \\
-             & \mathtt{\dots} \\
-             & \mathtt{[[s_{p11}, \dots , s_{p1n}], \dots , [s_{pm1}, \dots , s_{pmn}]],}
-               \mathtt{]}
-           \end{aligned}
-  \end{align*}
-  gives rise to the element \(x = \sum_{i=1}^{p}\sum_{j=1}^{m}\sum_{k=1}^{n} s_{ijk} e_{i}\otimes e_{j} \otimes e_{k} \in \mathbb{C}^{p} \otimes \mathbb{C}^{m} \otimes \mathbb{C}^{n}\).
-
-  In this picture, the only thing changing between vectors, tensors, and iterated tensors  is the type of input of the list: numbers, vector, and tensor, respectively.
-
-  Clearly, one could go beyond the \(3\)-fold tensors shown above and organise  \(r\)-fold tensor products, for \(r\in \mathbb{N}\), as lists of lists of \(\dots\)  of lists of numbers.
-
-  While this recursive definition is more concrete than the universal property we used in the definition of tensor products, it has one significant drawback: the bookkeeping grows exponentially with each tensor power.
-  For our quantum algorithms, we will often look at hundreds of qubits and therefore at spaces like \(( \mathbb{C}^{2})^{\otimes 100}\).
-  Even a single element \(w \in ( \mathbb{C}^{2})^{\otimes 100} \) would have a coefficient list with \(2^{100} \simeq 10^{30}\) entries.
-  This necessitates our abstract point of view.
-\end{remark}
-
-
-The ``memory'' of a quantum computer will be modelled by the states of the \( n \)-qubit system \(( \mathbb{C}^{2})^{\otimes 2}\).
+The ``memory'' of a quantum computer will be modelled by the states of the \( n \)-qubit system \(( \mathbb{C}^{2})^{\otimes n}\).
 We will use a notation similar to ordinary bit strings.
 
 \begin{example}\label{ex:n-qubits}
@@ -2644,6 +2723,25 @@ We will use a notation similar to ordinary bit strings.
   Then, the \(2^{n}\)-dimensional space \( (\mathbb{C}^{2})^{\otimes n}\)  has a basis \(\mathcal{B}= (\ket{s_{1} s_{2} \dots s_{n}})_{s\in\{0,1\}^{n}}\).
 \end{example}
 
+
+A pragmatic view on iterated tensors comes from computer science.
+
+\begin{remark}\label{rem:tensors-as-lists-of-lists-of-lists}
+  From a data structures perspective, we may identify a vector in \( (\mathbb{C}^2)^{\otimes n} \) as a dictionary with keys given by all possible combinations of length \( n \) of \( 0 \)s and \( 1 \)s---equating to the computational basis of \((\mathbb{C}^2)^{\otimes n}\) discussed in Example~\ref{ex:n-qubits}.
+  In Python-like pseudocode a single vector would be:
+  \begin{verbatim}
+    tensor_vector = {
+      (b1, b2, ..., bn): coefficient
+      for b1, b2, ..., bn in product([0, 1], repeat=n)
+    }
+\end{verbatim}
+
+  While this data structure-driven definition of iterated tensors is more concrete than the universal property we used, it has one significant drawback: the bookkeeping grows exponentially with each tensor power.
+  For our quantum algorithms, we will often consider hundreds of qubits and therefore spaces like \( (\mathbb{C}^2)^{\otimes 100} \).
+  Even a single element \( w \in (\mathbb{C}^2)^{\otimes 100} \) would require \( 2^{100} \approx 10^{30} \) key-value pairs.
+  Besides computational challenges, the complexity of such spaces grows too quickly to understand what is going on without a certain level of abstraction.
+\end{remark}
+
 With tensor products, we can consider multiple qubits, allowing us to complete the infographic at the beginning of the section.
 \begin{equation*}
   \inputtikz{motivation-tensor-product-complete}
@@ -2652,7 +2750,7 @@ With tensor products, we can consider multiple qubits, allowing us to complete t
 
 \begin{remark}\label{rmk:tensor-product-string-diags}
   The tensor product is a new operation between vector spaces.
-  Since we use in string diagrams the horizontal axis for composition, we will use the vertical axis for tensoring
+  Since we use the horizontal axis for composition in string diagrams, we will use the vertical axis for tensoring
   \begin{equation*}
     \inputtikz{tensor-product-of-vector-spaces}
   \end{equation*}
@@ -2711,13 +2809,17 @@ From now on, we endow \( V \otimes W \) with the inner product defined above.
 
 
 \begin{definition}\label{def:entangled-state}
-  A pure state \( x \in V \otimes W \) is a \emph{product state} or \emph{separable} if \(x = v\otimes w\) for \(v\in V\) and \(w \in W\).
+  A pure state \( [x] \in V \otimes W \) is a \emph{product state} or \emph{separable} if \(x = v\otimes w\) for \(v\in V\) and \(w \in W\).
   Otherwise, we call \(x\) \emph{entangled}.
 \end{definition}
 
 \begin{remark}\label{rmk:comparison-superposition-vs-entanglement}
   Let \(V\), \(W\) be Hilbert spaces with bases \(\mathcal{B}\) and \(\mathcal{C}\).
   If  \(x\in V\otimes W \) is an entangled state, it is in particular in a superposition with respect to the basis \(\mathcal{B}\times \mathcal{C}\) of \(V\otimes W\).
+
+  The converse does not hold.
+  Consider \( \mathbb{C}^{2}\) endowed with its computational basis.
+  The state \([\ket{v}]\) of \(\ket{v}=\tfrac{1}{\sqrt{2}} \ket{00} + \ket{10} \in (\mathbb{C}^{2})^{\otimes 2}\) is in a superposition but \(\ket{v} = \ket{+} \otimes \ket{0}\). Therefore \([\ket{v}]\) is not entangled.
 \end{remark}
 
 
@@ -2794,7 +2896,7 @@ A natural question at this stage is whether we need to be careful with respect t
   \end{equation}
 \end{lemma}
 \begin{proof}
-  The claim follows from Proposition~\ref{prop:tensor-product-kronecker-product} and Lemma~\ref{lem:comp-vs-tensoring}. % TODO these might become propositions...
+  The claim follows from Proposition~\ref{prop:tensor-product-kronecker-product} and Lemma~\ref{lem:comp-vs-tensoring}.
 \end{proof}
 
 String diagrams could either be read vertically first or horizontally first.
@@ -2952,7 +3054,7 @@ By combining the previous two lemmas, we can describe Kronecker products of dens
 
 To simplify the handling of iterated Kronecker products, we introduce a more abstract framework: the tensor product of linear maps.
 
-\begin{lemma}\label{lem:existence}
+\begin{lemma}\label{lem:existence-tp-lin-maps}
   Let \( f \from V \to W \) and \( g \from X \to Y \) be linear maps.
   There exists a unique linear map \( f \otimes g \from V \otimes X \to W \otimes Y \) such that
   \begin{equation}
@@ -2961,9 +3063,9 @@ To simplify the handling of iterated Kronecker products, we introduce a more abs
   for all \( v \in V \) and \( x \in X \).
 \end{lemma}
 \begin{proof}
-  The map \(V\times X \to W\otimes Y\), \((v, w) \mapsto f(v) \otimes g(w)\) is bilinear implying that there is a unique linear map
+  The map \(V\times X \to W\otimes Y\), \((v, x) \mapsto f(v) \otimes g(x)\) is bilinear implying that there is a unique linear map
   \begin{equation*}
-    f\otimes g \from V\otimes W \to X\otimes Y, \qquad v\otimes w \mapsto f(v) \otimes g(w). \qedhere
+    f\otimes g \from V\otimes X \to W\otimes Y, \qquad v\otimes x \mapsto f(v) \otimes g(x). \qedhere
   \end{equation*}
 \end{proof}
 
@@ -2994,7 +3096,7 @@ A natural question is how to translate between the tensor product of linear maps
 \begin{proof}
   Given \(1\leq i \leq n\) and \(1\leq j \leq q\), we compute
   \begin{align*}
-    \!\!\!\!\!(f\otimes g)&\circ \can_{\mathcal{B}_{V\otimes W}} (e_{i}\otimes e_{j})
+    \!\!\!\!\!(f\otimes g)&\circ \can_{\mathcal{B}_{V\otimes X}} (e_{i}\otimes e_{j})
     = (f\otimes g) v_{i}\otimes x_{j}
     = f(v_{i}) \otimes g(x_{j})\\
     & = \can_{\mathcal{C}_{W}}(Fe_{i}) \otimes \can_{\mathcal{C}_{Y}}(Ge_{j})
@@ -3135,7 +3237,7 @@ Note that passing from a vector space \(V\) to its dual space \(\rd*{V}\) revers
 \begin{example}\label{ex:bell-state}
   Consider the space \( \mathbb{C}^{2}\) with the computational basis \((\ket{0}, \ket{1})\).
   The dual basis for \(\rd*{V}\) is \((\bra{0}, \bra{1})\)
-  and the coevaluation map yield the normalised vector
+  and the coevaluation map yields the normalised vector
   \begin{equation*}
     \widetilde{\coev}_{ \mathbb{C}^{2}}(\tfrac{1}{\sqrt{2}}) = \tfrac{1}{\sqrt2}(\ket{0}\bra{0} +\ket{1}\bra{1})
   \end{equation*}
@@ -3225,9 +3327,9 @@ Like usual traces, partial traces can be computed using inner products.
   \begin{subequations}
     \begin{align}
       \braket{w}{\mathrm{Tr}_{W,W}^{V}(f) x}_{W}
-      = \sum_{i=1}^{n} \braket{w \otimes b_{i}}{f(x\otimes b_{i})}_{V\otimes W},\\
+      = \sum_{i=1}^{n} \braket{w \otimes b_{i}}{f(x\otimes b_{i})}_{W\otimes V},\\
       \braket{\mathrm{Tr}_{W,W}^{V}(f)w}{x}_{W}
-      = \sum_{i=1}^{n} \braket{f(w \otimes b_{i})}{x\otimes b_{i}}_{V\otimes W}
+      = \sum_{i=1}^{n} \braket{f(w \otimes b_{i})}{x\otimes b_{i}}_{W\otimes V}
     \end{align}
   \end{subequations}
 \end{lemma}
@@ -3242,14 +3344,14 @@ Like usual traces, partial traces can be computed using inner products.
     & = \sum_{i=1}^{n} \braket*{w}{(\id_{W} \otimes \ev_{V}) (g(x) \otimes h(b_{i}) \otimes \beta_{i})}_{W} \\
     & = \sum_{i=1}^{n} \beta_{i}(h(b_{i})) \braket{w}{g(x)}_{W}\\
     & = \sum_{i=1}^{n} \braket{b_{i}}{h(b_{i})}_{V} \braket{w}{g(x)}_{W} \\
-    & = \sum_{i=1}^{n} \braket{w \otimes b_{i}}{f(x \otimes b_{i})}_{V\otimes W}.
+    & = \sum_{i=1}^{n} \braket{w \otimes b_{i}}{f(x \otimes b_{i})}_{W\otimes V}.
   \end{align*}
   We conclude the proof by noting
   \begin{align*}
     \braket{\mathrm{Tr}_{W,W}^{V}(f)w}{x}_{W}
     & = \overline{\braket{x}{\mathrm{Tr}_{W,W}^{V}(f)w}_{W}}
-      = \sum_{i=1}^{n} \overline{\braket{x \otimes b_{i}}{f(w \otimes b_{i})}_{V\otimes W}} \\
-    & = \sum_{i=1}^{n} \braket{f(w \otimes b_{i})}{x \otimes b_{i}}_{V\otimes W}. \qedhere
+      = \sum_{i=1}^{n} \overline{\braket{x \otimes b_{i}}{f(w \otimes b_{i})}_{W\otimes V}} \\
+    & = \sum_{i=1}^{n} \braket{f(w \otimes b_{i})}{x \otimes b_{i}}_{W\otimes V}. \qedhere
   \end{align*}
 \end{proof}
 
@@ -3533,7 +3635,7 @@ Note that in particular, \(\sigma_{x} = X(\tfrac{1}{2})\), \(\sigma_{y} = Y(\tfr
 \end{proof}
 
 To visualise the action of the \( Z \), \( X \), and \( Y \) gates on the Bloch sphere,
-we introduce the following rotations around the \( z \), \( x \), and \( y \)-axes
+we introduce the linear maps
 \begin{subequations}
   \begin{align}
     z(\alpha) \from \mathbb{R}^3 &\to \mathbb{R}^3,
@@ -3567,6 +3669,13 @@ we introduce the following rotations around the \( z \), \( x \), and \( y \)-ax
        \begin{pmatrix} x \\ y \\ z \end{pmatrix}.
   \end{align}
 \end{subequations}
+
+These correspond to the rotations depicted below.
+
+\begin{equation*}
+  \inputtikz{bloch-sphere-rotation}
+\end{equation*}
+
 
 \begin{proposition}\label{prop:xyz-gates-are-rotations}
   Given a state \([v]\) of \( \mathbb{C}^{2}\), we write \(r_{[v]} \in \mathbb{R}^{3}\) for the corresponding point in the Bloch sphere.
