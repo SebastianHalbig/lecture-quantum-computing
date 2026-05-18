@@ -14,6 +14,7 @@ pkgOptions={
 ]{style}
 
 \usepackage{tcolorbox}
+\usetikzlibrary{quantikz2}
 
 \addbibresource{local-bib.bib}
 \usetikzlibrary{babel} % TODO: WIESO?!?
@@ -32,6 +33,9 @@ pkgOptions={
 \newcommand*{\BQPclass}{\ensuremath{\mathsf{BQP}}}
 \newcommand*{\BPPclass}{\ensuremath{\mathsf{BPP}}}
 \newcommand*{\Dtime}{\ensuremath{\mathbf{DTIME}}}
+\DeclareMathOperator{\SWAP}{SWAP}
+\DeclareMathOperator{\CNOT}{CNOT}
+\newcommand*{\PauliGroup}{\ensuremath{\mathcal{G}}}
 
 
 \newcommand{\underConstruction}{%
@@ -3553,6 +3557,33 @@ We now want to translate the action of unitaries on states to an operation on mi
   Finally, we note  \(\tr(f \circ m \circ f^{\dagger}) = \tr(f^{\dagger} \circ f\circ m ) = \tr(m) = 1\).
 \end{proof}
 
+The quantum version of an ``if-then-else'' logic relies on combining unitaries with projections.
+
+\begin{lemma}\label{lem:unitaries-and-projections}
+  Let \(e_{1}, \dots , e_{n} \in \End_{ \mathbb{C}}(V)\) be orthogonal projections satisfying \(e_{k}e_{l}=0\) if \(k\neq l\) and \(\sum_{k=1}^{n}e_{k} = \id_{V}\), and let \(u_{1}, \dots , u_{n} \in \End_{ \mathbb{C}}(W)\) be unitaries.
+  Then
+  \begin{equation*}
+    e_{1}\otimes u_{1} + \dots + e_{n} \otimes u_{n} \in \End_{ \mathbb{C}}(V \otimes W)
+  \end{equation*}
+  is unitary.
+\end{lemma}
+\begin{proof}
+  We set \(U = e_{1}\otimes u_{1} + \dots + e_{n} \otimes u_{n}\) and compute
+  \begin{equation*}
+    U^{\dagger} U
+    = \sum_{k,l=1}^{n} e_{k}^{\dagger}e_{l} \otimes u_{k}^{\dagger} u_{l}
+    = \sum_{k}^{n} e_{k}e_{k} \otimes u_{k}^{\dagger} u_{k}
+    = \sum_{k}^{n} e_{k}e_{k} \otimes \id_{W}
+    = \id_{V} \otimes \id_{W} = \id_{V\otimes W}.
+  \end{equation*}
+  The identity \(UU^{\dagger} = \id_{V\otimes W}\) is obtained analogously.
+\end{proof}
+
+\begin{remark}\label{rmk:unitaries-and-projections}
+  The assumptions of Lemma~\ref{lem:unitaries-and-projections} are not entirely independent. Lemma~\ref{lem:part-of-1-means-orth} shows that if \( e_1, \dots, e_n \in \End_{\mathbb{C}}(V) \) are (orthogonal) projections such that \( e_1 + \dots + e_n = \id_V \), then \( e_k e_l = 0 \) for \( k \neq l \) already holds.
+\end{remark}
+
+
 \subsubsection{Quantum Gates on the Bloch Sphere}\label{sec:quantum-gates-on-the-bloch-sphere}
 To develop intuition for how unitaries affect quantum states, we focus on a single qubit.
 
@@ -4193,7 +4224,7 @@ Given \(A, B \in \mathfrak{su}(n)\) we have
 The pair \( (\mathfrak{su}(n), [ \blank , \bblank]) \) is an example of what is called  a \emph{Lie algebra}.
 
 \begin{definition}\label{def:generating-subset}
-  A set \( \mathcal{G} = \{ u_1, \dots, u_k \} \subset \mathfrak{su}(n) \) is a \emph{generating subset} if for any subspace \(V \subset \mathfrak{su}(n)\)  such that \(\mathcal{G} \subset V\) and \(AB- BA \in V\) for all \(A,B\in V\) we have \(V = \mathfrak{su(n)}\).
+  A set \( \PauliGroup = \{ u_1, \dots, u_k \} \subset \mathfrak{su}(n) \) is a \emph{generating subset} if for any subspace \(V \subset \mathfrak{su}(n)\)  such that \(\PauliGroup \subset V\) and \(AB- BA \in V\) for all \(A,B\in V\) we have \(V = \mathfrak{su(n)}\).
 \end{definition}
 
 In analogy to the real or complex case, we may be tempted, to construct an exponential map for matrices.
@@ -4511,6 +4542,227 @@ The big advantage about mixed states in the context of  measurements is that we 
 \begin{equation*}
   \inputtikz{traces-probability}
 \end{equation*}
+
+\subsection{Quantum circuits}\label{sec:quantum-circuits}
+The quantum circuit model formalises quantum computation as a 3 to 4-step process.
+\begin{thmlist}
+  \item Prepare the system by setting up \(n\) qubits in a certain state.
+  \item Apply a \emph{quantum circuit} to the system.
+  By quantum circuit we mean a composition of tensor products of certain unitary transformations.
+  \item Perform a measurement (possibly on a subsystem).
+  \item Post-process the outcome using classical computation.
+\end{thmlist}
+
+Our quantum circuits are constructed by sequentially applying unitary maps from a chosen set of ``elementary'' operations.
+\begin{definition}\label{def:gate-set}
+  A \emph{gate set} is a set \(G\)  of unitary transformations.
+  An element \(g \in G\) with \(g \from (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes n}\) is called a \emph{gate (of arity \(n\))}.
+
+  A \emph{quantum circuit} is a unitary map \(f \in U(2^{m})\) such that
+  \begin{equation}
+    f= (g_{11}\otimes \dots \otimes g_{1k_{1}})\circ \dots \circ (g_{m 1} \otimes \dots \otimes  g_{mk_{m}}), \qquad g_{ij} \in G \cup \{ \id_{ \mathbb{C}^{2}}\}.
+  \end{equation}
+\end{definition}
+
+Gate sets are often dictated by the hardware.
+For example, in topological quantum computing, gates arise from braidings of anyons.
+
+\begin{example}\label{ex:popular-quantum-gates}
+  Some of the most common gates and their effects are listed below.
+
+  \begin{thmlist}
+    \item The \emph{Hadamard gate}:
+    \begin{equation*}
+      H =\tfrac{1}{\sqrt{2}}
+      \begin{pmatrix}
+        1 & 1 \\
+        1 & -1
+      \end{pmatrix} =
+      \inputtikz{Hadamard} %TODO raise
+    \end{equation*}
+    The Hadamard gate allows us to create superpositions.
+    It transforms the \(Z\)-basis to the \(X\)-basis and vice versa.
+    \item The \emph{X-gate:}
+    \begin{equation*}
+      X =
+      \begin{pmatrix}
+        0 & 1 \\
+        1 & 0
+      \end{pmatrix}
+      =\inputtikz{X-gate}
+    \end{equation*}
+    The \( X \)-gate acts as a bit-flip, mapping \( \ket{0} \) to \( \ket{1} \) and \(\ket{1}\) to \(\ket{0}\).
+    \item The \emph{Z-gate}:
+    \begin{equation*}
+      Z =
+      \begin{pmatrix}
+        1 & 0 \\ 0 & -1
+      \end{pmatrix}
+      =\inputtikz{Z-gate}
+    \end{equation*}
+    The \( Z \)-gate introduces a phase flip.
+    It sends \( \ket{1} \) to \( -\ket{1} \) while leaving \( \ket{0} \) unchanged.
+    \item The \emph{CNOT gate}:
+    \begin{equation*}
+      \CNOT =
+      \begin{pmatrix}
+        1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0
+      \end{pmatrix}
+      =\inputtikz{CNOT}
+    \end{equation*}
+    CNOT, short for "controlled not," operates conditionally on the second qubit (the target) depending on the state of the first qubit (the control qubit).
+    If the control qubit is \( \ket{1} \), the target qubit is flipped; otherwise, the target qubit remains unchanged.
+
+    \item The \emph{SWAP gate}:
+    \begin{equation*}
+      \SWAP = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix} = \inputtikz{SWAP}
+    \end{equation*}
+    The SWAP gate exchanges the states of two qubits.
+  \end{thmlist}
+\end{example}
+
+The above gates interact nicely with our Pauli matrices.
+
+\begin{definition}\label{def:n-Pauli-group}
+  Let \(n\in \mathbb{N}\) be a positive integer.
+  The \emph{\(n\)-Pauli group} is the set of matrices
+  \begin{equation}
+    \PauliGroup_{n} \eqdef\big\{ (\sigma_{i1}\otimes \dots \otimes \sigma_{in}) \dots  (\sigma_{m1}\otimes \dots \otimes \sigma_{mn}) \mid \sigma_{ij} \in\{ I_{2}, \sigma_{x}, \sigma_{y}, \sigma_{z}\}\big\}.
+  \end{equation}
+\end{definition}
+
+The term \emph{group} indicates that the \(n\)-Pauli group \(\PauliGroup_{n}\) admits additional algebraic properties and indeed, it contains the identity matrix, is closed under matrix multiplication (given \(g, h \in G_{n}\), we have \(gh \in \PauliGroup_{n}\)), and for any \(g\in \PauliGroup_{n}\), its inverse \(g^{-1}\) is also contained in the \(n\)-Pauli group \(\PauliGroup_{n}\).
+
+\begin{lemma}\label{lem:Pauli-group-elements}
+  Any element \(g \in \PauliGroup_{n}\) of the \emph{\(n\)-Pauli group} is of the form
+  \begin{equation}
+    g = \sigma_{0}(\sigma_{1}\otimes \dots \otimes \sigma_{n}),
+  \end{equation}
+  where \(\sigma_{0}\) is a complex number \(\sigma_{0}\in\{1, i, -1, -i\}\) and  \(\sigma_{k} \in\{ I_{2}, \sigma_{x}, \sigma_{y}, \sigma_{z}\}\) for all \(1\leq k \leq n\).
+\end{lemma}
+\begin{proof}
+  The claim follows immediately from the multiplication table of the Pauli matrices stated in Example~\ref{ex:multiplication-table}.
+\end{proof}
+
+Given a positive integer \(n\in \mathbb{N}\) and a matrix \(A\in \Mat_{2^{n}}( \mathbb{C})\), we write
+\begin{equation*}
+  A\PauliGroup_{n}A^{\dagger} \eqdef \{ A\sigma A^{\dagger} \mid \sigma \in \PauliGroup_{n}\}
+\end{equation*}
+
+\begin{lemma}\label{lem:clifford-gates}
+  The gates of Example~\ref{ex:popular-quantum-gates} satisfy
+  \begin{gather*}
+    H\PauliGroup_{1} H^{\dagger}= \PauliGroup_{1}, \qquad
+    X \PauliGroup_{1} X^{\dagger}= \PauliGroup_{1},\qquad
+    Z \PauliGroup_{1}Z^{\dagger} = \PauliGroup_{1}, \\
+    \SWAP \PauliGroup_{2} \SWAP^{\dagger} = \PauliGroup_{2} \qquad
+    \CNOT \PauliGroup_{2} \CNOT^{\dagger} = \PauliGroup_{2}.
+  \end{gather*}
+\end{lemma}
+\begin{proof}
+  It suffices to verify the claim for
+  \(\sigma_{x}, \sigma_{z}, I_{2}\otimes \sigma_{x}, I_{2}\otimes \sigma_{z}, \sigma_{x}\otimes I_{2}, \sigma_{z}\otimes I_{2}\) and we proceed case by case.
+  \begin{thmlist}
+    \item The Hadamard gate \( H \) conjugates the Pauli matrices as follows
+    \begin{equation*}
+      H \sigma_x H^\dagger = \sigma_z, \quad H \sigma_z H^\dagger = \sigma_x.
+    \end{equation*}
+    \item The \( X \)-gate acts on the Pauli matrices via
+    \begin{equation*}
+      X \sigma_x X^\dagger = \sigma_x, \quad X \sigma_z X^\dagger = -\sigma_z.
+    \end{equation*}
+    \item The \( Z \)-gate conjugates the Pauli matrices according to
+    \begin{equation*}
+      Z \sigma_x Z^\dagger = -\sigma_x, \quad Z \sigma_z Z^\dagger = \sigma_z.
+    \end{equation*}
+    \item The SWAP gate exchanges the qubits, so for any \( \sigma_i \otimes \sigma_j \), we have
+    \begin{equation*}
+      \SWAP (\sigma_i \otimes \sigma_j) \SWAP^\dagger = \sigma_j \otimes \sigma_i.
+    \end{equation*}
+    \item The CNOT gate acts on Pauli matrices on two qubits as follows
+    \begin{align*}
+      \CNOT (\sigma_x \otimes I_2) \CNOT^\dagger &= \sigma_x \otimes\sigma_{x},  \quad &\CNOT (I_2 \otimes \sigma_x) \CNOT^\dagger &= I_2 \otimes \sigma_x, \\
+      \CNOT (\sigma_z \otimes I_2) \CNOT^\dagger &= \sigma_z \otimes I_2, \quad  &\CNOT (I_2 \otimes \sigma_z) \CNOT^\dagger &= \sigma_z \otimes \sigma_z. \qedhere
+    \end{align*}
+  \end{thmlist}
+\end{proof}
+
+It might be tempting to assume that the above gates are simply elements of the Pauli group and the previous result is a mere observation that the \(n\)-Pauli groups are closed under multiplication and taking inverses.
+This is not the case.
+
+\begin{lemma}\label{lem:CNOT-is-not-in-Pauli-group}
+  The gate \(\CNOT\) is not contained in the 2-Pauli group.
+\end{lemma}
+
+\begin{proof}
+  By Lemma~\ref{lem:clifford-gates}, CNOT would need to be up to a scalar a Kronecker product of Pauli matrices.
+  However, \(\CNOT\) is not a Kronecker product of matrices.
+\end{proof}
+
+\begin{definition}\label{def:Clifford-gates}
+  A unitary map \(g \in U(2^{n})\) contained in some gate set \(G\) is a \emph{Clifford gate} if for any \(\sigma \in \PauliGroup_{n}\) we have
+  \begin{equation*}
+    g\sigma g^{\dagger} \in \PauliGroup_{n}.
+  \end{equation*}
+\end{definition}
+
+\begin{remark}\label{rmk:quantum-circuit-notation}
+  Quantum algorithms are frequently depicted using a variant of string diagrams called \emph{quantum circuit notation}.
+  This notation uses wires to represent qubits and boxes to represent gates, with certain conventions to conveniently express quantum operations.
+
+  It uses wires (strings) to represent individual qubits and boxes for gates.
+  A sample diagram is shown below
+  \begin{equation*}
+    \begin{tikzpicture}
+      \node[xscale=-1]{
+        \begin{quantikz}[]
+          & \ctrl{1} &          &   \gate{\reflectbox{S}} &  \\
+          & \targ{}  & \meter{} & \setwiretype{c}\wire[u][1]{c}
+        \end{quantikz}
+      };
+    \end{tikzpicture}
+  \end{equation*}
+  We read the diagram, according to our convention, from right to left.
+  First, we encounter a \(\CNOT\) gate:
+  \begin{equation*}
+    \begin{tikzpicture}
+      \node[xscale=-1]{
+        \begin{quantikz}[]
+          & \ctrl{1} & \\
+          & \targ{} &
+        \end{quantikz}
+      };
+    \end{tikzpicture}
+  \end{equation*}
+
+  Next, we measure the second qubit in the computational basis:
+  \begin{equation*}
+    \begin{tikzpicture}
+      \node[xscale=-1]{
+        \begin{quantikz}[]
+          &          &   \\
+          & \meter{} & \setwiretype{c}
+        \end{quantikz}
+      };
+    \end{tikzpicture}
+  \end{equation*}
+The outcome is interpreted as a classical bit: \(0\) if the measurement
+outcome was \(\ket{0}\) or \(1\) if \(\ket{1}\) was measured.
+The double wire represents this classical information.
+
+Lastly, the connection between this classical wire and the gate \(S\) means that we apply \(S\) only if the measurement outcome was \(1\):
+\begin{equation*}
+    \begin{tikzpicture}
+      \node[xscale=-1]{
+        \begin{quantikz}[]
+          &   \gate{\reflectbox{S}} &  \\
+          & \setwiretype{c}\wire[u][1]{c}
+        \end{quantikz}
+      };
+    \end{tikzpicture}
+  \end{equation*}
+
+\end{remark}
 
 \cleardoublepage
 \subsection{Exercises}\label{sec:basics-exercises}
@@ -4939,199 +5191,294 @@ Is \((d(b_{1}), d(b_{2}), d(b_{3}))\) a basis of \(\rd*{ \mathbb{C}^{3}}\)?
 
 \cleardoublepage
 \section{Quantum computation via the zx calculus}\label{sec:quantum-computation-via-the-zx-calculus}
-\begin{description}
-  \item[Kitaev--Solvay theorem] ``All models for quantum computing are equivalent''
-  \item[Qubits] Tensor products of vector spaces, homomorphisms, matrices.
-  \item[Bloch sphere model]
-  \item[ZX-calculus] Spiders et al
-  \item[Relations between spiders]
-\end{description}
 
-\part{Quantum algorithms}
-\section{Quantum algorithms}\label{sec:quantum-algorithms}
+Motivation: Diagrammatic reasoning about quantum algorithms.
+Want to use the flexibility of string diagrams.
 
-\begin{definition}\label{def:group}
-  A \emph{group} is a pair
-  \begin{equation*}
-    (G, \bullet)
-  \end{equation*}
-  comprising a set \( G \)  and a binary map
-  \begin{equation*}
-    \bullet \from G \times G \to G, \qquad (g,h) \mapsto  g\bullet h,
-  \end{equation*}
-  called \emph{multiplication} or \emph{group operation}, satisfying
-  \begin{description}
-    \item[\emph{Associativity}] \((a \bullet b) \bullet c = a \bullet (b \bullet c)\) for all \( a, b, c \in G \),
-    \item[\emph{Neutrality}] There exists an element \( e \in G \), called the \emph{neutral element} or \emph{unit} of \(G\), such that \( e \bullet a = a = a \bullet e \) for all \( a \in G \).
-    \item[\emph{Invertibility}] For each \( a \in G \), there exists an \( a^{-1} \in G \) such that \( a \bullet a^{-1} = a^{-1} \bullet a = e \).
-  \end{description}
-  We call \(G\) \emph{abelian} if  \( a\bullet b = b \bullet a \) for all \(a, b\in G\).
+\subsection{ZX-spiders}\label{sec:zx-spiders}
+
+In the following define the constituents of the ZX-diagrams.
+
+
+\begin{definition}\label{def:zx-spiders}
+  TOOD
 \end{definition}
 
-\begin{notation}
-  Let \((G, \bullet)\) be a group.
-  \begin{thmlist}
-    \item In case its multiplication is apparent, from the context, we will identify \(G\) with the pair \((G, \bullet)\).
-    \item Moreover, we will often use the shorthand notation
-    \begin{equation*}
-      ab \eqdef a \bullet b \qquad \text{ for all } a, b \in G.
-    \end{equation*}
-    \item In order to emphasise that a group is abelian \(G\) is abelian, we will denote its group operation by
-    \begin{equation*}
-      + \from G \times G \to G, \qquad (g,h) \mapsto g + h
-    \end{equation*}
-    and its neutral element by \(0\).
-  \end{thmlist}
-\end{notation}
+in matrix form
 
-Note that the neutral element \(e\) of a group \(G\) is unique.
-In case \(f\in G\) satisfies \(af=a=fa\) for all \(a \in G\), we have
-\begin{equation*}
-  e=ef=f.
-\end{equation*}
-
-Similarly, inverses are unique.
-Given an element \(a\in G\), and \(a^{-1}, b\in G\) such that \(a^{-1}a = e = aa^{-1}\) and \(ba = e = ab\), we have
-\begin{equation*}
-  a^{-1} = a^{-1}e = a^{-1}(ab) = (a^{-1}a)b = eb = b.
-\end{equation*}
-
-\begin{description}
-  \item[Simon's algorithm]
-  \item[Shor's algorithm]
-  \item[Grover's algorithm]
-  \item[HHL algorithm]
-\end{description}
+\begin{lemma}\label{lem:zx-spiders-are-partial-isometries}
+  TODO: partial isometry.
+  TODO: unitary if and only if n,m=1.
+\end{lemma}
 
 
-\part{Quantum complexity theory}
-\section{Quantum computing from a complexity theory perspective}\label{sec:quantum-computing-from-a-complexity-theory-perspective}
-\subsection{Some complexity theory terminology}\label{sec:some-complexity-theory-terminology}
-
-
-\begin{definition}\label{def:letters-words-languages}
-  A \emph{word} in the \emph{letters} \(\{0,1\}\) is a finite sequence \(w \eqdef (s_{1}, \dots , s_{n})\), where \(n\in \mathbb{N}\) and \(s_{i}\in \{0,1\}\) for all \(1 \leq i \leq n\).
-
-  We call \(|x|\eqdef n\) the \emph{length} of \(w\) and write \(\{0,1\}^{n}\) for the set of all words of length \(n\).
-  Furthermore, we set
-  \begin{equation}\label{eq:set-of-words}
-    \{0,1\}^{*}\eqdef \bigcup_{n\geq 0}\{0,1\}^{n}.
-  \end{equation}
-
-  A \emph{decision problem} is a subset \(L \subset \{0,1\}^{*}\).
-\end{definition}
-
-There is a bijection
-\begin{equation}
-  \begin{aligned}
-    \{\text{decision problems}\} &\iso \{f\from\{0,1\}^{*} \to \{0,1\}\}\\
-    L &\mapsto  f\from\{0,1\}^{*} \to \{0,1\}, \quad f(x)= 1 \iff x \in L \\
-    L_{f}\eqdef\{x \in\{0,1\}^{*} \mid f(x) = 1\} & \longmapsfrom f
-  \end{aligned}
-\end{equation}
-We will often view decision problems in terms of their unique associated maps \(\{0,1\}^{*}\to\{0, 1\}\)
-\medskip
-
-Besides formalising algorithms, we want to discuss their (asymptotic) efficiency.
-To that end, we need to a notion of functions being ``approximately similar''.
-
-\begin{definition}\label{def:O-notation}
-  Let \(D\) be a subset of \( \mathbb{R}\) and\(f, g \from D \to \mathbb{R}\).
-  We write \(f \in O(g)\) if there exists a \(M\in \mathbb{R}\) such that
-  \begin{equation}
-    |f(x)| \leq |M g(x) | \qquad\quad \text{ for all } x \in D.
-  \end{equation}
-
+\begin{definition}\label{def:phase-free-spiders}
+  TODO
 \end{definition}
 
 
-\subsection{Universal Turing machines}\label{sec:universal-turing-machines}
-We now formalise the principles outlined in our construction of the map \(\mathrm{add}\) in terms of Turing machines.
+\begin{lemma}\label{lem:X-spiders-generate-computational-basis}
 
-\begin{definition}\label{def:Turing-machine}
-  A \emph{Turing machine} is a triple \((\Gamma, Q, \delta)\) comprising
-  \begin{description}
-    \item[\(\Gamma\)] the \emph{alphabet} \(\{0,1,\rhd, \square \}\) of \(M\).
-    It includes  the (distinguished) \emph{start symbol} \(\rhd\) and the \emph{blank symbol} \(\square\).
-    \item[\(Q\)] a finite set of \emph{states}, containing a \emph{starting state} \(q_{\mathrm{start}}\) and a \emph{halting state} \(q_{\mathrm{halt}}\).
-    \item[\(\delta\)] a \emph{transition function}
-    \begin{equation*}
-      \delta \from Q \times \Gamma \to Q \times \Gamma\times\{L,S,R\}.
-    \end{equation*}
-  \end{description}
-\end{definition}
+\end{lemma}
 
-\begin{example}\label{ex:add-as-Turing-machine}
-  TODO: give an easy introduction for a Turing machine.
+\begin{example}\label{ex:XOR}
+  Kissinger-W Equation 3.8
 \end{example}
-A widely held belief is that Turing machines provide a model for ``computable functions''.
 
-\begin{remark}[Church--Turing thesis]\label{rmk:Church-Turing-thesis}
-  A function \(f \from  \mathbb{N} \to  \mathbb{N}\) can be computed by some device if it can be computed by a Turing machine.
-\end{remark}
-
-
-\begin{definition}\label{def:time-constructible-function}
-  A map \(f \from \mathbb{N} \to \mathbb{N}\) is \emph{time-constructible} if there exists a Turing machine \(M\) such that for each input \(n\) (in binary presentation) \(M\) halts in \(O(f)\) steps with output \(f(n)\) (in  binary presentation).
+\begin{definition}\label{def:GHZ-states}
+  TODO:
 \end{definition}
 
-\begin{remark}\label{rmk:encoding-Turing-machines}
-  A Turing machine \(M\) itself can be encoded as a word in the letters \(\{0,1, \square\}\).
-  Explicitly, we
-\end{remark}
+\begin{lemma}\label{lem:Z-spiders-generate-GHZ-states}
+  TODO
+\end{lemma}
 
-\begin{theorem}\label{thm:existence-of-universal-TM}
-  There exists a Turing machine \(U\)
+\subsection{ZX-diagram}\label{sec:zx-diagram}
+
+\begin{definition}\label{def:PROP}
+
+\end{definition}
+
+generators for a prop
+
+\begin{definition}\label{def:ZX-prop}
+
+\end{definition}
+
+TODO: SWAP in the prop
+
+TODO: EV-coev in prop.
+
+TODO: ZX-diagram as element of the naive ZX-prop.
+
+TODO: for convenience we will freely use swaps and bends to keep diagrams concise.
+
+TODO: 0-ary diagrams are numbers (Eq. 3.26).
+
+Hadamard Eq. 3.81.
+
+\begin{theorem}\label{thm:zx-is-universal}
+The evaluation map from the ZX-prop to linear maps is surjective.
 \end{theorem}
+\begin{proof}
+
+\end{proof}
+
+\subsection{Rewriting rules of the ZX-calculus}\label{sec:rewriting-rules-of-the-zx-calculus}
+
+The 7 rules of the ZX-calculus
+
+spider fusion
+
+colour change
+
+\(\pi\)-commutation rule
+
+strong complementary
+
+identity rule
+
+Hadamard-Hadamard cancelation
+
+Euler decomposition of the Hadamard.
+
+\subsection{Applications of the ZX-calculus}\label{sec:applications-of-the-zx-calculus}
+
+
+% \begin{description}
+%   \item[Kitaev--Solvay theorem] ``All models for quantum computing are equivalent''
+%   \item[Qubits] Tensor products of vector spaces, homomorphisms, matrices.
+%   \item[Bloch sphere model]
+%   \item[ZX-calculus] Spiders et al
+%   \item[Relations between spiders]
+% \end{description}
+
+% \part{Quantum algorithms}
+% \section{Quantum algorithms}\label{sec:quantum-algorithms}
+
+% \begin{definition}\label{def:group}
+%   A \emph{group} is a pair
+%   \begin{equation*}
+%     (G, \bullet)
+%   \end{equation*}
+%   comprising a set \( G \)  and a binary map
+%   \begin{equation*}
+%     \bullet \from G \times G \to G, \qquad (g,h) \mapsto  g\bullet h,
+%   \end{equation*}
+%   called \emph{multiplication} or \emph{group operation}, satisfying
+%   \begin{description}
+%     \item[\emph{Associativity}] \((a \bullet b) \bullet c = a \bullet (b \bullet c)\) for all \( a, b, c \in G \),
+%     \item[\emph{Neutrality}] There exists an element \( e \in G \), called the \emph{neutral element} or \emph{unit} of \(G\), such that \( e \bullet a = a = a \bullet e \) for all \( a \in G \).
+%     \item[\emph{Invertibility}] For each \( a \in G \), there exists an \( a^{-1} \in G \) such that \( a \bullet a^{-1} = a^{-1} \bullet a = e \).
+%   \end{description}
+%   We call \(G\) \emph{abelian} if  \( a\bullet b = b \bullet a \) for all \(a, b\in G\).
+% \end{definition}
+
+% \begin{notation}
+%   Let \((G, \bullet)\) be a group.
+%   \begin{thmlist}
+%     \item In case its multiplication is apparent, from the context, we will identify \(G\) with the pair \((G, \bullet)\).
+%     \item Moreover, we will often use the shorthand notation
+%     \begin{equation*}
+%       ab \eqdef a \bullet b \qquad \text{ for all } a, b \in G.
+%     \end{equation*}
+%     \item In order to emphasise that a group is abelian \(G\) is abelian, we will denote its group operation by
+%     \begin{equation*}
+%       + \from G \times G \to G, \qquad (g,h) \mapsto g + h
+%     \end{equation*}
+%     and its neutral element by \(0\).
+%   \end{thmlist}
+% \end{notation}
+
+% Note that the neutral element \(e\) of a group \(G\) is unique.
+% In case \(f\in G\) satisfies \(af=a=fa\) for all \(a \in G\), we have
+% \begin{equation*}
+%   e=ef=f.
+% \end{equation*}
+
+% Similarly, inverses are unique.
+% Given an element \(a\in G\), and \(a^{-1}, b\in G\) such that \(a^{-1}a = e = aa^{-1}\) and \(ba = e = ab\), we have
+% \begin{equation*}
+%   a^{-1} = a^{-1}e = a^{-1}(ab) = (a^{-1}a)b = eb = b.
+% \end{equation*}
+
+% \begin{description}
+%   \item[Simon's algorithm]
+%   \item[Shor's algorithm]
+%   \item[Grover's algorithm]
+%   \item[HHL algorithm]
+% \end{description}
+
+
+% \part{Quantum complexity theory}
+% \section{Quantum computing from a complexity theory perspective}\label{sec:quantum-computing-from-a-complexity-theory-perspective}
+% \subsection{Some complexity theory terminology}\label{sec:some-complexity-theory-terminology}
+
+
+% \begin{definition}\label{def:letters-words-languages}
+%   A \emph{word} in the \emph{letters} \(\{0,1\}\) is a finite sequence \(w \eqdef (s_{1}, \dots , s_{n})\), where \(n\in \mathbb{N}\) and \(s_{i}\in \{0,1\}\) for all \(1 \leq i \leq n\).
+
+%   We call \(|x|\eqdef n\) the \emph{length} of \(w\) and write \(\{0,1\}^{n}\) for the set of all words of length \(n\).
+%   Furthermore, we set
+%   \begin{equation}\label{eq:set-of-words}
+%     \{0,1\}^{*}\eqdef \bigcup_{n\geq 0}\{0,1\}^{n}.
+%   \end{equation}
+
+%   A \emph{decision problem} is a subset \(L \subset \{0,1\}^{*}\).
+% \end{definition}
+
+% There is a bijection
+% \begin{equation}
+%   \begin{aligned}
+%     \{\text{decision problems}\} &\iso \{f\from\{0,1\}^{*} \to \{0,1\}\}\\
+%     L &\mapsto  f\from\{0,1\}^{*} \to \{0,1\}, \quad f(x)= 1 \iff x \in L \\
+%     L_{f}\eqdef\{x \in\{0,1\}^{*} \mid f(x) = 1\} & \longmapsfrom f
+%   \end{aligned}
+% \end{equation}
+% We will often view decision problems in terms of their unique associated maps \(\{0,1\}^{*}\to\{0, 1\}\)
+% \medskip
+
+% Besides formalising algorithms, we want to discuss their (asymptotic) efficiency.
+% To that end, we need to a notion of functions being ``approximately similar''.
+
+% \begin{definition}\label{def:O-notation}
+%   Let \(D\) be a subset of \( \mathbb{R}\) and\(f, g \from D \to \mathbb{R}\).
+%   We write \(f \in O(g)\) if there exists a \(M\in \mathbb{R}\) such that
+%   \begin{equation}
+%     |f(x)| \leq |M g(x) | \qquad\quad \text{ for all } x \in D.
+%   \end{equation}
+
+% \end{definition}
+
+
+% \subsection{Universal Turing machines}\label{sec:universal-turing-machines}
+% We now formalise the principles outlined in our construction of the map \(\mathrm{add}\) in terms of Turing machines.
+
+% \begin{definition}\label{def:Turing-machine}
+%   A \emph{Turing machine} is a triple \((\Gamma, Q, \delta)\) comprising
+%   \begin{description}
+%     \item[\(\Gamma\)] the \emph{alphabet} \(\{0,1,\rhd, \square \}\) of \(M\).
+%     It includes  the (distinguished) \emph{start symbol} \(\rhd\) and the \emph{blank symbol} \(\square\).
+%     \item[\(Q\)] a finite set of \emph{states}, containing a \emph{starting state} \(q_{\mathrm{start}}\) and a \emph{halting state} \(q_{\mathrm{halt}}\).
+%     \item[\(\delta\)] a \emph{transition function}
+%     \begin{equation*}
+%       \delta \from Q \times \Gamma \to Q \times \Gamma\times\{L,S,R\}.
+%     \end{equation*}
+%   \end{description}
+% \end{definition}
+
+% \begin{example}\label{ex:add-as-Turing-machine}
+%   TODO: give an easy introduction for a Turing machine.
+% \end{example}
+% A widely held belief is that Turing machines provide a model for ``computable functions''.
+
+% \begin{remark}[Church--Turing thesis]\label{rmk:Church-Turing-thesis}
+%   A function \(f \from  \mathbb{N} \to  \mathbb{N}\) can be computed by some device if it can be computed by a Turing machine.
+% \end{remark}
+
+
+% \begin{definition}\label{def:time-constructible-function}
+%   A map \(f \from \mathbb{N} \to \mathbb{N}\) is \emph{time-constructible} if there exists a Turing machine \(M\) such that for each input \(n\) (in binary presentation) \(M\) halts in \(O(f)\) steps with output \(f(n)\) (in  binary presentation).
+% \end{definition}
+
+% \begin{remark}\label{rmk:encoding-Turing-machines}
+%   A Turing machine \(M\) itself can be encoded as a word in the letters \(\{0,1, \square\}\).
+%   Explicitly, we
+% \end{remark}
+
+% \begin{theorem}\label{thm:existence-of-universal-TM}
+%   There exists a Turing machine \(U\)
+% \end{theorem}
 
 
 
 
-\begin{definition}\label{def:deciding-a-decision-problem}
-  A Turing machine \(M\) \emph{decides} a decision problem \(L \subset\{0,1\}^{*}\) if \(M\) halts for each \(x \in \{0,1\}^{*}\) and the output of \(M\) is \(1\) if \(x\in L\) and \(0\) otherwise.
-\end{definition}
+% \begin{definition}\label{def:deciding-a-decision-problem}
+%   A Turing machine \(M\) \emph{decides} a decision problem \(L \subset\{0,1\}^{*}\) if \(M\) halts for each \(x \in \{0,1\}^{*}\) and the output of \(M\) is \(1\) if \(x\in L\) and \(0\) otherwise.
+% \end{definition}
 
 
-\begin{definition}\label{def:Dtime}
-  Consider a time constructible function \(T \from \mathbb{N} \to \mathbb{N}\).
-  The class \(\Dtime(T)\) consists of all decision problems \(L \subset\{0,1\}^{*}\) such that there exists a Turing machine \(M\) that halts in \(O(T)\) steps and decides \(L\).
-\end{definition}
+% \begin{definition}\label{def:Dtime}
+%   Consider a time constructible function \(T \from \mathbb{N} \to \mathbb{N}\).
+%   The class \(\Dtime(T)\) consists of all decision problems \(L \subset\{0,1\}^{*}\) such that there exists a Turing machine \(M\) that halts in \(O(T)\) steps and decides \(L\).
+% \end{definition}
 
 
-\begin{definition}\label{def:class-p}
-  The \emph{complexity class} \(\Pclass\) is given by
-  \begin{equation}\label{eq:p-class}
-    \Pclass = \bigcup_{n\geq 1} \Dtime(t^{n}).
-  \end{equation}
-\end{definition}
+% \begin{definition}\label{def:class-p}
+%   The \emph{complexity class} \(\Pclass\) is given by
+%   \begin{equation}\label{eq:p-class}
+%     \Pclass = \bigcup_{n\geq 1} \Dtime(t^{n}).
+%   \end{equation}
+% \end{definition}
 
-We think of problems in the complexity class \(\Pclass\) as being precisely the  ``feasible'' problems.
-The \emph{strong} Church--Turing thesis states:
-\begin{remark}[strong Church--Turing thesis]\label{rmk:strong-Church-Turing-thesis}
-  If a function \(f \from \mathbb{N} \to \mathbb{N}\) can be computed in polynomial time by some device, it can be computed in polynomial time by a Turing machines.
-\end{remark}
+% We think of problems in the complexity class \(\Pclass\) as being precisely the  ``feasible'' problems.
+% The \emph{strong} Church--Turing thesis states:
+% \begin{remark}[strong Church--Turing thesis]\label{rmk:strong-Church-Turing-thesis}
+%   If a function \(f \from \mathbb{N} \to \mathbb{N}\) can be computed in polynomial time by some device, it can be computed in polynomial time by a Turing machines.
+% \end{remark}
 
-Quantum computers potentially challenge the point of view.
-As we will see over the span of this course, they provide ways of performing tasks efficiently (in polynomial time) for which no efficient classical solution is know.
+% Quantum computers potentially challenge the point of view.
+% As we will see over the span of this course, they provide ways of performing tasks efficiently (in polynomial time) for which no efficient classical solution is know.
 
-\begin{definition}\label{def:class-np}
-  A decision problem \(L\) is in \(\NPclass\) (Nondeterministic Polynomial time) if there exists a polynomial-time TM \(V\), called a \emph{verifier}, and a polynomial \(p\), such that:
-  \(x \in L \iff \exists y \in \{0,1\}^{p(|x|)} \text{ s.t. } V(x, y) = 1\).
-\end{definition}
+% \begin{definition}\label{def:class-np}
+%   A decision problem \(L\) is in \(\NPclass\) (Nondeterministic Polynomial time) if there exists a polynomial-time TM \(V\), called a \emph{verifier}, and a polynomial \(p\), such that:
+%   \(x \in L \iff \exists y \in \{0,1\}^{p(|x|)} \text{ s.t. } V(x, y) = 1\).
+% \end{definition}
 
-\begin{remark}
-  While \(\Pclass \subseteq \NPclass\), we believe \(\Pclass \neq \NPclass\). Quantum computers are interesting because they can solve certain problems in \(\NPclass\) (like integer factoring) in polynomial time, whereas we suspect no such polynomial-time classical algorithm exists.
-\end{remark}
+% \begin{remark}
+%   While \(\Pclass \subseteq \NPclass\), we believe \(\Pclass \neq \NPclass\). Quantum computers are interesting because they can solve certain problems in \(\NPclass\) (like integer factoring) in polynomial time, whereas we suspect no such polynomial-time classical algorithm exists.
+% \end{remark}
 
-\part{Quantum error correction}
-\section{Fault-tolerance}\label{sec:fault-tolerance}
-\begin{description}
-  \item[Quantum compilation stack]
-  \item[Stabiliser codes]
-  \item[Toric and surface codes]
-  \item[Outlook: Toplogical quantum computing]
-\end{description}
+% \part{Quantum error correction}
+% \section{Fault-tolerance}\label{sec:fault-tolerance}
+% \begin{description}
+%   \item[Quantum compilation stack]
+%   \item[Stabiliser codes]
+%   \item[Toric and surface codes]
+%   \item[Outlook: Toplogical quantum computing]
+% \end{description}
 % \appendix
+
 % \section{Linear algebra}\label{sec:linear algebra}
 
 % \subsection{Unitary vector spaces}\label{sec:unitary vector spaces}
