@@ -1,0 +1,17 @@
+\begin{tikzpicture}[baseline={([yshift=-1ex]current bounding box.center)}]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (3, 0) {};
+		\node [style=none] (1) at (0, 0) {};
+		\node [style=none, inner sep=0pt] (2) at (1.5, 0) {$\bigoplus$};
+		\node [style=none] (3) at (3, 1) {};
+		\node [style=none] (4) at (0, 1) {};
+		\node [style=fullblackdot] (5) at (1.5, 1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=directed] (0.center) to (2.east);
+		\draw [style=directed] (2.west) to (1.center);
+		\draw [style=directed] (3.center) to (5);
+		\draw [style=directed] (5) to (4.center);
+		\draw [style=object] (5) to (2.north);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1490,7 +1490,7 @@ The level of difficulty is aligned with what you can expect in the exam.
   \item What is the polar form of \(\cos(2\pi /5)+ i \sin(2\pi /5)\)?
 \end{thmlist}
 
-\subsubsection*{Vector Spaces}
+\subsubsection*{Vector spaces}
 \begin{thmlist}
   \item Is the set of all \(n \times n\) Hermitian matrices a complex subspace of \(\Mat_n(\mathbb{C})\)?
   \item Consider two matrices \(A, B \in \Mat_{4}( \mathbb{C})\) and let \(U =\{v \in \mathbb{C}^{4} \mid Av = 0\}\) and \(W =\{Bv \mid v \in \mathbb{C}^{4}\}\).
@@ -3557,34 +3557,7 @@ We now want to translate the action of unitaries on states to an operation on mi
   Finally, we note  \(\tr(f \circ m \circ f^{\dagger}) = \tr(f^{\dagger} \circ f\circ m ) = \tr(m) = 1\).
 \end{proof}
 
-The quantum version of an ``if-then-else'' logic relies on combining unitaries with projections.
-
-\begin{lemma}\label{lem:unitaries-and-projections}
-  Let \(e_{1}, \dots , e_{n} \in \End_{ \mathbb{C}}(V)\) be orthogonal projections satisfying \(e_{k}e_{l}=0\) if \(k\neq l\) and \(\sum_{k=1}^{n}e_{k} = \id_{V}\), and let \(u_{1}, \dots , u_{n} \in \End_{ \mathbb{C}}(W)\) be unitaries.
-  Then
-  \begin{equation*}
-    e_{1}\otimes u_{1} + \dots + e_{n} \otimes u_{n} \in \End_{ \mathbb{C}}(V \otimes W)
-  \end{equation*}
-  is unitary.
-\end{lemma}
-\begin{proof}
-  We set \(U = e_{1}\otimes u_{1} + \dots + e_{n} \otimes u_{n}\) and compute
-  \begin{equation*}
-    U^{\dagger} U
-    = \sum_{k,l=1}^{n} e_{k}^{\dagger}e_{l} \otimes u_{k}^{\dagger} u_{l}
-    = \sum_{k}^{n} e_{k}e_{k} \otimes u_{k}^{\dagger} u_{k}
-    = \sum_{k}^{n} e_{k}e_{k} \otimes \id_{W}
-    = \id_{V} \otimes \id_{W} = \id_{V\otimes W}.
-  \end{equation*}
-  The identity \(UU^{\dagger} = \id_{V\otimes W}\) is obtained analogously.
-\end{proof}
-
-\begin{remark}\label{rmk:unitaries-and-projections}
-  The assumptions of Lemma~\ref{lem:unitaries-and-projections} are not entirely independent. Lemma~\ref{lem:part-of-1-means-orth} shows that if \( e_1, \dots, e_n \in \End_{\mathbb{C}}(V) \) are (orthogonal) projections such that \( e_1 + \dots + e_n = \id_V \), then \( e_k e_l = 0 \) for \( k \neq l \) already holds.
-\end{remark}
-
-
-\subsubsection{Quantum Gates on the Bloch Sphere}\label{sec:quantum-gates-on-the-bloch-sphere}
+\subsubsection{Quantum gates on the Bloch sphere}\label{sec:quantum-gates-on-the-bloch-sphere}
 To develop intuition for how unitaries affect quantum states, we focus on a single qubit.
 
 \begin{definition}\label{def:rotations-on-bloch-sphere}
@@ -3936,8 +3909,7 @@ This is called the \emph{Euler decomposition} of \(f\).
   \end{align*}
 \end{proof}
 
-\subsubsection{Translating Classical Algorithms to Quantum Algorithms}\label{sec:translating-classical-algorithms-to-quantum-algorithms}
-% The main?
+\subsubsection{Translating classical algorithms to quantum algorithms}\label{sec:translating-classical-algorithms-to-quantum-algorithms}
 A main component of quantum algorithms is the transformation of input states using unitary operations.
 These operations are invertible, which contrasts with classical algorithms.
 Think for example of the search problem: ``Is \( x \) in the list \( l \)?''. From the answer we cannot possibly reconstruct the whole list.
@@ -3983,7 +3955,7 @@ Using the computational basis \(( \ket 0, \ket 1 )\) of  the qubit \( \mathbb{C}
 we may lift \(B(f)\) to a linear map.
 To that end, given \((x,y)= (x_{1}, \dots , x_{n}, y_{1}, \dots , y_{m}) \in\{0,1\}^{n+m}\), we write
 \begin{equation}
-  \ket{x,y}\eqdef \ket{x_{1}\dots x_{n}y_{1}\dots y_{m}} \in ( \mathbb{C}^{2})^{n+m}.
+  \ket{x,y}\eqdef \ket{x_{1}\dots x_{n}y_{1}\dots y_{m}} \in ( \mathbb{C}^{2})^{\otimes(n+m)}.
 \end{equation}
 
 
@@ -4003,13 +3975,12 @@ To prove that \(UB(f)\) can be part of a quantum algorithm, we need to show that
 
 \begin{proof}
   Since \(UB(f)\) is unitary if and only if it is an isometry, we simply need to verify that it preserves the inner product.
-  Let \( \ket{x_1, y_1} \) and \( \ket{x_2, y_2} \) be basis vectors in \( (\mathbb{C}^2)^{\otimes (n+m)} \).
-  Their inner product is the product of Kronecker deltas
+  Given vectors \( \ket{x_1, y_1} \) and \( \ket{x_2, y_2} \) of the standard basis of \( (\mathbb{C}^2)^{\otimes (n+m)} \), their inner product is the product of Kronecker deltas
   \begin{equation*}
     \braket{x_1, y_1}{x_2, y_2} = \delta_{x_1,x_2} \delta_{y_1,y_2},
   \end{equation*}
   where \(\delta_{x_{1}, x_{2}} = 1\) if \(x_{1} = x_{2}\) and zero otherwise, and \(\delta_{y_{1}, y_{2}} \in\{0,1\}\) is defined analogously.
-  Conversely, we get
+  By a direct computation, we get
   \begin{equation*}
     \braket{UB(f)(x_1, y_1)}{UB(f)(x_2, y_2)}
     = \braket{x_1, f(x_1) \boxplus y_1}{x_2, f(x_2) \boxplus y_2}= \delta_{x_{1}, x_{2}} \delta_{f(x_1) \boxplus y_1, f(x_2) \boxplus y_2}.
@@ -4323,31 +4294,53 @@ In our interpretation of quantum mechanics (specifically, the Copenhagen interpr
 We begin by some elementary considerations on how projections and probabilities are connected.
 
 \begin{lemma}\label{lem:orthogonal-projections-and-probabilities}
-  For any normalised vector \(v \in V\) and orthogonal projection \(e \from V \to V\) an orthogonal projection.
-  The number \(\braket{v}{e \mid v}\) is real and satisfies \(0 \leq \braket{v}{e \mid v}\leq 1\).
+  Let \(e \from V \to V\) be an orthogonal projection.
+  \begin{thmlist}
+    \item If \(v\in V\) is a normalised vector, we have \(0 \leq \braket{v}{e \mid v} \leq 1 \)
+    \item If \(\rho\from V \to V\) is a mixed state, then \(0 \leq \tr(\rho e) \leq 1\).
+    Moreover, in case we have \(\rho_{v} = \ket{v}\bra{v} \from V\to V\) for some normalised \(\ket{v} \in V\), we get \(\tr(\rho_{v} e) = \braket{v}{e \mid v}\).
+  \end{thmlist}
 \end{lemma}
 \begin{proof}
-  Since \( e \) is an orthogonal projection, it satisfies \( e^2 = e \) and \( e = e^\dagger \).
-  Therefore,
+  We show both claims independently.
+  \begin{thmlist}
+    \item Since \( e \) is an orthogonal projection, it satisfies \( e^2 = e \) and \( e = e^\dagger \).
+    Therefore,
+    \begin{equation*}
+      \braket{v}{e \mid v} = \braket{v}{e^2 \mid v} = \braket{e^\dagger v}{e v} = \braket{e(v)}{e(v)} \geq 0.
+    \end{equation*}
+    To show that \(1\) is an upper bound, we decompose \( v \) into two summands \( v = e(v) + (v - e(v)) \).
+    These are orthogonal, as a direct computation shows
+    \begin{equation*}
+      \braket{e(v)}{v - e(v)}
+      = \braket{e(v)}{v} - \braket{e(v)}{e(v)}
+      = \braket{e(v)}{v} - \braket{e(v)}{v}
+      = 0.
+    \end{equation*}
+    Therefore
+    \begin{equation*}
+      0
+      \leq \braket{e(v)}{e(v)}
+      \leq \braket{e(v)}{e(v)} + \braket{v - e(v)}{v - e(v)}
+      = \braket{v}{v}
+      = 1.
+    \end{equation*}
+  \item   Since \( e \) is an orthogonal projection, it is positive semi-definite and satisfies \( e^2 = e \).
+  The mixed state \( \rho \) is self-adjoint, positive semi-definite and has trace \(1\).
+  Thus, by the spectral theorem, there exists an orthonormal basis \(\mathcal{B}= (\ket{b_{1}}, \dots , \ket{b_{n}})\) of \(V\) such that
   \begin{equation*}
-    \braket{v}{e \mid v} = \braket{v}{e^2 \mid v} = \braket{e^\dagger v}{e v} = \braket{e(v)}{e(v)} \geq 0.
+    \rho = \sum_i \lambda_i \ket{b_{i}} \bra{b_{i}}
   \end{equation*}
-  To show that \(1\) is an upper bound, we decompose \( v \) into two summands \( v = e(v) + (v - e(v)) \).
-  These are orthogonal, as a direct computation shows
+  with real numbers \( 0 \leq \lambda_i\leq 1\) satisfying \( \sum_i \lambda_i = 1 \).
+  We compute
   \begin{equation*}
-    \braket{e(v)}{v - e(v)}
-    = \braket{e(v)}{v} - \braket{e(v)}{e(v)}
-    = \braket{e(v)}{v} - \braket{e(v)}{v}
-    = 0.
+    \tr(e\rho)
+    = \sum_i \lambda_i \tr(e \ket{b_i} \bra{b_i}) =
+    \sum_i \lambda_i \braket{b_i}{e \mid b_i}
   \end{equation*}
-  Therefore
-  \begin{equation*}
-    0
-    \leq \braket{e(v)}{e(v)}
-    \leq \braket{e(v)}{e(v)} + \braket{v - e(v)}{v - e(v)}
-    = \braket{v}{v}
-    = 1. \qedhere
-  \end{equation*}
+
+  Since \( 0 \leq \braket{b_i}{e \mid b_i} \leq 1 \) for each \( 1\leq i \leq n \), it follows that \( 0 \leq \tr(e\rho) \leq 1 \).
+  \end{thmlist}
 \end{proof}
 
 Projections will be used to model the probabilistic aspects of our quantum systems.
@@ -4369,24 +4362,44 @@ Consider projections \( e_1, \dots, e_n \from V \to V \) such that \( e_1 + \dot
 
 \begin{proof}
   Let \( V_i = \im(e_i) \) denote the image of the \( i \)-th projector.
-  Since \( e_1 + \dots + e_n = \id_V \), we have \( \sum_{i=1}^n V_i = V \).
-  That is,any vector \( v \in V \) can be written (not necessarily uniquely) as \( v = \sum_{i=1}^n e_i(v) \).
-
+  Since \( e_1 + \dots + e_n = \id_V \), any vector \( v \in V \) can be written as \( v = \sum_{i=1}^n e_i(v) \) and therefore \(\sum_{i=1}^{n} V_{i} = V\).
   By Lemma~\ref{lem:equivalent-characterisations-projections}, each \( e_i \) satisfies \( e_i^2 = e_i \), so \( V_i \) is the eigenspace of \( e_i \) with eigenvalue \(1\) and \( \tr(e_i) = \dim V_i \).
-
   We compute
   \begin{equation*}
     \dim V = \tr(\id_V)
     = \tr\left(\sum\nolimits_{i=1}^n e_i\right)
     = \sum\nolimits_{i=1}^n \tr(e_i)
-    = \sum\nolimits_{i=1}^n \dim V_i.
-  \end{equation*}
-  By the dimension formula, we have
-  \begin{equation*}
-    \dim \big(V \cap \sum\nolimits_{j\neq i} V_{j}\big) = \dim \big(\sum\nolimits_{i=1}^{n} V_{i}\big) - \dim V_{i} - \dim \big(\sum\nolimits_{j\neq i} V_{j} \big) =0,
+    = \sum\nolimits_{i=1}^n \dim V_i,
   \end{equation*}
   implying that \( V = V_1 \oplus \dots \oplus V_n \).
-  Therefore, for \( i \neq j \), we have \( V_i \subset \ker(e_j) \) and \( V_j \subset \ker(e_i) \), which entails \( e_i e_j = 0 = e_j e_i \).
+  Therefore, any vector \(v\in V\) has a unique decomposition \(v= \sum_{i=1}^{n} v_{i}\) with \(v_{i}\in V_{i}\) and by our previous computation each summand is given by \(v_{i} = e(v_{i})\).
+  Therefore, for any \(1\leq i \leq n\) and \(v\in V\), we observe that
+  \begin{equation*}
+    e_{i}(v) = \id_{V}(e_{i}(v)) = e_{1}(e_{i}(v)) + \dots + e_{n}(e_{i}(v))
+  \end{equation*}
+  implying that \(e_{j} e_{i}(v) = 0 \) for all \(j \neq i\) and the claim follows.
+\end{proof}
+
+The quantum version of an ``if-then-else'' logic relies on combining unitaries with projections.
+
+\begin{lemma}\label{lem:unitaries-and-projections}
+  Let \(e_{1}, \dots , e_{n} \in \End_{ \mathbb{C}}(V)\) be orthogonal projections satisfying \(\sum_{k=1}^{n}e_{k} = \id_{V}\), and let \(u_{1}, \dots , u_{n} \in \End_{ \mathbb{C}}(W)\) be unitaries.
+  Then
+  \begin{equation*}
+    e_{1}\otimes u_{1} + \dots + e_{n} \otimes u_{n} \in \End_{ \mathbb{C}}(V \otimes W)
+  \end{equation*}
+  is unitary.
+\end{lemma}
+\begin{proof}
+  We set \(U = e_{1}\otimes u_{1} + \dots + e_{n} \otimes u_{n}\) and compute
+  \begin{equation*}
+    U^{\dagger} U
+    = \sum_{k,l=1}^{n} e_{k}^{\dagger}e_{l} \otimes u_{k}^{\dagger} u_{l}
+    = \sum_{k}^{n} e_{k}e_{k} \otimes u_{k}^{\dagger} u_{k}
+    = \sum_{k}^{n} e_{k}e_{k} \otimes \id_{W}
+    = \id_{V} \otimes \id_{W} = \id_{V\otimes W}.
+  \end{equation*}
+  The identity \(UU^{\dagger} = \id_{V\otimes W}\) is obtained analogously.
 \end{proof}
 
 \subsubsection{Observables and projection-valued measures}\label{sec:observables-and-projection-valued-measures}
@@ -4488,46 +4501,14 @@ Suppose we are in a state \([v]\) and \(E \from\{X \subset \Lambda\} \to \mathrm
 
 
 \subsubsection{Measurements for mixed states}\label{sec:measurements-for-mixed-states}
-Consider a mixed state \(\rho_{v} = \ket{v}\bra{v}\from V \to V\).
-We fix an orthonormal basis \( \mathcal{B}= (b_{1}, \dots , b_{n})\) of \(V\) with \(b_{1} = v\).
-For any orthogonal projection \(e \from V \to V\), we have
-\begin{equation*}
-  \tr(\rho_{v} e)
-  = \tr\big((\ket{v} \bra{v})e\big)
-  =\sum_{i=1}^n \braket{b_i}{v} \braket{v}{ e \mid b_i}
-  = \braket{v}{v} \braket{v}{e\mid v}
-  = \braket{v}{e \mid v}.
-\end{equation*}
-
-\begin{lemma}\label{lem:get-prob-values}
-  Consider an orthogonal projection \(e\from V\to V\)  on a Hilbert space and a mixed state \(\rho \from V \to V\).
-  Then \(\tr(e\rho) \) is a real number and \(0 \leq \tr(e\rho) \leq 1\).
-\end{lemma}
-\begin{proof}
-  Since \( e \) is an orthogonal projection, it is positive semi-definite and satisfies \( e^2 = e \).
-  The mixed state \( \rho \) is self-adjoint, positive semi-definite and has trace \(1\).
-  Thus, by the spectral theorem, there exists an orthonormal basis \(\mathcal{B}= (\ket{b_{1}}, \dots , \ket{b_{n}})\) of \(V\) such that
-  \begin{equation*}
-    \rho = \sum_i \lambda_i \ket{b_{i}} \bra{b_{i}}
-  \end{equation*}
-  with real numbers \( 0 \leq \lambda_i\leq 1\) satisfying \( \sum_i \lambda_i = 1 \).
-  We compute
-  \begin{equation*}
-    \tr(e\rho)
-    = \sum_i \lambda_i \tr(e \ket{b_i} \bra{b_i}) =
-    \sum_i \lambda_i \braket{b_i}{e \mid b_i}
-  \end{equation*}
-
-  Since \( 0 \leq \braket{b_i}{e \mid b_i} \leq 1 \) for each \( 1\leq i \leq n \), it follows that \( 0 \leq \tr(e\rho) \leq 1 \).
-\end{proof}
-
+Recall that by Lemma~\ref{lem:orthogonal-projections-and-probabilities} for a mixed state \(\rho \from V \to V\) and an orthogonal projection \(e\from V\to V\) we have \(0 \leq \tr(\rho e)\leq 1\).
 The definition below is known as the \emph{Born rule for mixed states}.
 
 \begin{definition}\label{def:Born-rule-for-projective-measurment}
   Consider the Hilbert space \(V\) and let \( E \from\{X \subseteq \Lambda\} \to \mathrm{Proj}(V)\) a projection-valued measure.
   For a given \(X \subseteq \Lambda\) and mixed state \(\rho \from V \to V\), the \emph{probability} of observing an outcome in \( X \) is
   \begin{equation}
-    \tr(E(X)\rho).
+    0 \leq \tr(E(X)\rho) \leq 1.
   \end{equation}
 \end{definition}
 
@@ -4896,7 +4877,7 @@ Lastly, the connection between this classical wire and the gate \(S\) means that
   Show that the corresponding state \(x \in V\otimes W\) is a separable if and only if \(\rho = \sum_{k=1}^{n} \lambda_{k} \phi_{k} \otimes \psi_{k}\) for \(\phi_{k} \from V\to V\) and \(\phi_{k} \from W\to W\) mixed states and real numbers \(\lambda_{k} > 0\) such that \(\sum_{k=1}^{n}\lambda_{k} =1\).
 
   \textit{Hint:} Show that in the rank \(1\) case we can chose \(n=1\).
-  To that end, consider a vector \(x \in V\otimes W\) with \(\rho(V\otimes W)\) and compute
+  To that end, consider a vector \(x \in V\otimes W\) and compute
   \(\braket{x}{\phi_{k} \otimes \psi_{k} \mid x}\).
 
   \textit{Hint:} Apply the spectral theorem to show that for any mixed state \(\zeta \from X \to X\) one has \(\zeta(x) = 0\) if and only if \(\braket{x}{\zeta \mid x} = 0\).
@@ -5037,7 +5018,7 @@ Lastly, the connection between this classical wire and the gate \(S\) means that
 
 
 \cleardoublepage
-\subsection{Study goals}\label{sec:study-goals}
+\subsection{Study goals}\label{sec:SCUM-study-goals}
 The questions below are designed to help you build a conceptual understanding of the SCUM-axioms.
 You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
 The level of difficulty is aligned with what you can expect in the exam.
@@ -5190,81 +5171,383 @@ Is \((d(b_{1}), d(b_{2}), d(b_{3}))\) a basis of \(\rd*{ \mathbb{C}^{3}}\)?
 
 
 \cleardoublepage
-\section{Quantum computation via the zx calculus}\label{sec:quantum-computation-via-the-zx-calculus}
+\section{Quantum computation via the ZX-calculus}\label{sec:quantum-computation-via-the-zx-calculus}
 
-Motivation: Diagrammatic reasoning about quantum algorithms.
-Want to use the flexibility of string diagrams.
+The ZX-calculus is a variant of the string diagrammatic calculus.
+The following quote, taken from the website \url{https://zxcalculus.com/} describes its applications and purposes.
+
+\begin{quote}
+  The ZX-calculus is a graphical language that goes beyond circuit diagrams.
+  It ``splits the atom'' of well-known quantum logic gates to reveal the compositional structure inside.
+  The calculus works by generalising the ideas of Z and X operations, allowing us to break out of the circuit model while maintaining soundness of reasoning.
+  In doing so we can show properties of circuits, entanglement states, and protocols, in a visually succinct but logically complete manner.
+
+  The ZX-calculus is forging the next generation of quantum software.
+  Using the calculus gives optimisation strategies that performs state-of-the-art T-count reduction (an important metric for fault-tolerant computing) and gate compilation.
+  The generators of the calculus correspond closely to the basic operations of lattice surgery in the surface code, giving a visual design and verification language for these codes; and ZX has also been used to discover novel error correction procedures.
+  It comes with a scalable notation capable of representing repeated structures at arbitrary qubit scales. (...)
+\end{quote}
+
 
 \subsection{ZX-spiders}\label{sec:zx-spiders}
+The ZX calculus builds on the observation that any unitary matrix can be written as a product of \(Z\) and \(X\) phase gates (up to a global phase), and extends this to a language suitable for diagrammatically reasoning about arbitrary linear maps.
 
-In the following define the constituents of the ZX-diagrams.
+\begin{convention}
+  For the \(ZX\)-calculus, we agree on the following conventions.
+  \begin{thmlist}
+    \item We identity the vector spaces \( \rd*{\mathbb{C}}\) and \(\mathbb{C}\) using the isomorphism
+    \begin{equation*}
+       \rd*{ \mathbb{C}} \to \mathbb{C}, \qquad \lambda \mapsto \lambda(1).
+    \end{equation*}
+    \item We identity the vector spaces \( \rd*{\mathbb{C}^{2}}\) and \(\mathbb{C}^{2}\) using the unique isomorphism \(\rd*{\mathbb{C}^{2}} \to \mathbb{C}^{2}\) that satisfies
+    \begin{equation*}
+       \bra{0} \mapsto \ket{0}, \qquad \bra{1} \mapsto \ket{1}.
+    \end{equation*}
+    \item We set
+    \begin{equation*}
+      \ket{0}^{\otimes 0} = 1 = \ket{1}^{\otimes 0}, \qquad
+      \ket{+}^{\otimes 0} = 1 = \ket{-}^{\otimes 0}.
+    \end{equation*}
+  \end{thmlist}
+\end{convention}
+
+These conventions have immediate consequences for our string diagrams.
+From now on, we will simply write
+\begin{equation*}
+  \inputtikz{zx-conventions}
+\end{equation*}
 
 
 \begin{definition}\label{def:zx-spiders}
-  TOOD
+  Given natural numbers \( n, m \in \mathbb{N}_{0} \) and \( \alpha, \beta \in \mathbb{R} \), we define the \emph{Z-spider} \( Z_n^m(\alpha) \) and the \emph{X-spider} \( X_n^m(\beta) \) as the linear maps
+  \begin{subequations}
+    \begin{align}
+      Z_{n}^{m}(\alpha) &= \ket{0}^{\otimes m}\bra{0}^{\otimes n} + e^{2\pi i \alpha}\ket{1}^{\otimes m} \bra{1} ^{\otimes n}\from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes m}, \\
+      X_{n}^{m}(\beta) &= \ket{+}^{\otimes m}\bra{+}^{\otimes n} + e^{2\pi i \alpha}\ket{-}^{\otimes m} \bra{-} ^{\otimes n}\from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes m}
+    \end{align}
+  \end{subequations}
+  The spiders \(Z_{n}^{m}(\alpha)\) and  \(X_{n}^{m}(\beta)\) are operations of \emph{arity} \((n,m)\) with \(n\) \emph{inputs} and  \(m\) outputs.
+
+  In case \(\alpha, \beta \in \mathbb{Z}\) are integers, we call \(Z_{n}^{m}(\alpha)\), respectively \(X_{n}^{m}(\beta)\) \emph{phase-free} and write \(Z_{n}^{m} \eqdef Z_{n}^{m}(\alpha)\) as well as \(X_{n}^{m} \eqdef X_{n}^{m}(\beta)\).
 \end{definition}
 
-in matrix form
+We draw \(Z\) and \(X\)-spiders of arity \((n,m)\) as coloured boxes with \(n\) incoming and \(m\) outcoming strings.
+Here the strings are undirected.
+\begin{equation*}
+  \inputtikz{zx-examples}
+\end{equation*}
+
+The states below are named after the physicists Greenberger, Horne, and Zeilinger
+\footnote{The below short biographies are taken from their wikipedia pages:
+  \begin{thmlist}
+    \item Daniel M. Greenberger is an American quantum physicist. He has been professor of physics at the City College of New York since 1964.
+    \item Michael Allan Horne (January 18, 1943 -- January 19, 2019) was an American quantum physicist, known for his work on the foundations of quantum mechanics.
+    \item Anton Zeilinger (born 20 May 1945) is an Austrian quantum physicist and Nobel laureate in physics of 2022.
+  \end{thmlist}
+}.
+\begin{definition}\label{def:GHZ-states}
+  Let \(m \geq 2\) be a natural number.
+  The \emph{GHZ state}  for \( m \) qubits is
+  \begin{equation}\label{eq:GHZ-state}
+    \ket{\textrm{GHZ}_m} = \frac{1}{\sqrt{2}} \left( \ket{0}^{\otimes m} + \ket{1}^{\otimes m} \right).
+  \end{equation}
+  For \( m = 2 \), this coincides with  the Bell state \( \ket{\Phi^+} = \frac{1}{\sqrt{2}} (\ket{00} + \ket{11}) \).
+\end{definition}
+GHZ states can be obtained by  using \(Z\) spiders
+\begin{equation}
+  Z_0^m(0)\;\tfrac{1}{\sqrt{2}}
+  = \frac{1}{\sqrt{2}}\big(\ket{0}^{\otimes m} + \ket{1}^{\otimes m}\big)= \ket{\text{GHZ}_m}, \qquad m \geq 2.
+\end{equation}
+In case \(m=1\), we obtain
+\begin{equation*}
+  Z_{0}^{1}(0) \; \tfrac{1}{\sqrt{2}}
+  = \frac{1}{\sqrt{2}}\big( \ket{0} + \ket{1})
+  = \ket{+},
+  \qquad
+  Z_{0}^{1}(\tfrac{1}{2}) \; \tfrac{1}{\sqrt{2}}
+  =\frac{1}{\sqrt{2}}\big(\ket{0} - \ket{1}\big)
+  = \ket{-}
+\end{equation*}
+
+On the other hand the spider \( X_0^m\) can be used to create a superposition with respect to the computational basis
+\begin{equation*}
+  X_0^m(0)\;1
+  = \ket{+}^{\otimes m} + \ket{-}^{\otimes m}
+  = \left( \frac{1}{\sqrt{2}} \right)^m \sum_{x \in \{0,1\}^m} \ket{x},\quad m \geq 2.
+\end{equation*}
+Moreover, we have
+\begin{equation*}
+  X_{0}^{1}(0)\;\tfrac{1}{\sqrt{2}}
+  = \frac{1}{\sqrt{2}}\big(\ket{+} + \ket{-}\big)
+  = \ket{0},
+  \qquad
+  X_{0}^{1}(\tfrac{1}{2})\;\tfrac{1}{\sqrt{2}}
+  = \frac{1}{\sqrt{2}}\big(\ket{+} - \ket{-}\big)
+  = \ket{1}.
+\end{equation*}
+
+\begin{remark}\label{rmk:x-creates-z-and-vice-versa}
+  By the above computations, we get the \(Z\)-basis from \(X\)-spiders, and the \(X\)-basis from the \(Z\)-spiders.
+  \begin{equation*}
+    \inputtikz{ZX-basis-creation}
+  \end{equation*}
+\end{remark}
+\subsubsection{Classical gates from ZX-diagrams}\label{sec:classical-gates-from-zx-diagrams}
+Before developing the syntax of the ZX-calculus---in form of rewriting rules---and
+formally defining ZX-diagrams, we aim to build our intuition for the kinds of maps that can be expressed by composing and tensoring \( Z \)- and \( X \)-spiders.
+In particular, we will discuss the \(ZX\)-representation of the quantum gates covered in Section~\ref{sec:quantum-circuits}.
+\bigskip
+
+For now, we will use the term ``ZX-diagram'' to refer to a string diagram whose nodes are either \(Z\) or \(X\)-spiders.
+Some examples of such diagrams are shown below.
+\begin{equation} \label{eq:ZX-closed-examples}
+  \inputtikz{ZX-closed-examples}
+\end{equation}
+
+\begin{lemma}\label{lem:any-complex-number}
+  For any complex number \(z\in \mathbb{C}\), there exists a \(ZX\)-diagram representing this number.
+\end{lemma}
+\begin{proof}
+  A guided step-by-step approach to the proof is given in Exercise~\ref{exe:complex-numbers-as-ZX-diagrams}.
+\end{proof}
+\bigskip
+
+\noindent
+\textbf{The Z-gate}: The \(Z\)-phase gate \(Z(\alpha) \from \mathbb{C}^{2}\to \mathbb{C}^{2}\) simply corresponds to  \(Z_{1}^{1}(\alpha)\), where \(\alpha \in \mathbb{R}\) is a real parameter.
+\bigskip
+
+\noindent
+\textbf{The X-gate}: For any \(\beta \in \mathbb{R}\), the \(X\)-phase gate \(X(\beta) \from \mathbb{C}^{2}\to \mathbb{C}^{2}\) coincides with \(X_{1}^{1}(\beta)\).
+\bigskip
+
+\noindent
+\textbf{The CNOT-gate}: The \(\CNOT\) get is obtain by composing multiple \(X\)- and \(Z\)-spider.
+We will derive two presentations.
+Both rely on the next auxiliary lemma that uses the addition modulo \(2\) discussed in Definition~\ref{def:addition-modulo-2}.
+
+\begin{lemma}\label{lem:CNOT-auxiliary-XZ}
+  Given \(a, b,c \in\{0,1\}\), we obtain
+  \begin{subequations}
+    \begin{align}
+      Z_{1}^{2} \ket{a}  = \ket{aa}, \qquad
+      Z_{2}^{1} \ket{bc} = \delta_{b=c}\ket{b} \label{eq:Z21-and-Z12-gates}\\
+      X_{1}^{2} \ket{a}  = \tfrac{1}{\sqrt{2}} \sum_{k=0}^{1} \ket{k}\otimes \ket{a \oplus k}, \qquad
+      X_{2}^{1} \ket{bc} = \tfrac{1}{\sqrt{2}}(\ket{b \oplus c}) \label{eq:X21-and-X12-gates}
+    \end{align}
+  \end{subequations}
+\end{lemma}
+\begin{proof}
+  Equation~\eqref{eq:Z21-and-Z12-gates} follows from a straightforward computation.
+  To prove Equation~\eqref{eq:X21-and-X12-gates}, we fix \(a, b,c \in\{0,1\}\) and calculate
+  \begin{align*}
+    \braket{+}{a} = \tfrac{1}{\sqrt2}, \qquad
+    \braket{-}{a} = (-1)^{a} \tfrac{1}{\sqrt{2}},
+    \qquad
+    \ket{++} + (-1)^{a} \ket{--} = \big(\sum\nolimits_{k=0}^{1} \ket{k} \otimes \ket{k \oplus a}\big), \\
+    \braket{+\!+\!}{bc} = \tfrac{1}{2}, \qquad
+    \braket{-\!-\!}{bc} = \tfrac{1}{2} (-1)^{b+c},\qquad
+    \ket{+} + (-1)^{b+c} \ket{-} = \sqrt{2}\ket{b \oplus c}
+  \end{align*}
+  Leading to
+  \begin{align*}
+    X_{1}^{2}\ket{a}
+    & = \ket{++}\braket{+}{a} + \ket{--}\braket{-}{a}
+      = \tfrac{1}{\sqrt{2}}\big(\ket{++} + (-1)^{a} \ket{--}\big)
+      = \tfrac{1}{\sqrt{2}} \big(\sum\nolimits_{k=0}^{1} \ket{k} \otimes \ket{k \oplus a}\big), \\
+    X_{2}^{1}\ket{bc}
+    & = \tfrac{1}{2}\big(\ket{+} + (-1)^{b+c}\ket{-}\big)
+      = \tfrac{\sqrt{2}}{2}(\ket{b \oplus c})
+      = \tfrac{1}{\sqrt{2}}(\ket{b \oplus c})\qedhere
+  \end{align*}
+\end{proof}
+
+
+The \(\CNOT\) gate can be characterised as the unique linear map \( (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) satisfying
+\begin{equation*}
+  \CNOT\ket{ab} = \ket{a} \otimes \ket{a \oplus b} \qquad \text{ for all } a,b \in\{0,1\}.
+\end{equation*}
+\begin{lemma}\label{lem:CNOT-equal-presentations}
+  We have
+  \begin{equation*}
+    \inputtikz{ZX-CNOT-variants}
+  \end{equation*}
+\end{lemma}
+\begin{proof}
+  Consider \(a ,b \in\{0,1\}\).
+  Using Lemma~\ref{lem:CNOT-auxiliary-XZ}, we compute for the left diagram
+  \begin{align*}
+    (Z_{2}^{1}\otimes \id_{ \mathbb{C}^{2}})(\id_{ \mathbb{C}^{2}} \otimes X_{1}^{2}) \ket{ab}
+    & = \tfrac{1}{\sqrt{2}} \sum_{k=1}^{2} (Z_{2}^{1}\otimes \id_{ \mathbb{C}^{2}}) \ket{ak} \otimes \ket{b \oplus k}
+      = \tfrac{1}{\sqrt{2}} \ket{a} \otimes \ket{b \oplus a}
+  \end{align*}
+    Similarly, the right diagram yields
+  \begin{align*}
+    (\id_{ \mathbb{C}^{2}} \otimes X_{2}^{1})(Z_{1}^{2} \otimes \id_{ \mathbb{C}^{2}}) \ket{ab}
+    & = (\id_{ \mathbb{C}_{2}} \otimes X_{2}^{1})\ket{aab}
+      = \tfrac{1}{\sqrt{2}} \ket{a}\otimes \ket{a \oplus b}. \qedhere
+  \end{align*}
+\end{proof}
+
+The previous Lemma allows us to use the following shorthand notation.
+\begin{equation*}
+  \inputtikz{ZX-pre-CNOT}
+\end{equation*}
+Combining Lemma~\ref{lem:CNOT-equal-presentations} with Equation~\eqref{eq:ZX-closed-examples} yields a presentation of the CNOT-gate in terms of \(ZX\)-diagrams.
+\begin{corollary}\label{cor:CNOT-as-ZX-diagram}
+  The CNOT-gate \(\CNOT\from (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) corresponds to the \(ZX\)-diagram
+  \begin{equation}\label{eq:ZX-version-of-CNOT}
+    \inputtikz{ZX-CNOT}
+  \end{equation}
+\end{corollary}
+\bigskip
+
+\noindent
+\textbf{The SWAP gate:}
+The SWAP gate interchanges the tensorands of a 2 qubit system
+That is, it maps a  vector \(\ket{ab}\) to \(\ket{ba}\).
+We observe that \(\CNOT \ket{ab} = \ket{a} \otimes \ket{a \oplus b}\) for  \(a, b \in\{0,1\}\), and therefore  transfers at least partially ``information'' from the first to the second qubit.
+This suggests that we can use chains of CNOTs to implement the SWAP-gate.
+
+\begin{proposition}\label{prop:swap-as-zx}
+  The SWAP-gate \(\SWAP \from ( \mathbb{C}^{2})^{\otimes 2} \to ( \mathbb{C}^{2})^{\otimes 2}\) corresponds to the diagram
+  \begin{equation}\label{eq:zw-swap}
+    \inputtikz{ZX-SWAP}
+  \end{equation}
+\end{proposition}
+\begin{proof}
+  We observe that we can decompose the Diagram~\eqref{eq:zw-swap} into three components: the left and rightmost being CNOT-gates and the middle one a flipped version of the CNOT-gate.
+  \begin{equation*}
+    \inputtikz{ZX-SWAP-aux}
+  \end{equation*}
+  Writing \(\sigma\from (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) for the tensor flip, we compute for any \(a, b \in\{0,1\}\)
+  \begin{align*}
+    (\CNOT\circ (\sigma \CNOT \sigma)\circ \CNOT)\ket{ab}
+    & = (\CNOT\circ (\sigma \CNOT \sigma)) \ket{a} \otimes \ket{a \oplus b}\\
+    & = \CNOT \ket{a \oplus a \oplus b} \otimes \ket{a \oplus b}
+      = \CNOT \ket{b} \otimes \ket{a \oplus b}\\
+    & = \ket{b} \otimes \ket{a \oplus b \oplus b}
+      = \ket{ba}. \qedhere
+  \end{align*}
+\end{proof}
+\bigskip
+
+\noindent
+\textbf{The Hadamard gate:}
+The Hadamard gate, due to its ubiquitous applications,  plays a special role in the \(ZX\)-calculus.
+Since it is a unitary operation on a single qubit, we could derive a \(ZX\)-diagram using its Euler decomposition.
+\begin{equation}\label{eq:Hadamard-via-Euler-decomposition}
+  \inputtikz{ZX-Hadamard-realisation-Euler}
+\end{equation}
+\begin{proposition}\label{prop:Hadamard-ZX}
+  The Hadamard gate \(H \from \mathbb{C}^{2}\to \mathbb{C}^{2}\),
+  \(\begin{psmallmatrix}
+    x \\ y
+  \end{psmallmatrix}\mapsto
+  \tfrac{1}{\sqrt{2}}
+  \begin{psmallmatrix}
+    x+y \\ x-y
+  \end{psmallmatrix}\), corresponds to the diagram
+  \begin{equation}
+    \inputtikz{ZX-Hadamard-realisation}
+  \end{equation}
+\end{proposition}
+\begin{proof}
+  The claim follows from a straightforward computation using Lemma~\ref{lem:CNOT-auxiliary-XZ}:
+  \begin{align*}
+    \big((Z_{1}^{0}(-\tfrac{1}{4})
+    & \otimes Z_{1}^{1}(\tfrac{1}{4})) \circ X_{1}^{2} \circ Z_{1}^{1}(\tfrac{1}{4})\big)\ket{0}
+      = \big((Z_{1}^{0}(-\tfrac{1}{4}) \otimes Z_{1}^{1}(\tfrac{1}{4})) \circ X_{1}^{2}\big)\ket{0} \\
+    & = \tfrac{1}{\sqrt{2}}\big(Z_{1}^{0}(-\tfrac{1}{4}) \otimes Z_{1}^{1}(\tfrac{1}{4})\big) \ket{00} + \ket{11}
+      = \tfrac{1}{\sqrt{2}}(\ket{0} + \ket{1}) = \ket{+}   \\
+    \big((Z_{1}^{0}(-\tfrac{1}{4})
+    & \otimes Z_{1}^{1}(\tfrac{1}{4})) \circ X_{1}^{2} \circ Z_{1}^{1}(\tfrac{1}{4})\big)\ket{1}
+      = i \big((Z_{1}^{0}(-\tfrac{1}{4}) \otimes Z_{1}^{1}(\tfrac{1}{4})) \circ X_{1}^{2}\big)\ket{1} \\
+    & = \tfrac{i}{\sqrt{2}}\big(Z_{1}^{0}(-\tfrac{1}{4}) \otimes Z_{1}^{1}(\tfrac{1}{4})\big) \ket{01} + \ket{10}
+      = \tfrac{i}{\sqrt{2}}(-i\ket{0} + i\ket{1}) = \ket{-}
+  \end{align*} \qedhere
+\end{proof}
+
+Due to its ubiquity in our quantum algorithms, we add the Hadamard gate as an additional spider to our calculus.
+
+\begin{definition}\label{def:Hadamard-ZX}
+  The \emph{Hadamard-spider} is the unitary map
+  \begin{equation}
+    H \from \mathbb{C}^{2}\to \mathbb{C}^{2}, \qquad
+    \begin{pmatrix}
+      x \\ y
+    \end{pmatrix}\mapsto
+    \tfrac{1}{\sqrt{2}}
+    \begin{pmatrix}
+      x+y \\ x-y
+    \end{pmatrix},
+  \end{equation}
+  which we draw in the \(ZX\)-calculus as a yellow square.
+  \begin{equation*}
+    \inputtikz{ZX-Hadamard}
+  \end{equation*}
+\end{definition}
+
+\subsubsection{Further basic identities of ZX-spiders}\label{sec:further-basic-identities-of-zx-spiders}
+With respect to the computational bases of \( (\mathbb{C}^{2})^{\otimes n} \) and \( (\mathbb{C}^{2})^{\otimes m}\), the map \(Z_n^m(\alpha) \from (\mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes m}\) is given by the matrix
+\begin{equation}\label{eq:Z-spider-as-matrix}
+  \begin{pmatrix}
+    1 & 0 &   &   &\\
+    0 & 0 & \ddots &   &\\
+      & \ddots &   & \ddots &\\
+      &   & \ddots & 0 & 0 \\
+      &   &   & 0 &  e^{2\pi i \alpha}
+  \end{pmatrix} \in \Mat_{m,n}( \mathbb{C}).
+\end{equation}
+Unless \(n=m=2\) this is clearly not invertible and therefore not unitary.
+
 
 \begin{lemma}\label{lem:zx-spiders-are-partial-isometries}
-  TODO: partial isometry.
-  TODO: unitary if and only if n,m=1.
+  For any integers \(n, m \in \mathbb{N}\) with \(n,m \geq 1\) and real numbers \(\alpha, \beta \in \mathbb{R}\), the spiders \(Z_{n}^{m}(\alpha), X_{n}^{m}(\beta)\from (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes m}\) are partial isometries and unitary if and only if \(n=1=m\).
 \end{lemma}
+\begin{proof}
+  Using Equation~\eqref{eq:Z-spider-as-matrix}, we observe that the transformation matrix \(A\) of \(Z_{n}^{m}(\alpha)^{\dagger} \circ Z_{n}^{m}(\alpha)\) with respect to the computational basis of \( (\mathbb{C}^{2})^{\otimes n}\) is given by
+  \begin{equation*}
+    A=
+    \begin{pmatrix}
+      1 & 0 &   &   &\\
+      0 & 0 & \ddots &   &\\
+        & \ddots &   & \ddots &\\
+        &   & \ddots & 0 & 0 \\
+        &   &   & 0 &  1
+    \end{pmatrix} \in \Mat_{n}( \mathbb{C}).
+  \end{equation*}
+  Clearly \(A^{2}=A\) and therefore Lemma~\ref{lem:transformation-matrix-of-isometry} shows that \(Z_{n}^{m}(\alpha)\) is a partial isometry and it is unitary if and only if \(n=m=1\).
+\end{proof}
 
+Due to our identification of \(\rd*{( \mathbb{C}^{2})}\) with \(\mathbb{C}^{2}\), the two variants of the evaluation and coevaluation maps coincide:
+\begin{gather*}
+  \coev_{ \mathbb{C}^{2}} \from \mathbb{C} \to \mathbb{C}^{2} \otimes \mathbb{C}^{2}, \quad \lambda \mapsto \lambda(\ket{00} + \ket{11}), \\
+  \ev_{ \mathbb{C}^{2}} \from \mathbb{C}^{2} \otimes \mathbb{C}^{2} \to \mathbb{C}, \quad \ket{ab} \mapsto \braket{a}{b}.
+\end{gather*}
 
-\begin{definition}\label{def:phase-free-spiders}
-  TODO
-\end{definition}
-
-
-\begin{lemma}\label{lem:X-spiders-generate-computational-basis}
-
+\begin{lemma}\label{lem:coev-and-ev-zx-diagram}
+  The following identities hold:
+  \begin{equation}
+    \inputtikz{ZX-ev-coev}
+  \end{equation}
 \end{lemma}
+\begin{proof}
+  The claim follows from a direct computation.
+\end{proof}
 
-\begin{example}\label{ex:XOR}
-  Kissinger-W Equation 3.8
-\end{example}
+\begin{convention}
+  For convenience we will freely use tensor flips (i.e. SWAPS) and  bends to keep diagrams concise.
+\end{convention}
 
-\begin{definition}\label{def:GHZ-states}
-  TODO:
-\end{definition}
+\subsection{ZX-diagrams and their rewriting rules}\label{sec:zx-diagrams-and-their-rewriting-rules}
 
-\begin{lemma}\label{lem:Z-spiders-generate-GHZ-states}
-  TODO
-\end{lemma}
-
-\subsection{ZX-diagram}\label{sec:zx-diagram}
-
-\begin{definition}\label{def:PROP}
-
-\end{definition}
-
-generators for a prop
-
-\begin{definition}\label{def:ZX-prop}
-
-\end{definition}
-
-TODO: SWAP in the prop
-
-TODO: EV-coev in prop.
-
-TODO: ZX-diagram as element of the naive ZX-prop.
-
-TODO: for convenience we will freely use swaps and bends to keep diagrams concise.
-
-TODO: 0-ary diagrams are numbers (Eq. 3.26).
-
-Hadamard Eq. 3.81.
 
 \begin{theorem}\label{thm:zx-is-universal}
-The evaluation map from the ZX-prop to linear maps is surjective.
+  The evaluation map from the ZX-prop to linear maps is surjective.
 \end{theorem}
 \begin{proof}
 
 \end{proof}
-
-\subsection{Rewriting rules of the ZX-calculus}\label{sec:rewriting-rules-of-the-zx-calculus}
 
 The 7 rules of the ZX-calculus
 
@@ -5283,6 +5566,50 @@ Hadamard-Hadamard cancelation
 Euler decomposition of the Hadamard.
 
 \subsection{Applications of the ZX-calculus}\label{sec:applications-of-the-zx-calculus}
+
+\cleardoublepage
+\subsection{Exercises}\label{sec:ZX-exercises}
+
+\subsection*{ZX-spiders}
+
+\begin{exercise}\label{exe:complex-numbers-as-ZX-diagrams}
+Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-diagram by proceeding as follows.
+\begin{thmlist}
+  \item Verify that multiplying complex numbers corresponds to composing (or tensoring) \(ZX\)-diagrams (without in- and outputs).
+  \item Show that for any real number \(0\leq q\leq 2\) there is a \(ZX\)-diagram, evaluating to \(q\).
+  \item Write \(z= q2^{n} \sqrt{2}e^{2\pi i \alpha}\) for \(q, \alpha \in \mathbb{R}\) and \(n \in \mathbb{N}\). Use this decomposition to obtain a \(ZX\)-diagram representing \(z\).
+\end{thmlist}
+\end{exercise}
+
+\begin{exercise}
+  Prove that Equation~\eqref{eq:Hadamard-via-Euler-decomposition} yields a \(ZX\)-presentation of the Hadamard gate.
+\end{exercise}
+
+\begin{exercise}
+  Given \(n,m \in \mathbb{N}\), find \(\lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \in \mathbb{C}\) coefficients such that
+  \begin{equation*}
+    X_{n}^{m} = \sum_{\substack{i_{1}, \dots , i_{n} \in\{0,1\}\\, j_{1}, \dots , j_{m} \in\{0,1\}}} \lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \ket{j_{1} \dots j_{m}}\bra{i_{1} \dots i_{n}}.
+  \end{equation*}
+\end{exercise}
+
+\begin{exercise}
+  Given \(\alpha, \beta \in \mathbb{R}\), determine the absolute value of \(X_{n}^{0}(\beta)X_{0}^{n}(\alpha)\).
+\end{exercise}
+
+
+\cleardoublepage
+\subsection{Study goals}\label{sec:ZX-study-goals}
+The questions below are designed to help you build a conceptual understanding of the ZX-calculus.
+You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
+The level of difficulty is aligned with what you can expect in the exam.
+
+\subsubsection*{ZX-spiders}
+\begin{thmlist}
+  \item What \(ZX\)-spider represents the identity map \( \mathbb{C}^{2} \to \mathbb{C}^{2}\),
+  \item Can the number \(3\) be represented as a single \(ZX\)-spider?
+  \item Determine all  \(\alpha \in \mathbb{ \mathbb{R}}\) such that there is an arity \((0,0)\)-spider representing \(e^{2\pi i \alpha}\).
+  \item Let \(\theta \in \mathbb{R}\) be a real number. Find a \(ZX\)-diagram representing \(\cos(\theta)\).
+\end{thmlist}
 
 
 % \begin{description}

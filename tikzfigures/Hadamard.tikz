@@ -1,0 +1,11 @@
+\begin{tikzpicture}[baseline={([yshift=-1ex]current bounding box.center)}]
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (3, 0) {};
+		\node [style=none] (1) at (0, 0) {};
+		\node [style=dagger-morph] (2) at (1.5, 0) {$H$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=directed] (0.center) to (2);
+		\draw [style=directed] (2) to (1.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

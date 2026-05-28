@@ -1,0 +1,56 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z-spider] (0) at (6.5, 0) {};
+		\node [style=X-spider] (4) at (6.5, 1) {};
+		\node [style=none] (20) at (3.75, 2) {};
+		\node [style=none] (21) at (13.25, 2) {};
+		\node [style=none] (24) at (3.75, -0.75) {};
+		\node [style=none] (25) at (13.25, -0.75) {};
+		\node [style=none] (30) at (8.75, 1) {};
+		\node [style=none] (32) at (8.75, 0) {};
+		\node [style=none] (38) at (4.25, 1) {};
+		\node [style=none] (39) at (4.25, 0) {};
+		\node [style=none] (40) at (9.75, 1) {};
+		\node [style=none] (41) at (9.75, 0) {};
+		\node [style=none] (42) at (10.75, 1) {};
+		\node [style=none] (43) at (10.75, 0) {};
+		\node [style=none] (45) at (11.75, 0) {};
+		\node [style=none] (46) at (12.75, 0) {};
+		\node [style=none] (47) at (12.75, 1) {};
+		\node [style=none] (48) at (11.75, 1) {};
+		\node [style=none] (49) at (11.75, 1.25) {};
+		\node [style=none] (50) at (10.75, 1.25) {};
+		\node [style=none] (51) at (10.75, -0.25) {};
+		\node [style=none] (52) at (11.75, -0.25) {};
+		\node [style=none] (54) at (11.25, 0.5) {$\CNOT$};
+		\node [style=none] (56) at (9.25, 0.5) {$=$};
+		\node [style=Z-spider] (57) at (5.75, 1.5) {};
+		\node [style=X-spider] (58) at (7.25, 1.5) {};
+		\node [style=none] (59) at (3.75, -1.25) {};
+		\node [style=none] (60) at (13.25, -1.25) {};
+		\node [style=none] (61) at (8.5, -1) {The ``flipped'' CNOT gate};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (20.center) to (21.center);
+		\draw [style=object] (0) to (4);
+		\draw [style=object] (0) to (39.center);
+		\draw [style=object] (4) to (30.center);
+		\draw [style=object] (32.center) to (0);
+		\draw [style=object] (4) to (38.center);
+		\draw [style=directed, in=360, out=180] (46.center) to (48.center);
+		\draw [style=directed, in=0, out=-180] (47.center) to (45.center);
+		\draw [style=directed, in=360, out=180] (43.center) to (40.center);
+		\draw [style=directed, in=0, out=-180] (42.center) to (41.center);
+		\draw (50.center) to (49.center);
+		\draw (49.center) to (52.center);
+		\draw (52.center) to (51.center);
+		\draw (51.center) to (50.center);
+		\draw [style=object] (58) to (57);
+		\draw (24.center) to (25.center);
+		\draw (20.center) to (24.center);
+		\draw (21.center) to (25.center);
+		\draw (24.center) to (59.center);
+		\draw (59.center) to (60.center);
+		\draw (60.center) to (25.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

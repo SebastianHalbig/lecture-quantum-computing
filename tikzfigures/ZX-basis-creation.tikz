@@ -1,0 +1,53 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (3, 0) {};
+		\node [style=Z-spider] (1) at (4.75, 0) {};
+		\node [style=vector] (2) at (7.5, 0) {\!\!\!$\sqrt{2}\ket{+}$};
+		\node [style=none] (3) at (5.5, 0) {$=$};
+		\node [style=none] (4) at (6.25, 0) {};
+		\node [style=none] (5) at (3, -2) {};
+		\node [style=Z-spider] (6) at (4.75, -2) {};
+    \node [style=none] (6a) at (4.75, -2) {$\tfrac{1}{2}$};
+		\node [style=vector] (7) at (7.5, -2) {\!\!\!$\sqrt{2}\ket{-}$};
+		\node [style=none] (8) at (5.5, -2) {$=$};
+		\node [style=none] (9) at (6.25, -2) {};
+		\node [style=none] (10) at (10, 0) {};
+		\node [style=X-spider] (11) at (11.75, 0) {};
+		\node [style=vector] (12) at (14.5, 0) {\!\!\!$\sqrt{2}\ket{0}$};
+		\node [style=none] (13) at (12.5, 0) {$=$};
+		\node [style=none] (14) at (13.25, 0) {};
+		\node [style=none] (15) at (10, -2) {};
+		\node [style=X-spider] (16) at (11.75, -2) {};
+    \node [style=none] (16b) at (11.75, -2) {$\tfrac{1}{2}$};
+		\node [style=vector] (17) at (14.5, -2) {\!\!\!$\sqrt{2}\ket{1}$};
+		\node [style=none] (18) at (12.5, -2) {$=$};
+		\node [style=none] (19) at (13.25, -2) {};
+		\node [style=none] (20) at (2, 1) {};
+		\node [style=none] (21) at (9, 1) {};
+		\node [style=none] (22) at (16, 1) {};
+		\node [style=none] (23) at (16, -3) {};
+		\node [style=none] (24) at (9, -3) {};
+		\node [style=none] (25) at (2, -3) {};
+		\node [style=none] (26) at (2, -3.5) {};
+		\node [style=none] (27) at (9, -3.5) {};
+		\node [style=none] (28) at (16, -3.5) {};
+		\node [style=none] (29) at (5.5, -3.25) {$Z$-gates create the $X$- basis.};
+		\node [style=none] (30) at (12.5, -3.25) {$X$-gates create the $Z$-basis.};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=object] (1) to (0.center);
+		\draw [style=directed] (2) to (4.center);
+		\draw [style=object] (6) to (5.center);
+		\draw [style=directed] (7) to (9.center);
+		\draw [style=object] (11) to (10.center);
+		\draw [style=directed] (12) to (14.center);
+		\draw [style=object] (16) to (15.center);
+		\draw [style=directed] (17) to (19.center);
+		\draw (20.center) to (22.center);
+		\draw (22.center) to (28.center);
+		\draw (28.center) to (26.center);
+		\draw (26.center) to (20.center);
+		\draw (21.center) to (27.center);
+		\draw (25.center) to (23.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

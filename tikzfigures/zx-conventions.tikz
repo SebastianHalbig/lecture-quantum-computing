@@ -1,0 +1,43 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (1, 0) {};
+		\node [style=none] (1) at (1, 1.5) {};
+		\node [style=none] (2) at (8, 1.5) {};
+		\node [style=none] (3) at (8, -1.25) {};
+		\node [style=none] (4) at (3.75, 0.75) {};
+		\node [style=none] (5) at (1.75, 0.75) {};
+		\node [style=none] (7) at (4.5, 0.75) {$\eqdef$};
+		\node [style=none] (8) at (7.25, 0.75) {};
+		\node [style=none] (9) at (5.25, 0.75) {};
+		\node [style=none] (10) at (7.25, 1) {$\mathbb{C}^2$};
+		\node [style=none] (11) at (5.25, 1) {$\mathbb{C}^2$};
+		\node [style=none] (12) at (15, 0) {};
+		\node [style=none] (13) at (15, 1.5) {};
+		\node [style=dagger-morph] (14) at (12.75, 0.75) {$\mu_{\lambda}$};
+		\node [style=dagger-morph] (15) at (9, 0.75) {$\lambda$};
+		\node [style=none] (19) at (14.25, 0.75) {};
+		\node [style=none] (20) at (11.25, 0.75) {};
+		\node [style=none] (21) at (10.5, 0.75) {$\eqdef$};
+		\node [style=none] (26) at (14.25, 1) {$\mathbb{C}$};
+		\node [style=none] (27) at (11.25, 1) {$\mathbb{C}$};
+		\node [style=none] (28) at (1, -1.25) {};
+		\node [style=none] (29) at (8, -1.25) {};
+		\node [style=none] (30) at (15, -1.25) {};
+		\node [style=none] (32) at (4.5, -0.625) {Strings will be undirect and always represent $\mathbb{C}^2$.};
+		\node [style=none, text width=7cm, align=center] (33) at (11.5, -0.625) {A box without in and outputs represents a complex number $\lambda \in \mathbb{C}$ (which is identified with the multiplication map $\mu_\lambda \from \mathbb{C}\to \mathbb{C}$, $z \mapsto \lambda z$.};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=object] (4.center) to (5.center);
+		\draw [style=directed] (8.center) to (9.center);
+		\draw (1.center) to (2.center);
+		\draw (2.center) to (3.center);
+		\draw (13.center) to (2.center);
+		\draw [style=directed, dashed] (14) to (20.center);
+		\draw [style=directed, dashed] (19.center) to (14);
+		\draw (29.center) to (28.center);
+		\draw (29.center) to (30.center);
+		\draw (0.center) to (12.center);
+		\draw (13.center) to (30.center);
+		\draw (1.center) to (28.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

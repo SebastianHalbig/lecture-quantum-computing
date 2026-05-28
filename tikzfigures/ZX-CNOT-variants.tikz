@@ -1,0 +1,55 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z-spider] (0) at (1.5, 3) {};
+		\node [style=none] (1) at (0, 3) {};
+		\node [style=none] (3) at (2.5, 4) {};
+		\node [style=X-spider] (4) at (3.5, 1) {};
+		\node [style=none] (5) at (0, 0) {};
+		\node [style=none] (6) at (2.5, 0) {};
+		\node [style=none] (7) at (5, 1) {};
+		\node [style=none] (8) at (5, 4) {};
+		\node [style=none] (9) at (2.5, 2) {};
+		\node [style=Z-spider] (10) at (11.5, 3) {};
+		\node [style=none] (11) at (13, 3) {};
+		\node [style=none] (12) at (10.5, 4) {};
+		\node [style=X-spider] (13) at (9.5, 1) {};
+		\node [style=none] (14) at (13, 0) {};
+		\node [style=none] (15) at (10.5, 0) {};
+		\node [style=none] (16) at (8, 1) {};
+		\node [style=none] (17) at (8, 4) {};
+		\node [style=none] (18) at (10.5, 2) {};
+		\node [style=none] (19) at (5.5, 2) {$=$};
+		\node [style=none] (20) at (-1, 4.5) {};
+		\node [style=none] (21) at (14, 4.5) {};
+		\node [style=none] (22) at (-1, -1) {};
+		\node [style=none] (23) at (14, -1) {};
+		\node [style=none] (24) at (-1, -0.5) {};
+		\node [style=none] (25) at (14, -0.5) {};
+		\node [style=none] (26) at (6.5, -0.75) {Two ways to realise a scalar multiple of the CNOT-gate.};
+		\node [style=none] (27) at (7.5, 2) {$=$};
+		\node [style=none] (28) at (6.5, 2) {\normalsize{$\tfrac{1}{\sqrt{2}}\CNOT$}};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=object] (0) to (1.center);
+		\draw [style=object] (5.center) to (6.center);
+		\draw [style=object, in=240, out=0] (6.center) to (4);
+		\draw [style=object] (8.center) to (3.center);
+		\draw [style=object] (4) to (7.center);
+		\draw [style=object, in=360, out=120] (4) to (9.center);
+		\draw [style=object, in=300, out=180] (9.center) to (0);
+		\draw [style=object, in=180, out=60] (0) to (3.center);
+		\draw [style=object] (10) to (11.center);
+		\draw [style=object] (14.center) to (15.center);
+		\draw [style=object, in=-60, out=180] (15.center) to (13);
+		\draw [style=object] (17.center) to (12.center);
+		\draw [style=object] (13) to (16.center);
+		\draw [style=object, in=-180, out=60] (13) to (18.center);
+		\draw [style=object, in=-120, out=0] (18.center) to (10);
+		\draw [style=object, in=0, out=120] (10) to (12.center);
+		\draw (20.center) to (21.center);
+		\draw (22.center) to (23.center);
+		\draw (20.center) to (22.center);
+		\draw (21.center) to (23.center);
+		\draw (25.center) to (24.center);
+	\end{pgfonlayer}
+\end{tikzpicture}
