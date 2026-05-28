@@ -5195,11 +5195,11 @@ The ZX calculus builds on the observation that any unitary matrix can be written
 \begin{convention}
   For the \(ZX\)-calculus, we agree on the following conventions.
   \begin{thmlist}
-    \item We identity the vector spaces \( \rd*{\mathbb{C}}\) and \(\mathbb{C}\) using the isomorphism
+    \item We identify the vector spaces \( \rd*{\mathbb{C}}\) and \(\mathbb{C}\) using the isomorphism
     \begin{equation*}
        \rd*{ \mathbb{C}} \to \mathbb{C}, \qquad \lambda \mapsto \lambda(1).
     \end{equation*}
-    \item We identity the vector spaces \( \rd*{\mathbb{C}^{2}}\) and \(\mathbb{C}^{2}\) using the unique isomorphism \(\rd*{\mathbb{C}^{2}} \to \mathbb{C}^{2}\) that satisfies
+    \item We identify the vector spaces \( \rd*{\mathbb{C}^{2}}\) and \(\mathbb{C}^{2}\) using the unique isomorphism \(\rd*{\mathbb{C}^{2}} \to \mathbb{C}^{2}\) that satisfies
     \begin{equation*}
        \bra{0} \mapsto \ket{0}, \qquad \bra{1} \mapsto \ket{1}.
     \end{equation*}
@@ -5223,7 +5223,7 @@ From now on, we will simply write
   \begin{subequations}
     \begin{align}
       Z_{n}^{m}(\alpha) &= \ket{0}^{\otimes m}\bra{0}^{\otimes n} + e^{2\pi i \alpha}\ket{1}^{\otimes m} \bra{1} ^{\otimes n}\from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes m}, \\
-      X_{n}^{m}(\beta) &= \ket{+}^{\otimes m}\bra{+}^{\otimes n} + e^{2\pi i \alpha}\ket{-}^{\otimes m} \bra{-} ^{\otimes n}\from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes m}
+      X_{n}^{m}(\beta) &= \ket{+}^{\otimes m}\bra{+}^{\otimes n} + e^{2\pi i \beta}\ket{-}^{\otimes m} \bra{-} ^{\otimes n}\from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes m}
     \end{align}
   \end{subequations}
   The spiders \(Z_{n}^{m}(\alpha)\) and  \(X_{n}^{m}(\beta)\) are operations of \emph{arity} \((n,m)\) with \(n\) \emph{inputs} and  \(m\) outputs.
@@ -5321,7 +5321,7 @@ Some examples of such diagrams are shown below.
 \bigskip
 
 \noindent
-\textbf{The CNOT-gate}: The \(\CNOT\) get is obtain by composing multiple \(X\)- and \(Z\)-spider.
+\textbf{The CNOT-gate}: The \(\CNOT\) is obtain by composing multiple \(X\)- and \(Z\)-spider.
 We will derive two presentations.
 Both rely on the next auxiliary lemma that uses the addition modulo \(2\) discussed in Definition~\ref{def:addition-modulo-2}.
 
@@ -5415,7 +5415,7 @@ This suggests that we can use chains of CNOTs to implement the SWAP-gate.
   \end{equation}
 \end{proposition}
 \begin{proof}
-  We observe that we can decompose the Diagram~\eqref{eq:zw-swap} into three components: the left and rightmost being CNOT-gates and the middle one a flipped version of the CNOT-gate.
+  We observe that we can decompose the Diagram~\eqref{eq:zw-swap} into three components: the leftmost and rightmost being CNOT-gates and the middle one a flipped version of the CNOT-gate.
   \begin{equation*}
     \inputtikz{ZX-SWAP-aux}
   \end{equation*}
@@ -5496,7 +5496,7 @@ With respect to the computational bases of \( (\mathbb{C}^{2})^{\otimes n} \) an
       & \ddots &   & \ddots &\\
       &   & \ddots & 0 & 0 \\
       &   &   & 0 &  e^{2\pi i \alpha}
-  \end{pmatrix} \in \Mat_{m,n}( \mathbb{C}).
+  \end{pmatrix} \in \Mat_{2^{m}, 2^{n}}( \mathbb{C}).
 \end{equation}
 Unless \(n=m=2\) this is clearly not invertible and therefore not unitary.
 
@@ -5514,7 +5514,7 @@ Unless \(n=m=2\) this is clearly not invertible and therefore not unitary.
         & \ddots &   & \ddots &\\
         &   & \ddots & 0 & 0 \\
         &   &   & 0 &  1
-    \end{pmatrix} \in \Mat_{n}( \mathbb{C}).
+    \end{pmatrix} \in \Mat_{2^{n}}( \mathbb{C}).
   \end{equation*}
   Clearly \(A^{2}=A\) and therefore Lemma~\ref{lem:transformation-matrix-of-isometry} shows that \(Z_{n}^{m}(\alpha)\) is a partial isometry and it is unitary if and only if \(n=m=1\).
 \end{proof}
