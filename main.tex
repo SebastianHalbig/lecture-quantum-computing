@@ -2960,7 +2960,7 @@ The next lemma studies how they  behave under the Kronecker product.
   \end{thmlist}
 \end{lemma}
 \begin{proof}
-  By the Schur decomposition, see Exercise~\ref{exe:schur-decomposition}, there exist invertible matrices \( P \) and \( Q \) such that \( A' = P^{-1}AP \) and \( B' = Q^{-1}BQ \) are upper triangular, with eigenvalues $ \lambda_1, \dots, \lambda_n $ of $ A $ and $ \mu_1, \dots, \mu_m $ of $ B $ as their diagonal entries.
+  By the Schur decomposition, see Exercise~\ref{exe:schur-decomposition}, there exist invertible matrices \( P \) and \( Q \) such that \( A' = P^{-1}AP \) and \( B' = Q^{-1}BQ \) are upper triangular, with eigenvalues \( \lambda_1, \dots, \lambda_n \) of \( A \) and \( \mu_1, \dots, \mu_m \) of \( B \) as their diagonal entries.
   The  Kronecker product is
    \begin{equation*}
     A' \otimes B' = P^{-1}AP \otimes Q^{-1}BQ = (P \otimes Q)^{-1}(A \otimes B)(P \otimes Q)
@@ -5188,7 +5188,7 @@ The following quote, taken from the website \url{https://zxcalculus.com/} descri
   It comes with a scalable notation capable of representing repeated structures at arbitrary qubit scales. (...)
 \end{quote}
 
-
+The ZX-calculus is discussed in detail in \cite[Chapter~3]{kissinger-wetering2025:PicturingQuantumSoftware} and \cite{coecke-kissinger2017:PicturingQuantumProcesses}.
 \subsection{ZX-spiders}\label{sec:zx-spiders}
 The ZX calculus builds on the observation that any unitary matrix can be written as a product of \(Z\) and \(X\) phase gates (up to a global phase), and extends this to a language suitable for diagrammatically reasoning about arbitrary linear maps.
 
@@ -5487,6 +5487,135 @@ Due to its ubiquity in our quantum algorithms, we add the Hadamard gate as an ad
   \end{equation*}
 \end{definition}
 
+\subsubsection{Interlude: The Deutsch--Jozsa algorithm}\label{sec:interlude:-the-deutsch--jozsa-algorithm}
+
+The \emph{Deutsch--Jozsa algorithm}\footnote{%
+  The Deutsch--Jozsa algorithm is named after the physicists
+  \textit{David Deutsch} (born 1953) and \textit{Richard Jozsa} (born 1953).
+} addresses the following problem:
+\begin{center}
+  Given a map \( f \from \{0,1\}^m \to \{0,1\} \) that is either
+  \begin{thmlist}
+    \item \textit{constant}: \( f(x) = f(y) \) for all \( x, y \in \{0,1\}^m \), or
+    \item \textit{balanced}: \( |\left\{ x \in \{0,1\}^m \mid f(x) = 0 \right\}| = |\left\{ y \in \{0,1\}^m \mid f(y) = 1 \right\}| \),
+  \end{thmlist}
+  decide whether \( f \) is balanced or constant.
+\end{center}
+
+\noindent
+\textbf{Classical approach:}
+In the worst case\footnote{This worst-case scenario occurs, for example, if \( f \) is constant.}, we must evaluate \( f \) for at least \( 2^{m-1} + 1 \) inputs to determine whether it is balanced or constant.
+\bigskip
+
+\noindent
+\textbf{The quantum approach:}
+Assume we have a quantum version of our function \(f\) given by the unitary map \( UB(f) \from (\mathbb{C}^2)^{\otimes m+1} \to (\mathbb{C}^2)^{\otimes m+1} \) of \( f \), satisfying (as discussed with Bennett's trick in Section~\ref{sec:translating-classical-algorithms-to-quantum-algorithms})
+for every \( x_1, \dots, x_m, y \in \{0,1\} \):
+\begin{equation*}
+  UB(f) \ket{x_1 \dots x_m} \otimes \ket{y} \mapsto \ket{x_1 \dots x_m} \otimes \ket{f(x_1, \dots, x_m) \oplus y}.
+\end{equation*}
+
+We will now show that a deceptively simple quantum algorithm can solve this problem. Theorem~\ref{thm:zx-is-universal} will show that there even is a ZX-diagram representing \( UB(f) \).
+We will use it as a black box and consider the diagram below.
+\begin{equation*}
+  \inputtikz{Deutsch-Jozsa}
+\end{equation*}
+Here \(\zeta_{1}= (\tfrac{1}{\sqrt{2}})^{m+1}= \zeta_{2}\) are scalars needed to ensure that we work with normalised vectors.
+These scalars can be drawn in the ZX-calculus, see Lemma~\ref{lem:any-complex-number}.
+
+To understand why this can detect whether \( f \) is balanced, we analyse all three phases of the algorithm---state initialisation, quantum circuit application, and measurement—in detail.
+\medskip
+
+\noindent
+\textit{State initialisation:}
+By Remark~\ref{rmk:x-creates-z-and-vice-versa}, a phase-free \( X_0^1 \)-gate creates the state \( \sqrt{2}\ket{0} \), and \( X_0^1(\tfrac{1}{2}) \) gives rise to \( \sqrt{2}\ket{1} \).
+Thus, using the normalisation given by the scalar \(\zeta_{1}\), our initial state is
+\begin{equation*}
+  v_{\text{init}} = \ket{0 \dots 0 1}.
+\end{equation*}
+\medskip
+
+
+\noindent
+\textit{Quantum circuit:}
+The Hadamard gate \( H \from \mathbb{C}^2 \to \mathbb{C}^2 \) corresponds to the change of basis sending \( \ket{0} \) to \( \ket{+} \) and \( \ket{1} \) to \( \ket{-} \).
+For any \( x \in \{0,1\} \), we have
+\begin{equation}\label{eq:Hadamard-equiv-descriptions}
+  H \ket{x} = \frac{1}{\sqrt{2}} \left( \ket{0} + (-1)^x \ket{1} \right) = \frac{1}{\sqrt{2}} \sum_{y \in \{0,1\}} (-1)^{xy} \ket{y}.
+\end{equation}
+
+Thus, step 1 of our quantum circuit yields
+\begin{equation*}
+  v_{\text{step 1}}
+  = H^{\otimes m+1} (v_{\text{init}})
+  = \left( \frac{1}{\sqrt{2}} \right)^{m+1} \sum_{s \in \{0,1\}^m} \ket{s} \otimes \left( \ket{0} - \ket{1} \right).
+\end{equation*}
+
+In order to evaluate \(UB(f) v_{\text{step 1}}\), we compute for a given \( s \in \{0,1\}^m \) the value
+\begin{equation*}
+  UB(f) \left( \ket{s} \otimes \left( \ket{0} - \ket{1} \right) \right) =
+  \begin{cases}
+    \ket{s} \otimes \left( \ket{0} - \ket{1} \right) & \text{if } f(s) = 0, \\
+    \ket{s} \otimes \left( \ket{1} - \ket{0} \right) & \text{if } f(s) = 1.
+  \end{cases}
+\end{equation*}
+This can also be written as
+\begin{equation*}
+  UB(f) \left( \ket{s} \otimes \left( \ket{0} - \ket{1} \right) \right) = (-1)^{f(s)} \ket{s} \otimes \left( \ket{0} - \ket{1} \right)
+\end{equation*}
+and so
+\begin{equation*}
+  v_{\text{step 2}}
+  = UB(f)(v_{\text{step 1}})
+  = \left( \frac{1}{\sqrt{2}} \right)^{m+1} \sum_{s \in \{0,1\}^m} (-1)^{f(s)} \ket{s} \otimes \left( \ket{0} - \ket{1} \right).
+\end{equation*}
+For \( s, z \in \{0,1\}^m \), we write \( sz \eqdef s_1 z_1 + \dots + s_m z_m \).
+Then, using the Hadamard transformation, we get
+\begin{equation*}
+  v_{\text{step 3}}
+  = (H^{\otimes m} \otimes \id_{\mathbb{C}^2}) v_{\text{step 2}}
+  = \left( \frac{1}{2} \right)^m \sum_{s, z \in \{0,1\}^m} (-1)^{f(s) + sz} \ket{z} \otimes \left( \frac{1}{\sqrt{2}} \ket{0} - \ket{1} \right).
+\end{equation*}
+\medskip
+
+\noindent
+\textit{Measurement:}
+Finally, we measure our results.
+In the circuit drawn above, this is done by placing at the end of each string either a phase-free \( X_1^0 \)-spider or the \( Z_1^0(\tfrac{1}{2}) \)-spider.
+Note that by definition
+\begin{equation*}
+  X_1^0(0) = \bra{+} + \bra{-} = \sqrt{2} \bra{0}, \quad Z_1^0\left(\tfrac{1}{2}\right) = \bra{0} - \bra{1} = \sqrt{2} \bra{-}.
+\end{equation*}
+
+Thus, due to the rescaling factor \(\zeta_{2}\), our measurement map is
+\begin{equation*}
+  \bra{0}^{\otimes m} \otimes \bra{-}.
+\end{equation*}
+
+Let \(\lambda\in \mathbb{C}\) be the the unique scalar such that \(e(v_{\text{step 3}})= \lambda \ket{0}^{\otimes m} \otimes \ket{-} + v^{\perp}\), where \(v^{\perp}\) is orthogonal to \(\ket{0}^{\otimes m} \otimes \ket{-}\).
+Then
+\begin{equation*}
+  \big(\bra{0}^{\otimes m} \otimes \bra{-} \big)v_{\mathrm{step 3}} = \lambda.
+\end{equation*}
+This is not exactly the projective measurement discussed in Section~\ref{sec:measurements-and-the-born-rule}, but the difference is negligible:
+given the projection map  \( e \from (\mathbb{C}^2)^{\otimes m+1} \to (\mathbb{C}^{2})^{\otimes m+1} \) into the subspace spanned by \( \ket{0}^{\otimes m} \otimes \ket{-} \) , we compute the probability of observing our system in state \(\ket{0}^{\otimes m}\otimes \ket{-}\) as
+\begin{align*}
+  \braket{v_{\text{step 3}}}{ e | v_{\text{step 3}}}
+  & = \braket{v_{\text{step 3}}}{ e^{\dagger} e | v_{\text{step 3}}}
+    = \braket{e(v_{\text{step 3}})}{e(v_{\text{step 3}})}
+    = |\lambda|.
+\end{align*}
+Thus, we get the probability off our system being the configuration \(\ket{0}^{\otimes m}\otimes \ket{-}\) as
+\begin{equation*}
+  |\lambda|
+  = \bigg| \big(\bra{0}^{\otimes m} \otimes \bra{-} \big)v_{\mathrm{step 3}} \bigg|
+  =
+  \begin{cases}
+    1 & \text{if } f \text{ is constant}, \\
+    0 & \text{if } f \text{ is balanced}.
+  \end{cases}
+\end{equation*}
+
 \subsubsection{Further basic identities of ZX-spiders}\label{sec:further-basic-identities-of-zx-spiders}
 With respect to the computational bases of \( (\mathbb{C}^{2})^{\otimes n} \) and \( (\mathbb{C}^{2})^{\otimes m}\), the map \(Z_n^m(\alpha) \from (\mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes m}\) is given by the matrix
 \begin{equation}\label{eq:Z-spider-as-matrix}
@@ -5539,33 +5668,372 @@ Due to our identification of \(\rd*{( \mathbb{C}^{2})}\) with \(\mathbb{C}^{2}\)
   For convenience we will freely use tensor flips (i.e. SWAPS) and  bends to keep diagrams concise.
 \end{convention}
 
-\subsection{ZX-diagrams and their rewriting rules}\label{sec:zx-diagrams-and-their-rewriting-rules}
+\subsection{Universality of ZX-diagram}\label{sec:universality-of-zx-diagram}
+The aim of this section is simple: we want to prove that any linear map from \( (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes m}\) can be represented as a ZX-diagram.
+While this could be done more or less in an ad-hoc fashion, we will take the scenic route to answer probably the most natural question: ``so what?''.
+To this end, we will discuss two major results in quantum information theory:
+\begin{thmlist}
+  \item The \emph{Gottesman--Knill Theorem}~\ref{thm:Gottesman-Knill-theorem} states that certain non-universal gate sets---gate sets with limited complexity for the operations they can implement---can be simulated efficiently (\ie in polynomial time) on a classical computer.
+  \item The \emph{Solovay--Kitaev Theorem}~\ref{thm:Kitaev-Solovay-theorem} proves that the choice of universal gate set does not matter.
+  That is, any algorithm running in polynomial time using gates  of some gate set \( A \) will also run in polynomial time using gates of a gate set \( B \).
+\end{thmlist}
+
+\begin{definition}\label{def:two-level-unitary}
+We call a matrix \(U \in \mathrm{U}(n)\) a \emph{two-level unitary} if it is of the form
+  \begin{equation*}
+    U =
+    \begin{pmatrix}
+      1 &   &   &   &   &   &   &   &   \\
+        & \ddots &   &   &   &   &   &   &   \\
+        &   & 1 &   &   &   &   &   &   \\
+        &   &   & a & \dots &   & b &   &   \\
+        &   &   & \vdots & \ddots &   & \vdots &   &   \\
+        &   &   & c & \dots &   & d &   &   \\
+        &   &   &   &   &   &   & 1 &   \\
+        &   &   &   &   &   &   &   & \ddots &   \\
+        &   &   &   &   &   &   &   &   & 1
+    \end{pmatrix}
+  \end{equation*}
+  where \(a, b, c, d\) appear in the \(p\)-th and \(q\)-th rows and columns, and the matrix acts as the identity elsewhere.
+\end{definition}
+
+A way to construct two-level unitaries is as follows:
+pick any \( 2 \times 2 \) unitary matrix \( \begin{pmatrix} a & b \\ c & d \end{pmatrix} \) and indices \( 1 \leq p < q \leq n \). Then, take the identity matrix and replace the entries at positions \( (p,p) \), \( (p,q) \), \( (q,p) \), and \( (q,q) \) with \( a, b, c, \) and \( d \), respectively.
 
 
-\begin{theorem}\label{thm:zx-is-universal}
-  The evaluation map from the ZX-prop to linear maps is surjective.
-\end{theorem}
+\begin{lemma}\label{lem:two-level-unitaries-do-the-job}
+  Let \( n \geq 2 \).
+  Any unitary matrix \( U \in U(n) \) is a product of two-level unitaries.
+\end{lemma}
 \begin{proof}
+  We proceed by induction on \( n \).
 
+  \textit{Base case (\( n = 2 \)):}
+  For \( n = 2 \), the claim trivially holds since any \( 2 \times 2 \) unitary matrix is itself a two-level unitary.
+
+  \textit{Inductive step:}
+  Assume the claim holds for \( n \), and let \( U \) be a unitary matrix of size \( n+1 \).
+  Let \( u = (u_{11}, \dots, u_{n1})^T \) be the first column of \( U \).
+
+  Assume that \( u_{k1} \neq 0 \) for some \( k > 1 \), and let \( 1 < j \leq n \) be the minimal index such that \( u_{j1} \neq 0 \).
+  By Exercise~\ref{exe:existence-of-rotation}, there exist \( x, y \in \mathbb{C} \) with \( |x|^2 + |y|^2 = 1 \) such that
+  \begin{equation*}
+    - \overline{y} u_{11} + \overline{x} u_{j1} = 0.
+  \end{equation*}
+
+  Let \( R_{1} \) be the two-level unitary obtained by replacing the entries of the identity matrix at positions \( (1,1) \), \( (1,j) \), \( (j,1) \), and \( (j,j) \) with \( x, y, -\overline{y}, \) and \( \overline{x} \), respectively.
+  Then, \( R_{1}U \) is unitary (as a product of unitary matrices), and its first column \( v = (v_{11}, \dots, v_{n1}) \) satisfies \( v_{k1} = 0 \) for all \( 1 \leq k \leq j \).
+
+  Iterating this procedure leads to a unitary matrix \( U' = R_\ell \dots R_1 U \) obtained by multiplying \( U \) with two-level unitaries, such that its first column is \( (e^{2\pi i \lambda}, 0, \dots, 0)^T \) for some \( \lambda \in \mathbb{R} \).
+  Since \( U' \) is unitary, we have:
+  \begin{equation*}
+    U' =
+    \begin{pmatrix}
+      e^{2\pi i \lambda} & 0 \\
+      0 & U''
+    \end{pmatrix} =
+    \begin{pmatrix}
+      e^{2\pi i \lambda} & 0 \\
+      0 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & U''
+    \end{pmatrix},
+  \end{equation*}
+  where \( U'' \) is a unitary \( n \times n \) matrix.
+  By the induction hypothesis, \( U'' \) is a product of two-level unitaries. Therefore, \( U' \) is a product of two-level unitaries, and so is \( U \).
 \end{proof}
 
-The 7 rules of the ZX-calculus
+We will use the decomposition of unitaries into a product of two-level unitaries predominantly to show that a gate set constructible from \(ZX\)-spiders can be used to implement any unitary.
+This also requires a certain  decomposition of the \emph{special unitary} \(2\times 2\) matrices
+\begin{equation}\label{eq:SU2-defn}
+  \SU(2) \eqdef\{ U \in \U(2) \mid \det(U) = 1\}
+\end{equation}
 
-spider fusion
+\begin{lemma}\label{lem:ABC-decomposition}
+  For any matrix \(U\in \SU(2)\) there exist matrices \(A,B,C \in \SU(2)\) such that
+  \begin{equation*}
+    ABC= I_{2} \qquad \text{ and } \qquad
+    A\sigma_{X}B\sigma_{X}C = U.
+  \end{equation*}
+\end{lemma}
+\begin{proof}
+  Let \( A, B \in \SU(2) \) and \( C = B^{-1} A^{-1} \).
+  By construction, \( ABC = I_2 \), and
+  \begin{equation*}
+    A \sigma_X B \sigma_X C
+    = A \sigma_X B \sigma_X B^{-1} A^{-1}
+    = A V A^{-1}, \qquad \text{where } V = \sigma_X B \sigma_X B^{-1}.
+  \end{equation*}
 
-colour change
+  Clearly, \( V \) is unitary since it is a product of unitary matrices. Moreover, \( \det(V) = \det(\sigma_X)^2 = 1 \), so \( V \in \SU(2) \).
 
-\(\pi\)-commutation rule
+  By Lemma~\ref{lem:standard-form-su2}, there exist \( a, b \in \mathbb{C} \) with \( |a|^2 + |b|^2 = 1 \) such that
+  \begin{equation*}
+    B = \begin{pmatrix} a & b \\ -\overline{b} & \overline{a} \end{pmatrix}.
+  \end{equation*}
 
-strong complementary
+  We compute \( V \) explicitly
+  \begin{align*}
+    V & =
+        \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+        \begin{pmatrix} a & b \\ -\overline{b} & \overline{a} \end{pmatrix}
+        \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+        \begin{pmatrix} \overline{a} & -b \\ \overline{b} & a \end{pmatrix}
+        =
+        \begin{pmatrix} -\overline{b} & \overline{a} \\ a & b \end{pmatrix}
+        \begin{pmatrix} \overline{b} & a \\ \overline{a} & -b \end{pmatrix} \\
+      & =
+        \begin{pmatrix}
+          \overline{a}^2 - \overline{b}^2 & -\overline{b}a - \overline{a}b \\
+          a\overline{b} + b\overline{a} & a^2 - b^2
+        \end{pmatrix}.
+  \end{align*}
 
-identity rule
+  Thus, the trace of \( V \) is
+  \begin{equation*}
+      \tr(V) = (\overline{a}^2 - \overline{b}^2) + (a^2 - b^2) = 2 \Re(a^2 - b^2).
+  \end{equation*}
 
-Hadamard-Hadamard cancelation
+  Let \( t = \tr(U) \).
+  Since \( U \in \SU(2) \), we have \( t \in [-2, 2] \).
+  We can choose \( a \) and \( b \) such that \( \Re(a^2 - b^2) = \frac{t}{2}\).
+  The claim now follows by Exercise~\ref{exe:conjugacy-classes-su2}, which establishes that two matrices in \( \SU(2) \) with the same trace are conjugate.
+\end{proof}
 
-Euler decomposition of the Hadamard.
+Recall the notion of a quantum circuit discussed in Definition~\ref{def:gate-set}.
 
-\subsection{Applications of the ZX-calculus}\label{sec:applications-of-the-zx-calculus}
+\begin{proposition}\label{prop:zx-calc-is-universal}
+  Consider the gate set
+  \begin{equation*}
+    \mathcal{G}=\{\CNOT, Z_{1}^{1}(\alpha), X_{1}^{1}(\beta), e^{2\pi i \gamma} \id_{ \mathbb{C}^{2}}\mid \alpha, \beta, \gamma \in \mathbb{R}\}.
+  \end{equation*}
+  For any  unitary map \(f \from ( \mathbb{C}^{2})^{ \otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) exists a quantum circuit with gates in \(\mathcal{G}\) implementing \(f\).
+  That is
+  \begin{equation*}
+    f = (g_{11} \otimes \dots \otimes g_{1k_{1}})\otimes \dots \otimes (g_{m_{1}}\otimes \dots \otimes g_{m k_{m}}),\qquad \text{where } g_{ij} \in \mathcal{G} \cup \{\id_{ \mathbb{C}^{2}}\}.
+  \end{equation*}
+\end{proposition}
+
+To keep the proof concise, we will, depending on the context, implicitly identify a linear map \( \vartheta \from (\mathbb{C}^2)^{\otimes n} \to (\mathbb{C}^2)^{\otimes n} \) with its transformation matrix with respect to the computational basis.
+
+\begin{proof} \phantom{abc}\hfill\\
+  \noindent
+  \textit{Step 1. Construction of unary gates:}
+
+  By Proposition~\ref{prop:euler-decomposition-of-rotation}, any unitary map \( f \colon \mathbb{C}^2 \to \mathbb{C}^2 \) can be implemented using \( \mathcal{G} \).
+  This holds in particular for the Hadamard gate \( H \colon \mathbb{C}^2 \to \mathbb{C}^2 \).
+  Therefore, due to Exercise~\ref{exe:flipped-cnot-using-cnot-Hadamard}, the \( \SWAP \) gate can also be realised as a circuit with gates in \( \mathcal{G} \).
+  \medskip
+
+  \noindent
+  \textit{Step 2. Construction of (multi-)controlled gates:}
+  We will now show that for any \(1\leq j \leq n\) and any unitary \(f \from ( \mathbb{C}^{2})\otimes n \to ( \mathbb{C}^{2})^{ \otimes n}\), we can implement the (multi-)controlled unitary
+  \begin{equation*}
+    \CNOT_{j}(f)
+    \eqdef \id + (\ket{1}\bra{1})^{\otimes j-1} \otimes (f-\id) \otimes (\ket{1}\bra{1})^{ \otimes n-j}.
+  \end{equation*}
+  By iteratively applying \(\SWAP\)-gates, we can assume without loss of generality that \(j=n\).
+
+  We now prove the claim by induction on \(n\).
+
+  \textit{Base case (\( n = 2 \)):}
+  Let \( V \) be the transformation matrix of \( f \) with respect to the \( Z \)-basis \( \mathcal{B} \).
+   Note that the transformation matrix of \(\CNOT_{2}(f)\) is given by
+  \begin{equation*}
+    \big(\ket{0}\bra{0} \otimes I_{2} \big) \otimes \big(\ket{1}\bra{1} \otimes V \big).
+  \end{equation*}
+  Moreover, in case \(f= \sigma_{x}\), we obtain the usual \(\CNOT\)-gate.
+
+  There exists a \( \lambda \in \mathbb{R} \) such that the unitary matrix
+  \begin{equation*}
+    U = P V, \qquad\qquad \text{where }
+    P= \begin{pmatrix}
+      1 & 0\\
+      0 & e^{2\pi i \lambda}
+    \end{pmatrix},
+  \end{equation*}
+  has determinant \(1\).
+  By Lemma~\ref{lem:ABC-decomposition}, there are unitary matrices \(A, B, C \in \U(2)\) such that \(ABC=I_{2}\) and \(A\sigma_{x}B\sigma_{x}C = U\).
+  Given \(s, t\in\{0,1\}\), we compute
+  \begin{align*}
+    (\id\otimes A)&\CNOT(\id\otimes B)\CNOT(\id\otimes C)(P^{-1}\otimes\id) \ket{st}
+              = e^{-2\pi i s \lambda} \ket{s}\otimes A \sigma_{x}^{s}B \sigma_{x}^{s}C\ket{t}\\
+            & = \ket{s} \otimes U^{s}\ket{t}
+              = \CNOT(f) \ket{st}.
+  \end{align*}
+
+  \textit{Inductive step \((n \to n+1)\):}
+  We define the unitary matrix
+  \begin{equation*}
+    K = \tfrac{i}{2}
+    \begin{pmatrix}
+      1 & -i \\
+      -i & 1
+    \end{pmatrix}.
+  \end{equation*}
+  A direct computation shows that \(K^{2}= X\).
+  Now, let us consider the map \(\widetilde{\CNOT}\) given composition depicted below.
+  \begin{equation*}
+    \inputtikz{multi-controlled-cnot}
+  \end{equation*}
+  By the induction hypothesis, combined with the fact that the \( \SWAP \)-gate can be implemented using \( \mathcal{G} \), there is a quantum circuit based on the gate set \( \mathcal{G} \) that gives rise to \( \widetilde{\CNOT} \).
+
+  We now evaluate \(\widetilde{\CNOT}\) on the computational basis of \(( \mathbb{C}^{2})^{\otimes n}\) by tracing the effects of  each of the \(5\) (generalised) \(\CNOT\) gates step-by-step.
+  To that end, let \(s \in\{0,1\}^{n-1}\) with \(s \neq (1, \dots , 1)\) and \(a, b \in\{0,1\}\):
+  \begin{align*}
+    \ket{s} \otimes \ket{a} \otimes \ket{b}
+    &
+      \mapsto \ket{s} \otimes \ket{a} \otimes K^{a}\ket{b}
+      \mapsto \ket{s} \otimes \ket{a} \otimes K^{a}\ket{b}\\
+    & \mapsto \ket{s} \otimes \ket{a} \otimes (K^{\dagger})^{a}K^{a}\ket{b}
+      \mapsto \ket{s} \otimes \ket{a} \otimes (K^{\dagger})^{a}K^{a}\ket{b}\\
+    & \mapsto \ket{s} \otimes \ket{a} \otimes (K^{\dagger})^{a}K^{a}\ket{b}
+      = \ket{s} \otimes \ket{a} \otimes \ket{b}, \\
+    \ket{1 \dots 1} \otimes \ket{a} \otimes \ket{b}
+    &
+      \mapsto \ket{1 \dots 1} \otimes \ket{a} \otimes K^{a}\ket{b}
+      \mapsto \ket{1 \dots 1} \otimes \ket{1- a} \otimes K^{a}\ket{b}\\
+    & \mapsto \ket{1 \dots 1} \otimes \ket{1- a} \otimes (K^{\dagger})^{1-a} K^{a}\ket{b}
+      \mapsto \ket{1 \dots 1} \otimes \ket{a} \otimes (K^{\dagger})^{1-a} K^{a}\ket{b} \\
+    & \mapsto \ket{1 \dots 1} \otimes \ket{a} \otimes K (K^{\dagger})^{1-a} K^{a}\ket{b} \\
+    & = \ket{1 \dots 1} \otimes \ket{a} \otimes K^{2a} \ket{b}
+      = \ket{1 \dots 1} \otimes \ket{a} \otimes X^{a} \ket{b}
+  \end{align*}
+  Therefore, \(\widetilde{\CNOT}\) flips the last qubit if and only if the first \(n\)-qubits are \(1\) and acts as the identity otherwise.
+
+  Analogously to the previous computation, we obtain \(\CNOT_{{n+1}}(f)\) as
+  \begin{equation*}
+    (\id\otimes A)\widetilde{\CNOT}(\id\otimes B)\widetilde{\CNOT}(\id\otimes C)(\CNOT_{n-1}(P^{-1})\otimes\id).
+  \end{equation*}
+  \medskip
+
+  \noindent
+  \textit{Step 3. Construction of transpositions:}
+  Suppose now that there are \(x,y \in\{0,1\}^{n}\) and an \(1\leq j \leq n\) such that \(x_{j}=0\), \(y_{j}=1\) and \(x_{i}=y_{i}\) for all \(i \neq j\).
+  We define the unitary map \(\tau_{x,y} \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) via
+  \begin{equation*}
+    \tau \ket{x} = \ket{y} \quad
+    \tau \ket{y} = \ket{x} \quad
+    \tau\ket{s} = \ket{s} \text{ for all } s\notin\{x,y\}.
+  \end{equation*}
+  By suitably applying \(\SWAP\) gates, we can assume without loss of generality that \(j=n\).
+  In order to implement \(\tau_{x,y}\) using our gate set, we define the map
+  \begin{equation*}
+    h= h_{1} \otimes \dots \otimes  h_{n},
+  \end{equation*}
+  where \( h_i = \id \) if \( x_i = 1 \) and \( h_i = \sigma_x \) otherwise.
+  We set \(x' =h \ket{x} = \ket{1\dots1 0} \) and \(y'= h\ket{y}= \ket{1 \dots 1 0}\) and observe that since \(h^{2}=\id\), we have
+  \(h\tau_{x,y}h= \tau_{x',y'}\).
+  However, \(\tau_{x', y'} = \CNOT_{n}(\sigma_{x})\) and therefore, we can construct \(\tau_{x,y}\) using the gate set \(\mathcal{G}\).
+  \medskip
+
+  \noindent
+  \textit{Step 4. Construction of two-level unitaries:}
+  Consider the total order on \( \{0,1\}^n \) given by the lexicographical order\footnote{
+    The \emph{lexicographical order} is defined recursively by \((x_{1}, \dots , x_{n})< (y_{1}, \dots , y_{n})\) if \(x_{1}<y_{1}\) or \((x_{2}, \dots , x_{n})< (y_{2}, \dots , y_{n})\).
+  }.
+  Assume the transformation matrix of \( f \) with respect to the computational basis of \( (\mathbb{C}^2)^{\otimes n} \) is a two-level unitary matrix. That is, there exist \( x < y \in \{0,1\}^n \) such that \( f \) acts by some unitary \( U \) on the subspace generated by \( \ket{x} \) and \( \ket{y} \), and as the identity on the orthogonal complement of that subspace.
+  We can now chose chains
+  \begin{equation*}
+    y = y_0 < y_1 < \dots < y_k = (1, \dots, 1), \quad x = x_0 < x_1 < \dots < x_l = (1, \dots, 1, 0),
+  \end{equation*}
+  such that \( y_i \) and \( y_{i+1} \) and similarly \( x_{i} \) and \(x_{i+1}\) only differ by a single digit.
+  Set
+  \begin{equation*}
+    f' = \tau_{x_l, x_{l-1}} \dots \tau_{x_1, x_0} \tau_{y_k, y_{k-1}} \dots \tau_{y_1, y_0} f \tau_{y_0, y_1} \dots \tau_{y_{k-1}, y_k} \tau_{x_0, x_1} \dots \tau_{x_{l-1}, x_l}.
+  \end{equation*}
+  Its transformation matrix is
+  \begin{equation*}
+    \begin{pmatrix}
+      I & 0 \\
+      0 & U
+    \end{pmatrix}.
+  \end{equation*}
+  Therefore, \( f' = \CNOT_n(U) \).
+  Since the transpositions \( \tau_{x_i, x_{i+1}} \) and \( \tau_{y_j, y_{j+1}} \), as well as \( f' \), can be obtained as quantum circuits using \( \mathcal{G} \), we can implement \( f \) using \( \mathcal{G} \).
+
+  Finally, by Lemma~\ref{lem:two-level-unitaries-do-the-job},  every \(f \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) is a product of two-level unitaries and the claim follows.
+\end{proof}
+
+% In quantum computing the set of possible operations of a circuit is encoded by the unitary matrices \(U(2^{n})\) this set is far from being finite--it is in fact uncountably infinite.
+% Thus, from finitely many gates we will be able to produce every unitary matrix exatly.
+% Instead we can ask to approximate such a matrix with an arbitary level of precission.
+% \begin{definition}\label{def:operator-norm}
+%   Let \(f \from V\to W\) be alinear map between finite-dimensional Hilbert spaces.
+%   The \emph{operator norm} of \(f\) is
+%   \begin{equation*}
+%     \|f\| = \sup_{v \in V\setminus\{0\}}\tfrac{\|f(v)\|_{W}}{\|v\|}_{V} <- before this def we need to recall that \| is given by sqrt of \braket{v}{v}.
+%   \end{equation*}
+% \end{definition}
+% Here we should mention without prove that for diag matrix we get the abs value of the biggest ev.
+
+% For further discussion on universal gate sets, see \cite[Section~4.5]{nielsen-chuang2000:QuantumComputationInformation}.
+% \begin{definition}\label{def:universal-gate-set}
+%   A gate set \(G\) is \emph{(approximate) universal} if for any unitary map \(f\from \mathbb{C}^{2}(^{ \otimes n} \to ..\)  and \(\varepsilon>0\) there exists a circuit \(g = (g_{11} \otimes \dots \otimes g_{1k_{1}}) \circ \dots \circ (g_{n1} \otimes \dots \otimes g_{n k_{n}}), \qquad \text{ where } g_{ij} \in G \cup\{\id_{ \mathbb{C}^{2}}\}\) such that
+% \begin{equation}
+%   \|f-g\| \leq \varepsilon.
+% \end{equation}
+% \end{definition}
+
+% This raises two important questions:
+
+% Why do we even want universal gates?
+% So far we mostly used Hadamards to perform a change of basis.
+% and does the choice matter:
+% are different approximate universal gate sets better than other.
+% I.e. if we can realise one algorithm efficiently (with a number of gates that scales polynomialy
+
+% \subsubsection{The Gottesman-Knill-theorem}\label{sec:the-gottesman-knill-theorem}
+% Gottesmann-Knill-theorem
+
+% \begin{theorem}\label{thm:Gottesman-Knill-theorem}
+%   state
+% \end{theorem}
+% \begin{proof}
+
+% \end{proof}
+
+% \subsubsection{The Kitaev--Solovay algorithm}\label{sec:the-kitaev--solovay-algorithm}
+% Solovay
+% later proven by Kitaev.
+
+% In this section we prove a single statement that is central to quantum computing.
+% \begin{theorem}\label{thm:Kitaev-Solovay-theorem}
+
+% \end{theorem}
+% algorithmic proof due to Dawson Nielsen % https://arxiv.org/pdf/quant-ph/0505030
+
+
+
+% \subsection{ZX-diagrams and their rewriting rules}\label{sec:zx-diagrams-and-their-rewriting-rules}
+
+
+% \begin{theorem}\label{thm:zx-is-universal}
+%   The evaluation map from the ZX-prop to linear maps is surjective.
+% \end{theorem}
+% \begin{proof}
+
+% \end{proof}
+
+% The 7 rules of the ZX-calculus
+
+% spider fusion
+
+% colour change
+
+% \(\pi\)-commutation rule
+
+% strong complementary
+
+% identity rule
+
+% Hadamard-Hadamard cancelation
+
+% Euler decomposition of the Hadamard.
+
+% \subsection{Applications of the ZX-calculus}\label{sec:applications-of-the-zx-calculus}
 
 \cleardoublepage
 \subsection{Exercises}\label{sec:ZX-exercises}
@@ -5596,6 +6064,29 @@ Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-
   Given \(\alpha, \beta \in \mathbb{R}\), determine the absolute value of \(X_{n}^{0}(\beta)X_{0}^{n}(\alpha)\).
 \end{exercise}
 
+
+\begin{exercise}\label{exe:existence-of-rotation}
+  Show that for any pair of complex numbers \(a, b \in \mathbb{C}\), there exist \(x,y \in \mathbb{C}\) such that \(|x|^{2} +|y|^{2}=1 \) and  \(\overline{x}a + \overline{y}b = 0\).
+
+  \textit{Hint:} Think about the subspace \(
+  \mathbb{C}
+  \begin{psmallmatrix}
+    a \\b
+  \end{psmallmatrix} \subset \mathbb{C}^{2}
+  \).
+\end{exercise}
+
+\begin{exercise}[Hard]\label{exe:conjugacy-classes-su2}
+  Show that for any two matrices \(U, V\in\SU(2)\) there exists an \(A\in \SU(2)\) with \(AUA^{-1}= V\) if and only if \(\tr(U) = \tr(V)\).
+\end{exercise}
+
+\begin{exercise}\label{exe:flipped-cnot-using-cnot-Hadamard}
+  Verify that
+  \begin{equation*}
+    \CNOT_{1}\eqdef\SWAP \CNOT \SWAP = \id \otimes \ket{0}\bra{0} + \sigma_{x} \otimes \ket{1}\bra{1}.
+  \end{equation*}
+  Moreover show that \(CNOT_{1}\) can be obtained from the gate-set \(\mathcal{G}= \{H, \CNOT\}\).
+\end{exercise}
 
 \cleardoublepage
 \subsection{Study goals}\label{sec:ZX-study-goals}
