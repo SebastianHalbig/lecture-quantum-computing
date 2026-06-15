@@ -35,7 +35,7 @@ pkgOptions={
 \newcommand*{\Dtime}{\ensuremath{\mathbf{DTIME}}}
 \DeclareMathOperator{\SWAP}{SWAP}
 \DeclareMathOperator{\CNOT}{CNOT}
-\newcommand*{\PauliGroup}{\ensuremath{\mathcal{G}}}
+\newcommand*{\PauliGroup}{\ensuremath{\mathcal{P}}}
 
 
 \newcommand{\underConstruction}{%
@@ -294,8 +294,35 @@ Achieving fault-tolerant quantum computing is one of the most pressing challenge
 In the following we recapitulate basics of linear algebra necessary to discuss the axioms of quantum computing.
 For further reading, see for example \cite{axler2024:LinearAlgebraDoneRight, treil2024:LinearAlgebraDoneWrong, blyth1990:ModuleTheoryLinearAlgebra}.
 
-\subsection{Complex numbers}\label{sec:complex-numbers}
-In contrast to the binary system of classical computing, quantum computing is based on the arithmetic of the complex numbers.
+\subsection{Complex numbers and the binary system}\label{sec:complex-numbers}
+There are two arithmetic systems at the heart of (quantum) computing: the binary system and the complex numbers.
+
+\begin{definition}\label{def:the-field-f2}
+  The binary numbers \(\mathbb{F}_{2}\) are the set \(\{0,1\}\) endowed with the maps
+  \begin{align*}
+    \boxplus & \from \mathbb{F}_{2} \times \mathbb{F}_{2} \to \mathbb{F}_{2}, \\
+    \boxdot & \from \mathbb{F}_{2} \times \mathbb{F}_{2} \to \mathbb{F}_{2},
+  \end{align*}
+  called \emph{binary addition} and \emph{multiplication}, respectively.
+  They are defined by the operation tables
+  \begin{equation}
+    \begin{array}{c|cc}
+      \boxplus & 0 & 1 \\
+      \hline
+      0 & 0 & 1 \\
+      1 & 1 & 0
+    \end{array}
+    \qquad\qquad
+    \begin{array}{c|cc}
+      \boxdot & 0 & 1 \\
+      \hline
+      0 & 0 & 0 \\
+      1 & 0 & 1
+    \end{array}.
+  \end{equation}
+\end{definition}
+
+Complex numbers on the other hand subsume the real numbers and extend them by adding an imaginary part.
 
 \begin{definition}\label{def:complex-numbers}
   The \emph{complex numbers} \( \mathbb{C} \) are the set \( \mathbb{R}^2 = \{(x, y) \mid x, y \in \mathbb{R}\} \), whose elements we write as \(x+iy\eqdef (x,y)\), endowed with two binary maps,
@@ -318,14 +345,13 @@ given \(a+ib, c+id, x+iy \in \mathbb{C}\) with \(x+iy \neq 0\), we compute
     = \frac{x - iy}{x^{2}+y^{2}}.
 \end{align*}
 
-The arithmetic properties of the  complex numbers \( \mathbb{C} \) are  succinctly described by stating that \( \mathbb{C}\) forms a \emph{field}.
-That is, its addition and multiplication satisfy the following axioms for all \( a, b, c \in \mathbb{C} \):
-
+The arithmetic properties of  \( \mathbb{F}_{2}\) as well as the complex numbers \( \mathbb{C} \) are  succinctly described by stating that \( \mathbb{F}_{2}\) and \( \mathbb{C}\) form a \emph{field}.
+That is, their addition and multiplication satisfy the following axioms for all elements \( a, b, c \):
 \begin{thmlist}
   \item \emph{Associativity}: \((a + b) + c = a + (b + c)\) and \((a \cdot b) \cdot c = a \cdot (b \cdot c)\);
   \item \emph{Commutativity}: \( a + b = b + a \) and \( a \cdot b = b \cdot a \);
   \item \emph{Neutral elements}: \( a + 0 = a = 0 + a \) and \( a \cdot 1 = a = 1 \cdot a \);
-  \item \emph{Inverses}: For every \( d \in \mathbb{C} \), there exists an element \( -d \in \mathbb{C} \) such that \( d + (-d) = 0 \), and for every \( f \in \mathbb{C} \setminus \{0\} \), there exists an element \( f^{-1} \in \mathbb{C}\setminus\{ 0\}\) such that \( f \cdot f^{-1} = 1 \);
+  \item \emph{Inverses}: There exists an element \( -a \) such that \( a + (-a) = 0 \), and if \(a\neq 0\) there is an \( a^{-1}\) such that \( a \cdot a^{-1} = 1 \);
   \item \emph{Distributive law}: \( a \cdot (b + c) = a \cdot b + a \cdot c \).
 \end{thmlist}
 
@@ -381,10 +407,17 @@ While it is hard to add complex numbers in polar form, it has the unquestionable
 
 \subsection{Vector spaces}\label{sec:vector-spaces}
 The building blocks for quantum computers---qubits---will often be modelled as equivalence classes of vectors in a complex vector space.
+To also succinctly cover aspects of classical computation, we use the following notation.
+
+\begin{convention}
+  For the remainder of the section, we write \(\Bbbk\in\{ \mathbb{F}_{2}, \mathbb{C}\}\).
+  To maintain a unified notation, in case \( \Bbbk= \mathbb{F}_{2}\), we will often slightly deviate Definition~\ref{def:the-field-f2} and  use \(+\) instead of \(\boxplus\) and \(\cdot\) instead of \(\boxdot\).
+  Additionally,we will often use juxtaposition for  multiplication.
+\end{convention}
 
 \begin{definition}\label{def:complex-vector-space}
-  A \emph{complex vector space} is a set \( V \) endowed with two maps.
-  A \emph{(vector) addition} \( +\from V \times V \to V \) and a \emph{scalar multiplication} \( \cdot\from \mathbb{C} \times V \to V \) satisfying the following axioms for all \( s, v, w \in V \) and \( \alpha, \beta \in \mathbb{C} \):
+  A \(\Bbbk\)-\emph{vector space} is a set \( V \) endowed with two maps.
+  A \emph{(vector) addition} \( +\from V \times V \to V \) and a \emph{scalar multiplication} \( \cdot\from \Bbbk \times V \to V \) satisfying the following axioms for all \( s, v, w \in V \) and \( \alpha, \beta \in \Bbbk \):
 
   \begin{thmlist}
     \item \emph{Associativity of addition}: \( (s + v) + w = s + (v + w) \);
@@ -396,6 +429,8 @@ The building blocks for quantum computers---qubits---will often be modelled as e
     \item \emph{Distributivity}: \( (\alpha + \beta) \cdot (s + v) = \alpha \cdot s + \beta \cdot s + \alpha \cdot v + \beta \cdot v\).
   \end{thmlist}
   The elements of \(V\) are referred to as \emph{vectors}.
+
+  In case \(  \Bbbk= \mathbb{C}\), we call \(V\) a \emph{complex} vector space and in case \(  \Bbbk= \mathbb{F}_{2}\), we refer to it as a \( \mathbb{F}_{2}\)-vector space.
 \end{definition}
 
 A direct computation shows that the zero vector \( 0 \in V \) and additive inverses are unique.
@@ -409,6 +444,8 @@ implying that \(-v = (-1)\cdot v\).
 \begin{example}\label{ex:one-dim-vector-space}
   The set \( \mathbb{C} \) becomes a complex vector space with its usual complex addition and multiplication as vector addition and scalar multiplication, respectively.
   The zero vector is \( 0 \in \mathbb{C} \).
+
+  Similarly, \( \mathbb{F}_{2}\) is an \( \mathbb{F}_{2}\)-vector space with vector addition given by \(\boxplus \from \mathbb{F}_{2} \times \mathbb{F}_{2} \to \mathbb{F}_{2}\) and scalar multiplication \(\boxdot \from \mathbb{F}_{2} \times \mathbb{F}_{2} \to \mathbb{F}_{2}\)
 \end{example}
 
 A lot of our considerations will revolve around intelligent bookkeeping for vector spaces and their transformations.
@@ -417,7 +454,7 @@ We will achieve this using a graphical calculus.
   We will describe vector spaces, and later matrices, or linear maps using \emph{string diagrams}.
   For now these are quite simple.
   A vector space \(V\) is simply a (horizontal) line, possibly labelled by \(V\).
-  The space \( \mathbb{C}\) will be drawn transparently.
+  The space \( \Bbbk\) will be drawn transparently.
   \begin{equation}
     \inputtikz{vector-spaces-as-string-diags}
   \end{equation}
@@ -427,9 +464,9 @@ Measurements play a central role in our quantum algorithms.
 These will in particular ``update'' qubits such that the resulting state is contained in a (smaller) region of  of the state space.
 
 \begin{definition}\label{def:subspace-space}
-  Consider a complex vector space \(V\).
+  Consider a vector space \(V\).
   A subset \(U\subset V\) is called a \emph{subspace} of \(V\) if it is non-empty and for all \(\lambda
-  \in \mathbb{C} \) and \(x,y \in U\) we have \(\lambda x+y \in U\).
+  \in \Bbbk \) and \(x,y \in U\) we have \(\lambda x+y \in U\).
 \end{definition}
 
 \begin{proposition}\label{prop:sub-are-vs}
@@ -494,11 +531,11 @@ Based on this idea, we want to break down a vector space into its ``simplest'' n
 
 
 \begin{definition}\label{def:basis}
-  An \emph{(ordered) basis} of a complex vector space \( V \) is a tuple \( \mathcal{B} = (b_i)_{i \in I} \), where \( I \) is a totally ordered index set, such that every vector \( v \in V \) can be written as a \emph{unique} linear combination
+  An \emph{(ordered) basis} of a \(\Bbbk\)-vector space \( V \) is a tuple \( \mathcal{B} = (b_i)_{i \in I} \), where \( I \) is a totally ordered index set, such that every vector \( v \in V \) can be written as a \emph{unique} linear combination
   \begin{equation*}
     v = \sum_{i \in I} \lambda_i b_i,
   \end{equation*}
-  with \( \lambda_i \in \mathbb{C} \) and only finitely many \( \lambda_i \) are non-zero.
+  with \( \lambda_i \in  \Bbbk \) and only finitely many \( \lambda_i \) are non-zero.
 \end{definition}
 
 One of the most fundamental theorems in linear algebra is the existence of bases.
@@ -529,16 +566,17 @@ One of the most important examples for us will be the two-dimensional complex sp
   In the context of quantum computing, one writes \(\ket{0} = \begin{psmallmatrix} 1 \\ 0 \end{psmallmatrix}\) and \(\ket{1} = \begin{psmallmatrix} 0 \\ 1 \end{psmallmatrix}\) and refers to \(\mathcal{E}\) as either the \emph{computational} or \emph{\(Z\)-basis}.
 \end{example}
 
-Similar to \( \mathbb{C}^{2}\), we can define a vector space \( \mathbb{C}^{n}\) for any natural number \(n \in \mathbb{N}\).
+Similar to \( \mathbb{C}^{2}\), we can define a vector space \( \mathbb{C}^{n}\) or even \(  \Bbbk^{n}\) for any natural number \(n \in \mathbb{N}\).
+
 
 \begin{example}\label{ex:cn}
   For any  natural number \(n\in \mathbb{N}\), we can define a vector space
   \begin{equation*}
-    \mathbb{C}^n= \left\{\begin{psmallmatrix}  v_{1}\\ \vdots \\ v_{n} \end{psmallmatrix} \mid v_{1}, \dots , v_{n} \in \mathbb{C} \right\}
+    \Bbbk^n= \left\{\begin{psmallmatrix}  v_{1}\\ \vdots \\ v_{n} \end{psmallmatrix} \mid v_{1}, \dots , v_{n} \in \Bbbk \right\}
   \end{equation*}
   with pointwise addition and scalar multiplication.
 
-  Representing elements of \( \mathbb{C}^{n}\) as \emph{column vectors} is not particularly space-saving.
+  Representing elements of \( \Bbbk^{n}\) as \emph{column vectors} is not particularly space-saving.
   Thus, we will often write them as \emph{row vectors} instead.
   Explicitly, we set
   \begin{equation*}
@@ -547,32 +585,32 @@ Similar to \( \mathbb{C}^{2}\), we can define a vector space \( \mathbb{C}^{n}\)
     \eqdef
     ( v_{1}, \dots, v_{n} )\qquad
     \text{for all } v=     \begin{pmatrix}
-      v_{1}\\ \vdots \\ v_{n} \end{pmatrix} \in \mathbb{C}^{n}
+      v_{1}\\ \vdots \\ v_{n} \end{pmatrix} \in \Bbbk^{n}
   \end{equation*}
   and call \(v^{T}\) the \emph{transpose} of \(v\).
 
 
-  Similar to \( \mathbb{C}^{2}\), it has a \emph{standard basis} \( \mathcal{E} = (e_{1}, \dots , e_{n})\) given by
+  Similar to \( \Bbbk^{2}\), it has a \emph{standard basis} \( \mathcal{E} = (e_{1}, \dots , e_{n})\) given by
   \begin{equation*}
     e_{j}^{T} \eqdef
     ( 0 , \dots , 0 , 1 , 0 , \dots , 0), \qquad \text{ with \(j\)-th entry \(1\) and all other entries \(0\).}
   \end{equation*}
 \end{example}
 
-Not all vector spaces are of the form \( \mathbb{C}^{n}\) for some \(n\in \mathbb{N}\).
+Not all vector spaces are of the form \( \Bbbk^{n}\) for some \(n\in \mathbb{N}\).
 
 \begin{example}\label{ex:free-vector-space}
   Let \(S\) be a set.
-  We define a vector space structure on the collection \(\mathrm{Map}(S, \mathbb{C})\) of all  maps \(f \from S \to \mathbb{C}  \) by setting
+  We define a vector space structure on the collection \(\mathrm{Map}(S, \Bbbk)\) of all  maps \(f \from S \to \Bbbk  \) by setting
   \begin{equation*}
     (f+g)s \eqdef f(s) + g(s), \qquad (\lambda f) s \eqdef \lambda (f(s))
   \end{equation*}
-  for all \(f,g \in \mathrm{Map}(S, \mathbb{C})\) and \(s \in S\).
+  for all \(f,g \in \mathrm{Map}(S, \Bbbk)\) and \(s \in S\).
 
-  We refer to \(\mathrm{Map}(S, \mathbb{C})\) as the \emph{free vector space} generated by \(S\).
-  By choosing a total order on \(S\), we obtain a basis \(\mathcal{B}= (\delta_{s})_{s\in S}\) of \(\mathrm{Map}(S, \mathbb{C})\), given by the \emph{delta functions}
+  We refer to \(\mathrm{Map}(S, \Bbbk)\) as the \emph{free \(\Bbbk\)-vector space} generated by \(S\).
+  By choosing a total order on \(S\), we obtain a basis \(\mathcal{B}= (\delta_{s})_{s\in S}\) of \(\mathrm{Map}(S, \Bbbk)\), given by the \emph{delta functions}
   \begin{equation}
-    \delta_{s} \from S \to \mathbb{C}\qquad \delta_{s}(t) =
+    \delta_{s} \from S \to \Bbbk\qquad \delta_{s}(t) =
     \begin{cases}
       1 & \text{ if } s= t, \\
       0 & \text{ otherwise},
@@ -581,19 +619,19 @@ Not all vector spaces are of the form \( \mathbb{C}^{n}\) for some \(n\in \mathb
 
   Note that we have an inclusion
   \begin{equation*}
-    \iota_{S} \from S \to \mathrm{Map}(S, \mathbb{C}), \qquad
+    \iota_{S} \from S \to \mathrm{Map}(S, \Bbbk), \qquad
     s \mapsto \delta_{s}.
   \end{equation*}
 
   If we identify,  by a slight abuse of notation, \(s\) with \(\iota_{S}(s) = \delta_{s}\), we can consider
   \begin{equation}
-    \mathrm{Map}(S, \mathbb{C}) = \left\{\sum\nolimits_{s\in S} \lambda_{s} s \mid \lambda_{s}\in \mathbb{C} \text{ with } \lambda_{s}= 0 \text{ for all but finitely many } s\in S\right\}
+    \mathrm{Map}(S, \Bbbk) = \left\{\sum\nolimits_{s\in S} \lambda_{s} s \mid \lambda_{s}\in \Bbbk \text{ with } \lambda_{s}= 0 \text{ for all but finitely many } s\in S\right\}
   \end{equation}
   as the space of all (formal) linear combinations of \(S\).
 
   \textit{Mental picture for students of a computer science background:}
-  We can think of the vectors in \( \mathrm{Map}(S, \mathbb{C}) \) as dictionaries (or associative arrays) with keys from the set \( S \) and values in \( \mathbb{C} \).
-  For example in a Python-like pseudocode, if \( v= \texttt{ \{s: l\_s for s in S\}} \) and \(w= \texttt{ \{s: r\_s for s in S\}} \) are two vectors, then addition and scalar multiplication (by a scalar \(\lambda \in \mathbb{C}\))  would look like:
+  We can think of the vectors in \( \mathrm{Map}(S, \Bbbk) \) as dictionaries (or associative arrays) with keys from the set \( S \) and values in \( \Bbbk \).
+  For example in a Python-like pseudocode, if \( v= \texttt{ \{s: l\_s for s in S\}} \) and \(w= \texttt{ \{s: r\_s for s in S\}} \) are two vectors, then addition and scalar multiplication (by a scalar \(\lambda \in \Bbbk\))  would look like:
 \begin{verbatim}
   v_plus_w = {s: v[s] + w[s] for s in S}
   lambda_v = {s: lambda * v[s] for s in S}
@@ -612,7 +650,7 @@ For any natural number  \(n \in \mathbb{N}\), we write
 \end{equation}
 \begin{definition}\label{def:matrices}
   Consider numbers \(m, n \in \mathbb{N}\).
-  An \( m \times n \) \emph{matrix} \(A\) over \( \mathbb{C} \) is a collection
+  An \( m \times n \) \emph{matrix} \(A\) over \( \Bbbk \) is a collection
   \begin{equation}
     A= (a_{ij})_{(i, j) \in [m] \times [n]} \eqdef
     \begin{pmatrix}
@@ -622,15 +660,15 @@ For any natural number  \(n \in \mathbb{N}\), we write
       a_{m1} & a_{m2} & \dots & a_{mn}
     \end{pmatrix}
   \end{equation}
-  with \(a_{ij} \in \mathbb{C}\) for all \(i \in [m]\) and \(j \in [n]\).
-  The set of all such matrices is \( \Mat_{m,n}(\mathbb{C}) \).
-  For \( m = n \), we write \( \Mat_n(\mathbb{C}) \).
+  with \(a_{ij} \in \Bbbk\) for all \(i \in [m]\) and \(j \in [n]\).
+  The set of all such matrices is \( \Mat_{m,n}(\Bbbk) \).
+  For \( m = n \), we write \( \Mat_n(\Bbbk) \).
 \end{definition}
 
 As we will discuss below, matrices can be used to transform vectors (via the matrix-vector multiplication).
 Here, the computationally easiest case is given if all the non-zero entries of a matrix are located on the (main) diagonal.
 \begin{example}\label{ex:diagonal-matrices}
-  Let \(n\in \mathbb{N}\) and consider complex numbers \(\lambda_{1}, \dots , \lambda_{n} \in \mathbb{C}\).
+  Let \(n\in \mathbb{N}\) and consider complex numbers \(\lambda_{1}, \dots , \lambda_{n} \in \Bbbk\).
   The matrix
   \begin{equation}
     \mathrm{diag}(\lambda_{1}, \dots , \lambda_{n}) =
@@ -642,7 +680,7 @@ Here, the computationally easiest case is given if all the non-zero entries of a
     \end{pmatrix}
   \end{equation}
   is called a \emph{diagonal matrix}.
-  In case \(\lambda_{1}= \dots = \lambda_{n} = 1\), we write \(I_{n}\eqdef \mathrm{diag}(1, \dots ,1)\in \Mat_{n}(\mathbb{C})\) and call it the \emph{identity matrix} of size \(n\).
+  In case \(\lambda_{1}= \dots = \lambda_{n} = 1\), we write \(I_{n}\eqdef \mathrm{diag}(1, \dots ,1)\in \Mat_{n}(\Bbbk)\) and call it the \emph{identity matrix} of size \(n\).
 \end{example}
 
 The ``power'' of quantum computing arises from the calculus of non-diagonal matrices.
@@ -654,7 +692,7 @@ The two examples below will be fundamental throughout the course.
     \begin{pmatrix}
       \tfrac{1}{\sqrt{2}} & \tfrac{1}{\sqrt{2}} \\
       \tfrac{1}{\sqrt{2}} & -\tfrac{1}{\sqrt{2}}
-    \end{pmatrix}
+    \end{pmatrix} \in \Mat_{2}( \mathbb{C})
   \end{equation*}
   is called the \emph{Hadamard gate} in quantum computing and will be used to create superpositions.
 
@@ -665,7 +703,7 @@ The two examples below will be fundamental throughout the course.
       0 & 1 & 0 & 0 \\
       0 & 0 & 0 & 1 \\
       0 & 0 & 1 & 0
-    \end{pmatrix}.
+    \end{pmatrix}\in \Mat_{4}( \mathbb{C}).
   \end{equation*}
   We will later see how it can be used to flip a \emph{target qubit} depending on the behaviour of a \emph{control qubit}.
   This will be a source of producing entanglements.
@@ -673,7 +711,7 @@ The two examples below will be fundamental throughout the course.
 
 One of the most important set of matrices are the Pauli-matrices.
 \begin{definition}\label{def:Pauli-matrices}
-  The matrices
+  The complex matrices
   \begin{equation*}
     \sigma_x =
     \begin{pmatrix}
@@ -697,8 +735,8 @@ For convenience, we also write \(\sigma_{0} = I_{2}\eqdef
 \)
 
 \begin{remark}\label{rmk:matrices-are-a-vector-space}
-  The set \( \Mat_{m,n}(\mathbb{C}) \) of \( m \times n \) matrices forms a complex vector space under entry-wise addition and scalar multiplication.
-  Specifically, for \( \lambda \in \mathbb{C} \) and \( A, B \in \Mat_{m,n}(\mathbb{C}) \), we define
+  The set \( \Mat_{m,n}(\Bbbk) \) of \( m \times n \) matrices forms a complex vector space under entry-wise addition and scalar multiplication.
+  Specifically, for \( \lambda \in \Bbbk \) and \( A, B \in \Mat_{m,n}(\Bbbk) \), we define
   \begin{subequations}
     \begin{gather}
       A + B =
@@ -738,9 +776,12 @@ While qubits are often described as equivalence classes of vectors in a complex 
 These are matrices which are, amongst other properties, invariant under the transformations discussed in the next definition.
 
 \begin{definition}\label{def:adjoint}
-  Consider a matrix \( A = (a_{ik}) \in \Mat_{m,n}(\mathbb{C}) \).
+  Consider a matrix \( A = (a_{ik}) \in \Mat_{m,n}(  \Bbbk) \).
   \begin{thmlist}
-    \item The \emph{transpose} of \( A \) is \( A^T = (a_{ki}) \in \Mat_{n,m}(\mathbb{C}) \).
+    \item The \emph{transpose} of \( A \) is \( A^T = (a_{ki}) \in \Mat_{n,m}(\mathbb{  \Bbbk}) \).
+  \end{thmlist}
+  Now, let \(  \Bbbk= \mathbb{C}\).
+  \begin{thmlist}[resume]
     \item The \emph{conjugate} of \( A \) is \( \overline{A} = (\overline{a_{ik}}) \in \Mat_{m,n}(\mathbb{C}) \).
     \item The \emph{adjoint} of \( A \) is \( A^\dagger = \overline{A^T} \in \Mat_{n,m}(\mathbb{C}) \).
   \end{thmlist}
@@ -754,14 +795,14 @@ The former operation will be modelled by matrix-vector multiplication.
 The latter by matrix-matrix multiplication.
 
 \begin{definition}\label{def:matrix-multiplication}
-  Let \( A = (a_{ik}) \in \Mat_{m,n}(\mathbb{C}) \) be a matrix.
+  Let \( A = (a_{ik}) \in \Mat_{m,n}(\Bbbk) \) be a matrix.
   \begin{thmlist}
-    \item Consider a vector \(v\in \mathbb{C}^{n}\) with \(v^{T}= (v_{1}, \dots , v_{n})\).
-    The \emph{matrix-vector multiplication} of \(A\) and \(v\) is the vector \(Av \in \mathbb{C}^{m}\) defined by
+    \item Consider a vector \(v\in \Bbbk^{n}\) with \(v^{T}= (v_{1}, \dots , v_{n})\).
+    The \emph{matrix-vector multiplication} of \(A\) and \(v\) is the vector \(Av \in \Bbbk^{m}\) defined by
     \begin{equation}
       (Av)_{i} \eqdef \sum_{k=1}^{n} a_{ik} v_{k}.
     \end{equation}
-    \item Given another matrix \( B = (b_{kj}) \in \Mat_{n,p}(\mathbb{C}) \), the \emph{matrix product} of \(A\) and \(B\) is the matrix \( AB \in \Mat_{m,p}(\mathbb{C}) \) whose entries are given for all \(1\leq i \leq m\) and \(1\leq j \leq p\) by
+    \item Given another matrix \( B = (b_{kj}) \in \Mat_{n,p}(\Bbbk) \), the \emph{matrix product} of \(A\) and \(B\) is the matrix \( AB \in \Mat_{m,p}(\Bbbk) \) whose entries are given for all \(1\leq i \leq m\) and \(1\leq j \leq p\) by
     \begin{equation*}
       (AB)_{ij} = \sum_{k=1}^n a_{ik} b_{kj}.
     \end{equation*}
@@ -769,14 +810,14 @@ The latter by matrix-matrix multiplication.
 \end{definition}
 
 The above formula for the product of two matrices can be memorised as follows.
-Consider matrices \(A\in \Mat_{m,n}(\mathbb{C})\) and \(B \in \Mat_{n,p}( \mathbb{C})\).
-Suppose, we want to determine the entry \(C_{ij}\) of the product \(C= AB \in \Mat_{m,p} (\mathbb{C})\).
+Consider matrices \(A\in \Mat_{m,n}(\Bbbk)\) and \(B \in \Mat_{n,p}( \Bbbk)\).
+Suppose, we want to determine the entry \(C_{ij}\) of the product \(C= AB \in \Mat_{m,p} (\Bbbk)\).
 To that end, we proceed in two steps.
 \begin{thmlist}
-  \item We consider the (row)  vector \(a= \begin{psmallmatrix}
-    a_{i1} & \dots & a_{in} \end{psmallmatrix}\) given by the \(i\)-th row of \(A\) and the (column) vector \(b = \begin{psmallmatrix} b_{1j}\\ \vdots \\b_{nj}  \end{psmallmatrix}
+  \item We consider the (row)  vector \(a= (a_{i1}\;  \dots \; a_{in})\) given by the \(i\)-th row of \(A\) and the (column) vector \(b = \begin{psmallmatrix} b_{1j}\\ \vdots \\b_{nj}  \end{psmallmatrix}
   \) given by the \(j\)-th column of \(B\).
-  \item Then \( C_{ij} \) is the ``dot product'' of \( a \) and \( b \). That is,
+  \item Then \( C_{ij} \) is the ``dot product'' of \( a \) and \( b \).
+  That is,
   \begin{equation*}
     C_{ij}=
     \begin{pmatrix}
@@ -830,7 +871,7 @@ A pure colour comparison shows that \eg the entry \(C_{11}\) of \(C\) is obtaine
     \inputtikz{matrix-transpose-adjoint-conjugate}
   \end{equation}
 
-  To also express matrix-vector multiplication, we may consider a vector \(v \in \mathbb{C}^{n}\) as a matrix \(v\in \Mat_{n,1}( \mathbb{C})\).
+  To also express matrix-vector multiplication, we may consider a vector \(v \in \Bbbk^{n}\) as a matrix \(v\in \Mat_{n,1}( \Bbbk)\).
   To signify that \(v\) is a vector, we draw it as a triangle.
   \begin{equation}
     \inputtikz{matrix-vector-mult-as-string-diags}
@@ -841,14 +882,14 @@ To ensure that the diagrammatic approach to matrix operations is well-defined, w
 
 \begin{lemma}\label{lem:associativity-of-matrix-multiplication}
   Matrix multiplication is associative and unital.
-  That is, for all \(A \in \Mat_{m,n}( \mathbb{C})\), \(B \in \Mat_{n,o}( \mathbb{C})\), and \( C \in \Mat_{o,p}( \mathbb{C})\), we have
+  That is, for all \(A \in \Mat_{m,n}( \Bbbk)\), \(B \in \Mat_{n,o}( \Bbbk)\), and \( C \in \Mat_{o,p}( \Bbbk)\), we have
   \begin{equation*}
     A(BC) = (AB)C \qquad \text{and}\qquad
     I_{m} A = A = A I_{n}.
   \end{equation*}
 \end{lemma}
 Note however, that matrix multiplication is \emph{not} commutative.
-For every \(n\geq 2\) there are square matrices \(A, B \in \Mat_{n,n}(\mathbb{C})\), such that \(AB \neq BA\).
+For every \(n\geq 2\) there are square matrices \(A, B \in \Mat_{n,n}(\Bbbk)\), such that \(AB \neq BA\).
 
 \begin{example}\label{ex:multiplication-table}
   The multiplication table of the Pauli matrices of Definition~\ref{def:Pauli-matrices} (with \(\sigma_{0}=I_{2}\)) is as follows:
@@ -865,12 +906,12 @@ For every \(n\geq 2\) there are square matrices \(A, B \in \Mat_{n,n}(\mathbb{C}
 
 \begin{definition}\label{def:invertible-matrix}
   Let \(n\in \mathbb{N}\) be a natural number.
-  A matrix \( A \in \Mat_n(\mathbb{C}) \) is \emph{invertible} if there exists a matrix \( B \in \Mat_n(\mathbb{C}) \) such that \( AB = I_n = BA \), where \( I_n \) is the \( n \times n \) identity matrix.
+  A matrix \( A \in \Mat_n(\Bbbk) \) is \emph{invertible} if there exists a matrix \( B \in \Mat_n(\Bbbk) \) such that \( AB = I_n = BA \), where \( I_n \) is the \( n \times n \) identity matrix.
   In this case, \( B \) is called the \emph{inverse} of \( A \) and is denoted by \( A^{-1} \eqdef B\).
 
-  The set of invertible matrices is \(\GL_{n}( \mathbb{C})\).
+  The set of invertible matrices is \(\GL_{n}( \Bbbk)\).
 \end{definition}
-The inverse of an invertible matrix \(A\in \Mat_{n}( \mathbb{C})\) can be computed for example using Gaussian elimination.
+The inverse of an invertible matrix \(A\in \Mat_{n}( \Bbbk)\) can be computed for example using Gaussian elimination.
 Starting with
 \begin{equation*}
   \left(\begin{array}{cccc|cccc}
@@ -895,10 +936,10 @@ The matrix \(B=(b_{ij})\) is the inverse of \(A\).
 Three interconnected invariants of matrices will play a central role in the study of quantum computing: the rank, trace and the determinant of a matrix (the latter indirectly, and mostly via its connection to eigenvalues).
 
 \begin{definition}\label{def:rank}
-  The \emph{rank} \(\rk(A)\) of a matrix \(A \in \Mat_{m,n}(\mathbb{C})\) is the dimension of the subspace \(\{ Av \mid v\in \mathbb{C}^{n}\}\subset \mathbb{C}^{m}\).
+  The \emph{rank} \(\rk(A)\) of a matrix \(A \in \Mat_{m,n}(\Bbbk)\) is the dimension of the subspace \(\{ Av \mid v\in \Bbbk^{n}\}\subset \Bbbk^{m}\).
 \end{definition}
 
-The rank of a matrix \( A \in \Mat_{m,n}(\mathbb{C}) \) can be computed using Gaussian elimination.
+The rank of a matrix \( A \in \Mat_{m,n}(\Bbbk) \) can be computed using Gaussian elimination.
 By applying elementary row operations (swapping rows, multiplying a row by a non-zero scalar, and adding a multiple of one row to another), we can transform \( A \) into a matrix \(A'\) in  \emph{row echelon form}.
 That is, a matrix of the form
 \begin{equation*}
@@ -922,7 +963,7 @@ The rank \(\rk (A) = k\) simply equals the number of \emph{pivot} elements of \(
 
 
 \begin{definition}\label{def:trace}
-  The \emph{trace} of a matrix \(A\in \Mat_{n}( \mathbb{C})\) is
+  The \emph{trace} of a matrix \(A\in \Mat_{n}( \Bbbk)\) is
   \begin{equation}
     \tr(A)= a_{11}+ \dots + a_{nn}.
   \end{equation}
@@ -931,7 +972,7 @@ The rank \(\rk (A) = k\) simply equals the number of \emph{pivot} elements of \(
 In the density matrix formalism, traces will be used to describe probabilities of outcomes of measurements.
 
 \begin{proposition}\label{prop:basic-properties-of-trace}
-  Let \(A, B\in \Mat_{n}( \mathbb{C})\), \(\lambda \in \mathbb{C}\), and \(G \in \GL_{n}( \mathbb{C})\).
+  Let \(A, B\in \Mat_{n}( \Bbbk)\), \(\lambda \in \Bbbk\), and \(G \in \GL_{n}( \Bbbk)\).
   The trace  is
   \begin{thmlist}
     \item linear:  \(\tr(\lambda A + B) = \lambda \tr(A) + \tr(B)\),
@@ -943,20 +984,20 @@ In the density matrix formalism, traces will be used to describe probabilities o
 Eigenvalues play a crucial role in quantum computing, for example via their connection to positive (semi-)definiteness.
 
 \begin{definition}\label{def:eigenvalue-and-eigenspace}
-  Let \( A \in \Mat_{n}(\mathbb{C}) \). A scalar \( \lambda \in \mathbb{C} \) is called an \emph{eigenvalue} of \( A \) if there exists a non-zero vector \( v \in \mathbb{C}^n \) such that
+  Let \( A \in \Mat_{n}(\Bbbk) \). A scalar \( \lambda \in \Bbbk \) is called an \emph{eigenvalue} of \( A \) if there exists a non-zero vector \( v \in \Bbbk^n \) such that
   \begin{equation}
     A v = \lambda v.
   \end{equation}
 
   The vector \( v \) is called an \emph{eigenvector} associated with \( \lambda \).
-  The subspace \(\{v\in \mathbb{C}^{n} \mid Av = \lambda v\}\) is the \emph{eigenspace} of the eigenvalue \( \lambda \).
+  The subspace \(\{v\in \Bbbk^{n} \mid Av = \lambda v\}\) is the \emph{eigenspace} of the eigenvalue \( \lambda \).
 \end{definition}
 
 For computations, it is often favourable to work with \emph{diagonal matrices}.
 That is, matrices with all off-diagonal entries being zero.
 
 \begin{definition}\label{def:diagonalisable}
-  A matrix \( A \in \Mat_{n}(\mathbb{C}) \) is \emph{diagonalisable} if there exists an invertible matrix \( P \in \Mat_{n}(\mathbb{C}) \) such that
+  A matrix \( A \in \Mat_{n}(\Bbbk) \) is \emph{diagonalisable} if there exists an invertible matrix \( P \in \Mat_{n}(\Bbbk) \) such that
   \begin{equation*}
     P^{-1} A P =
     \begin{pmatrix}
@@ -972,9 +1013,9 @@ That is, matrices with all off-diagonal entries being zero.
 The connection between eigenvalues and diagonalisable matrices is due to the following result.
 
 \begin{proposition}\label{prop:diag-iff-basis-of-eigenvalues}
-  A matrix \( A \in \Mat_{n}(\mathbb{C}) \) is diagonalisable if and only if there exists a basis \( \mathcal{B} = (b_1, \dots, b_n) \) of \( \mathbb{C}^n \) consisting of eigenvectors of \( A \).
+  A matrix \( A \in \Mat_{n}(\Bbbk) \) is diagonalisable if and only if there exists a basis \( \mathcal{B} = (b_1, \dots, b_n) \) of \( \Bbbk^n \) consisting of eigenvectors of \( A \).
 
-  In this case, let \( B \) be the matrix whose columns are the eigenvectors \( b_1, \dots, b_n \), and set \( \lambda_k \in \mathbb{C} \)  such that \(Ab_{k}=\lambda_{k}b_{k}\) for all \(1\le k \leq n\).
+  In this case, let \( B \) be the matrix whose columns are the eigenvectors \( b_1, \dots, b_n \), and set \( \lambda_k \in \Bbbk \)  such that \(Ab_{k}=\lambda_{k}b_{k}\) for all \(1\le k \leq n\).
   Then,
   \begin{equation}
     B^{-1} A B =
@@ -1004,7 +1045,7 @@ Specifically, eigenvalues of a matrix \(A\) correspond to roots of the so-called
 The following definition of the determinant is called the \emph{ Leibniz formula}.
 Equivalent definitions can be given in terms of the Laplace formula, or the universal property of the determinant as alternating and normalised multilinear form.
 \begin{definition}\label{def:determinant}
-  The \emph{determinant} of a matrix \( A = (a_{ij}) \in \Mat_n(\mathbb{C}) \) is
+  The \emph{determinant} of a matrix \( A = (a_{ij}) \in \Mat_n(\Bbbk) \) is
   \begin{equation}
     \det(A) = \sum_{\sigma \in \Sym(n)} \sgn(\sigma) a_{1\sigma(1)} \cdots a_{n\sigma(n)}.
   \end{equation}
@@ -1014,7 +1055,7 @@ Unlike traces, the determinant is not linear\footnote{%
   It is however, linear in the columns and rows of a matrix, respectively.}.
 
 \begin{proposition}\label{prop:basic-properties-of-determinant}
-  Consider matrices \(A, B \in\Mat_{n}( \mathbb{C}) \) and \(P \in \GL_{n}( \mathbb{C})\).
+  Consider matrices \(A, B \in\Mat_{n}( \Bbbk) \) and \(P \in \GL_{n}( \Bbbk)\).
   The determinant is
   \begin{thmlist}
     \item multiplicative: \(\det(AB) = \det(A) \det (B)\),
@@ -1023,39 +1064,39 @@ Unlike traces, the determinant is not linear\footnote{%
   \end{thmlist}
 \end{proposition}
 
-One shows that \(A\in \Mat_{n}( \mathbb{C})\) is invertible if and only if \(\det(A) \neq 0\).
+One shows that \(A\in \Mat_{n}( \Bbbk)\) is invertible if and only if \(\det(A) \neq 0\).
 This can be cleverly used to study eigenvalues.
-Suppose that \(\lambda\) is an eigenvalue of \(A\) and \(v \in \mathbb{C}^{n}\) is an eigenvector
+Suppose that \(\lambda\) is an eigenvalue of \(A\) and \(v \in \Bbbk^{n}\) is an eigenvector
 Then
 \begin{equation*}
   (\lambda I_{n} - A) v = \lambda I_{n} v - Av = \lambda v - \lambda v =0.
 \end{equation*}
 Since \(0 \neq v\) the matrix \(\lambda I_{n} - A\) cannot be invertible and \(\det (\lambda I_{n} - A) = 0\).
-Thus, we want to systematically find all \(t \in \mathbb{C}\) such that  \(\det(t I_{n} - A) = 0\).
+Thus, we want to systematically find all \(t \in \Bbbk\) such that  \(\det(t I_{n} - A) = 0\).
 
 \begin{definition}\label{def:char-poly}
-  The \emph{characteristic polynomial} of a matrix \( A \in \Mat_n(\mathbb{C}) \) is
+  The \emph{characteristic polynomial} of a matrix \( A \in \Mat_n(\Bbbk) \) is
   \begin{equation}
-    \chi_A(t) = \det(t I_n - A) \in \mathbb{C}[t].
+    \chi_A(t) = \det(t I_n - A) \in \Bbbk[t].
   \end{equation}
 \end{definition}
 We can now state our previously made observation about the connection between eigenvalues and determinants as a theorem.
 \begin{theorem}\label{thm:eigenvalues-and-char-poly}
-  A scalar \(\lambda \in \mathbb{C}\) is an eigenvalue of a matrix \(A\in \Mat_{n}( \mathbb{C})\) if and only if \(\chi_{A}(\lambda) = 0\).
+  A scalar \(\lambda \in \Bbbk\) is an eigenvalue of a matrix \(A\in \Mat_{n}( \Bbbk)\) if and only if \(\chi_{A}(\lambda) = 0\).
 \end{theorem}
 
 The coefficients of the characteristic polynomial are closely connected with the invariants of matrices we have previously discussed.
 
 \begin{proposition}\label{prop:coeffs-of-char-poly}
-  The characteristic polynomial of a matrix \(A \in \Mat_{n}( \mathbb{C})\) satisfies
+  The characteristic polynomial of a matrix \(A \in \Mat_{n}( \Bbbk)\) satisfies
   \begin{equation}
     \chi_{A}(t) = t^{n} - \tr(A)t^{n-1} + \dots + (-1)^{n}\det(A).
   \end{equation}
 \end{proposition}
-Let \(v\in \mathbb{C}^{n}\) be a vector and \(A \in \Mat_{n}( \mathbb{C})\) a matrix.
-By considering \(v^{\dagger}= (\overline{v_{1}}, \dots , \overline{v_{n}})\in \Mat_{1,n}( \mathbb{C})\) as a matrix, we can compute the scalar
+Let \(v\in \Bbbk^{n}\) be a vector and \(A \in \Mat_{n}( \Bbbk)\) a matrix.
+By considering \(v^{\dagger}= (\overline{v_{1}}, \dots , \overline{v_{n}})\in \Mat_{1,n}( \Bbbk)\) as a matrix, we can compute the scalar
 \begin{equation*}
-  v^{\dagger}Av =\sum_{i,k=1}^{n} \overline{v_{i}}a_{ik}v_{k} \in \mathbb{C}.
+  v^{\dagger}Av =\sum_{i,k=1}^{n} \overline{v_{i}}a_{ik}v_{k} \in \Bbbk.
 \end{equation*}
 
 \begin{definition}\label{def:positive-semidefinite}
@@ -1063,32 +1104,32 @@ By considering \(v^{\dagger}= (\overline{v_{1}}, \dots , \overline{v_{n}})\in \M
   \begin{thmlist}
     \item For all \(v\in \mathbb{C}^{n}\) we have \(v^{\dagger}Av \geq 0\).
     \item All eigenvalues \(\lambda\) of \(A\) are real and \(\lambda \geq 0\).
-    \item For every \(0\leq i\leq n-1\), every \emph{i-th principal minor} is non-negative.
+    \item For every \(1\leq i\leq n\), every \emph{i-th principal minor} is non-negative.
     The \(i\)-th principal minors are the determinants \(\det A_{i}\) of  the \( i \times i \) submatrices of \(A\) obtained by deleting the same \( n-i \) rows \(l_{1}, \dots , l_{i}\) and columns \(l_{1}, \dots , l_{i}\) from \( A \).
   \end{thmlist}
 \end{definition}
 The criterion involving principal minors requires checking \emph{all} possible \( i \times i \) principal minors for each \( i \), not just the leading principal minors (those formed by the first \( i \) rows and columns).
-For example, for a \( 2 \times 2 \) matrix
+For example, for a self-adjoint \( 2 \times 2 \) matrix
 \begin{equation*}
   A = \begin{pmatrix}
     a & b \\
-    c & d
+    \overline{b} & d
   \end{pmatrix},
 \end{equation*}
 the principal minors are:
 \begin{thmlist}
-\item \( i = 0 \): we consider the whole matrix and have \( \det(A) = ad - bc \),
 \item \( i = 1 \): we delete the first row and first column, and get the matrix \((a)\) whose determinant is \( \det(a)=a \),
 \item \( i = 1 \): we delete the second row and second column, leading to the matrix \((d)\) with  determinant \( \det(d)=d\).
+\item \( i = 2 \): we consider the whole matrix and have \( \det(A) = ad - b\overline{b} \),
 \end{thmlist}
 Cases like deleting the first row and the second column are not considered.
 \bigskip
 
 Albeit an abstract result at first glance, the Cayley--Hamilton theorem describes many of the structural properties of matrices.
 \begin{theorem}[Cayley--Hamilton]\label{thm:cayley-hamilton}
-  Every matrix \( A \in \Mat_n(\mathbb{C}) \) satisfies
+  Every matrix \( A \in \Mat_n(\Bbbk) \) satisfies
   \begin{equation*}
-    \chi_{A}(A) = 0 \in \Mat_{n}( \mathbb{C}).
+    \chi_{A}(A) = 0 \in \Mat_{n}( \Bbbk).
   \end{equation*}
 \end{theorem}
 Here, \( \chi_A(A) \) is the matrix obtained by substituting \( A^k \) for \( t^k \) in the characteristic polynomial \( \chi_A(t) \), with the convention that \( A^0 = I_n \).
@@ -1111,7 +1152,7 @@ and inserting \(A\) yields
       A^{-1}= - \frac{1}{c_{0}}(A^{n-1} + c_{n-1} A^{n-2} + \dots + c_{1} I_{n}).
     \end{equation}
   \end{thmlist}
-  Suppose that \(\lambda_{1}, \dots , \lambda_{k}\in \mathbb{C}\) are the pairwise distinct roots of \(\chi_{A}(t)\) with multiplicities  \(m_{1}, \dots , m_{k}\in \mathbb{N}\), \ie \(\chi_{A}(t) = (t-\lambda_{1})^{m_{1}} \cdot \dots \cdot (t-\lambda_{k})^{m_{k}}\).
+  Suppose that \(\lambda_{1}, \dots , \lambda_{k}\in \Bbbk\) are the pairwise distinct roots of \(\chi_{A}(t)\) with multiplicities  \(m_{1}, \dots , m_{k}\in \mathbb{N}\), \ie \(\chi_{A}(t) = (t-\lambda_{1})^{m_{1}} \cdot \dots \cdot (t-\lambda_{k})^{m_{k}}\).
   \begin{thmlist}[resume]
     \item  The eigenvalues of \(A\) are \(\lambda_{1}, \dots , \lambda_{k}\).
     \item  The trace of \(A\) is \(\tr(A) =  \lambda_{1}m_{1} + \dots \lambda_{k}m_{k}\).
@@ -1122,31 +1163,31 @@ and inserting \(A\) yields
 
 \subsection{Linear maps}\label{sec:linear-maps}
 
-While matrix-vector multiplication provides a way to act on vectors in \( \mathbb{C}^n \), we will later encounter more general vector spaces that cannot be canonically identified with \( \mathbb{C}^{n}\).
+While matrix-vector multiplication provides a way to act on vectors in \( \Bbbk^n \), we will later encounter more general vector spaces that cannot be canonically identified with \( \Bbbk^{n}\).
 This necessitates a more abstract and general notion of transformation.
 
 \begin{definition}\label{def:linear-maps}
-  A \emph{map} \( f \from V \to W \) between complex vector spaces \(V\) and \(W\) is called  a \emph{linear map} or \emph{homomorphism of vector spaces} if
+  A \emph{map} \( f \from V \to W \) between \(\Bbbk\)-vector spaces \(V\) and \(W\) is called  a \emph{linear map} or \emph{homomorphism of vector spaces} if
   \begin{subequations}
     \begin{align}
       f(x + y) &= f(x) + f(y), \\
       f(\lambda x) &= \lambda f(x),
     \end{align}
   \end{subequations}
-  for all \( x, y \in V \) and \( \lambda \in \mathbb{C} \).
+  for all \( x, y \in V \) and \( \lambda \in \Bbbk \).
   In case there exists a linear map \(g \from W \to V\) such that \(g f = \id_{V} \) and \(f g = \id_{W}\), we call \(f\) an \emph{isomorphism} and \(g\) the \emph{inverse} of \(f\).
 
-  The set of all linear maps from \( V \) to \( W \) is \(\Hom_{ \mathbb{C}}(V, W) \).
-  If \(V=W\), we call \(f\) an \emph{endomorphism} and write \(\End_{ \mathbb{C}}(V) \eqdef \Hom_{ \mathbb{C}}(V,V)\).
+  The set of all linear maps from \( V \) to \( W \) is \(\Hom_{ \Bbbk}(V, W) \).
+  If \(V=W\), we call \(f\) an \emph{endomorphism} and write \(\End_{ \Bbbk}(V) \eqdef \Hom_{ \Bbbk}(V,V)\).
 \end{definition}
 
-In Proposition~\ref{prop:basic-properties-of-trace}, we have already seen that the trace map \(\tr \from \Mat_{n}( \mathbb{C}) \to \mathbb{C}\) is linear.
+In Proposition~\ref{prop:basic-properties-of-trace}, we have already seen that the trace map \(\tr \from \Mat_{n}( \Bbbk) \to \Bbbk\) is linear.
 
 \begin{example}\label{ex:matrices-lead-to-linear-multiplication}
-  Consider a matrix \(A\in \Mat_{m,n}( \mathbb{C})\).
+  Consider a matrix \(A\in \Mat_{m,n}( \Bbbk)\).
   The map
   \begin{equation}
-    \mu_{A} \from \mathbb{C}^{n}\to \mathbb{C}^{m}, \qquad v \mapsto Av.
+    \mu_{A} \from \Bbbk^{n}\to \Bbbk^{m}, \qquad v \mapsto Av.
   \end{equation}
   is linear.
 
@@ -1162,8 +1203,8 @@ In Proposition~\ref{prop:basic-properties-of-trace}, we have already seen that t
 Similar to matrices, the collection of all linear maps between two fixed vector spaces forms again a vector space.
 
 \begin{remark}\label{rmk:vector-space-structure}
-  The set \( \Hom_{\mathbb{C}}(V, W) \) naturally forms a vector space under pointwise addition and scalar multiplication.
-  That is, for all \(f, g \in \Hom_{ \mathbb{C}}(V,W)\), \(\lambda \in \mathbb{C}\), and \(v\in V\) we have
+  The set \( \Hom_{\Bbbk}(V, W) \) naturally forms a vector space under pointwise addition and scalar multiplication.
+  That is, for all \(f, g \in \Hom_{ \Bbbk}(V,W)\), \(\lambda \in \Bbbk\), and \(v\in V\) we have
   \begin{equation*}
     (f+g)v = f(v) + g(v)\qquad \text{ and } \qquad
     (\lambda f)v = \lambda (f (v)).
@@ -1175,7 +1216,7 @@ Similar to matrices, the collection of all linear maps between two fixed vector 
 \end{remark}
 
 \begin{definition}\label{def:dual space}
-  We call \(\rd*{V} \eqdef \Hom_{ \mathbb{C}}(V,   \mathbb{C} )\) the \emph{dual space} of \(V\).
+  We call \(\rd*{V} \eqdef \Hom_{ \Bbbk}(V,   \Bbbk )\) the \emph{dual space} of \(V\).
 \end{definition}
 
 We now want to link linear maps to matrices.
@@ -1186,13 +1227,13 @@ As an auxiliary step, we first notice that any linear map is uniquely determined
   Any (set) map \(g \from \mathcal{B} \to W\) can be extended to a unique linear map \(f\from V \to W\) such that \(f(b) = g(b)\) for all \(b\in \mathcal{B}\).
 \end{theorem}
 
-As an immediate consequence, we can identify any \(n\)-dimensional space (non-uniquely!) with \( \mathbb{C}^{n}\).
+As an immediate consequence, we can identify any \(n\)-dimensional space (non-uniquely!) with \( \Bbbk^{n}\).
 
 \begin{corollary}\label{cor:basis-isomorphism}
   For any basis \( \mathcal{B} = (b_{1}, \dots , b_{n})\)  of a vector space \(V\), the map
   \begin{equation}
     \can_{\mathcal{B}} \from
-    \mathbb{C}^{n} \to V, \qquad
+    \Bbbk^{n} \to V, \qquad
     \begin{pmatrix}
       \lambda_{1}\\ \vdots \\ \lambda_{n}
     \end{pmatrix}
@@ -1207,7 +1248,7 @@ One of the most powerful tools in linear algebra is to translate between linear 
 \begin{proposition}\label{prop:matrices-linear-maps}
   Consider a vector space \(V\) with basis \( \mathcal{B} = (b_{1}, \dots , b_{n})\), a space \(W\) with basis \( \mathcal{C} = (c_{1}, \dots , c_{m})\), and a linear map \(f\from V \to W\).
   \begin{thmlist}
-    \item There is a  unique matrix  \(A= (a_{ij}) \in \Mat_{m,n}( \mathbb{C})\) such that
+    \item There is a  unique matrix  \(A= (a_{ij}) \in \Mat_{m,n}( \Bbbk)\) such that
     \begin{equation*}
       f(b_{j})= a_{1j}c_{1} + \dots + a_{mj} c_{m}\qquad \text{ for all } 1\leq j \leq n.
     \end{equation*}
@@ -1215,7 +1256,7 @@ One of the most powerful tools in linear algebra is to translate between linear 
     \begin{equation}
       \begin{tikzcd}[ampersand replacement=\&,cramped]
         V \&\& W \\\\
-        {\mathbb{C}^n} \&\& {\mathbb{C}^m}
+        {\Bbbk^n} \&\& {\Bbbk^m}
         \arrow["f", from=1-1, to=1-3]
         \arrow["{\can_{\mathcal{B}}}", from=3-1, to=1-1]
         \arrow["{\mu_A}"', from=3-1, to=3-3]
@@ -1255,7 +1296,7 @@ In particular, the representing matrix of the composition \( g \circ f \) is the
     \begin{tikzcd}[ampersand replacement=\&,cramped]
       V \&\& W \&\& X \\
       \\
-      {\mathbb{C}^n} \&\& {\mathbb{C}^m} \&\& {\mathbb{C}^p}
+      {\Bbbk^n} \&\& {\Bbbk^m} \&\& {\Bbbk^p}
       \arrow["f", from=1-1, to=1-3]
       \arrow["gf", curve={height=-24pt}, from=1-1, to=1-5]
       \arrow["g", from=1-3, to=1-5]
@@ -1293,12 +1334,12 @@ This naturally raises the question, how \({}_{\mathcal{C}}f_{\mathcal{B}}\) tran
   \begin{equation}
     \inputtikz{composition-as-string-diags}
   \end{equation}
-  To also apply a linear map to a vector, we consider a vector \(v \in \mathbb{C}^{n}\) as the linear map
+  To also apply a linear map to a vector, we consider a vector \(v \in \Bbbk^{n}\) as the linear map
 
   \begin{equation*}
-    \nu \from \mathbb{C} \to V,\quad \lambda \mapsto \lambda v.
+    \nu \from \Bbbk \to V,\quad \lambda \mapsto \lambda v.
   \end{equation*}
-  Using the convention that \(\mathbb{C}\) is drawn transparently, we get the following diagrammatic representation.
+  Using the convention that \(\Bbbk\) is drawn transparently, we get the following diagrammatic representation.
   \begin{equation}
     \inputtikz{vectors-in-string-diagrams}
   \end{equation}
@@ -1339,8 +1380,8 @@ In other words, \( f \) acts as the identity on \( U \) and maps every vector in
     \item \(f\) is a projection onto its image \(\im f =\{f(v) \mid v\in V\}\).
     \item\(f^{2} = f\),
     \item for every  \(v\in V\) we have \(v\in \im(f)\) if and only if \(f(v) = v\), and
-    \item every vector \(v\in V\) can be written as a unique linear combination \(v= x+f(v)\) with \(f(x) = 0\).
-    In this case \(x= (\id_{V} -f) v\).
+    \item every vector \(v\in V\) can be written as a unique linear combination \(v= x+y\) with \(f(x) = 0\) and \(f(y) = y\).
+    In this case \(x= (\id_{V} -f) v\) and \(y = f(v)\).
   \end{thmlist}
 \end{lemma}
 \begin{proof}
@@ -1354,8 +1395,16 @@ In other words, \( f \) acts as the identity on \( U \) and maps every vector in
     Suppose \( f^2 = f \). If \( v \in \im(f) \), then \( v = f(w) \) for some \( w \in V \). Thus, \( f(v) = f(f(w)) = f(w) = v \). Conversely, if \( f(v) = v \), then \( v \in \im(f) \).
 
     \item[(iii) \(\Rightarrow\) (iv):]
-    If \( \im(f) = \{ v \in V \mid f(v) = v \} \), then for any \( v \in V \), set \( x = (\id_V - f)(v) \). We have \( f(x) = f(v) - f^2(v) = 0 \) and \( v = x + f(v) \). This decomposition is unique because if \( v = x_1 + f(v) = x_2 + f(v) \), then \( x_1 = x_2 \).
-
+    We define \(x =(\id_{V} - f) v \) and \(y = f(v)\).
+    Clearly, we have \(x + y = v\).
+    In case \(\im(f) = \{ v \in V \mid f(v) = v \} \), then
+    \(f(y) = f^{2}(v) = f(v) = y\) and \(f(x) = f(v) - f^{2}(v) = 0\).
+    Now suppose \(x',y' \in V\) with \(f(x') = 0\), \(f(y') = y' \) and \(x' +y'= v \).
+    Then
+    \begin{gather*}
+      y = f(y) =  f(x+y) = f(v) = f(x' + y') = f(y') = y'\\
+      x = x + y -y' = v - y' = x' + y' -y' = x'.
+    \end{gather*}
     \item[(iv) \(\Rightarrow\) (i):]
     Consider an element \( w = f(v) \) in the image of \(f\) and write \( v = x + f(v) \) with \( f(x) = 0 \).
     Applying \( f \) to both sides, we get
@@ -1382,7 +1431,7 @@ Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the follo
     \item Write \(z_2\) in polar form \(re^{2\pi i \alpha}\).
     \item Find a complex number \(u\) such that \(u^{3}= z_{2}\).
     \item Determine \emph{integers} \(p,q \in \mathbb{Z}\) such that \(z_{1}^{2} + p z_{1} + q = 0\).
-    \item Prove that for any \(z \in \mathbb{C}\setminus\{0\}\), we have \(z^{-1} = \tfrac{\overline{z}}{|z|^{2}}\).
+    \item Prove that for any \(z \in \Bbbk\setminus\{0\}\), we have \(z^{-1} = \tfrac{\overline{z}}{|z|^{2}}\).
   \end{thmlist}
 \end{exercise}
 
@@ -1401,7 +1450,7 @@ Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the follo
     \item Verify that \(\sigma_x^2 = \sigma_y^2 = \sigma_z^2 = I_2\).
     \item Show that \(\tr(\sigma_j) = 0\) for \(j \in \{x, y, z\}\).
     \item Prove that the Pauli matrices are self-adjoint (Hermitian), \ie \(\sigma_j^\dagger = \sigma_j\) for all \(j \in\{x,y,z\}\).
-    \item Show that \((\sigma_{0}, \sigma_{x}, \sigma_{y}, \sigma_{z})\) is a basis of \(\Mat_{2}( \mathbb{C})\).
+    \item Show that \((\sigma_{0}, \sigma_{x}, \sigma_{y}, \sigma_{z})\) is a basis of \(\Mat_{2}( \Bbbk)\).
   \end{thmlist}
   Define the two matrices \(P_{\pm} = \frac{1}{2}(I_2 \pm \sigma_x)\).
   \begin{thmlist}[resume]
@@ -3638,11 +3687,11 @@ Note that in particular, \(\sigma_{x} = X(\tfrac{1}{2})\), \(\sigma_{y} = Y(\tfr
   Analogous computations for the \(X\) and \(Y\)-gates complete the proof.
 \end{proof}
 
-To visualise the action of the \( Z \), \( X \), and \( Y \) gates on the Bloch sphere,
-we introduce the linear maps
+We will show in the next proposition, that the \( Z \), \( X \), and \( Y \)-gates act on the Bloch sphere, by rotations.
+These rotations are given by the linear maps
 \begin{subequations}
   \begin{align}
-    z(\alpha) \from \mathbb{R}^3 &\to \mathbb{R}^3,
+    r_{z}(\alpha) \from \mathbb{R}^3 &\to \mathbb{R}^3,
     &&
        \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
        \begin{pmatrix}
@@ -3652,7 +3701,7 @@ we introduce the linear maps
        \end{pmatrix}
        \begin{pmatrix} x \\ y \\ z \end{pmatrix},
     \\
-    x(\beta) \from \mathbb{R}^3 &\to \mathbb{R}^3,
+    r_{x}(\beta) \from \mathbb{R}^3 &\to \mathbb{R}^3,
     &&
        \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
        \begin{pmatrix}
@@ -3662,7 +3711,7 @@ we introduce the linear maps
        \end{pmatrix}
        \begin{pmatrix} x \\ y \\ z \end{pmatrix},
     \\
-    y(\gamma) \from \mathbb{R}^3 &\to \mathbb{R}^3,
+    r_{y}(\gamma) \from \mathbb{R}^3 &\to \mathbb{R}^3,
     &&
        \begin{pmatrix} x \\ y \\ z \end{pmatrix} \mapsto
        \begin{pmatrix}
@@ -3682,12 +3731,12 @@ These correspond to the rotations depicted below.
 
 
 \begin{proposition}\label{prop:xyz-gates-are-rotations}
-  Given a state \([v]\) of \( \mathbb{C}^{2}\), we write \(r_{[v]} \in \mathbb{R}^{3}\) for the corresponding point in the Bloch sphere.
+  Given a state \([v]\) of \( \mathbb{C}^{2}\), we write \(\mathrm{pt}_{[v]} \in \mathbb{R}^{3}\) for the corresponding point in the Bloch sphere.
   For any \( \alpha, \beta, \gamma \in \mathbb{R} \), we have
   \begin{align*}
-    r_{[Z(\alpha) v]} = z(\alpha)r_{[v]}, \qquad
-    r_{[X(\beta) v]} = x(\beta)r_{[v]}, \qquad
-    r_{[Y(\gamma) v]} = y(\gamma)r_{[v]}. \qedhere
+    \mathrm{pt}_{[Z(\alpha) v]} = r_{z}(\alpha)\mathrm{pt}_{[v]}, \qquad
+    \mathrm{pt}_{[X(\beta) v]} = r_{x}(\beta)\mathrm{pt}_{[v]}, \qquad
+    \mathrm{pt}_{[Y(\gamma) v]} = r_{y}(\gamma)\mathrm{pt}_{[v]}.
   \end{align*}
 \end{proposition}
 
@@ -3697,7 +3746,7 @@ These correspond to the rotations depicted below.
   \begin{equation*}
     \rho_{v} = \frac{1}{2}(I_2 + r_x \sigma_x + r_y \sigma_y + r_z \sigma_z),
   \end{equation*}
-  and \( r_{[v]} = (r_x, r_y, r_z)^{T}\in \mathbb{R}^{3}\) is the associated point on the Bloch sphere.
+  and \( \mathrm{pt}_{[v]} = (\mathrm{pt}_x, \mathrm{pt}_y, \mathrm{pt}_z)^{T}\in \mathbb{R}^{3}\) is the associated point on the Bloch sphere.
   The density matrix of the transformed state \( [Z(\alpha)v] \) is given by \(\rho_{Z(\alpha)v} = Z(\alpha) \rho_{v} Z(\alpha)^\dagger\).
 
   We now compute the conjugation of each Pauli matrix by \( Z(\alpha) \).
@@ -3768,11 +3817,10 @@ These correspond to the rotations depicted below.
       \end{pmatrix}
       = -\sin(2\pi \alpha) \sigma_x + \cos(2\pi \alpha) \sigma_y.
   \end{align*}
-  Thus, we get \(r_{[Z(\alpha) v]} = z(\alpha)r_{[v]}\).
+  Thus, we get \(\mathrm{pt}_{[Z(\alpha) v]} = z(\alpha)\mathrm{pt}_{[v]}\).
   The cases for the \(X\) and \(Y\)-gates are similar.
 \end{proof}
 
-% TODO Example show the z, x, y rotation on the Bloch sphere.
 % TODO Highlight problem with the maximally entangled state: it is invariant under rotations!
 
 We have already seen that any state can be transformed into any other state via a unitary map.
@@ -3918,23 +3966,28 @@ Nonetheless, we will show that an (idealised) quantum machine can at least theor
 This necessitates  a non-trivial process for transforming classical algorithms into unitary maps.
 At this stage, and without going into further details, we adopt a high-level perspective on classical algorithms, and simply model them as maps \(f \from \{0,1\}^n \to \{0,1\}^m\).
 
-\begin{definition}\label{def:addition-modulo-2}
-  The \emph{addition modulo 2} is the operation
+\begin{remark}\label{rem:addition-modulo-2}
+  Recall that as discussed in Definition~\ref{def:the-field-f2}, the
+  \emph{addition modulo 2} is the operation
   \begin{equation}
-    \boxplus \from\{0,1\}\times\{0,1\} \to\{0,1\}, \qquad (a, b) \mapsto
-    \begin{cases}
-      1 & a=1, b=0 \text{ or } a= 0, b=1 \\
-      0 & a=0, b=0 \text{ or } a = 1, b= 1.
-    \end{cases}
+    \boxplus \from\{0,1\}\times\{0,1\} \to\{0,1\}
   \end{equation}
+  with addition table
+  \begin{equation*}
+    \begin{array}{c|cc}
+      \boxplus & 0 & 1 \\
+      \hline
+      0 & 0 & 1 \\
+      1 & 1 & 0
+    \end{array}.
+  \end{equation*}
   This operation is also known as the \emph{exclusive or} (in short \emph{XOR}).
-\end{definition}
+\end{remark}
 
-We extend this addition component-wise to \(m\)-tuples of bits and write
-\begin{equation*}
-  \boxplus \from \{0,1\}^{m} \times \{0,1\}^{m} \to \{0,1\}^{m}, \qquad
-  (a_{1}, \dots , a_{m}, b_{1}, \dots , b_{m}) \mapsto (a_{1} \boxplus b_{1}, \dots , a_{m} \boxplus b_{m}).
-\end{equation*}
+\begin{convention}
+  To emphasise the ``classical'' nature of bitstrings, we will write \(\{0,1\}^{m}\) instead of \(\mathbb{F}_{2}^{m}\).
+  We will, however, often treat this set as an \(\mathbb{F}_2\)-vector space equipped with component-wise addition \(\boxplus\).
+\end{convention}
 
 The method described below, called \emph{Bennett's trick}, is the first step for turning classical algorithms into quantum ones.
 
@@ -4012,14 +4065,14 @@ The topics below will not be included in an examination and are not part of the 
   A \emph{group} is a set \( G \) together with a binary operation \( \cdot \from G \times G \to G \), called the \emph{group operation} or \emph{multiplication}, satisfying the following axioms.
   \begin{thmlist}
     \item \emph{Associativity:} For all \( a, b, c \in G \), we have \( (a \cdot b) \cdot c = a \cdot (b \cdot c) \).
-    \item \emph{Identity element:} There exists an element \( e \in G \) such that \( a \cdot e = a = e \cdot a \) for all \( a \in G \).
+    \item \emph{Neutral element:} There exists an element \( e \in G \) such that \( a \cdot e = a = e \cdot a \) for all \( a \in G \).
     \item \emph{Inverse element:} For every \( a \in G \), there exists a \( b \in G \) such that \( a \cdot b = e = b \cdot a \). In this case, we write \( a^{-1} \eqdef b \).
   \end{thmlist}
 \end{definition}
 
 We have already encountered groups in this course.
 For instance, any vector space \( V \) forms a group with vector addition as group operation.
-Here the identity element is the zero vector \(0 \in V\) and the inverse of a vector \( v \in V \) is its additive inverse \( -v\in V \).
+Here the neutral element is the zero vector \(0 \in V\) and the inverse of a vector \( v \in V \) is its additive inverse \( -v\in V \).
 \bigskip
 
 Another large class of examples comes from certain subsets of matrices.
@@ -4092,7 +4145,7 @@ We denote the equivalence class of \( U \) by \( [U] \) and set
   \end{equation*}
   showing that the group operation is well-defined.
 
-  Associativity as well as the existence of inverses and the  existence of an identity element follow directly from the properties of matrix multiplication.
+  Associativity as well as the existence of inverses and the  existence of an neutral element follow directly from the properties of matrix multiplication.
 \end{proof}
 
 \begin{definition}\label{def:pun-sun}
@@ -4357,7 +4410,8 @@ a pair of projectors \(e_{1}, e_{2}\) are \emph{pairwise orthogonal} if \(e_{1}e
 In particular, we will later on consider sets \(\{e_{1}, \dots , e_{n}\}\) of orthogonal projectors \(V\to V\) that are moreover pairwise orthogonal.
 
 \begin{lemma}\label{lem:part-of-1-means-orth}
-Consider projections \( e_1, \dots, e_n \from V \to V \) such that \( e_1 + \dots + e_n = \id_V \). Then, the set of projections \( \{ e_1, \dots, e_n \} \) is pairwise orthogonal.
+  Consider projections \( e_1, \dots, e_n \from V \to V \) such that \( e_1 + \dots + e_n = \id_V \).
+  Then, the set of projections \( \{ e_1, \dots, e_n \} \) is pairwise orthogonal.
 \end{lemma}
 
 \begin{proof}
@@ -4900,7 +4954,8 @@ Lastly, the connection between this classical wire and the gate \(S\) means that
     (\id_{X}\otimes \tau_{V,W})(\tau_{V,X} \otimes \id_{W})(\id_{V}\otimes \tau_{W,X}).
   \end{equation*}
 
-  Let \(s \from\{1, \dots , n\} \to \{1, \dots , n\}\) be a bijection and consider two maps linear maps \(\chi, \zeta \from V_{1} \otimes \dots \otimes V_{n} \to V_{s(1)} \otimes \dots \otimes V_{s(n)}\) which are compositions of tensor flips and  identities.
+  Let \(s \from\{1, \dots , n\} \to \{1, \dots , n\}\) be a bijection and \(V_{1}, \dots , V_{n}\) pairwise distinct vector spaces.
+  Consider two maps linear maps \(\chi, \zeta \from V_{1} \otimes \dots \otimes V_{n} \to V_{s(1)} \otimes \dots \otimes V_{s(n)}\) which are compositions of tensor flips and  identities.
   Specifically, each component in the composition is of the form
   \begin{equation*}
     \id_{V_1} \otimes \dots \otimes \id_{V_{k-1}} \otimes \tau_{V_k, V_{k+1}} \otimes \id_{V_{k+2}} \otimes \dots \otimes \id_{V_n}.
@@ -4912,8 +4967,8 @@ Lastly, the connection between this classical wire and the gate \(S\) means that
   Let \(f\from V\to W\) be a morphism between finite-dimensional vector spaces.
   Give a string diagrammatic proof of
   \begin{equation*}
-    (\id_{\rd*{V}}\otimes f)\coev_{V} = (\rd*{f} \otimes \id_{V})\coev_{V}, \qquad
-    \ev_V (f \otimes \id_{\rd*{V}}) = \ev_{V}(\id_{V}\otimes \rd*{f})
+    (\id_{\rd*{V}}\otimes f)\coev_{V} = (\rd*{f} \otimes \id_{W})\coev_{W}, \qquad
+    \ev_W (f \otimes \id_{\rd*{W}}) = \ev_{V}(\id_{V}\otimes \rd*{f})
   \end{equation*}
 \end{exercise}
 
@@ -5171,6 +5226,7 @@ Is \((d(b_{1}), d(b_{2}), d(b_{3}))\) a basis of \(\rd*{ \mathbb{C}^{3}}\)?
 
 
 \cleardoublepage
+\part{Quantum algorithms and the ZX-calculus}
 \section{Quantum computation via the ZX-calculus}\label{sec:quantum-computation-via-the-zx-calculus}
 
 The ZX-calculus is a variant of the string diagrammatic calculus.
@@ -5231,7 +5287,7 @@ From now on, we will simply write
   In case \(\alpha, \beta \in \mathbb{Z}\) are integers, we call \(Z_{n}^{m}(\alpha)\), respectively \(X_{n}^{m}(\beta)\) \emph{phase-free} and write \(Z_{n}^{m} \eqdef Z_{n}^{m}(\alpha)\) as well as \(X_{n}^{m} \eqdef X_{n}^{m}(\beta)\).
 \end{definition}
 
-We draw \(Z\) and \(X\)-spiders of arity \((n,m)\) as coloured boxes with \(n\) incoming and \(m\) outcoming strings.
+We draw \(Z\) and \(X\)-spiders of arity \((n,m)\) as coloured boxes with \(n\) incoming and \(m\) outgoing strings.
 Here the strings are undirected.
 \begin{equation*}
   \inputtikz{zx-examples}
@@ -5269,11 +5325,11 @@ In case \(m=1\), we obtain
   = \ket{-}
 \end{equation*}
 
-On the other hand the spider \( X_0^m\) can be used to create a superposition with respect to the computational basis
+On the other hand the spider \( X_0^m\) can be used to create a superposition with respect to the computational basis. Given \(x = (x_{1}, \dots , x_{m})\in\{0,1\}^{m}\), we write \((-1)^{|x|} \eqdef (-1)^{x_{1}+ \dots + x_{m}}\) and observe
 \begin{equation*}
   X_0^m(0)\;1
   = \ket{+}^{\otimes m} + \ket{-}^{\otimes m}
-  = \left( \frac{1}{\sqrt{2}} \right)^m \sum_{x \in \{0,1\}^m} \ket{x},\quad m \geq 2.
+  = \left( \frac{1}{\sqrt{2}} \right)^m \sum_{x \in \{0,1\}^m} 1 + (-1)^{|x|}\ket{x},\qquad  m \geq 2.
 \end{equation*}
 Moreover, we have
 \begin{equation*}
@@ -5321,9 +5377,9 @@ Some examples of such diagrams are shown below.
 \bigskip
 
 \noindent
-\textbf{The CNOT-gate}: The \(\CNOT\) is obtain by composing multiple \(X\)- and \(Z\)-spider.
+\textbf{The CNOT-gate}: The \(\CNOT\) is obtained by composing multiple \(X\)- and \(Z\)-spider.
 We will derive two presentations.
-Both rely on the next auxiliary lemma that uses the addition modulo \(2\) discussed in Definition~\ref{def:addition-modulo-2}.
+Both rely on the next auxiliary lemma that uses the addition modulo \(2\) discussed in Remark~\ref{rem:addition-modulo-2}.
 
 \begin{lemma}\label{lem:CNOT-auxiliary-XZ}
   Given \(a, b,c \in\{0,1\}\), we obtain
@@ -5331,8 +5387,8 @@ Both rely on the next auxiliary lemma that uses the addition modulo \(2\) discus
     \begin{align}
       Z_{1}^{2} \ket{a}  = \ket{aa}, \qquad
       Z_{2}^{1} \ket{bc} = \delta_{b=c}\ket{b} \label{eq:Z21-and-Z12-gates}\\
-      X_{1}^{2} \ket{a}  = \tfrac{1}{\sqrt{2}} \sum_{k=0}^{1} \ket{k}\otimes \ket{a \oplus k}, \qquad
-      X_{2}^{1} \ket{bc} = \tfrac{1}{\sqrt{2}}(\ket{b \oplus c}) \label{eq:X21-and-X12-gates}
+      X_{1}^{2} \ket{a}  = \tfrac{1}{\sqrt{2}} \sum_{k=0}^{1} \ket{k}\otimes \ket{a \boxplus k}, \qquad
+      X_{2}^{1} \ket{bc} = \tfrac{1}{\sqrt{2}}(\ket{b \boxplus c}) \label{eq:X21-and-X12-gates}
     \end{align}
   \end{subequations}
 \end{lemma}
@@ -5343,28 +5399,28 @@ Both rely on the next auxiliary lemma that uses the addition modulo \(2\) discus
     \braket{+}{a} = \tfrac{1}{\sqrt2}, \qquad
     \braket{-}{a} = (-1)^{a} \tfrac{1}{\sqrt{2}},
     \qquad
-    \ket{++} + (-1)^{a} \ket{--} = \big(\sum\nolimits_{k=0}^{1} \ket{k} \otimes \ket{k \oplus a}\big), \\
+    \ket{++} + (-1)^{a} \ket{--} = \big(\sum\nolimits_{k=0}^{1} \ket{k} \otimes \ket{k \boxplus a}\big), \\
     \braket{+\!+\!}{bc} = \tfrac{1}{2}, \qquad
     \braket{-\!-\!}{bc} = \tfrac{1}{2} (-1)^{b+c},\qquad
-    \ket{+} + (-1)^{b+c} \ket{-} = \sqrt{2}\ket{b \oplus c}
+    \ket{+} + (-1)^{b+c} \ket{-} = \sqrt{2}\ket{b \boxplus c}
   \end{align*}
   Leading to
   \begin{align*}
     X_{1}^{2}\ket{a}
     & = \ket{++}\braket{+}{a} + \ket{--}\braket{-}{a}
       = \tfrac{1}{\sqrt{2}}\big(\ket{++} + (-1)^{a} \ket{--}\big)
-      = \tfrac{1}{\sqrt{2}} \big(\sum\nolimits_{k=0}^{1} \ket{k} \otimes \ket{k \oplus a}\big), \\
+      = \tfrac{1}{\sqrt{2}} \big(\sum\nolimits_{k=0}^{1} \ket{k} \otimes \ket{k \boxplus a}\big), \\
     X_{2}^{1}\ket{bc}
     & = \tfrac{1}{2}\big(\ket{+} + (-1)^{b+c}\ket{-}\big)
-      = \tfrac{\sqrt{2}}{2}(\ket{b \oplus c})
-      = \tfrac{1}{\sqrt{2}}(\ket{b \oplus c})\qedhere
+      = \tfrac{\sqrt{2}}{2}(\ket{b \boxplus c})
+      = \tfrac{1}{\sqrt{2}}(\ket{b \boxplus c})\qedhere
   \end{align*}
 \end{proof}
 
 
 The \(\CNOT\) gate can be characterised as the unique linear map \( (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) satisfying
 \begin{equation*}
-  \CNOT\ket{ab} = \ket{a} \otimes \ket{a \oplus b} \qquad \text{ for all } a,b \in\{0,1\}.
+  \CNOT\ket{ab} = \ket{a} \otimes \ket{a \boxplus b} \qquad \text{ for all } a,b \in\{0,1\}.
 \end{equation*}
 \begin{lemma}\label{lem:CNOT-equal-presentations}
   We have
@@ -5377,14 +5433,14 @@ The \(\CNOT\) gate can be characterised as the unique linear map \( (\mathbb{C}^
   Using Lemma~\ref{lem:CNOT-auxiliary-XZ}, we compute for the left diagram
   \begin{align*}
     (Z_{2}^{1}\otimes \id_{ \mathbb{C}^{2}})(\id_{ \mathbb{C}^{2}} \otimes X_{1}^{2}) \ket{ab}
-    & = \tfrac{1}{\sqrt{2}} \sum_{k=0}^{1} (Z_{2}^{1}\otimes \id_{ \mathbb{C}^{2}}) \ket{ak} \otimes \ket{b \oplus k}
-      = \tfrac{1}{\sqrt{2}} \ket{a} \otimes \ket{b \oplus a}
+    & = \tfrac{1}{\sqrt{2}} \sum_{k=0}^{1} (Z_{2}^{1}\otimes \id_{ \mathbb{C}^{2}}) \ket{ak} \otimes \ket{b \boxplus k}
+      = \tfrac{1}{\sqrt{2}} \ket{a} \otimes \ket{b \boxplus a}
   \end{align*}
     Similarly, the right diagram yields
   \begin{align*}
     (\id_{ \mathbb{C}^{2}} \otimes X_{2}^{1})(Z_{1}^{2} \otimes \id_{ \mathbb{C}^{2}}) \ket{ab}
-    & = (\id_{ \mathbb{C}_{2}} \otimes X_{2}^{1})\ket{aab}
-      = \tfrac{1}{\sqrt{2}} \ket{a}\otimes \ket{a \oplus b}. \qedhere
+    & = (\id_{ \mathbb{C}^{2}} \otimes X_{2}^{1})\ket{aab}
+      = \tfrac{1}{\sqrt{2}} \ket{a}\otimes \ket{a \boxplus b}. \qedhere
   \end{align*}
 \end{proof}
 
@@ -5403,9 +5459,9 @@ Combining Lemma~\ref{lem:CNOT-equal-presentations} with Equation~\eqref{eq:ZX-cl
 
 \noindent
 \textbf{The SWAP gate:}
-The SWAP gate interchanges the tensorands of a 2 qubit system
+The SWAP gate interchanges the tensorands of a 2 qubit system.
 That is, it maps a  vector \(\ket{ab}\) to \(\ket{ba}\).
-We observe that \(\CNOT \ket{ab} = \ket{a} \otimes \ket{a \oplus b}\) for  \(a, b \in\{0,1\}\), and therefore  transfers at least partially ``information'' from the first to the second qubit.
+We observe that \(\CNOT \ket{ab} = \ket{a} \otimes \ket{a \boxplus b}\) for  \(a, b \in\{0,1\}\), and therefore  transfers at least partially ``information'' from the first to the second qubit.
 This suggests that we can use chains of CNOTs to implement the SWAP-gate.
 
 \begin{proposition}\label{prop:swap-as-zx}
@@ -5422,10 +5478,10 @@ This suggests that we can use chains of CNOTs to implement the SWAP-gate.
   Writing \(\sigma\from (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) for the tensor flip, we compute for any \(a, b \in\{0,1\}\)
   \begin{align*}
     (\CNOT\circ (\sigma \CNOT \sigma)\circ \CNOT)\ket{ab}
-    & = (\CNOT\circ (\sigma \CNOT \sigma)) \ket{a} \otimes \ket{a \oplus b}\\
-    & = \CNOT \ket{a \oplus a \oplus b} \otimes \ket{a \oplus b}
-      = \CNOT \ket{b} \otimes \ket{a \oplus b}\\
-    & = \ket{b} \otimes \ket{a \oplus b \oplus b}
+    & = (\CNOT\circ (\sigma \CNOT \sigma)) \ket{a} \otimes \ket{a \boxplus b}\\
+    & = \CNOT \ket{a \boxplus a \boxplus b} \otimes \ket{a \boxplus b}
+      = \CNOT \ket{b} \otimes \ket{a \boxplus b}\\
+    & = \ket{b} \otimes \ket{a \boxplus b \boxplus b}
       = \ket{ba}. \qedhere
   \end{align*}
 \end{proof}
@@ -5503,7 +5559,7 @@ The \emph{Deutsch--Jozsa algorithm}\footnote{%
 \end{center}
 
 \noindent
-\textbf{Classical approach:}
+\textbf{The classical approach:}
 In the worst case\footnote{This worst-case scenario occurs, for example, if \( f \) is constant.}, we must evaluate \( f \) for at least \( 2^{m-1} + 1 \) inputs to determine whether it is balanced or constant.
 \bigskip
 
@@ -5512,10 +5568,10 @@ In the worst case\footnote{This worst-case scenario occurs, for example, if \( f
 Assume we have a quantum version of our function \(f\) given by the unitary map \( UB(f) \from (\mathbb{C}^2)^{\otimes m+1} \to (\mathbb{C}^2)^{\otimes m+1} \) of \( f \), satisfying (as discussed with Bennett's trick in Section~\ref{sec:translating-classical-algorithms-to-quantum-algorithms})
 for every \( x_1, \dots, x_m, y \in \{0,1\} \):
 \begin{equation*}
-  UB(f) \ket{x_1 \dots x_m} \otimes \ket{y} \mapsto \ket{x_1 \dots x_m} \otimes \ket{f(x_1, \dots, x_m) \oplus y}.
+  \ket{x_1 \dots x_m} \otimes \ket{y} \mapsto \ket{x_1 \dots x_m} \otimes \ket{f(x_1, \dots, x_m) \boxplus y}.
 \end{equation*}
 
-We will now show that a deceptively simple quantum algorithm can solve this problem. Theorem~\ref{thm:zx-is-universal} will show that there even is a ZX-diagram representing \( UB(f) \).
+We will now show that a deceptively simple quantum algorithm can solve this problem. Theorem~\ref{thm:ZX-calculus-is-universal} will show that there even is a ZX-diagram representing \( UB(f) \).
 We will use it as a black box and consider the diagram below.
 \begin{equation*}
   \inputtikz{Deutsch-Jozsa}
@@ -5574,7 +5630,7 @@ Then, using the Hadamard transformation, we get
 \begin{equation*}
   v_{\text{step 3}}
   = (H^{\otimes m} \otimes \id_{\mathbb{C}^2}) v_{\text{step 2}}
-  = \left( \frac{1}{2} \right)^m \sum_{s, z \in \{0,1\}^m} (-1)^{f(s) + sz} \ket{z} \otimes \left( \frac{1}{\sqrt{2}} \ket{0} - \ket{1} \right).
+  = \left( \frac{1}{2} \right)^m \sum_{s, z \in \{0,1\}^m} (-1)^{f(s) + sz} \ket{z} \otimes \left( \frac{1}{\sqrt{2}} \big( \ket{0} - \ket{1} \big) \right).
 \end{equation*}
 \medskip
 
@@ -5595,7 +5651,7 @@ Thus, due to the rescaling factor \(\zeta_{2}\), our measurement map is
 Let \(\lambda\in \mathbb{C}\) be the the unique scalar such that \(e(v_{\text{step 3}})= \lambda \ket{0}^{\otimes m} \otimes \ket{-} + v^{\perp}\), where \(v^{\perp}\) is orthogonal to \(\ket{0}^{\otimes m} \otimes \ket{-}\).
 Then
 \begin{equation*}
-  \big(\bra{0}^{\otimes m} \otimes \bra{-} \big)v_{\mathrm{step 3}} = \lambda.
+  \big(\bra{0}^{\otimes m} \otimes \bra{-} \big)v_{\text{step 3}} = \lambda.
 \end{equation*}
 This is not exactly the projective measurement discussed in Section~\ref{sec:measurements-and-the-born-rule}, but the difference is negligible:
 given the projection map  \( e \from (\mathbb{C}^2)^{\otimes m+1} \to (\mathbb{C}^{2})^{\otimes m+1} \) into the subspace spanned by \( \ket{0}^{\otimes m} \otimes \ket{-} \) , we compute the probability of observing our system in state \(\ket{0}^{\otimes m}\otimes \ket{-}\) as
@@ -5603,12 +5659,12 @@ given the projection map  \( e \from (\mathbb{C}^2)^{\otimes m+1} \to (\mathbb{C
   \braket{v_{\text{step 3}}}{ e | v_{\text{step 3}}}
   & = \braket{v_{\text{step 3}}}{ e^{\dagger} e | v_{\text{step 3}}}
     = \braket{e(v_{\text{step 3}})}{e(v_{\text{step 3}})}
-    = |\lambda|.
+    = |\lambda|^{2}.
 \end{align*}
-Thus, we get the probability off our system being the configuration \(\ket{0}^{\otimes m}\otimes \ket{-}\) as
+Thus, we get the probability of our system being the configuration \(\ket{0}^{\otimes m}\otimes \ket{-}\) as
 \begin{equation*}
-  |\lambda|
-  = \bigg| \big(\bra{0}^{\otimes m} \otimes \bra{-} \big)v_{\mathrm{step 3}} \bigg|
+  |\lambda|^{2}
+  = \bigg| \big(\bra{0}^{\otimes m} \otimes \bra{-} \big)v_{\mathrm{step 3}} \bigg|^{2}
   =
   \begin{cases}
     1 & \text{if } f \text{ is constant}, \\
@@ -5646,6 +5702,8 @@ Unless \(n=m=2\) this is clearly not invertible and therefore not unitary.
     \end{pmatrix} \in \Mat_{2^{n}}( \mathbb{C}).
   \end{equation*}
   Clearly \(A^{2}=A\) and therefore Lemma~\ref{lem:transformation-matrix-of-isometry} shows that \(Z_{n}^{m}(\alpha)\) is a partial isometry and it is unitary if and only if \(n=m=1\).
+
+  The computations for \(X\)-spiders is analogous.
 \end{proof}
 
 Due to our identification of \(\rd*{( \mathbb{C}^{2})}\) with \(\mathbb{C}^{2}\), the two variants of the evaluation and coevaluation maps coincide:
@@ -5668,12 +5726,12 @@ Due to our identification of \(\rd*{( \mathbb{C}^{2})}\) with \(\mathbb{C}^{2}\)
   For convenience we will freely use tensor flips (i.e. SWAPS) and  bends to keep diagrams concise.
 \end{convention}
 
-\subsection{Universality of ZX-diagram}\label{sec:universality-of-zx-diagram}
+\subsection{Universality of the ZX-calculus}\label{sec:universality-of-zx-calculus}
 The aim of this section is simple: we want to prove that any linear map from \( (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes m}\) can be represented as a ZX-diagram.
 While this could be done more or less in an ad-hoc fashion, we will take the scenic route to answer probably the most natural question: ``so what?''.
 To this end, we will discuss two major results in quantum information theory:
 \begin{thmlist}
-  \item The \emph{Gottesman--Knill Theorem}~\ref{thm:Gottesman-Knill-theorem} states that certain non-universal gate sets---gate sets with limited complexity for the operations they can implement---can be simulated efficiently (\ie in polynomial time) on a classical computer.
+  \item The \emph{Gottesman--Knill Theorem}~\ref{thm:gottesman-knill} states that certain non-universal gate sets---gate sets with limited complexity for the operations they can implement---can be simulated efficiently (\ie in polynomial time) on a classical computer.
   \item The \emph{Solovay--Kitaev Theorem}~\ref{thm:Kitaev-Solovay-theorem} proves that the choice of universal gate set does not matter.
   That is, any algorithm running in polynomial time using gates  of some gate set \( A \) will also run in polynomial time using gates of a gate set \( B \).
 \end{thmlist}
@@ -5683,15 +5741,15 @@ We call a matrix \(U \in \mathrm{U}(n)\) a \emph{two-level unitary} if it is of 
   \begin{equation*}
     U =
     \begin{pmatrix}
-      1 &   &   &   &   &   &   &   &   \\
-        & \ddots &   &   &   &   &   &   &   \\
-        &   & 1 &   &   &   &   &   &   \\
-        &   &   & a & \dots &   & b &   &   \\
-        &   &   & \vdots & \ddots &   & \vdots &   &   \\
-        &   &   & c & \dots &   & d &   &   \\
-        &   &   &   &   &   &   & 1 &   \\
-        &   &   &   &   &   &   &   & \ddots &   \\
-        &   &   &   &   &   &   &   &   & 1
+      1 &   &   &   &   &   &   &   \\
+        & \ddots &   &   &   &   &   &   \\
+        &   & 1 &   &   &   &   &   \\
+        &   &   & a & \dots & b &   &   \\
+        &   &   & \vdots & \ddots & \vdots &   &   \\
+        &   &   & c & \dots & d &   &   \\
+        &   &   &   &   &   & 1 &   \\
+        &   &   &   &   &   &   & \ddots &   \\
+        &   &   &   &   &   &   &   & 1
     \end{pmatrix}
   \end{equation*}
   where \(a, b, c, d\) appear in the \(p\)-th and \(q\)-th rows and columns, and the matrix acts as the identity elsewhere.
@@ -5700,6 +5758,15 @@ We call a matrix \(U \in \mathrm{U}(n)\) a \emph{two-level unitary} if it is of 
 A way to construct two-level unitaries is as follows:
 pick any \( 2 \times 2 \) unitary matrix \( \begin{pmatrix} a & b \\ c & d \end{pmatrix} \) and indices \( 1 \leq p < q \leq n \). Then, take the identity matrix and replace the entries at positions \( (p,p) \), \( (p,q) \), \( (q,p) \), and \( (q,q) \) with \( a, b, c, \) and \( d \), respectively.
 
+\begin{remark}\label{rmk:abstract-definition-of-two-level-unitaries}
+  Let \(f \from V \to V\) be unitary.
+  One can show that there exists an orthonormal basis \(\mathcal{B}\) such that the transformation matrix \(_{\mathcal{B}}f_{\mathcal{B}}\) is two-level unitary if and only if
+  \begin{equation*}
+    \dim V - \dim\{v \in V \mid f(v) = v\} \leq 2.
+  \end{equation*}
+\end{remark}
+
+We can now establish a decomposition result for unitary matrices
 
 \begin{lemma}\label{lem:two-level-unitaries-do-the-job}
   Let \( n \geq 2 \).
@@ -5711,7 +5778,7 @@ pick any \( 2 \times 2 \) unitary matrix \( \begin{pmatrix} a & b \\ c & d \end{
   \textit{Base case (\( n = 2 \)):}
   For \( n = 2 \), the claim trivially holds since any \( 2 \times 2 \) unitary matrix is itself a two-level unitary.
 
-  \textit{Inductive step:}
+  \textit{Induction step \((n\to n+1)\):}
   Assume the claim holds for \( n \), and let \( U \) be a unitary matrix of size \( n+1 \).
   Let \( u = (u_{11}, \dots, u_{n1})^T \) be the first column of \( U \).
 
@@ -5809,7 +5876,7 @@ Recall the notion of a quantum circuit discussed in Definition~\ref{def:gate-set
   \begin{equation*}
     \mathcal{G}=\{\CNOT, Z_{1}^{1}(\alpha), X_{1}^{1}(\beta), e^{2\pi i \gamma} \id_{ \mathbb{C}^{2}}\mid \alpha, \beta, \gamma \in \mathbb{R}\}.
   \end{equation*}
-  For any  unitary map \(f \from ( \mathbb{C}^{2})^{ \otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) exists a quantum circuit with gates in \(\mathcal{G}\) implementing \(f\).
+  For any  unitary map \(f \from ( \mathbb{C}^{2})^{ \otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) there exists a quantum circuit with gates in \(\mathcal{G}\) implementing \(f\).
   That is
   \begin{equation*}
     f = (g_{11} \otimes \dots \otimes g_{1k_{1}})\otimes \dots \otimes (g_{m_{1}}\otimes \dots \otimes g_{m k_{m}}),\qquad \text{where } g_{ij} \in \mathcal{G} \cup \{\id_{ \mathbb{C}^{2}}\}.
@@ -5822,40 +5889,37 @@ To keep the proof concise, we will, depending on the context, implicitly identif
   \noindent
   \textit{Step 1. Construction of unary gates:}
 
-  By Proposition~\ref{prop:euler-decomposition-of-rotation}, any unitary map \( f \colon \mathbb{C}^2 \to \mathbb{C}^2 \) can be implemented using \( \mathcal{G} \).
-  This holds in particular for the Hadamard gate \( H \colon \mathbb{C}^2 \to \mathbb{C}^2 \).
-  Therefore, due to Exercise~\ref{exe:flipped-cnot-using-cnot-Hadamard}, the \( \SWAP \) gate can also be realised as a circuit with gates in \( \mathcal{G} \).
+  By Proposition~\ref{prop:euler-decomposition-of-rotation}, any unitary map \( f \from \mathbb{C}^2 \to \mathbb{C}^2 \) can be implemented using \( \mathcal{G} \).
+  This holds in particular for the Hadamard gate \( H \from \mathbb{C}^2 \to \mathbb{C}^2 \).
   \medskip
 
   \noindent
   \textit{Step 2. Construction of (multi-)controlled gates:}
-  We will now show that for any \(1\leq j \leq n\) and any unitary \(f \from ( \mathbb{C}^{2})\otimes n \to ( \mathbb{C}^{2})^{ \otimes n}\), we can implement the (multi-)controlled unitary
+  We will now show that for any \(1\leq j \leq n\) and any unitary \(f \from \mathbb{C}^{2} \to \mathbb{C}^{2}\), we can implement the (multi-)controlled unitary
   \begin{equation*}
     \CNOT_{j}(f)
     \eqdef \id + (\ket{1}\bra{1})^{\otimes j-1} \otimes (f-\id) \otimes (\ket{1}\bra{1})^{ \otimes n-j}.
   \end{equation*}
-  By iteratively applying \(\SWAP\)-gates, we can assume without loss of generality that \(j=n\).
+  Due to Exercise~\ref{exe:flipped-cnot-using-cnot-Hadamard}, the \( \SWAP \) gate can also be realised as a circuit with gates in \( \mathcal{G} \) and therefore iteratively applying \(\SWAP\)-gates, allows us to assume without loss of generality that \(j=n\).
 
   We now prove the claim by induction on \(n\).
 
   \textit{Base case (\( n = 2 \)):}
   Let \( V \) be the transformation matrix of \( f \) with respect to the \( Z \)-basis \( \mathcal{B} \).
-   Note that the transformation matrix of \(\CNOT_{2}(f)\) is given by
+  There is a \( \lambda \in \mathbb{R} \)   such that
   \begin{equation*}
-    \big(\ket{0}\bra{0} \otimes I_{2} \big) \otimes \big(\ket{1}\bra{1} \otimes V \big).
-  \end{equation*}
-  Moreover, in case \(f= \sigma_{x}\), we obtain the usual \(\CNOT\)-gate.
-
-  There exists a \( \lambda \in \mathbb{R} \) such that the unitary matrix
-  \begin{equation*}
-    U = P V, \qquad\qquad \text{where }
+    U= P V\in \SU(2), \qquad\qquad \text{where }
     P= \begin{pmatrix}
       1 & 0\\
       0 & e^{2\pi i \lambda}
-    \end{pmatrix},
+    \end{pmatrix}.
   \end{equation*}
-  has determinant \(1\).
-  By Lemma~\ref{lem:ABC-decomposition}, there are unitary matrices \(A, B, C \in \U(2)\) such that \(ABC=I_{2}\) and \(A\sigma_{x}B\sigma_{x}C = U\).
+  Lemma~\ref{lem:ABC-decomposition}, show that three matrices \(A, B, C \in \SU(2)\) exist, such that \(ABC=I_{2}\) and \(A\sigma_{x}B\sigma_{x}C = U\).
+  We now define the sequence of gates:
+  \begin{equation*}
+    \inputtikz{controlled-f}
+  \end{equation*}
+
   Given \(s, t\in\{0,1\}\), we compute
   \begin{align*}
     (\id\otimes A)&\CNOT(\id\otimes B)\CNOT(\id\otimes C)(P^{-1}\otimes\id) \ket{st}
@@ -5864,17 +5928,17 @@ To keep the proof concise, we will, depending on the context, implicitly identif
               = \CNOT(f) \ket{st}.
   \end{align*}
 
-  \textit{Inductive step \((n \to n+1)\):}
+  \textit{Induction step \((n \to n+1)\):}
   We define the unitary matrix
   \begin{equation*}
-    K = \tfrac{i}{2}
+    K = \tfrac{1+i}{2}
     \begin{pmatrix}
       1 & -i \\
       -i & 1
     \end{pmatrix}.
   \end{equation*}
-  A direct computation shows that \(K^{2}= X\).
-  Now, let us consider the map \(\widetilde{\CNOT}\) given composition depicted below.
+  A direct computation shows that \(K^{2}= \sigma_{x}\).
+  Now, let us consider the map \(\widetilde{\CNOT}\) depicted by the composition below.
   \begin{equation*}
     \inputtikz{multi-controlled-cnot}
   \end{equation*}
@@ -5899,40 +5963,39 @@ To keep the proof concise, we will, depending on the context, implicitly identif
       \mapsto \ket{1 \dots 1} \otimes \ket{a} \otimes (K^{\dagger})^{1-a} K^{a}\ket{b} \\
     & \mapsto \ket{1 \dots 1} \otimes \ket{a} \otimes K (K^{\dagger})^{1-a} K^{a}\ket{b} \\
     & = \ket{1 \dots 1} \otimes \ket{a} \otimes K^{2a} \ket{b}
-      = \ket{1 \dots 1} \otimes \ket{a} \otimes X^{a} \ket{b}
+      = \ket{1 \dots 1} \otimes \ket{a} \otimes \sigma_{x}^{a} \ket{b}
   \end{align*}
   Therefore, \(\widetilde{\CNOT}\) flips the last qubit if and only if the first \(n\)-qubits are \(1\) and acts as the identity otherwise.
 
-  Analogously to the previous computation, we obtain \(\CNOT_{{n+1}}(f)\) as
+  Analogously to the base-case, we obtain \(\CNOT_{{n+1}}(f)\) as
   \begin{equation*}
-    (\id\otimes A)\widetilde{\CNOT}(\id\otimes B)\widetilde{\CNOT}(\id\otimes C)(\CNOT_{n-1}(P^{-1})\otimes\id).
+    (\id\otimes A)\widetilde{\CNOT}(\id\otimes B)\widetilde{\CNOT}(\id\otimes C)(\CNOT_{n}(P^{-1})\otimes\id).
   \end{equation*}
-  \medskip
 
   \noindent
   \textit{Step 3. Construction of transpositions:}
   Suppose now that there are \(x,y \in\{0,1\}^{n}\) and an \(1\leq j \leq n\) such that \(x_{j}=0\), \(y_{j}=1\) and \(x_{i}=y_{i}\) for all \(i \neq j\).
   We define the unitary map \(\tau_{x,y} \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) via
   \begin{equation*}
-    \tau \ket{x} = \ket{y} \quad
-    \tau \ket{y} = \ket{x} \quad
-    \tau\ket{s} = \ket{s} \text{ for all } s\notin\{x,y\}.
+    \tau_{x,y} \ket{x} = \ket{y} \quad
+    \tau_{x,y} \ket{y} = \ket{x} \quad
+    \tau_{x,y}\ket{s} = \ket{s} \text{ for all } s\notin\{x,y\}.
   \end{equation*}
   By suitably applying \(\SWAP\) gates, we can assume without loss of generality that \(j=n\).
   In order to implement \(\tau_{x,y}\) using our gate set, we define the map
   \begin{equation*}
-    h= h_{1} \otimes \dots \otimes  h_{n},
+    h= h_{1} \otimes \dots \otimes  h_{n-1}\otimes \id,
   \end{equation*}
   where \( h_i = \id \) if \( x_i = 1 \) and \( h_i = \sigma_x \) otherwise.
-  We set \(x' =h \ket{x} = \ket{1\dots1 0} \) and \(y'= h\ket{y}= \ket{1 \dots 1 0}\) and observe that since \(h^{2}=\id\), we have
+  We set \(x' =h \ket{x} = \ket{1\dots1 0} \) and \(y'= h\ket{y}= \ket{1 \dots 1 1}\) and observe that since \(h^{2}=\id\), we have
   \(h\tau_{x,y}h= \tau_{x',y'}\).
   However, \(\tau_{x', y'} = \CNOT_{n}(\sigma_{x})\) and therefore, we can construct \(\tau_{x,y}\) using the gate set \(\mathcal{G}\).
   \medskip
 
   \noindent
   \textit{Step 4. Construction of two-level unitaries:}
-  Consider the total order on \( \{0,1\}^n \) given by the lexicographical order\footnote{
-    The \emph{lexicographical order} is defined recursively by \((x_{1}, \dots , x_{n})< (y_{1}, \dots , y_{n})\) if \(x_{1}<y_{1}\) or \((x_{2}, \dots , x_{n})< (y_{2}, \dots , y_{n})\).
+  We endow\( \{0,1\}^n \) with the lexicographical order\footnote{
+    The \emph{lexicographical order} is given by \((x_{1}, \dots , x_{n})< (y_{1}, \dots , y_{n})\) if and only if there exists a \(1\leq i \leq n \) such that \(x_{j}=y_{j}\) for all \(j<i\) and \(x_{i}<y_{i}\).
   }.
   Assume the transformation matrix of \( f \) with respect to the computational basis of \( (\mathbb{C}^2)^{\otimes n} \) is a two-level unitary matrix. That is, there exist \( x < y \in \{0,1\}^n \) such that \( f \) acts by some unitary \( U \) on the subspace generated by \( \ket{x} \) and \( \ket{y} \), and as the identity on the orthogonal complement of that subspace.
   We can now chose chains
@@ -5957,43 +6020,849 @@ To keep the proof concise, we will, depending on the context, implicitly identif
   Finally, by Lemma~\ref{lem:two-level-unitaries-do-the-job},  every \(f \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) is a product of two-level unitaries and the claim follows.
 \end{proof}
 
-% In quantum computing the set of possible operations of a circuit is encoded by the unitary matrices \(U(2^{n})\) this set is far from being finite--it is in fact uncountably infinite.
-% Thus, from finitely many gates we will be able to produce every unitary matrix exatly.
-% Instead we can ask to approximate such a matrix with an arbitary level of precission.
-% \begin{definition}\label{def:operator-norm}
-%   Let \(f \from V\to W\) be alinear map between finite-dimensional Hilbert spaces.
-%   The \emph{operator norm} of \(f\) is
-%   \begin{equation*}
-%     \|f\| = \sup_{v \in V\setminus\{0\}}\tfrac{\|f(v)\|_{W}}{\|v\|}_{V} <- before this def we need to recall that \| is given by sqrt of \braket{v}{v}.
-%   \end{equation*}
-% \end{definition}
-% Here we should mention without prove that for diag matrix we get the abs value of the biggest ev.
+\begin{lemma}\label{lem:generate-vectors-using-zx-calculus}
+  For any vector \(v \in ( \mathbb{C}^{2})^{ \otimes n}\) there is a \(ZX\)-diagram representing the vector.
+\end{lemma}
+\begin{proof}
+  Let \(w \in ( \mathbb{C}^{2})^{\otimes n}\) be normalised and \(\lambda \in \mathbb{C}\) such that \(\lambda w= v\).
+  There exists a unitary map \(f\from ( \mathbb{C}^{2})^{ \otimes n} \to ( \mathbb{C}^{2})^{ \otimes n}\) satisfying \( f\ket{0 \dots 0} = w\).
+  We conclude the proof by noting that due to Remark~\ref{rmk:x-creates-z-and-vice-versa}, Proposition~\ref{prop:zx-calc-is-universal}, and Lemma~\ref{lem:any-complex-number}, there are \(ZX\)-diagrams representing  the vector \(\ket{0 \dots 0}\), the map \(f\) and the scalar \(\lambda\), respectively.
+\end{proof}
 
-% For further discussion on universal gate sets, see \cite[Section~4.5]{nielsen-chuang2000:QuantumComputationInformation}.
-% \begin{definition}\label{def:universal-gate-set}
-%   A gate set \(G\) is \emph{(approximate) universal} if for any unitary map \(f\from \mathbb{C}^{2}(^{ \otimes n} \to ..\)  and \(\varepsilon>0\) there exists a circuit \(g = (g_{11} \otimes \dots \otimes g_{1k_{1}}) \circ \dots \circ (g_{n1} \otimes \dots \otimes g_{n k_{n}}), \qquad \text{ where } g_{ij} \in G \cup\{\id_{ \mathbb{C}^{2}}\}\) such that
-% \begin{equation}
-%   \|f-g\| \leq \varepsilon.
-% \end{equation}
-% \end{definition}
+Now we are ready to establish the universality of the \(ZX\)-calculus.
 
-% This raises two important questions:
+\begin{theorem}\label{thm:ZX-calculus-is-universal}
+  Any linear \(f \from ( \mathbb{C}^{2})^{ \otimes n} \to ( \mathbb{C}^{2})^{ \otimes m}\) has a representation as a \(ZX\)-diagram.
+\end{theorem}
+\begin{proof}
+Consider the string diagram shown below.
+  \begin{equation*}
+    \inputtikz{zx-universal-via-string-diags}
+  \end{equation*}
+  While regions (I) and (IV) are identities, (II) depicts a vector in \(( \mathbb{C}^{2})^{\otimes n} \otimes ( \rd*{\mathbb{C}^{2}})^{ \otimes m}\cong (\mathbb{C}^{2})^{\otimes n + m}\) and hence, by Lemma~\ref{lem:generate-vectors-using-zx-calculus}, can be represented by some \(ZX\)-diagram.
+  Finally, region (III) is a collection of evaluations and Lemma~\ref{lem:coev-and-ev-zx-diagram} shows that these can be realised using \(ZX\)-diagrams.
+\end{proof}
 
-% Why do we even want universal gates?
-% So far we mostly used Hadamards to perform a change of basis.
-% and does the choice matter:
-% are different approximate universal gate sets better than other.
-% I.e. if we can realise one algorithm efficiently (with a number of gates that scales polynomialy
+\subsubsection{The Gottesman-Knill theorem}\label{sec:the-gottesman-knill-theorem}
 
-% \subsubsection{The Gottesman-Knill-theorem}\label{sec:the-gottesman-knill-theorem}
-% Gottesmann-Knill-theorem
+One of the main reasons we want a certain level of complexity in our quantum computer is due to the fact that it may otherwise be efficiently simulable on a classical computer.
+In this section, we follow \cite[Chapter~10]{nielsen-chuang2000:QuantumComputationInformation}.
+\bigskip
 
-% \begin{theorem}\label{thm:Gottesman-Knill-theorem}
-%   state
-% \end{theorem}
-% \begin{proof}
+The Gottesman-Knill theorem relies on an abstract algebraic machinery known as \emph{group theory}.
+To prove this theorem, we need some concepts discussed in the supplementary Section~\ref{sec:the-(projective)-unitary-group}, starting with the notion of a group, also examined in Definition~\ref{def:group}.
+\begin{definition}
+  A \emph{group} is a set \( G \) together with a binary operation \( \cdot \from G \times G \to G \), called the \emph{group operation} or \emph{multiplication}, satisfying the following axioms.
+  \begin{thmlist}
+    \item \emph{Associativity:} For all \( a, b, c \in G \), we have \( (a \cdot b) \cdot c = a \cdot (b \cdot c) \).
+    \item \emph{Neutral element:} There exists an element \( e \in G \) such that \( a \cdot e = a = e \cdot a \) for all \( a \in G \).
+    \item \emph{Inverse element:} For every \( a \in G \), there exists a \( b \in G \) such that \( a \cdot b = e = b \cdot a \). In this case, we write \( a^{-1} \eqdef b \).
+  \end{thmlist}
+\end{definition}
 
-% \end{proof}
+We have already encountered groups in this course.
+For instance, any vector space \( V \) forms a group with vector addition as group operation.
+Here the neutral element is the zero vector \(0 \in V\) and the inverse of a vector \( v \in V \) is its additive inverse \( -v\in V \).
+
+\begin{example}\label{ex:z2-and-z-as-groups}
+  Other groups we will consider from time to time are the integers \(\mathbb{Z}\) with their usual addition and \(0 \in \mathbb{Z}\) as neutral element.
+  Note that \(\mathbb{Z}\) is not a group with respect to multiplication since we do not have inverses.
+  For example the multiplicative inverse \(\tfrac{1}{2}\) of \(2\) is not an integer.
+
+  In the following, \( \mathbb{Z}_{2}^{n} \eqdef (\mathbb{F}_{2}^{n}, \boxplus)\) will play a central role.
+  Recall that here the group operation applied to \(b= (b_{1}, \dots , b_{n})\) and \(e= (e_{1}, \dots , e_{n})\) yields
+  \begin{equation*}
+    b \boxplus e \eqdef (b_{1}\boxplus e_{1}, \dots , b_{n} \boxplus e_{n}).
+  \end{equation*}
+
+\end{example}
+
+With groups we will frequently use the following notations.
+\begin{convention}
+  Let \(G\) be a group.
+  We denote the inverse of an element \(a\in G\) by \(a^{-1}\) and write the multiplication of \(G\) using juxtaposition: \( ab \eqdef a \cdot b\) for all \(a,b \in G\).
+\end{convention}
+
+As for vector spaces, we have a notion of structure preserving maps between groups.
+
+\begin{definition}
+  A map \(f\from G\to H\) between two groups is a \emph{(group) homomorphism} if
+  \begin{equation}
+    f(g_{1} g_{2}) = f(g_{1}) f(g_{2})\qquad\quad \text{for all \(g_{1}, g_{2} \in G\)}.
+  \end{equation}
+\end{definition}
+Note that indeed any linear map \(f\from V\to W\) is a homomorphism of the groups \((V,+)\) and \((W,+)\).
+
+\begin{example}\label{ex:projection-of-z}
+  Define the map
+  \begin{equation*}
+    \pi \from \mathbb{Z} \to \mathbb{Z}_{2}, \qquad x \mapsto
+    \begin{cases}
+      1 & x \text{ is odd},\\
+      0 & x \text{ is even}.
+    \end{cases}
+  \end{equation*}
+  A direct computation shows that \(\pi\) is a homomorphism of groups.
+\end{example}
+
+What subvector spaces are to vector spaces, subgroups are to groups.
+\begin{definition}\label{def:subgroup}
+  A non-empty subset \(H \subset G\) of a group is called a \emph{subgroup} if for all \(g,h \in H\) we have \(gh^{-1} \in H\).
+\end{definition}
+
+A large class of examples of groups and subgroups comes from certain subsets of matrices, see also Example~\ref{ex:invertible-matrices}.
+\begin{example}
+  Let \(n\in \mathbb{N}\) be a natural number.
+  \begin{thmlist}
+    \item The set of invertible \( n \times n \) matrices over \( \mathbb{C} \), denoted \( \GL_{n}(\mathbb{C}) \), forms the \emph{general linear group} under matrix multiplication.
+    \item The unitary \( n \times n \) matrices \( \U(n) \), form  the \emph{unitary group}. They are a subgroup of \(\GL_{n}( \mathbb{C})\).
+    \item The \emph{special unitary group} \(\SU(n)\) has as elements all unitary \( n \times n \) matrices of determinant \(1\).
+    They are a subgroup of \(\U(n)\) and therefore also of \(\GL_{n}( \mathbb{C})\).
+  \end{thmlist}
+\end{example}
+
+Recall the \(n\)-Pauli group from Definition~\ref{def:n-Pauli-group}.
+In  Exercise~\ref{exe:n-Pauli-group-is-group}, you are asked to show that it is indeed a group with respect to matrix multiplication.
+
+\begin{lemma}\label{lem:Pauli-group}
+  Let \(n \in \mathbb{N}\).
+  The \(n\)-Pauli group
+  \begin{equation*}
+    \PauliGroup_{n} \eqdef\big\{ (\sigma_{i1}\otimes \dots \otimes \sigma_{in}) \dots  (\sigma_{m1}\otimes \dots \otimes \sigma_{mn}) \mid \sigma_{ij} \in\{ I_{2}, \sigma_{x}, \sigma_{y}, \sigma_{z}\}\big\}.
+  \end{equation*}
+  is a subgroup of \(\U(2^{n})\).
+\end{lemma}
+
+The multiplication table of the Pauli group, see Example~\ref{ex:multiplication-table}, shows that any element in \(\PauliGroup_{1}\) can be written as \(i^{a}\sigma_{x}^{b}\sigma_{z}^{c}\).
+This extends straightforwardly to the \(n\)-Pauli group \(\PauliGroup_{n}\).
+
+\begin{lemma}\label{lem:bijection-Pauli-n-group-matrices}
+  There is a bijection
+  \begin{equation}
+    \begin{gathered}
+      \Phi \from \left\{
+        \begin{pmatrix}
+          a, b_{1}, \dots, b_{n}, c_{1}, \dots, c_{n}
+        \end{pmatrix}
+        \;\middle|\;
+        a \in\{0, \dots 3\}, b_{i}, c_{j} \in\{0,1\} \right\} \to \PauliGroup_{n}\\
+      \begin{pmatrix}
+        a , b_{1} , \dots , b_{n} , c_{1} , \dots , c_{n}
+      \end{pmatrix}  \mapsto i^{a} \sigma_{x}^{b_{1}}\sigma_{z}^{c_{1}} \otimes \dots \otimes \sigma_{x}^{b_{n}}\sigma_{z}^{c_{n}}.
+    \end{gathered}
+  \end{equation}
+  In the other direction, we there exists a homomorphism of groups
+  \begin{equation}
+    r \from \PauliGroup_{n} \to \mathbb{Z}_{2}^{2n}
+  \end{equation}
+  such that \(r\Phi(a, b_{1}, \dots , b_{n}, c_{1}, \dots , c_{n}) = (b_{1}, \dots , b_{n}, c_{1}, \dots , c_{n})\).
+\end{lemma}
+\begin{proof}
+  That \( \Phi \) is surjective can be immediately obtained from the multiplication table of \( \PauliGroup_1 \).
+  To
+  show its injectivity, let us assume that we have two tuples
+  \begin{equation*}
+    g = (a, b_1, \dots, b_n, c_1, \dots, c_n), \quad h = (d, e_1, \dots, e_n, f_1, \dots, f_n).
+  \end{equation*}
+  We set \(b= (b_{1}, \dots , b_{n})\in\{0,1\}^{n}\) and define \(c,e,f\in\{0,1\}^{n}\) analogously.
+  Let \( s \in \{0,1\}^n \).
+  As a short hand notation, given \(t \in\{0,1\}^{n}\), we write
+  \begin{equation*}
+    |s| = s_{1} + \dots+ s_{n}, \qquad s\bullet t = (s_{1}t_{1}, \dots, s_{n}t_{n})
+  \end{equation*}
+  A direct computation shows that
+  \begin{align*}
+    \Phi(g) \ket{s} = i^a \sigma_x^{b_1} \sigma_z^{c_1} \otimes \dots \otimes \sigma_x^{b_n} \sigma_z^{c_n} \ket{s} = i^{a} (-1)^{|s\bullet c|}\ket{s\boxplus b}, \\
+    \Phi(h) \ket{s} = i^d \sigma_x^{e_1} \sigma_z^{f_1} \otimes \dots \otimes \sigma_x^{e_n} \sigma_z^{f_n} \ket{s} = i^{d} (-1)^{|s\bullet f|}\ket{s\boxplus e}.
+  \end{align*}
+  Thus, \( \Phi(g) = \Phi(h) \) if and only if \( g = h \).
+
+  To show that there is a group homomorphism \( r \from \PauliGroup_n \to \mathbb{Z}_2^{2n} \), we again consider the elements \( \Phi(g) \) and \( \Phi(h) \).
+  By using the anti-commutativity of \( \sigma_x \) and \( \sigma_z \), we observe that there is some \( k \in \{0, \dots, 3\} \) such that
+  \begin{equation*}
+    \Phi(g) \Phi(h) = i^k \Phi(1, b_1 \boxplus e_1, \dots, b_n \boxplus e_n, c_1 \boxplus f_1, \dots, c_n \boxplus f_n).
+  \end{equation*}
+  Therefore, the map
+  \begin{equation*}
+      r \from \PauliGroup_n \to \mathbb{Z}_2^{2n}, \quad i^a \sigma_x^{b_1} \sigma_z^{c_1} \otimes \dots \otimes \sigma_x^{b_n} \sigma_z^{c_n} \mapsto (b_1, \dots, b_n, c_1, \dots, c_n)
+  \end{equation*}
+  is a well-defined group homomorphism.
+\end{proof}
+
+We can use this vector representation of elements in the Pauli group to simplify our bookkeeping.
+
+\begin{definition}\label{def:check-vector}
+  Let \(n\in \mathbb{N}\) be a positive integer.
+  Given  a number \(a \in\{0, \dots , 3\}\) and tuples \(b= (b_{1}, \dots , b_{n})\in \mathbb{F}_{2}^{n}\) and \(c=(c_{1}, \dots , c_{n}) \in \mathbb{F}_{2}^{n}\), we write
+  \begin{equation*}
+    (a \mid b \mid c) \eqdef
+    (a, b_{1}, \dots , b_{n}, c_{1}, \dots , c_{n}), \quad \text{ and }\quad
+    (b \mid c) \eqdef
+    (b_{1}, \dots , b_{n}, c_{1}, \dots , c_{n})
+  \end{equation*}
+and call  \((a\mid b\mid c)\) and \((b\mid c)\) the \emph{(extended) check vectors} of \(\Phi(a \mid b \mid c) \in \PauliGroup_{n}\).
+\end{definition}
+
+We say that two elements \(g,h \in \PauliGroup_{n}\) \emph{commute} if \(gh= hg\).
+They \emph{anti-commute} in case \(gh=-hg\).
+
+\begin{lemma}\label{lem:pauli-commutativity}
+  Consider elements elements \(g,h\in \PauliGroup_{n}\).
+  Then \(g\) and \(h\) commute if and only if their check vectors \((b \mid c)\) and \((e \mid f)\) satisfy
+  \begin{equation}
+    (b \mid c)
+    \begin{pmatrix}
+      0 & I_{n} \\
+      I_{n} & 0
+    \end{pmatrix} (e \mid f)^{T} = c_{1}e_{1} \boxplus \dots c_{n}e_{n} \boxplus b_{1}f_{1}\boxplus \dots \boxplus b_{n}f_{n} = 0.
+  \end{equation}
+  Otherwise, \(g\) and \(h\) anti-commute.
+\end{lemma}
+\begin{proof}
+  The fact that \(\sigma_{i} \sigma_{j} = - \sigma_{j}\sigma_{i}\) for all \(i,j \in\{x,y,z\}\) distinct implies that the elements of \(\PauliGroup_{n}\) either commute or anti-commute.
+
+  To derive necessary and sufficient conditions for elements in \(\PauliGroup_{n}\) to commute, we compute
+  \begin{align*}
+    gh
+    & = \big(i^{a}\sigma_{x}^{b_{1}}\sigma_{z}^{c_{1}} \cdot \dotsc \cdot \sigma_{x}^{b_{n}} \sigma_{z}^{c_{n}}\big)
+    \big(i^{d}\sigma_{x}^{e_{1}}\sigma_{z}^{f_{1}} \cdot \dotsc \cdot \sigma_{x}^{e_{n}} \sigma_{z}^{f_{n}}\big)\\
+    & = i^{a+d}(-1)^{c_{1}e_{1}+ \dots + c_{n} e_{n}} \sigma_{x}^{b_{1}+e_{1}}\sigma_{z}^{c_{1}+f_{1}} \cdot \dotsc\cdot \sigma_{x}^{b_{n}+e_{n}}\sigma_{z}^{c_{n}+f_{n}}\\
+    hg
+    & = \big(i^{d}\sigma_{x}^{e_{1}}\sigma_{z}^{f_{1}} \cdot \dotsc \cdot \sigma_{x}^{e_{n}} \sigma_{z}^{f_{n}}\big)
+      \big(i^{a}\sigma_{x}^{b_{1}}\sigma_{z}^{c_{1}} \cdot \dotsc \cdot \sigma_{x}^{b_{n}} \sigma_{z}^{c_{n}}\big)
+    \\
+    & = i^{a+d}(-1)^{f_{1}b_{1}+ \dots + f_{n} b_{n}} \sigma_{x}^{e_{1}+b_{1}}\sigma_{z}^{c_{1}+f_{1}} \cdot \dotsc\cdot \sigma_{x}^{e_{n}+b_{n}}\sigma_{z}^{f_{n}+c_{n}}.
+  \end{align*}
+  Therefore, \(g\) and \(h\) commute if and only if \(c_{1}e_{1}+ \dots + c_{n}e_{n}\) and \(f_{1}b_{1} +\dots + f_{n}b_{n}\) have the same parity (so either both are even or both are odd).
+  This is equivalent to
+  \begin{equation*}
+    (b \mid c)
+    \begin{pmatrix}
+      0 & I_{n} \\
+      I_{n} & 0
+    \end{pmatrix}
+    (e \mid f)^{T}
+    = (c \mid b)(e \mid f)^{T}
+    = c_{1}e_{1} \boxplus \dots c_{n}e_{n} \boxplus b_{1}f_{1}\boxplus \dots \boxplus b_{n}f_{n} =0. \qedhere
+  \end{equation*}
+\end{proof}
+
+While the Pauli group alone is too simplistic to implement interesting quantum circuits, many gates, such as the Hadamard gate, have a well-behaved interaction with Pauli groups.
+
+\begin{definition}\label{def:normaliser-of-group}
+  Let \(G\) be a group and \(H \subset G\) a subset.
+  The \emph{normaliser} of \(H\) is the set
+  \begin{equation}
+    N(H) =\{n \in G \mid nHn^{-1} = H\},
+  \end{equation}
+  where for any \(n\in G\) we write \(nHn^{-1} =\{nhn^{-1} \mid h\in H\}\).
+\end{definition}
+
+
+\begin{lemma}\label{lem:normaliser-of-group-is-group}
+  The normaliser \(N(H)\) of a subgroup \(H \subset G\) is a group with group operation inherited from \(G\).
+\end{lemma}
+\begin{proof}
+  Let \(e\in G\) be the neutral element of \(G\).
+  Clearly \(ehe^{-1} = h \) for all \(h\in H\) and so \(N(H)\) contains the neutral element \(e\in G\).
+  In particular, \(N(H)\) is non-empty.
+  Let \(n,m\in N(H)\).
+  We compute
+  \begin{equation*}
+    n^{-1}m H (n^{-1}m)^{-1}
+    = n^{-1}(mHm^{-1})n
+    = n^{-1}Hn
+    = n^{-1}nHn^{-1}n
+    = H. \qedhere
+  \end{equation*}
+\end{proof}
+
+Recall  Definition~\ref{def:Clifford-gates} specifying Clifford gates.
+We can now provide a concise mathematical framework for them using our group-theoretical language.
+
+\begin{definition}\label{def:Clifford-group}
+  Consider an integer \(n\in \mathbb{N}\).
+  The \emph{\(n\)-Clifford group} \(\mathcal{C}_{n}\eqdef N(\PauliGroup_{n})\) is the normaliser of the Pauli group \(\PauliGroup_{n}\subset\U(2^{n})\).
+\end{definition}
+
+The next example shows that some well-known gates are contained in the respective \(n\)-Clifford groups, see also Lemma~\ref{lem:clifford-gates}.
+\begin{example}\label{ex:CNOT-S-Hadamard-are-in-Clifford}
+  Let us verify that the Hadamard gate \(H\) and the \(\CNOT\) gate belong to the Clifford group by looking at their conjugation action on the Pauli operators
+  \begin{thmlist}
+    \item For the Hadamard gate: \(H \sigma_x H^\dagger = \sigma_z\) and \(H \sigma_z H^\dagger = \sigma_x\).
+    \item For the \(\CNOT\) gate acting on two qubits:
+    \begin{align*}
+      \CNOT (\sigma_x \otimes I_{2}) \CNOT^\dagger &= \sigma_x \otimes \sigma_x, \quad &\CNOT (I_{2} \otimes \sigma_x) \CNOT^\dagger &= I_{2} \otimes \sigma_x, \\
+      \CNOT (\sigma_z \otimes I_{2}) \CNOT^\dagger &= \sigma_z \otimes I_{2}, \quad &\CNOT (I_{2} \otimes \sigma_z) \CNOT^\dagger &= \sigma_z \otimes \sigma_z.
+    \end{align*}
+  \end{thmlist}
+
+  Another interesting unary gate to consider is the \(S\)-gate, given by
+  \begin{equation*}
+    S= Z_{1}^{1}(\tfrac{1}{4}) =
+    \begin{pmatrix}
+      1 & 0 \\
+      0 & i
+    \end{pmatrix}.
+  \end{equation*}
+  It satisfies \(S \sigma_x S^\dagger = \sigma_y\) and \(S \sigma_z S^\dagger = \sigma_z\).
+
+  We can rewrite these relations in terms of check vectors and get
+  \begin{subequations}
+    \begin{align}
+      (b \mid c) &\xrightarrow{\text{conjugation by Hadamard-gate}} (c \mid b) \\
+      (b \mid c) &\xrightarrow{\text{conjugation by \(S\)-gate}} (b \mid b \boxplus c) \\
+      (b_{1}, b_{2} \mid c_{1}, c_{2}) &\xrightarrow{\text{conjugation by \(\CNOT\)-gate}} (b_{1}, b_{1}\boxplus b_{2} \mid c_{1}\boxplus c_{2}, c_{2}).
+    \end{align}
+  \end{subequations}
+\end{example}
+
+Given a subset \(K\) of a group \(G\), we write \(K^{-1} \eqdef \{g\in G \mid g^{-1}\in K\}\).
+
+\begin{definition}\label{def:generators}
+  A subset \(K\)  of a group \(G\) is said to \emph{generate} \(G\), if for every \(g \in G\) there exists a \(j\in \mathbb{N}_{0}\) such that
+  \begin{equation*}
+    g = k_{1} \cdot \dotsc \cdot k_{j}, \qquad\quad \text{ where } k_{l} \in K \cup K^{-1}.
+  \end{equation*}
+  In this case, we write \(G = \langle K \rangle\).
+\end{definition}
+
+Suppose we have a subset \(\{p \in G \mid p \text{ satisfying some property }P \}\) of a group \(G\).
+It is customary to write
+\begin{equation*}
+  \langle p \in G \mid p \text{ satisfying some property }P \rangle \eqdef \langle \{p \in G \mid p \text{ satisfying some property }P \}\rangle.
+\end{equation*}
+
+\begin{lemma}\label{lem:Clifford-group-generated}
+  Let \(n\in \mathbb{N}\) be a positive integer.
+  For any \(1\leq j \leq n\) and \(1\leq l<n\), we abbreviate
+  \begin{equation*}
+    H_{j} \eqdef I_{2}^{\otimes j-1} \otimes H \otimes I_{2}^{\otimes n-j}, \quad\;
+    S_{j} \eqdef I_{2}^{\otimes j-1} \otimes S \otimes I_{2}^{\otimes n-j}, \quad\;
+    \CNOT_{l} \eqdef I_{2}^{\otimes l-1}\otimes \CNOT \otimes I_{2}^{n-l-1}.
+  \end{equation*}
+  Then, we have
+  \begin{equation}
+      \mathcal{C}_n = \langle e^{2\pi i \lambda}, H_j, S_k, \CNOT_{l} \mid \lambda \in \mathbb{R},  1\leq j,k \leq n \text{ and } 1\leq  l <n\rangle.
+  \end{equation}
+\end{lemma}
+\begin{proof}
+  We prove the claim by induction on \(n\). The base case \(n=1\) is established in Exercise~\ref{exe:clifford-generation-base-case}.
+
+  \textit{Induction step \(( n \to n+1)\):}
+  The set of generators \(\mathcal{G}_{n+1}\) is contained in \( \mathcal{C}_{n+1}\) and it remains to show that  \(\mathcal{C}_{n+1} \subseteq \mathcal{G}_{n+1}\).
+  Let \(U \in \mathcal{C}_{n+1}\) and consider the elements \(x = I_{2}^{\otimes n} \otimes \sigma_{x}\) and \(z = I_{2}^{\otimes n} \otimes \sigma_{z}\) of the \((n+1)\)-Pauli group.
+  We organise the check vectors of \(U x U^{\dagger}\) and \(U z U^{\dagger}\) into a \(2\times 2(n+1)\) matrix with entries in \(\{0,1\}\):
+  \begin{equation*}
+    A=\left(
+      \begin{array}{c c c c| c c c c}
+        b_{1} & \dots & b_{n} & b_{n+1} & c_{1} & \dots & c_{n} & c_{n+1} \\
+        d_{1} & \dots & d_{n} & d_{n+1} & e_{1} & \dots & e_{n} & e_{n+1}
+      \end{array}
+    \right),
+  \end{equation*}
+  Since \(x\) and \(z\) anti-commute there is a \(1\leq j \leq n+1\) such  that the \(2 \times 2\) sub-matrix \(
+  \begin{psmallmatrix}
+    b_{j} & c_{j} \\ d_{j} & e_{j}
+  \end{psmallmatrix}
+  \) has odd determinant, see Lemma~\ref{lem:pauli-commutativity}.
+  Due to Exercise~\ref{exe:flipped-cnot-using-cnot-Hadamard}, the \(\SWAP\)-gate can be realised as a circuit with gates in \(\mathcal{G}_{n+1}\).
+  By iteratively applying \(\SWAP\)-gates if necessary, we can move this sub-matrix to the final slot.
+  The matrix component restricted to the \((n+1)\)-th and \(2(n+1)\)-th columns then reads as
+  \begin{equation*}
+    A_{n+1} \eqdef
+    \begin{pmatrix}
+      b_{j} & c_{j}\\
+      d_{j} & e_{j}
+    \end{pmatrix}.
+  \end{equation*}
+  By Example~\ref{ex:CNOT-S-Hadamard-are-in-Clifford}, left-multiplication by \(H_{n+1}\) swaps the columns of \(A_{n+1}\), while \(S_{n+1}\) adds the first column to the second.
+  Using these operations, we can reduce \(A_{n+1}\) to the identity matrix.
+  Thus, we have transformed \(A\) into the matrix
+  \begin{equation*}
+    A'=\left(
+      \begin{array}{c c c c| c c c c}
+        b_{1} & \dots & b_{n} & 1 & c_{1} & \dots & c_{n} & 0 \\
+        d_{1} & \dots & d_{n} & 0 & e_{1} & \dots & e_{n} & 1
+      \end{array}
+    \right),
+  \end{equation*}
+  We will now further simplify this matrix.
+  To that end, we use
+  \begin{equation*}
+    \CNOT_{j,k}\eqdef \SWAP_{j+1,k}\;\CNOT_{j}\;\SWAP_{j+1,k},
+  \end{equation*}
+  where \(\SWAP_{j+1,k}\) is a product of \(\SWAP\)-gates that interchanges the \(j+1\) and \(k\)-th tensorand.
+  The \(\CNOT_{j,k}\)-gate acts on a check vector by
+  \begin{equation*}
+    b_{j} \mapsto b_{j}, \qquad b_{k}\mapsto b_{k}\boxplus b_{j}, \qquad
+    c_{j} \mapsto c_{j} \boxplus c_{k}, \qquad c_{k}\mapsto c_{k}.
+  \end{equation*}
+  For each \(1 \leq j \leq n\), we execute the following steps.
+  \begin{thmlist}
+    \item If \(e_{j} =1 = d_{j}\), we  apply \(S_{j}\) to get \(e_{j}=0\).
+    Otherwise, if \(d_{j}=0\) and \(e_{j}=1\), we use \(H_{j}\) to interchange \(d_{j}\) and \(e_{j}\).
+    Then we continue with the item below.
+    \item If \(b_{j}=1\) we apply \(\CNOT_{n+1,j}\). Since \(d_{n+1}= 0= e_{j}\), this leads to the updated entries
+    \begin{align*}
+      b_{j}&\mapsto b_{j}\boxplus b_{n+1} = 0, \qquad &  b_{n+1}&\mapsto b_{n+1},\\
+      d_{j}&\mapsto d_{j}\boxplus d_{n+1} = d_{j}, \qquad &  d_{n+1}&\mapsto d_{n+1} \\
+      c_{j}&\mapsto c_{j},\qquad &  c_{n+1}&\mapsto c_{j} \boxplus c_{n+1}, \\
+      e_{j} &\mapsto e_{j},\qquad &  e_{n+1}&\mapsto e_{j} \boxplus e_{n+1} =e_{n+1}.
+    \end{align*}
+    \item If \(d_{j} = 1\), we apply \(H_{j}\) to interchange \(d_{j}\) and \(e_{j}\).
+    Then we continue with the item below.
+
+  \end{thmlist}
+  This results in the matrix
+  \begin{equation*}
+    A''=\left(
+      \begin{array}{c c c c| c c c c}
+        0 & \dots & 0 & 1 & c_{1} & \dots & c_{n} & * \\
+        0 & \dots & 0 & 0 & e_{1} & \dots & e_{n} & 1
+      \end{array}
+    \right).
+  \end{equation*}
+  Moreover, possibly applying \(S_{n+1}\) in case \(*\;=1\), we can ensure that \(c_{n+1}=0\).
+  Next, we perform for each \(1 \leq j \leq n\), the  steps listed below.
+  \begin{thmlist}
+    \item If \(c_{j}=1\), apply \(H_{j}\) to interchange it with \(b_{j}\).
+    Then apply \(\CNOT_{n+1,j}\) to set \(c_{j}=0\) and interchange \(b_{j}\) and \(c_{j}\) again using \(H_{j}\).
+    Then, we continue with the below step.
+    \item If \(e_{j}=1\), we apply \(\CNOT_{j, n+1}\) and get \(e_{j}=0\). All other states remain unchanged.
+  \end{thmlist}
+  This reduction transforms the joint check matrix into the form
+  \begin{equation*}
+    A'''=\left(
+      \begin{array}{c c c c| c c c c}
+        0 & \dots & 0 & 1 & 0 & \dots & 0 & 0 \\
+        0 & \dots & 0 & 0 & 0 & \dots & 0 & 1
+      \end{array}
+    \right).
+  \end{equation*}
+  Thus, we have constructed an element \(V \in \langle\mathcal{G}_{n+1}\rangle \) such that \(V U x U^\dagger V^\dagger = (-1)^r x\) and \(V U z U^\dagger V^\dagger = (-1)^s z\) for some  \(r, s \in \{0, 1\}\).
+  Now note that \(z = S_{n+1}^{2}\) and \(x = H_{n+1}S_{n+1}^{2} H_{n+1}\).
+  Thus, there exists an operator \(V' \in \langle \mathcal{G}_{n+1}\rangle\) such that the product \(W = x^{s}z^{r}VU\) commutes with both \(x\) and \(z\).
+  Since \(W\) acts as the identity under conjugation on the last tensor factor, it decomposes as \(W = \tilde{W} \otimes I_2\) for some unitary \(\tilde{W} \in \mathcal{C}_n\).
+  By the induction hypothesis, \(\tilde{W} \in \langle\mathcal{G}_n\rangle\), which immediately implies \(W \in \langle\mathcal{G}_{n+1}\rangle\).
+\end{proof}
+
+Up to this point, we have described the state of an \(n\)-qubit quantum system by a state vector \(\ket{s} \in (\mathbb{C}^2)^{\otimes n}\).
+Tracking this vector explicitly requires storing \(2^n\) complex numbers, which quickly becomes unmanageable for a classical computer.
+The stabiliser formalism offers an alternative description using subgroups of of the \( n \)-Pauli group.
+
+\begin{definition}\label{def:stabiliser-subspace-subgroup}
+  Let \( S \subset \PauliGroup_n \) be a subgroup of the \( n \)-Pauli group.
+  One calls the vector space
+  \begin{equation}
+    V_{S} \eqdef \{v\in (\mathbb{C}^{2})^{\otimes n}\mid sv = v \text{ for all }s\in S\}.
+  \end{equation}
+  \emph{stabilised} by \(S\) and \(S\) a \emph{stabiliser} of \(V_{S}\).
+\end{definition}
+
+Let us now see how we can describe a state in the computational basis using stabilisers.
+
+\begin{example}\label{ex:ket-0-state}
+  Consider the subgroup \( S \subset \PauliGroup_n \) generated by
+  \begin{equation*}
+       s_{1} = \sigma_z  \otimes I_2 \otimes \dots \otimes I_2, \quad s_{2}=I_2 \otimes \sigma_z \otimes I_{2}\otimes \dots \otimes I_2, \quad \dots, \quad s_{n}=I_2 \otimes \dots \otimes I_{2}\otimes  \sigma_z.
+ \end{equation*}
+ We consider the action of the generators on \( v \in (\mathbb{C}^2)^{\otimes n} \).
+ Using the computational basis, we may write \(v\) as the linear combination
+ \begin{equation*}
+     v = \sum_{s \in \{0,1\}^n} \alpha_s \ket{s}.
+ \end{equation*}
+   The action of \( \sigma_z \) at the \( i \)-th position on \( v \) is
+   \begin{equation*}
+    (I_2 \otimes \dots \otimes \sigma_z \otimes \dots \otimes I_2) v = \sum_{s \in \{0,1\}^n} (-1)^{s_i} \alpha_s \ket{s}.
+  \end{equation*}
+  Now, \(v\) is stabilised by \(S\) if and only if \(s_{i}v=v\) for all \(1\leq i \leq n\).
+  This implies that \(v\) is stabilised if and only if
+  \begin{equation*}
+      v = \alpha \ket{0 \dots 0}, \qquad \alpha\in \mathbb{C}.
+  \end{equation*}
+  Note in particular that we can easily retrieve states from this formalism:
+  the state \([\ket{0 \dots 0}]\) corresponds to the set of normalised vectors \(v\in ( \mathbb{C}^{2})^{\otimes n}\) such that \(sv =v\) for all \(s\in S\).
+\end{example}
+
+In the previous example, we used the fact that we have a ``minimal'' set of generators that we had to take into account.
+
+\begin{definition}\label{def:minimal-set-of-generators}
+  The generators \( s_1, \dots, s_l \) of \( S=\langle s_{1}, \dots , s_{l}\rangle \) are  \emph{independent} if for all \( i \in \{1, \dots, l\} \)
+  \begin{equation}
+    \langle s_1, \dots, \widehat{s_i}, \dots, s_l \rangle \subsetneq S,
+  \end{equation}
+where \( \widehat{s_i} \) indicates that the term \( s_i \) is omitted.
+\end{definition}
+
+This minimality condition can also be seen from the collection of all check vectors of the generators.
+
+\begin{definition}\label{def:check-matrix}
+  To a given tuple of generators \((s_{1}, \dots, s_{l})\in \PauliGroup_{n}\), we associate the \(l\times 2n\) \emph{check matrix}
+  \begin{equation*}
+    \left(
+      \begin{array}{c c c | c c c}
+        b_{11} & \dots & b_{1n} & c_{11} & \dots & c_{1n} \\
+        \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+        b_{l1} & \dots & b_{ln} & c_{l1} & \dots & c_{ln}
+      \end{array}
+      \right) \in \Mat_{l,2n}( \mathbb{F}_{2}),
+    \end{equation*}
+    where the \(k\)-th row is given by the check vector \(r(s_{k})\) of \(s_{k}\).
+\end{definition}
+
+
+
+\begin{proposition}\label{prop:minimal-generating-set}
+  Let \(S= \langle s_{1}, \dots , s_{l}\rangle\) be a subgroup of \(\PauliGroup_{n}\) such that \(-I \notin S\).
+  Then \(s_{1}, \dots , s_{l}\) are independent if and only if the check matrix of \((s_{1}, \dots , s_{l})\) has rank \(l\).
+\end{proposition}
+\begin{proof}
+  Note that the check vector of \(s_{i}^{2}\) is given by \( (0 \mid 0) \).
+  Thus
+  \begin{equation*}
+    s_i^2 \in \{ i^a I_{2^n} \mid a \in \{0, \dots, 3\} \}.
+  \end{equation*}
+  As \( s_i^2 \neq I_{2^n} \) would imply that \( -I \in S \), we conclude that \( s_i^2 = I \).
+  Now, the check matrix has rank \( l \) if and only if its rows are linearly independent.
+  Consider \( a_1, \dots, a_l \in \mathbb{F}_2 \) such that \(\sum_{i=1}^l a_i r_i = 0\), where \( r_i = r(s_i) \) denotes the \( i \)-th row of the check matrix. This is equivalent to
+  \begin{equation*}
+    r\left( \prod_{i=1}^l s_i^{a_i} \right) = (0 \mid 0).
+  \end{equation*}
+  As \(-I \notin S\) we get \( \prod_{i=1}^l s_i^{a_i} = I \).
+  Therefore, the generators are independent if and only if the check matrix has rank \( l \), which completes the proof.
+\end{proof}
+
+An important application of the previous result is that a minimal set of generators allows us to determine the size of the stabilised subspace.
+This also has applications in quantum error correction and the encoding of quantum error correction.
+
+\begin{proposition}\label{prop:stabilised-subspace}
+  Let \(S=\langle s_{1}, \dots , s_{n-k}\rangle\subset \PauliGroup_{n}\) be generated by \(n-k\) independent elements such that \(-I \notin S\) and \(s_{i}s_{j}= s_{j} s_{i}\) for all \(1\leq i,j \leq n-k\).
+  Then, the stabilised subspace
+  \begin{equation*}
+    V_S = \{ v \in (\mathbb{C}^2)^{\otimes n} \mid s v = v \text{ for all } s \in S \}
+  \end{equation*}
+  has dimension \( 2^k \).
+\end{proposition}
+\begin{proof}
+  For any \( x = (x_1, \dots, x_{n-k}) \in \mathbb{F}_2^{n-k} \), define
+  \begin{equation*}
+    p^x_S \eqdef \frac{\prod_{j=1}^{n-k} (I + (-1)^{x_j} s_j)}{2^{n-k}}.
+  \end{equation*}
+  We will now show that \((p^{x}_{S})_{x\in \mathbb{F}_{2}^{n-k}}\) forms a set of pairwise-orthogonal projectors and \(\im p^{0}_{S} = V_{S}\).
+
+  Since  \(s_j^2 = I\), we have
+  \begin{equation*}
+    (I + (-1)^{x_j} s_j)^2 = I + 2(-1)^{x_j}s_j + s_j^2 = 2(I + (-1)^{x_j} s_j)
+  \end{equation*}
+  and the commutativity \(s_{i}s_{j}= s_{j} s_{i}\) yields
+    \begin{equation*}
+      (p^x_S)^2
+      = \frac{\prod_{j=1}^{n-k} (I + (-1)^{x_j} s_j)^2}{(2^{n-k})^2}
+      = \frac{2^{n-k} \prod_{j=1}^{n-k} (I + (-1)^{x_j} s_j)}{(2^{n-k})^2}
+      = p^x_S.
+    \end{equation*}
+
+    If \(x \neq y\), there exists at least one index \(m \in \{1, \dots, n-k\}\) such that \(x_m \neq y_m\) and therefore
+    \begin{equation*}
+      (I+ (-1)^{x_{m}} s_{m})(I+ (-1)^{y_{m}} s_{m}) = I^{2} - s_{m}^{2} = 0
+    \end{equation*}
+    implying that \(p^x_S p^y_S = 0= p^{y}_{S}p^{x}_{S}\).
+
+   Next, we observe that
+    \begin{equation*}
+      \sum_{x \in \mathbb{F}_2^{n-k}} \prod_{j=1}^{n-k} (I + (-1)^{x_j} s_j)
+      = \prod_{j=1}^{n-k} \sum_{x_j \in \blank \mathbb{F}_{2}} (I + (-1)^{x_j} s_j)
+      = \prod_{j=1}^{n-k} \big( (I + s_j) + (I - s_j) \big) = \prod_{j=1}^{n-k} 2I
+      = 2^{n-k}I
+    \end{equation*}
+    and therefore \(\sum_{x \in \mathbb{F}_2^{n-k}} p^x_S = I\).
+
+    Finally, we show that \(V_{S}= \im p^{0}_{S}\).
+    If \(v \in \im p^0_S\), then \(v = p^0_S(w)\) for some \(w \in ( \mathbb{C}^{2})^{\otimes n}\).
+    Since \(s_i(I + s_i) = s_i + s_i^2 = I + s_i\), it follows that \(s_i p^0_S = p^0_S\) for every generator.
+    Thus \(s_i v = s_i p^0_S(w)  = p^0_S(w) = v\), proving \(\im p^0_S \subseteq V_S\).
+    Conversely, if \(v \in V_S\), then \(s_j v = v\) and \((I+s_{j})v = 2v\) for all \(1 \leq j \leq n-k\) resulting in
+    \begin{equation*}
+      p^0_S v
+      = \frac{\prod_{j=1}^{n-k} (I + s_j)}{2^{n-k}} v
+      = \frac{\prod_{j=1}^{n-k} (2)}{2^{n-k}} v = v.
+    \end{equation*}
+    Thus, \(V_{S}\subseteq \im p^0_S\).
+
+
+    To compute the dimension of \(V_{S}\)  we use that due to Lemma~\ref{lem:part-of-1-means-orth}, the \( (p^x_S)_{x \in \mathbb{F}_2^{n-k}} \) forms a set of pairwise orthogonal projectors and we obtain a direct sum decomposition
+  \begin{equation*}
+    (\mathbb{C}^2)^{\otimes n} \cong \bigoplus_{x \in \mathbb{F}_2^{n-k}} V_x,
+  \end{equation*}
+  where \( V_x \) is the image of \( p^x_S \).
+
+  To conclude the proof , we show \( \dim V_x = \dim V_y \) for all \( x, y \in \mathbb{F}_2^{n-k}\).
+  Given \( x \in \mathbb{F}_2^{n-k} \), we construct an element \( g \in \PauliGroup_n \) such that
+  \begin{equation*}
+    g p^0_S g^\dagger = p^x_S.
+  \end{equation*}
+
+  By Proposition~\ref{prop:minimal-generating-set} the check matrix \(A\in \Mat_{n-k, 2n}(\mathbb{F}_{2})\) of the generators  \(s_1, \dots, s_{n-k}\) has rank \(n-k\).
+  Thus, there is a matrix \(B\in \Mat_{n-k, 2n}( \mathbb{F}_{2})\) satisfying
+  \begin{equation*}
+    A
+    \begin{pmatrix}
+      0 & I_{n} \\
+      I_{n} & 0
+    \end{pmatrix}
+    B^{T} = I_{n-k} \in \Mat_{n-k}( \mathbb{F}_{2}).
+  \end{equation*}
+  Let \(g_{i}\in \PauliGroup_n\) be such that \(r(g_{i})= b_{i}\), where \(b_{i}\) is the \(i\)-th row of \(B\).
+  By Lemma~\ref{lem:pauli-commutativity}, we have \(s_{i} g_{i} = - g_{i} s_{i}\) and \(s_{j} g_{i} = g_{i} s_{j}\) for \(j\neq i\).
+  For our fixed \(x \in \mathbb{F}_{2}^{n-k}\), we set \(g \eqdef \prod_{j=1}^{n-k} g_j^{x_j}\) and compute
+  \begin{equation*}
+    g p^0_S g^\dagger
+    = g \left( \frac{\prod_{j=1}^{n-k} (I + s_j)}{2^{n-k}} \right) g^\dagger
+    = \frac{\prod_{j=1}^{n-k} (I + g s_j g^\dagger)}{2^{n-k}}
+    = \frac{\prod_{j=1}^{n-k} (I + (-1)^{x_j} s_j)}{2^{n-k}} = p^x_S.
+  \end{equation*}
+  Since conjugation preserves the rank, we have \(\dim V_x = \dim V_0 = \dim V_S\) for all \(x \in \mathbb{F}_2^{n-k}\) and
+  \begin{equation*}
+    2^{n} = \dim ( \mathbb{C}^{2})^{\otimes n } = 2^{n-k}(\dim V_S)  \implies \dim V_{S} = 2^{k}.\qedhere
+  \end{equation*}
+\end{proof}
+
+As a consequence, if \(S\) has \(n\) independent generators it stabilises a subspace of dimension \(1\). In other words a space of the form \( \mathbb{C} v\) for some normalised vector \(v\).
+This allows us to reconstruct the state \(v\) as the set of all normalised vectors contained in \(V_{S}\).
+
+\begin{lemma}\label{lem:stabiliser-matrix-bijection}
+  Let \(n, l \in \mathbb{N}\) with \(1 \leq l \leq n\) and consider the map
+  \begin{equation}
+    \begin{aligned}
+      \Theta \from\left\{(v,A) \in \mathbb{F}_{2}^{l}\times \Mat_{l,2n}( \mathbb{F}_{2}) \;\middle|\;
+      \begin{array}{c}
+        A \text{ has rank }l \text{ and }\\
+        A
+        \begin{psmallmatrix}
+          0 & I \\ I & 0
+        \end{psmallmatrix}A^{T} = 0
+      \end{array}
+      \right\} &\to\{ (s_{1}, \dots , s_{l}) \in \PauliGroup_{n}^{l}\},\\
+      (v, A) & \mapsto (\Theta(v,A)_{1}, \dots , \Theta(v,A)_{l})
+    \end{aligned}
+  \end{equation}
+  with
+  \begin{equation*}
+    \Theta(v,A)_{j} = (-1)^{v_{j}} \sigma_{x}^{a_{j,1}}\sigma_{z}^{a_{j,n+1}} \otimes \dots \otimes \sigma_{x}^{a_{j,n}}\sigma_{z}^{a_{j,2n}}.
+  \end{equation*}
+  Then \(\Theta\) is injective and its image is given precisely by the set of all ordered \(l\)-tuples of independent, mutually commuting elements \((s_1, \dots, s_l)\) in \(\PauliGroup_n\) such that \(-I \notin S = \langle s_1, \dots, s_l \rangle\).
+\end{lemma}
+\begin{proof}
+  The injectivity of \(\Theta\) follows from Lemma~\ref{lem:bijection-Pauli-n-group-matrices}.
+
+  Let \(v\in \mathbb{F}_{2}^{l}\) be a vector and let \(A\in \Mat_{l,2n}( \mathbb{F}_{2})\) be a matrix of rank \(l\) satisfying \(A\begin{psmallmatrix}
+    0 & I \\ I & 0
+  \end{psmallmatrix}A^{T}\).
+  Due to Lemma~\ref{lem:pauli-commutativity} the  elements \((s_{1}, \dots , s_{l})=\Theta(v,A)\) commute.
+  To see that the generated subgroup \(S = \langle s_{1}, \dots , s_{l} \rangle\) does not contain \(-I\), consider an arbitrary element \(g = \prod_{j=1}^l s_j^{x_j}\in S\), where \(x \in \mathbb{F}_2^l\).
+  Note that
+  \begin{equation*}
+    r(g) = r\left( \prod_{j=1}^l s_j^{x_j} \right) = \sum_{j=1}^l x_j r(s_j) = x^{T} A.
+  \end{equation*}
+  If \(g = -I\), we have  \(x^{T}A = r(g) = r(-I) = 0\).
+  However, because \(A\) has full rank \(l\), its rows are linearly independent, so \(x^{T}A = 0\) forces \(x = 0 \in \mathbb{F}_2^l\) and \(\prod_{j=1}^l s_j^{0}=I\).
+  Finally, by Proposition~\ref{prop:minimal-generating-set}, \(s_{1}, \dots , s_{l}\) are independent.
+
+  Conversely, assume \(S= \langle s_{1}, \dots , s_{l} \rangle\) is a subgroup of \(\PauliGroup_{n}\) not containing \(-I\) with pairwise commuting independent generators.
+  Then Lemma~\ref{lem:pauli-commutativity} and Proposition~\ref{prop:stabilised-subspace} show that \((v,A)=\Theta^{-1}(s_{1}, \dots , s_{l})\) has to satisfy \(\rk A = l\) and \(A
+  \begin{psmallmatrix}
+    0 & I \\ I & 0
+  \end{psmallmatrix}A^{T}=0\).
+\end{proof}
+
+As a consequence, we can describe even certain highly entangled states purely in terms of finite binary data.
+
+\begin{remark}\label{rmk:states-via-binary-data}
+  We write
+  \begin{equation*}
+    \mathcal{L}_n \eqdef
+    \left\{(v,A) \in \mathbb{F}_{2}^{n}\times \Mat_{n,2n}( \mathbb{F}_{2}) \;\middle|\;
+      \begin{array}{c}
+        A \text{ has rank }n \text{ and }\\
+        A
+        \begin{psmallmatrix}
+          0 & I \\ I & 0
+        \end{psmallmatrix}A^{T} = 0
+      \end{array}
+    \right\}
+  \end{equation*}
+  For \((v,A) \in \mathcal{L}_n\), the stabilised subspace \(V_{S}\) of the subgroup \(S \eqdef \langle \Theta(v,A) \rangle \subset \PauliGroup_{n}\) has \(\dim V_S = 1\) by Proposition~\ref{prop:stabilised-subspace}.
+  Thus, if \(\ket{w}, \ket{w'} \in V_S\) are normalised, they define the same state \([\ket{w}] = [\ket{w'}]\), termed in the following the \emph{stabiliser state of the datum} \((v,A)\).
+\end{remark}
+
+Note that any \(p_{l} = I_{2}^{\otimes l-1} \otimes \sigma \otimes I_{2}^{\otimes n-l} \in \PauliGroup_{n}\) with \(\sigma \in \{\sigma_{x}, \sigma_{y}, \sigma_{z}\}\) is self-adjoint and has the eigenvalues \(\mathrm{spec}(p_{l}) =\{\pm 1\}\).
+As discussed in Section~\ref{sec:measurements-and-the-born-rule}, we associate to it the projection-valued measure
+\begin{equation*}
+  E_{\sigma,l} \from \{ \Lambda \subseteq \mathrm{spec}(p_{l})\} \to \mathrm{Proj}((\mathbb{C}^{2})^{\otimes n}), \qquad \Lambda \mapsto \sum\nolimits_{\lambda \in \Lambda}e_{\sigma,l}(\lambda),
+\end{equation*}
+where
+\begin{equation*}
+  e_{\sigma,l}(\lambda) = \tfrac{I + \lambda p_{l}}{2} \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{ \otimes n}.
+\end{equation*}
+
+\begin{theorem}[Gottesman--Knill]\label{thm:gottesman-knill}
+  Fix a natural number \(n \in \mathbb{N}\) and let \([\ket{w}]\) be the stabiliser state of \((v,A)\in \mathcal{L}_{n}\).
+  The following statements hold:
+  \begin{thmlist}
+    \item  For any \(s\in\{0,1\}^{n}\), the computational basis state \([\ket{s}]\) is the unique stabiliser state of the datum \((s,(0_{n} \mid I_{n})) \in \mathcal{L}_{n}\).
+    \item  For any Clifford gate \(U\in \mathcal{C}_{n}\), the transformed state \([U\ket{w}]\) is the stabilizer state of a datum \((v', A') \in \mathcal{L}_{n}\).
+
+    \item Consider  \(p_{l} = I_{2}^{\otimes l-1} \otimes \sigma \otimes I_{2}^{\otimes n-l})\in \PauliGroup_{n}\) with \(\sigma \in \{\sigma_{x}, \sigma_{y}, \sigma_{z}\}\) and denote its associated projection-valued measure by \(E_{\sigma,l} \from \{ \Lambda \subseteq \mathrm{spec}(p_{l})\} \to \mathrm{Proj}((\mathbb{C}^{2})^{\otimes n})\).
+    The probability of observing the eigenvalue \(\lambda \in\{1, -1\}\) is
+    \begin{equation}\label{eq:Got-Knil-probs}
+      \braket{w }{ E_{\sigma,l}(\{\lambda\}) | w} =
+      \begin{cases}
+        1 & \text{if } (-1)^{\tfrac{\lambda-1}{2}} p_{l} \in \langle \Theta(v,A)\rangle, \\
+        0 & \text{if } (-1)^{\tfrac{1-\lambda}{2}} p_{l} \in \langle\Theta(v,A)\rangle, \\
+        \tfrac{1}{2} & \text{otherwise.}
+      \end{cases}
+    \end{equation}
+    Let \(c \eqdef A \begin{psmallmatrix} 0 & I_n \\ I_n & 0 \end{psmallmatrix} r(p_{l})^{T} \in \mathbb{F}_{2}^{n}\). If \(c = 0\), the post-measurement state remains the stabiliser state of \((v, A)\).
+    Otherwise, choose an index \(k\) such that \(c_k = 1\); the post-measurement state is the stabiliser state of  \((v', A') \in \mathcal{L}_n\) where the \(j\)-th entry of \(v'\), respectively \(j\)-th row of \(A'\) are given by
+    \begin{equation}\label{eq:Got-Knil-state-updates}
+      v'_j = \begin{cases} \tfrac{1 - \lambda}{2} & \text{if } j = k, \\ v_j + c_j v_k & \text{if } j \neq k, \end{cases}\qquad \text{and} \qquad
+      a'_j = \begin{cases} r(p_l) & \text{if } j = k, \\ a_j + c_j a_k & \text{if } j \neq k, \end{cases}.
+    \end{equation}
+  \end{thmlist}
+\end{theorem}
+\begin{proof}
+  \begin{thmlist}
+    \item Let \(S = \langle \Theta(s, (0_{n}\mid I_{n})) \rangle\). This subgroup is generated by the elements \((s_{1}, \dots , s_{n})\) where
+    \begin{equation*}
+      s_{j} = (-1)^{s_{j}} I_{2}\otimes \dots\otimes I_{2}\otimes \sigma_{z} \otimes I_{2}\otimes \dots \otimes I_{2}.
+    \end{equation*}
+    Due to Proposition~\ref{prop:stabilised-subspace}, the stabilised space \(V_{S}\) is one-dimensional.
+    Evaluating the generators of \(S\) on \(\ket{s}\) yields:
+    \begin{equation*}
+      s_{j} \ket{s} = (-1)^{s_j} (-1)^{s_j} \ket{s} = (-1)^{2s_{j}}\ket{s} = \ket{s}.
+    \end{equation*}
+    Thus \([\ket{s}]\) is the unique stabiliser state of \((s, (0_n \mid I_n))\).
+
+    \item Let \(S = \langle \Theta(v,A) \rangle\) and let \(\ket{w} \in V_S\).
+    For a Clifford gate \(U \in \mathcal{C}_n\), define \(S' = U S U^\dagger = \langle U \Theta(v,A)_1 U^\dagger, \dots, U \Theta(v,A)_n U^\dagger \rangle\).
+    Since \(S'\) is generated by \(n\) independent, pairwise commuting generators and \(-I\notin S\), Lemma~\ref{lem:stabiliser-matrix-bijection} provides a unique \((v', A') \in \mathcal{L}_n\) such that \(\Theta(v', A' ) = S' \).
+    Furthermore, for any \(s \in S\), we observe that
+    \begin{equation*}
+      (U s U^\dagger) U\ket{w} = U s \ket{w} = U\ket{w}.
+    \end{equation*}
+    Hence, \([U\ket{w}]\) is precisely the stabiliser state of the datum \((v', A')\).
+
+    \item Write \(P = p_l\) and \(S = \langle \Theta(v,A) \rangle\).
+    If \((-1)^\lambda P \in S\) for some \(\lambda \in \{0,1\}\), then \(P \ket{w} = (-1)^\lambda \ket{w}\)
+    and the projection \(e_{\sigma,l}(\lambda)\) onto the eigenspace acts as
+    \begin{equation*}
+      e_{\sigma,l}(\lambda) \ket{w} = \tfrac{1}{2}(I + (-1)^\lambda P)\ket{w} = \ket{w}.
+    \end{equation*}
+    Thus, evaluating the inner product yields \(\braket{w | E_{\sigma,l}(\{m\}) | w} = \braket{w|w} = 1\), which forces \(\braket{w | E_{\sigma,l}(\{-\lambda\}) | w} = 0\).
+    Note that in this  case, \(P\) commutes with every element of \(S\), implying \(c = 0\), and the state after measurement is given by \([\ket{w}]\).
+
+    If neither \(P\) nor \(-P\) belongs to \(S\), there exists a nonempty set of indices \(j\) for which \(s_{j}=\Theta(v,A)_j\) anti-commutes with \(P\) since \(S\) is maximal abelian by  Exercise~\ref{exe:max-abelian}.
+    Let \(k\) be an index such that \(c_k = 1\).
+    For any other index \(j \neq k\) with \(c_j = 1\), replacing the generator \(s_j\) with \(s_j s_k\) yields a new set of generators \((s_{1}', \dots , s_{n}')\) of \(S\) such that \(P\) anti-commutes with \(s'_{k}\) and commutes with each \(s_{j}\) for \(j\neq k\).
+    We fix the unique \((v', A') \in \mathcal{L}_{n}\) such that \(\Theta(v', A') = (s_{1}, \dots , s_{n})\).
+
+    Using the identity  \(s_k e_{\sigma,l}(\lambda) s_k = e_{\sigma,l}(-\lambda\) we compute
+    \begin{align*}
+      \braket{w}{ E_{\sigma,l}(\{\lambda\}) | w}
+      & = \braket{w}{e_{\sigma,l}(\lambda) | w}
+        = \braket{w}{ s_k e_{\sigma,l}(\lambda) s_k | w} \\
+      & = \braket{w}{ e_{\sigma,l}(-\lambda) | w}
+        = 1 - \braket{w }{ E_{\sigma,l}(\{\lambda\}) | w},
+    \end{align*}
+    which implies \(\braket{w}{E_{\sigma,l}(\{\lambda\}) | w} = \tfrac{1}{2}\).
+    Note that the updated state is stabilised by \(\langle s'_{1}, \dots , (-1)^{\lambda}p_{l}, \dots , s'_{n}\rangle\).
+    And a direct computation shows that the associated datum \((v'', A'' ) \in \mathcal{L}_{n}\) is as described in Equation~\eqref{eq:Got-Knil-state-updates}. \qedhere
+  \end{thmlist}
+\end{proof}
+
+The Gottesmann--Knill theorem implies that any quantum circuit restricted to the Clifford group can be simulated efficiently on a classical architecture.
+
+\begin{remark}\label{rmk:application-of-Gottesman--Knill-theorem}
+  Consider a quantum algorithm specified by the following steps:
+  \begin{thmlist}
+    \item Initialization in the pure computational basis state \(\ket{0 \dots 0} \in (\mathbb{C}^{2})^{\otimes n}\).
+    \item Sequential application of \(m\) elementary Clifford gates \(U_{1}, \dots , U_{m}\), where each \(U_{i}\) belongs to the set of generators \(\{H_l, S_l, \CNOT_{l} \mid 1 \leq l \leq n\}\) defined by
+    \begin{align*}
+      H_{l} &\eqdef I_{2}^{\otimes l-1} \otimes H \otimes I_{2}^{\otimes n - l}, \\
+      S_{l} &\eqdef I_{2}^{\otimes l-1} \otimes S \otimes I_{2}^{\otimes n - l}, \\
+      \CNOT_{l} &\eqdef I_{2}^{\otimes l-1} \otimes \CNOT \otimes I_{2}^{\otimes n - l - 1}.
+    \end{align*}
+    \item Measurement of all \(n\) qubits with respect to the computational basis.
+  \end{thmlist}
+  This is classically evaluated via Theorem~\ref{thm:gottesman-knill} under the following resource estimates:
+  \begin{thmlist}
+    \item The initial state \(\ket{0 \dots 0}\) is uniquely represented by the datum \((0, (0_n \mid I_n)) \in \mathcal{L}_n\).
+    This configuration is stored classically as an array of size \(2n^2 + n\) bits over \(\mathbb{F}_2\).
+
+    \item Let \((v,A) \in \mathcal{L}_n\) be the stabiliser datum defining the state \([\ket{w}]\) prior to the application of a gate \(U_k \in \{H_l, S_l, \CNOT_{l,l+1}\}\).
+    The updated state \([U_k \ket{w}]\) is encoded by the datum \((v', A') \in \mathcal{L}_{n}\) with
+    \(A' = AM\) and \( v' = v + (\delta_{1}, \dots , \delta_{n})^{T}\):
+    \begin{itemize}
+      \item \textbf{Hadamard gate:}
+      The matrix \(M_H\) interchanges the \(l\)-th and \((n+l)\)-th columns of \(A\), and for each \(1\leq j \leq n\) we have
+      \begin{equation*}
+        \delta_j = a_{j,l} \cdot \dots \cdot a_{j,n+l}.
+      \end{equation*}
+
+      \item \textbf{Phase gate:}
+      The matrix \(M_S\) adds the \(l\)-th column of \(A\) to its \((n+l)\)-th column, and for each \(1\leq j \leq n\) we have
+      \begin{equation*}
+        \delta_j = a_{j,l} \cdot \dots \cdot a_{j,n+l}.
+      \end{equation*}
+
+      \item \textbf{Controlled-NOT gate:}
+      The matrix \(M_{\CNOT}\) adds column \(l\) to column \(l+1\), and column \(n+l+1\) to column \(n+l\).
+      The \(j\)-th entry of \((\delta_{1}, \dots , \delta_{n})^{T}\) is determined by
+      \begin{equation*}
+        \delta_j = a_{j,l} a_{j, n+l+1} (a_{j,l+1} + a_{j, n+l} + 1).
+      \end{equation*}
+    \end{itemize}
+    In all three cases at most \(3n\) entries of the datum \((v,A)\) are changed to obtain \((v', A')\).
+    \item Measurement in the computational basis equates to evaluating the projection-valued measures associated with the observables \(p_l = I_{2}^{\otimes l-1} \otimes \sigma_z \otimes I_{2}^{\otimes n-l}\) sequentially for each coordinate \(1 \leq l \leq n\).
+
+    Each single-qubit measurement step involves evaluating the commutation vector \(c\) and, if \(c \neq 0\), at most \(2n^{2}+n\) entries are changed to describe the state post measurment.
+  \end{thmlist}
+\end{remark}
+
+By~\cite{aaronson-gottesman2004:ImprovedSimulationStabiliserCircuits}, for any Clifford-gate \(U\in \mathcal{C}_{n}\) there exists a sequence (of length \(O(n^{2}/\log(n))\)) consisting of \(\CNOT\)-, Hadamard-, and \(S\)-gates such that the resulting unitary \(V\) satisfies \(UV^{-1}=e^{2\pi i \lambda} I\).
+
+\subsubsection{The Solovay--Kitaev theorem}\label{sec:the-solovay--kitaev-theorem}
+
+In quantum computing the set of possible operations of a circuit is encoded by the unitary matrices \(U(2^{n})\) this set is far from being finite--it is in fact uncountably infinite.
+Thus, from finitely many gates we will be able to produce every unitary matrix exatly.
+Instead we can ask to approximate such a matrix with an arbitary level of precission.
+\begin{definition}\label{def:operator-norm}
+  Let \(f \from V\to W\) be alinear map between finite-dimensional Hilbert spaces.
+  The \emph{operator norm} of \(f\) is
+  \begin{equation*}
+    \|f\| = \sup_{v \in V\setminus\{0\}}\tfrac{\|f(v)\|_{W}}{\|v\|}_{V} <- before this def we need to recall that \| is given by sqrt of \braket{v}{v}.
+  \end{equation*}
+\end{definition}
+Here we should mention without prove that for diag matrix we get the abs value of the biggest ev.
+
+For further discussion on universal gate sets, see \cite[Section~4.5]{nielsen-chuang2000:QuantumComputationInformation}.
+\begin{definition}\label{def:universal-gate-set}
+  A gate set \(G\) is \emph{(approximate) universal} if for any unitary map \(f\from \mathbb{C}^{2}(^{ \otimes n} \to ..\)  and \(\varepsilon>0\) there exists a circuit \(g = (g_{11} \otimes \dots \otimes g_{1k_{1}}) \circ \dots \circ (g_{n1} \otimes \dots \otimes g_{n k_{n}}), \qquad \text{ where } g_{ij} \in G \cup\{\id_{ \mathbb{C}^{2}}\}\) such that
+\begin{equation}
+  \|f-g\| \leq \varepsilon.
+\end{equation}
+\end{definition}
+
+This raises two important questions:
+
+Why do we even want universal gates?
+So far we mostly used Hadamards to perform a change of basis.
+and does the choice matter:
+are different approximate universal gate sets better than other.
+I.e. if we can realise one algorithm efficiently (with a number of gates that scales polynomialy
+
+
 
 % \subsubsection{The Kitaev--Solovay algorithm}\label{sec:the-kitaev--solovay-algorithm}
 % Solovay
@@ -6009,11 +6878,6 @@ To keep the proof concise, we will, depending on the context, implicitly identif
 
 % \subsection{ZX-diagrams and their rewriting rules}\label{sec:zx-diagrams-and-their-rewriting-rules}
 
-
-% \begin{theorem}\label{thm:zx-is-universal}
-%   The evaluation map from the ZX-prop to linear maps is surjective.
-% \end{theorem}
-% \begin{proof}
 
 % \end{proof}
 
@@ -6038,7 +6902,7 @@ To keep the proof concise, we will, depending on the context, implicitly identif
 \cleardoublepage
 \subsection{Exercises}\label{sec:ZX-exercises}
 
-\subsection*{ZX-spiders}
+\subsubsection*{ZX-spiders}
 
 \begin{exercise}\label{exe:complex-numbers-as-ZX-diagrams}
 Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-diagram by proceeding as follows.
@@ -6064,6 +6928,15 @@ Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-
   Given \(\alpha, \beta \in \mathbb{R}\), determine the absolute value of \(X_{n}^{0}(\beta)X_{0}^{n}(\alpha)\).
 \end{exercise}
 
+\begin{exercise}[(Bernstein--Vazirani algorithm)]
+  Suppose there is an element \(s \in\{0,1\}^{n}\) and a function \(f \from\{0, 1\}^{n} \to\{0,1\}\) satisfying
+  \begin{equation*}
+    f(x) = x_{1}s_{1} \boxplus x_{2}s_{2} \boxplus \dots \boxplus x_{n} s_{n}.
+  \end{equation*}
+  Use a variation of the Deutsch--Jozsa algorithm to show that it is possible to find \(s\) with a single call of \(UB(f)\).
+\end{exercise}
+
+\subsubsection*{Universality of the ZX-calculus}
 
 \begin{exercise}\label{exe:existence-of-rotation}
   Show that for any pair of complex numbers \(a, b \in \mathbb{C}\), there exist \(x,y \in \mathbb{C}\) such that \(|x|^{2} +|y|^{2}=1 \) and  \(\overline{x}a + \overline{y}b = 0\).
@@ -6077,15 +6950,59 @@ Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-
 \end{exercise}
 
 \begin{exercise}[Hard]\label{exe:conjugacy-classes-su2}
-  Show that for any two matrices \(U, V\in\SU(2)\) there exists an \(A\in \SU(2)\) with \(AUA^{-1}= V\) if and only if \(\tr(U) = \tr(V)\).
+  Consider a unitary matrices \(U\in\SU(2)\).
+  \begin{thmlist}
+    \item Show that \(\tr(U)\in [-2, 2]\).
+    \item  Let \(V\in\SU(2)\). Show that  there exists an \(A\in \SU(2)\) with \(AUA^{-1}= V\) if and only if \(\tr(U) = \tr(V)\).
+  \end{thmlist}
 \end{exercise}
 
 \begin{exercise}\label{exe:flipped-cnot-using-cnot-Hadamard}
-  Verify that
+  Verify that \(\CNOT_{1}\eqdef\SWAP \CNOT \SWAP\) corresponds to
   \begin{equation*}
-    \CNOT_{1}\eqdef\SWAP \CNOT \SWAP = \id \otimes \ket{0}\bra{0} + \sigma_{x} \otimes \ket{1}\bra{1}.
+     \id \otimes \ket{0}\bra{0} + \sigma_{x} \otimes \ket{1}\bra{1}.
   \end{equation*}
-  Moreover show that \(CNOT_{1}\) can be obtained from the gate-set \(\mathcal{G}= \{H, \CNOT\}\).
+  Moreover show that \(\CNOT_{1}\) can be obtained from the gate-set \(\mathcal{G}= \{H, \CNOT\}\).
+\end{exercise}
+
+
+\begin{exercise}
+Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGroup_{n}\).
+\end{exercise}
+\begin{exercise}\label{exe:n-Pauli-group-is-group}
+  Show that the set
+  \begin{equation*}
+    \PauliGroup_{n} \eqdef\big\{ (\sigma_{i1}\otimes \dots \otimes \sigma_{in}) \dots  (\sigma_{m1}\otimes \dots \otimes \sigma_{mn}) \mid \sigma_{ij} \in\{ I_{2}, \sigma_{x}, \sigma_{y}, \sigma_{z}\}\big\}.
+  \end{equation*}
+  becomes a group when endowed with matrix multiplication as group operation.
+\end{exercise}
+
+\begin{exercise}\label{exe:centre-of-matrices}
+  Show that any matrix \(A\in \U(2^{n})\) commuting with all elements of \(\PauliGroup_{n}\) must be of the form \(A= e^{2\pi i \lambda}I\).
+
+  \textit{Hint:} Think about matrices that commute with all other matrices.
+\end{exercise}
+
+\begin{exercise}\label{exe:clifford-generation-base-case}
+  Show that the Clifford group \(\mathcal{C}_{1}\) is generated by the Hadamard gate \(H\), the \(S\)-gate \(S\), and  \(e^{2\pi i \lambda}I_{2}\) for any \(\lambda \in \mathbb{R}\).
+  A possible strategy is as follows:
+  \begin{thmlist}
+    \item Let \(U \in \mathcal{C}_{1}\). Use the fact that \(\sigma_{z}\) has order \(2\) to conclude that \(U\sigma_{z}U^{\dagger} \in \{\pm \sigma_{x}, \pm \sigma_{y}, \pm \sigma_{z}\}\).
+    \item For any of the eight possible outcomes of \(U\sigma_{z}U^{\dagger}\) find a suitable product \(V\) of Hadamard and \(S\)-gates such that \(VU\sigma_{z}U^{\dagger}V^{\dagger} = \sigma_{z}\).
+    \item Argue, using the anti-commutativity of \(\sigma_{x}\) and \(\sigma_{z}\) that \(VU\sigma_{x}U^{\dagger}V^{\dagger} \in\{\pm \sigma_{x}, \pm\sigma_{y}\}\).
+    \item Using \(S\) gates alone, show that there is a \(W\) such that
+    \begin{equation*}
+      WVU\sigma_{z}U^{\dagger}V^{\dagger}W^{\dagger} = \sigma_{z} \qquad \text{and}\qquad WVU\sigma_{x}U^{\dagger}V^{\dagger}W^{\dagger} = \sigma_{x}.
+    \end{equation*}
+    \item Conclude the claim by using Exercise~\ref{exe:clifford-generation-base-case}.
+  \end{thmlist}
+\end{exercise}
+
+\begin{exercise}\label{exe:max-abelian}
+  Consider a subgroup \(S= \langle s_{1}, \dots , s_{l}\rangle \subseteq \PauliGroup_{n}\) such that \(-I \notin S\) and \(s_{j}s_{k}= s_{k}s_{j}\).
+  We call \(S\) \emph{maximal abelian} if for any \(g\in \PauliGroup_{n}\)  with \(g^{2}= I\), \(g\notin S\), and \(-g \notin S\) there is a \(1\leq j \leq l\) such that \(s_{j}g = -g s_{j}\).
+
+  Show that \(S\) is maximal abelian if and only if \(l=n\).
 \end{exercise}
 
 \cleardoublepage
@@ -6099,15 +7016,40 @@ The level of difficulty is aligned with what you can expect in the exam.
   \item What \(ZX\)-spider represents the identity map \( \mathbb{C}^{2} \to \mathbb{C}^{2}\),
   \item Can the number \(3\) be represented as a single \(ZX\)-spider?
   \item Determine all  \(\alpha \in \mathbb{ \mathbb{R}}\) such that there is an arity \((0,0)\)-spider representing \(e^{2\pi i \alpha}\).
-  \item Let \(\theta \in \mathbb{R}\) be a real number. Find a \(ZX\)-diagram representing \(\cos(\theta)\).
+  \item Let \(\theta \in \mathbb{R}\) be a real number.
+  Find a \(ZX\)-diagram representing \(\cos(\theta)\).
+  \item What is \(ZX\)-diagram represents the Pauli matrix \(\sigma_{y}\)?
+  \item Write \(\tr(Z_{1}^{1}(0)\) as a \(ZX\)-diagram.
+  \item When does the spider \(Z_{n}^{m}(\alpha)\) represent a linear isomety?
+  \item How can the state \(\ket{00+}\) be created using \(ZX\)-spiders?
+  \item Compute \(X_{n}^{0}(0)Z_{0}^{n}(0)\) for all \(n \in \mathbb{N}\).
+  \item Represent the matrix \(
+  \begin{pmatrix}
+    -i & 0 \\ 0 & 1
+  \end{pmatrix}
+  \) as a \(ZX\)-diagram.
 \end{thmlist}
 
+\subsubsection*{Universality of the ZX-calculus}
+\begin{thmlist}
+  \item Let \(f \from ( \mathbb{C}^{2})^{\otimes n }\to ( \mathbb{C}^{2})^{ \otimes n}\) be unitary and assume that \(\dim \{v\in V \mid f(v) = -v\} =3\).
+  Can there be a basis \(\mathcal{B}\) of \(( \mathbb{C}^{2})^{\otimes n}\) such that \({}_{\mathcal{B}}f_{\mathcal{B}}\) is two-level unitary.
+  \item Is the product of two-level unitary matrices a two-level unitary matrix?
+  \item Find the \(ABC\)-decomposition of \(-I_{2}\).
+  \item Is the set of all \(n\times n\)-matrices containing a single \(1\) in each row and column and all other entries \(z\) a subgroup of \(\GL(n)\)?
+  \item Is there an element \(I_{2}\neq g\in \PauliGroup_{1}\) such that \(g^{3}= I_{2}\)?
+  \item Explain why a subgroup \(H\subset G\) is a group (with the same neutral element and multiplication inherited by \(G\)).
+  \item State for two given elements \(g,h \in \PauliGroup_{n}\) criteria for them to commute using their check vectors.
+  \item Is the matrix \(
+  \begin{pmatrix}
+    i & 0 \\ 0 & 1
+  \end{pmatrix}
+  \) contained in the \(1\)-Clifford group?
+  \item Is \(\U(n)\) contained in the normaliser of \(\SU(n) \subset \GL(n)\)?
+\end{thmlist}
 
+\cleardoublepage
 % \begin{description}
-%   \item[Kitaev--Solvay theorem] ``All models for quantum computing are equivalent''
-%   \item[Qubits] Tensor products of vector spaces, homomorphisms, matrices.
-%   \item[Bloch sphere model]
-%   \item[ZX-calculus] Spiders et al
 %   \item[Relations between spiders]
 % \end{description}
 

@@ -78,9 +78,9 @@
 		\node [style=none] (102) at (30.25, -4.5) {};
 		\node [style=none] (103) at (9.75, -4.5) {};
 		\node [style=none] (104) at (20.25, -4.5) {};
-		\node [style=none, align=center] (105) at (4.5, -5.375) {The map $z(\alpha)$ induces\\ a rotation around the $Z$-axis.};
-		\node [style=none, align=center] (106) at (15, -5.375) {The map $x(\beta)$ induces\\ a rotation around the $X$-axis.};
-		\node [style=none, align=center] (107) at (25.25, -5.375) {The map $y(\gamma)$ induces\\ a rotation around the $Y$-axis.};
+		\node [style=none, align=center] (105) at (4.5, -5.375) {The map $r_z(\alpha)$ induces\\ a rotation around the $Z$-axis.};
+		\node [style=none, align=center] (106) at (15, -5.375) {The map $r_x(\beta)$ induces\\ a rotation around the $X$-axis.};
+		\node [style=none, align=center] (107) at (25.25, -5.375) {The map $r_y(\gamma)$ induces\\ a rotation around the $Y$-axis.};
 	\end{pgfonlayer}
 	\begin{pgfonlayer}{edgelayer}
 		\draw [thick, dashed] (33.center)

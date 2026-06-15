@@ -1,14 +1,14 @@
 \begin{tikzpicture}
 	\begin{pgfonlayer}{nodelayer}
-		\node [style=none] (0) at (6.5, 3) {$\mathbb{C}^n$};
+		\node [style=none] (0) at (6.5, 3) {$\Bbbk^n$};
 		\node [style=none] (1) at (-1, 4) {};
 		\node [style=none] (2) at (-1, 1) {};
-		\node [style=none] (4) at (3.5, 0.625) {The matrix $A\in \Mat_{m,n}(\mathbb{C})$ is represented as a labelled box.};
+		\node [style=none] (4) at (3.5, 0.625) {The matrix $A\in \Mat_{m,n}(\Bbbk)$ is represented as a labelled box.};
 		\node [style=none] (5) at (8, 4) {};
 		\node [style=none] (8) at (8, 1) {};
 		\node [style=none] (12) at (0.5, 2.5) {};
 		\node [style=none] (13) at (6.5, 2.5) {};
-		\node [style=none] (14) at (0.5, 3) {$\mathbb{C}^m$};
+		\node [style=none] (14) at (0.5, 3) {$\Bbbk^m$};
 		\node [style=dagger-morph] (15) at (3.5, 2.5) {$A$};
 		\node [style=none] (17) at (-1, 0.25) {};
 		\node [style=none] (21) at (8, 0.25) {};
