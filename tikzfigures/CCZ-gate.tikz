@@ -1,0 +1,42 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (4.25, 3) {};
+		\node [style=none] (1) at (4.25, 0) {};
+		\node [style=none] (2) at (4.25, -3) {};
+		\node [style=Z-spider] (3) at (0, 3) {$\tfrac{1}{8}$};
+		\node [style=Z-spider] (4) at (0, 0) {$\tfrac{1}{8}$};
+		\node [style=Z-spider] (5) at (3.5, 1.5) {$-\tfrac{1}{8}$};
+		\node [style=Z-spider] (6) at (0, -3) {$\tfrac{1}{8}$};
+		\node [style=Z-spider] (7) at (3.5, -1.5) {$-\tfrac{1}{8}$};
+		\node [style=Z-spider] (8) at (-3.5, -1.5) {$\tfrac{1}{8}$};
+		\node [style=Z-spider] (9) at (-3.5, 1.5) {$-\tfrac{1}{8}$};
+		\node [style=X-spider] (10) at (-2, 1.5) {};
+		\node [style=X-spider] (11) at (2, 1.5) {};
+		\node [style=X-spider] (12) at (2, -1.5) {};
+		\node [style=X-spider] (13) at (-2, -1.5) {};
+		\node [style=none] (14) at (-4.25, 3) {};
+		\node [style=none] (15) at (-4.25, 0) {};
+		\node [style=none] (16) at (-4.25, -3) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=object] (0.center) to (3);
+		\draw [style=object] (3) to (14.center);
+		\draw [style=object] (1.center) to (4);
+		\draw [style=object] (4) to (15.center);
+		\draw [style=object] (2.center) to (6);
+		\draw [style=object] (6) to (16.center);
+		\draw [style=object] (7) to (12);
+		\draw [style=object] (13) to (8);
+		\draw [style=object] (5) to (11);
+		\draw [style=object] (10) to (9);
+		\draw [style=object] (11) to (4);
+		\draw [style=object] (11) to (3);
+		\draw [style=object] (4) to (12);
+		\draw [style=object] (12) to (6);
+		\draw [style=object] (4) to (13);
+		\draw [style=object] (13) to (6);
+		\draw [style=object] (6) to (10);
+		\draw [style=object] (13) to (3);
+		\draw [style=object] (3) to (10);
+	\end{pgfonlayer}
+\end{tikzpicture}

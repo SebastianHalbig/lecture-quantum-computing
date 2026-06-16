@@ -78,6 +78,10 @@ pkgOptions={
   \tikzexternalenable
 }
 
+%
+% TODO: Post semester: Move section on Gottesmann-Knill up to Kitaev solvay into a section called group-theoretic aspects of quantum computing.
+%
+%
 \begin{document}
 \maketitle
 \tableofcontents
@@ -1524,7 +1528,7 @@ Subsequently, its eigenvalues can be either \(0\) or \(1\), leading to the follo
 \subsection{Study goals}\label{sec:lin-alg-study-goals}
 The questions below are designed to help you build a conceptual understanding of the linear algebra required in this course.
 You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
-The level of difficulty is aligned with what you can expect in the exam.
+The level of difficulty is indicative of what you could expect in an oral exam.
 
 \subsubsection*{Complex numbers}
 \begin{thmlist}
@@ -5076,7 +5080,7 @@ Lastly, the connection between this classical wire and the gate \(S\) means that
 \subsection{Study goals}\label{sec:SCUM-study-goals}
 The questions below are designed to help you build a conceptual understanding of the SCUM-axioms.
 You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
-The level of difficulty is aligned with what you can expect in the exam.
+The level of difficulty is indicative of what you could expect in an oral exam.
 
 \subsubsection*{Hilbert spaces}
 \begin{thmlist}
@@ -5727,28 +5731,21 @@ Due to our identification of \(\rd*{( \mathbb{C}^{2})}\) with \(\mathbb{C}^{2}\)
 \end{convention}
 
 \subsection{Universality of the ZX-calculus}\label{sec:universality-of-zx-calculus}
-The aim of this section is simple: we want to prove that any linear map from \( (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes m}\) can be represented as a ZX-diagram.
-While this could be done more or less in an ad-hoc fashion, we will take the scenic route to answer probably the most natural question: ``so what?''.
-To this end, we will discuss two major results in quantum information theory:
-\begin{thmlist}
-  \item The \emph{Gottesman--Knill Theorem}~\ref{thm:gottesman-knill} states that certain non-universal gate sets---gate sets with limited complexity for the operations they can implement---can be simulated efficiently (\ie in polynomial time) on a classical computer.
-  \item The \emph{Solovay--Kitaev Theorem}~\ref{thm:Kitaev-Solovay-theorem} proves that the choice of universal gate set does not matter.
-  That is, any algorithm running in polynomial time using gates  of some gate set \( A \) will also run in polynomial time using gates of a gate set \( B \).
-\end{thmlist}
+The aim of the next sections is simple: we want to prove that any linear map from \( (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes m}\) can be represented as a ZX-diagram, see Theorem~\ref{thm:ZX-calculus-is-universal}.
 
 \begin{definition}\label{def:two-level-unitary}
 We call a matrix \(U \in \mathrm{U}(n)\) a \emph{two-level unitary} if it is of the form
   \begin{equation*}
     U =
     \begin{pmatrix}
-      1 &   &   &   &   &   &   &   \\
-        & \ddots &   &   &   &   &   &   \\
-        &   & 1 &   &   &   &   &   \\
-        &   &   & a & \dots & b &   &   \\
-        &   &   & \vdots & \ddots & \vdots &   &   \\
-        &   &   & c & \dots & d &   &   \\
-        &   &   &   &   &   & 1 &   \\
-        &   &   &   &   &   &   & \ddots &   \\
+      1 &   &   &   &   &   &   &   &  \\
+        & \ddots &   &   &   &   &   &   &  \\
+        &   & 1 &   &   &   &   &   &  \\
+        &   &   & a & \dots & b &   &   &  \\
+        &   &   & \vdots & \ddots & \vdots &   &   &  \\
+        &   &   & c & \dots & d &   &   &  \\
+        &   &   &   &   &   & 1 &   &  \\
+        &   &   &   &   &   &   & \ddots &  \\
         &   &   &   &   &   &   &   & 1
     \end{pmatrix}
   \end{equation*}
@@ -6043,15 +6040,144 @@ Consider the string diagram shown below.
   Finally, region (III) is a collection of evaluations and Lemma~\ref{lem:coev-and-ev-zx-diagram} shows that these can be realised using \(ZX\)-diagrams.
 \end{proof}
 
-\subsubsection{The Gottesman-Knill theorem}\label{sec:the-gottesman-knill-theorem}
+\cleardoublepage
 
-One of the main reasons we want a certain level of complexity in our quantum computer is due to the fact that it may otherwise be efficiently simulable on a classical computer.
-In this section, we follow \cite[Chapter~10]{nielsen-chuang2000:QuantumComputationInformation}.
-\bigskip
+\subsection{Exercises}\label{sec:ZX-exercises}
+\subsubsection*{ZX-spiders}
+\begin{exercise}\label{exe:complex-numbers-as-ZX-diagrams}
+Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-diagram by proceeding as follows.
+\begin{thmlist}
+  \item Verify that multiplying complex numbers corresponds to composing (or tensoring) \(ZX\)-diagrams (without in- and outputs).
+  \item Show that for any real number \(0\leq q\leq 2\) there is a \(ZX\)-diagram, evaluating to \(q\).
+  \item Write \(z= q2^{n} \sqrt{2}e^{2\pi i \alpha}\) for \(q, \alpha \in \mathbb{R}\) and \(n \in \mathbb{N}\). Use this decomposition to obtain a \(ZX\)-diagram representing \(z\).
+\end{thmlist}
+\end{exercise}
 
-The Gottesman-Knill theorem relies on an abstract algebraic machinery known as \emph{group theory}.
-To prove this theorem, we need some concepts discussed in the supplementary Section~\ref{sec:the-(projective)-unitary-group}, starting with the notion of a group, also examined in Definition~\ref{def:group}.
-\begin{definition}
+\begin{exercise}
+  Prove that Equation~\eqref{eq:Hadamard-via-Euler-decomposition} yields a \(ZX\)-presentation of the Hadamard gate.
+\end{exercise}
+
+\begin{exercise}
+  Given \(n,m \in \mathbb{N}\), find \(\lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \in \mathbb{C}\) coefficients such that
+  \begin{equation*}
+    X_{n}^{m} = \sum_{\substack{i_{1}, \dots , i_{n} \in\{0,1\}\\, j_{1}, \dots , j_{m} \in\{0,1\}}} \lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \ket{j_{1} \dots j_{m}}\bra{i_{1} \dots i_{n}}.
+  \end{equation*}
+\end{exercise}
+
+\begin{exercise}
+  Given \(\alpha, \beta \in \mathbb{R}\), determine the absolute value of \(X_{n}^{0}(\beta)X_{0}^{n}(\alpha)\).
+\end{exercise}
+
+\begin{exercise}[(Bernstein--Vazirani algorithm)]
+  Suppose there is an element \(s \in\{0,1\}^{n}\) and a function \(f \from\{0, 1\}^{n} \to\{0,1\}\) satisfying
+  \begin{equation*}
+    f(x) = x_{1}s_{1} \boxplus x_{2}s_{2} \boxplus \dots \boxplus x_{n} s_{n}.
+  \end{equation*}
+  Use a variation of the Deutsch--Jozsa algorithm to show that it is possible to find \(s\) with a single call of \(UB(f)\).
+\end{exercise}
+
+\subsubsection*{Universality of the ZX-calculus}
+
+\begin{exercise}\label{exe:existence-of-rotation}
+  Show that for any pair of complex numbers \(a, b \in \mathbb{C}\), there exist \(x,y \in \mathbb{C}\) such that \(|x|^{2} +|y|^{2}=1 \) and  \(\overline{x}a + \overline{y}b = 0\).
+
+  \textit{Hint:} Think about the subspace \(
+  \mathbb{C}
+  \begin{psmallmatrix}
+    a \\b
+  \end{psmallmatrix} \subset \mathbb{C}^{2}
+  \).
+\end{exercise}
+
+\begin{exercise}[Hard]\label{exe:conjugacy-classes-su2}
+  Consider a unitary matrices \(U\in\SU(2)\).
+  \begin{thmlist}
+    \item Show that \(\tr(U)\in [-2, 2]\).
+    \item  Let \(V\in\SU(2)\). Show that  there exists an \(A\in \SU(2)\) with \(AUA^{-1}= V\) if and only if \(\tr(U) = \tr(V)\).
+  \end{thmlist}
+\end{exercise}
+
+\begin{exercise}\label{exe:flipped-cnot-using-cnot-Hadamard}
+  Verify that \(\CNOT_{1}\eqdef\SWAP \CNOT \SWAP\) corresponds to
+  \begin{equation*}
+     \id \otimes \ket{0}\bra{0} + \sigma_{x} \otimes \ket{1}\bra{1}.
+  \end{equation*}
+  Moreover show that \(\CNOT_{1}\) can be obtained from the gate-set \(\mathcal{G}= \{H, \CNOT\}\).
+\end{exercise}
+
+\begin{exercise}
+  Implement a \(ZX\)-diagram on \(3\) qubits that maps the input \(\ket{00xy}\) to \(\ket{vabc}\),
+  where \(v,a,b,c \in\{0,1\}\) satisfy \(4a+ 2b + c = x+y\), where \(x,y\in\{0,1\}\).
+\end{exercise}
+
+\begin{exercise}
+  Draw a \(ZX\)-diagram that represents a linear map \(f\from \mathbb{C}^{2} \to \mathbb{C}^{2}\) whose transformation matrix with respect to the \(Z\)-basis is \(
+  \begin{psmallmatrix}
+    1 & 0 \\ 0 & 0
+  \end{psmallmatrix}
+  \).
+\end{exercise}
+
+\cleardoublepage
+\subsection{Study goals}\label{sec:ZX-study-goals}
+The questions below are designed to help you build a conceptual understanding of the ZX-calculus.
+You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
+The level of difficulty is indicative of what you could expect in an oral exam.
+
+\subsubsection*{ZX-spiders}
+\begin{thmlist}
+  \item What \(ZX\)-spider represents the identity map \( \mathbb{C}^{2} \to \mathbb{C}^{2}\),
+  \item Can the number \(3\) be represented as a single \(ZX\)-spider?
+  \item Determine all  \(\alpha \in \mathbb{ \mathbb{R}}\) such that there is an arity \((0,0)\)-spider representing \(e^{2\pi i \alpha}\).
+  \item Let \(\theta \in \mathbb{R}\) be a real number.
+  Find a \(ZX\)-diagram representing \(\cos(\theta)\).
+  \item What is \(ZX\)-diagram represents the Pauli matrix \(\sigma_{y}\)?
+  \item Write \(\tr(Z_{1}^{1}(0)\) as a \(ZX\)-diagram.
+  \item When does the spider \(Z_{n}^{m}(\alpha)\) represent a linear isomety?
+  \item How can the state \(\ket{00+}\) be created using \(ZX\)-spiders?
+  \item Compute \(X_{n}^{0}(0)Z_{0}^{n}(0)\) for all \(n \in \mathbb{N}\).
+  \item Represent the matrix \(
+  \begin{pmatrix}
+    -i & 0 \\ 0 & 1
+  \end{pmatrix}
+  \) as a \(ZX\)-diagram.
+\end{thmlist}
+
+\subsubsection*{Universality of the ZX-calculus}
+\begin{thmlist}
+  \item Let \(f \from ( \mathbb{C}^{2})^{\otimes n }\to ( \mathbb{C}^{2})^{ \otimes n}\) be unitary and assume that \(\dim \{v\in V \mid f(v) = -v\} =3\).
+  Can there be a basis \(\mathcal{B}\) of \(( \mathbb{C}^{2})^{\otimes n}\) such that \({}_{\mathcal{B}}f_{\mathcal{B}}\) is two-level unitary.
+  \item Is the product of two-level unitary matrices a two-level unitary matrix?
+  \item Find the \(ABC\)-decomposition of \(-I_{2}\).
+  \item Draw a \(ZX\)-diagram that represents the linear map \(f \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) defined by \(\ket{0} \mapsto \ket{+}\) and  \(\ket{1} \mapsto \ket{-}\).
+  \item Suppose you have a \(ZX\)-diagram representing a map \(f \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\). How would you implement \(f^{\dagger}\) in the \(ZX\)-calculus?
+  \item Suppose you have a \(ZX\)-diagram that implements the controlled controlled \(Z\) gate \(\mathrm{CCZ}\from ( \mathbb{C}^{2})^{\otimes 3} \to ( \mathbb{C}^{2})^{\otimes 3}\) \(\ket{abc} \mapsto (-1)^{ab \cdot c} \ket{abc}\).
+  How would you change the diagram to obtain the map \(\mathrm{CCX}\from ( \mathbb{C}^{2})^{\otimes 3} \to ( \mathbb{C}^{2})^{\otimes 3}\) \(\ket{abc} \mapsto  \ket{ab}\otimes \ket{ab \boxplus c}\).
+\end{thmlist}
+\cleardoublepage
+
+\section{Group theoretic aspects of quantum computing}\label{sec:groups-and-the-gottesman-knill-theorem}
+
+Groups are algebraic structures that abstractly capture the idea of endowing a set such as \( \mathbb{Z}\) or \( \GL_{n}( \mathbb{C})\) with a particularly well-behaved binary operation; in our examples either the addition of integers or the multiplication of matrices.
+Some of the main reasons we want to study groups are:
+\begin{thmlist}
+  \item The \emph{Gottesman--Knill Theorem}~\ref{thm:gottesman-knill} states that quantum algorithms constructed from  Pauli and Clifford groups can be efficiently simulated (\ie in polynomial time) on a classical computer.
+  \item  \emph{Shor's algorithm} allows us to split numbers \(n\in \mathbb{N}\) in subexponential time into their factors.
+  This can be used to break encryption methods such as RSA.
+  % TODO REF
+  % This can be used to break encryption methods such as RSA.
+  % TODO own section on Lie-theoretic aspects of quantum computing
+%  \item The \emph{Solovay--Kitaev Theorem}~\ref{thm:Kitaev-Solovay-theorem} proves that the choice of universal gate set does not matter.
+ % That is, any algorithm running in polynomial time using gates  of some gate set \( A \) will also run in polynomial time using gates of a gate set \( B \).
+\end{thmlist}
+
+\subsection{Elementary group theory}\label{sec:groups}
+We briefly provide an elementary overview of basic group-theoretic concepts. For further reading, see the textbooks \cite{lang2002:Algebra,lang1987:UndergraduateAlgebra,rotman1984:INtroductionTheoryGroups}.
+
+\subsubsection{Groups, subgroups, and group homomorphism}\label{sec:groups,-subgroups,-and-group-homomorphism}
+
+
+\begin{definition}\label{def:group}
   A \emph{group} is a set \( G \) together with a binary operation \( \cdot \from G \times G \to G \), called the \emph{group operation} or \emph{multiplication}, satisfying the following axioms.
   \begin{thmlist}
     \item \emph{Associativity:} For all \( a, b, c \in G \), we have \( (a \cdot b) \cdot c = a \cdot (b \cdot c) \).
@@ -6121,6 +6247,8 @@ A large class of examples of groups and subgroups comes from certain subsets of 
   \end{thmlist}
 \end{example}
 
+\subsubsection{Pauli- and Clifford groups}\label{sec:pauli--and-clifford-groups}
+
 Recall the \(n\)-Pauli group from Definition~\ref{def:n-Pauli-group}.
 In  Exercise~\ref{exe:n-Pauli-group-is-group}, you are asked to show that it is indeed a group with respect to matrix multiplication.
 
@@ -6151,7 +6279,7 @@ This extends straightforwardly to the \(n\)-Pauli group \(\PauliGroup_{n}\).
       \end{pmatrix}  \mapsto i^{a} \sigma_{x}^{b_{1}}\sigma_{z}^{c_{1}} \otimes \dots \otimes \sigma_{x}^{b_{n}}\sigma_{z}^{c_{n}}.
     \end{gathered}
   \end{equation}
-  In the other direction, we there exists a homomorphism of groups
+  Moreover, there exists a homomorphism of groups
   \begin{equation}
     r \from \PauliGroup_{n} \to \mathbb{Z}_{2}^{2n}
   \end{equation}
@@ -6447,6 +6575,8 @@ It is customary to write
   By the induction hypothesis, \(\tilde{W} \in \langle\mathcal{G}_n\rangle\), which immediately implies \(W \in \langle\mathcal{G}_{n+1}\rangle\).
 \end{proof}
 
+\subsection{The stabiliser formalism}\label{sec:the-stabiliser-formalism}
+
 Up to this point, we have described the state of an \(n\)-qubit quantum system by a state vector \(\ket{s} \in (\mathbb{C}^2)^{\otimes n}\).
 Tracking this vector explicitly requires storing \(2^n\) complex numbers, which quickly becomes unmanageable for a classical computer.
 The stabiliser formalism offers an alternative description using subgroups of of the \( n \)-Pauli group.
@@ -6455,7 +6585,7 @@ The stabiliser formalism offers an alternative description using subgroups of of
   Let \( S \subset \PauliGroup_n \) be a subgroup of the \( n \)-Pauli group.
   One calls the vector space
   \begin{equation}
-    V_{S} \eqdef \{v\in (\mathbb{C}^{2})^{\otimes n}\mid sv = v \text{ for all }s\in S\}.
+    V_{S} \eqdef \{\ket{v}\in (\mathbb{C}^{2})^{\otimes n}\mid s\ket{v} = \ket{v} \text{ for all }s\in S\}.
   \end{equation}
   \emph{stabilised} by \(S\) and \(S\) a \emph{stabiliser} of \(V_{S}\).
 \end{definition}
@@ -6467,22 +6597,22 @@ Let us now see how we can describe a state in the computational basis using stab
   \begin{equation*}
        s_{1} = \sigma_z  \otimes I_2 \otimes \dots \otimes I_2, \quad s_{2}=I_2 \otimes \sigma_z \otimes I_{2}\otimes \dots \otimes I_2, \quad \dots, \quad s_{n}=I_2 \otimes \dots \otimes I_{2}\otimes  \sigma_z.
  \end{equation*}
- We consider the action of the generators on \( v \in (\mathbb{C}^2)^{\otimes n} \).
- Using the computational basis, we may write \(v\) as the linear combination
+ We consider the action of the generators on \( \ket{v} \in (\mathbb{C}^2)^{\otimes n} \).
+ Using the computational basis, we may write \(\ket{v}\) as the linear combination
  \begin{equation*}
-     v = \sum_{s \in \{0,1\}^n} \alpha_s \ket{s}.
+     \ket{v} = \sum_{s \in \{0,1\}^n} \alpha_s \ket{s}.
  \end{equation*}
-   The action of \( \sigma_z \) at the \( i \)-th position on \( v \) is
+   The action of \( \sigma_z \) at the \( i \)-th position on \( \ket{v} \) is
    \begin{equation*}
-    (I_2 \otimes \dots \otimes \sigma_z \otimes \dots \otimes I_2) v = \sum_{s \in \{0,1\}^n} (-1)^{s_i} \alpha_s \ket{s}.
+    (I_2 \otimes \dots \otimes \sigma_z \otimes \dots \otimes I_2) \ket{v} = \sum_{s \in \{0,1\}^n} (-1)^{s_i} \alpha_s \ket{s}.
   \end{equation*}
-  Now, \(v\) is stabilised by \(S\) if and only if \(s_{i}v=v\) for all \(1\leq i \leq n\).
-  This implies that \(v\) is stabilised if and only if
+  Now, \(\ket{v}\) is stabilised by \(S\) if and only if \(s_{i}\ket{v}=\ket{v}\) for all \(1\leq i \leq n\).
+  This implies that \(\ket{v}\) is stabilised if and only if
   \begin{equation*}
-      v = \alpha \ket{0 \dots 0}, \qquad \alpha\in \mathbb{C}.
+      \ket{v} = \alpha \ket{0 \dots 0}, \qquad \alpha\in \mathbb{C}.
   \end{equation*}
   Note in particular that we can easily retrieve states from this formalism:
-  the state \([\ket{0 \dots 0}]\) corresponds to the set of normalised vectors \(v\in ( \mathbb{C}^{2})^{\otimes n}\) such that \(sv =v\) for all \(s\in S\).
+  the state \([\ket{0 \dots 0}]\) corresponds to the set of normalised vectors \(\ket{v}\in ( \mathbb{C}^{2})^{\otimes n}\) such that \(s\ket{v} =\ket{v}\) for all \(s\in S\).
 \end{example}
 
 In the previous example, we used the fact that we have a ``minimal'' set of generators that we had to take into account.
@@ -6515,7 +6645,7 @@ This minimality condition can also be seen from the collection of all check vect
 
 \begin{proposition}\label{prop:minimal-generating-set}
   Let \(S= \langle s_{1}, \dots , s_{l}\rangle\) be a subgroup of \(\PauliGroup_{n}\) such that \(-I \notin S\).
-  Then \(s_{1}, \dots , s_{l}\) are independent if and only if the check matrix of \((s_{1}, \dots , s_{l})\) has rank \(l\).
+  Then, the generators  \(s_{1}, \dots , s_{l}\) are independent if and only if the check matrix of \((s_{1}, \dots , s_{l})\) has rank \(l\).
 \end{proposition}
 \begin{proof}
   Note that the check vector of \(s_{i}^{2}\) is given by \( (0 \mid 0) \).
@@ -6534,13 +6664,13 @@ This minimality condition can also be seen from the collection of all check vect
 \end{proof}
 
 An important application of the previous result is that a minimal set of generators allows us to determine the size of the stabilised subspace.
-This also has applications in quantum error correction and the encoding of quantum error correction.
+This also has applications in quantum error correction.
 
 \begin{proposition}\label{prop:stabilised-subspace}
   Let \(S=\langle s_{1}, \dots , s_{n-k}\rangle\subset \PauliGroup_{n}\) be generated by \(n-k\) independent elements such that \(-I \notin S\) and \(s_{i}s_{j}= s_{j} s_{i}\) for all \(1\leq i,j \leq n-k\).
   Then, the stabilised subspace
   \begin{equation*}
-    V_S = \{ v \in (\mathbb{C}^2)^{\otimes n} \mid s v = v \text{ for all } s \in S \}
+    V_S = \{ \ket{v} \in (\mathbb{C}^2)^{\otimes n} \mid s \ket{v} = \ket{v} \text{ for all } s \in S \}
   \end{equation*}
   has dimension \( 2^k \).
 \end{proposition}
@@ -6572,26 +6702,28 @@ This also has applications in quantum error correction and the encoding of quant
    Next, we observe that
     \begin{equation*}
       \sum_{x \in \mathbb{F}_2^{n-k}} \prod_{j=1}^{n-k} (I + (-1)^{x_j} s_j)
-      = \prod_{j=1}^{n-k} \sum_{x_j \in \blank \mathbb{F}_{2}} (I + (-1)^{x_j} s_j)
+      = \prod_{j=1}^{n-k} \sum_{x \in \mathbb{F}_{2}} (I + (-1)^{x} s_j)
       = \prod_{j=1}^{n-k} \big( (I + s_j) + (I - s_j) \big) = \prod_{j=1}^{n-k} 2I
       = 2^{n-k}I
     \end{equation*}
     and therefore \(\sum_{x \in \mathbb{F}_2^{n-k}} p^x_S = I\).
 
     Finally, we show that \(V_{S}= \im p^{0}_{S}\).
-    If \(v \in \im p^0_S\), then \(v = p^0_S(w)\) for some \(w \in ( \mathbb{C}^{2})^{\otimes n}\).
-    Since \(s_i(I + s_i) = s_i + s_i^2 = I + s_i\), it follows that \(s_i p^0_S = p^0_S\) for every generator.
-    Thus \(s_i v = s_i p^0_S(w)  = p^0_S(w) = v\), proving \(\im p^0_S \subseteq V_S\).
-    Conversely, if \(v \in V_S\), then \(s_j v = v\) and \((I+s_{j})v = 2v\) for all \(1 \leq j \leq n-k\) resulting in
+    If \(\ket{v} \in \im p^0_S\), then \(\ket{v} = p^0_S\ket{w}\) for some \(\ket{w} \in ( \mathbb{C}^{2})^{\otimes n}\).
+    Since \(s_i(I + s_i) = s_i + s_i^2 = I + s_i\), it follows that
     \begin{equation*}
-      p^0_S v
-      = \frac{\prod_{j=1}^{n-k} (I + s_j)}{2^{n-k}} v
-      = \frac{\prod_{j=1}^{n-k} (2)}{2^{n-k}} v = v.
+      s_i \ket{v} = s_{i} p^0_S \ket{w} = p^0_S \ket{w} = \ket{v}.
     \end{equation*}
-    Thus, \(V_{S}\subseteq \im p^0_S\).
+    Conversely, if \(\ket{v} \in V_S\), then \(s_j \ket{v} = \ket{v}\) and \((I+s_{j})\ket{v} = 2\ket{v}\) for all \(1 \leq j \leq n-k\) resulting in
+    \begin{equation*}
+      p^0_S \ket{v}
+      = \frac{\prod_{j=1}^{n-k} (I + s_j)}{2^{n-k}} \ket{v}
+      = \frac{\prod_{j=1}^{n-k} (2)}{2^{n-k}} \ket{v}
+      = \ket{v}.
+    \end{equation*}
 
 
-    To compute the dimension of \(V_{S}\)  we use that due to Lemma~\ref{lem:part-of-1-means-orth}, the \( (p^x_S)_{x \in \mathbb{F}_2^{n-k}} \) forms a set of pairwise orthogonal projectors and we obtain a direct sum decomposition
+    Lemma~\ref{lem:part-of-1-means-orth} shows that  \( (p^x_S)_{x \in \mathbb{F}_2^{n-k}} \) forms a set of pairwise orthogonal projectors and we obtain a direct sum decomposition
   \begin{equation*}
     (\mathbb{C}^2)^{\otimes n} \cong \bigoplus_{x \in \mathbb{F}_2^{n-k}} V_x,
   \end{equation*}
@@ -6615,7 +6747,8 @@ This also has applications in quantum error correction and the encoding of quant
   \end{equation*}
   Let \(g_{i}\in \PauliGroup_n\) be such that \(r(g_{i})= b_{i}\), where \(b_{i}\) is the \(i\)-th row of \(B\).
   By Lemma~\ref{lem:pauli-commutativity}, we have \(s_{i} g_{i} = - g_{i} s_{i}\) and \(s_{j} g_{i} = g_{i} s_{j}\) for \(j\neq i\).
-  For our fixed \(x \in \mathbb{F}_{2}^{n-k}\), we set \(g \eqdef \prod_{j=1}^{n-k} g_j^{x_j}\) and compute
+  Let us now  fix \(x \in \mathbb{F}_{2}^{n-k}\) and set \(g \eqdef \prod_{j=1}^{n-k} g_j^{x_j}\).
+  We compute
   \begin{equation*}
     g p^0_S g^\dagger
     = g \left( \frac{\prod_{j=1}^{n-k} (I + s_j)}{2^{n-k}} \right) g^\dagger
@@ -6628,38 +6761,42 @@ This also has applications in quantum error correction and the encoding of quant
   \end{equation*}
 \end{proof}
 
-As a consequence, if \(S\) has \(n\) independent generators it stabilises a subspace of dimension \(1\). In other words a space of the form \( \mathbb{C} v\) for some normalised vector \(v\).
-This allows us to reconstruct the state \(v\) as the set of all normalised vectors contained in \(V_{S}\).
+As a consequence, if \(S\) has \(n\) independent generators it stabilises a subspace of dimension \(1\). In other words a space of the form \( \mathbb{C} \ket{v}\) for some normalised vector \(\ket{v}\).
+This allows us to reconstruct the state \(\ket{v}\) as the set of all normalised vectors contained in \(V_{S}\).
 
 \begin{lemma}\label{lem:stabiliser-matrix-bijection}
   Let \(n, l \in \mathbb{N}\) with \(1 \leq l \leq n\) and consider the map
   \begin{equation}
-    \begin{aligned}
-      \Theta \from\left\{(v,A) \in \mathbb{F}_{2}^{l}\times \Mat_{l,2n}( \mathbb{F}_{2}) \;\middle|\;
+    \begin{gathered}
+      \Theta \from\!\!\!\left\{(v,A) \in \mathbb{F}_{2}^{l}\times \Mat_{l,2n}( \mathbb{F}_{2}) \;\middle|\!\!
       \begin{array}{c}
         A \text{ has rank }l \text{ and }\\
         A
         \begin{psmallmatrix}
           0 & I \\ I & 0
-        \end{psmallmatrix}A^{T} = 0
-      \end{array}
-      \right\} &\to\{ (s_{1}, \dots , s_{l}) \in \PauliGroup_{n}^{l}\},\\
-      (v, A) & \mapsto (\Theta(v,A)_{1}, \dots , \Theta(v,A)_{l})
-    \end{aligned}
+        \end{psmallmatrix}A^{T} = 0 \in \Mat_{n}( \mathbb{F}_{2})
+      \end{array}\!\!
+      \right\} \to\{ (s_{1}, \dots , s_{l}) \in \PauliGroup_{n}^{l}\},\\
+      (v, A)  \mapsto (\Theta(v,A)_{1}, \dots , \Theta(v,A)_{l})
+    \end{gathered}
   \end{equation}
   with
   \begin{equation*}
-    \Theta(v,A)_{j} = (-1)^{v_{j}} \sigma_{x}^{a_{j,1}}\sigma_{z}^{a_{j,n+1}} \otimes \dots \otimes \sigma_{x}^{a_{j,n}}\sigma_{z}^{a_{j,2n}}.
+    \Theta(v,A)_{j} = i^{o_{j} + 2v_{j}} \sigma_{x}^{a_{j,1}}\sigma_{z}^{a_{j,n+1}} \otimes \dots \otimes \sigma_{x}^{a_{j,n}}\sigma_{z}^{a_{j,2n}}, \qquad o_{j} = a_{j,1}a_{j,n+1} + \dots + a_{j,n}a_{j,2n}.
   \end{equation*}
   Then \(\Theta\) is injective and its image is given precisely by the set of all ordered \(l\)-tuples of independent, mutually commuting elements \((s_1, \dots, s_l)\) in \(\PauliGroup_n\) such that \(-I \notin S = \langle s_1, \dots, s_l \rangle\).
 \end{lemma}
 \begin{proof}
   The injectivity of \(\Theta\) follows from Lemma~\ref{lem:bijection-Pauli-n-group-matrices}.
+  Let \(v\in\{0, \dots , 3\}\) and \(b, c \in\{0,1\}^{n}\) and set \(g = \Phi(v\mid a_{1}, \dots , a_{n} \mid a_{n+1}, \dots , a_{2n}) \in \PauliGroup_{n}\).
+  Then \(g^{2}= (-1)^{b_{1}c_{1} + \dots + b_{n}c_{n} + 2v}\).
+  Therefore, the image of \(\Theta\) is contained in \(\{ g \in \PauliGroup_{n} \mid g^{2}= I\}\).
 
-  Let \(v\in \mathbb{F}_{2}^{l}\) be a vector and let \(A\in \Mat_{l,2n}( \mathbb{F}_{2})\) be a matrix of rank \(l\) satisfying \(A\begin{psmallmatrix}
+
+  Let \(v\in \mathbb{F}_{2}^{l}\) be a vector and let \(A\in \Mat_{l,2n}( \mathbb{F}_{2})\) be a matrix of rank \(l\) satisfying the identity \(A\begin{psmallmatrix}
     0 & I \\ I & 0
-  \end{psmallmatrix}A^{T}\).
-  Due to Lemma~\ref{lem:pauli-commutativity} the  elements \((s_{1}, \dots , s_{l})=\Theta(v,A)\) commute.
+  \end{psmallmatrix}A^{T} = 0\).
+  Due to Lemma~\ref{lem:pauli-commutativity}, the  elements \((s_{1}, \dots , s_{l})=\Theta(v,A)\) commute.
   To see that the generated subgroup \(S = \langle s_{1}, \dots , s_{l} \rangle\) does not contain \(-I\), consider an arbitrary element \(g = \prod_{j=1}^l s_j^{x_j}\in S\), where \(x \in \mathbb{F}_2^l\).
   Note that
   \begin{equation*}
@@ -6670,13 +6807,13 @@ This allows us to reconstruct the state \(v\) as the set of all normalised vecto
   Finally, by Proposition~\ref{prop:minimal-generating-set}, \(s_{1}, \dots , s_{l}\) are independent.
 
   Conversely, assume \(S= \langle s_{1}, \dots , s_{l} \rangle\) is a subgroup of \(\PauliGroup_{n}\) not containing \(-I\) with pairwise commuting independent generators.
-  Then Lemma~\ref{lem:pauli-commutativity} and Proposition~\ref{prop:stabilised-subspace} show that \((v,A)=\Theta^{-1}(s_{1}, \dots , s_{l})\) has to satisfy \(\rk A = l\) and \(A
-  \begin{psmallmatrix}
-    0 & I \\ I & 0
-  \end{psmallmatrix}A^{T}=0\).
+  Note that every \(g\in S\) satisfies \(g^{2}=I\).
+  Then Lemma~\ref{lem:pauli-commutativity} and Proposition~\ref{prop:minimal-generating-set} show that there is a \((v,A)\) with \(\Theta(v, A) =(s_{1}, \dots , s_{l})\).
 \end{proof}
 
-As a consequence, we can describe even certain highly entangled states purely in terms of finite binary data.
+\subsubsection{The Gottesman--Knill theorem}\label{sec:the-gottesman--knill-theorem}
+The Gottesman--Knill theorem relies on the observation that we can describe certain states purely in terms of finite binary data.
+Surprisingly these states can be entangled or in a superposition and therefore, a priori, seem not to belong to the realm of classical computing.
 
 \begin{remark}\label{rmk:states-via-binary-data}
   We write
@@ -6727,26 +6864,28 @@ where
     Otherwise, choose an index \(k\) such that \(c_k = 1\); the post-measurement state is the stabiliser state of  \((v', A') \in \mathcal{L}_n\) where the \(j\)-th entry of \(v'\), respectively \(j\)-th row of \(A'\) are given by
     \begin{equation}\label{eq:Got-Knil-state-updates}
       v'_j = \begin{cases} \tfrac{1 - \lambda}{2} & \text{if } j = k, \\ v_j + c_j v_k & \text{if } j \neq k, \end{cases}\qquad \text{and} \qquad
-      a'_j = \begin{cases} r(p_l) & \text{if } j = k, \\ a_j + c_j a_k & \text{if } j \neq k, \end{cases}.
+      a'_j = \begin{cases} r(p_l) & \text{if } j = k, \\ a_j + c_j a_k & \text{if } j \neq k. \end{cases}
     \end{equation}
   \end{thmlist}
 \end{theorem}
 \begin{proof}
   \begin{thmlist}
-    \item Let \(S = \langle \Theta(s, (0_{n}\mid I_{n})) \rangle\). This subgroup is generated by the elements \((s_{1}, \dots , s_{n})\) where
+    \item Let \(S = \langle \Theta(s, (0_{n}\mid I_{n})) \rangle\).
+    This subgroup is generated by the elements \((g_{1}, \dots , g_{n})\) where
     \begin{equation*}
-      s_{j} = (-1)^{s_{j}} I_{2}\otimes \dots\otimes I_{2}\otimes \sigma_{z} \otimes I_{2}\otimes \dots \otimes I_{2}.
+      g_{j} = (-1)^{s_{j}} I_{2}\otimes \dots\otimes I_{2}\otimes \sigma_{z} \otimes I_{2}\otimes \dots \otimes I_{2}, \qquad \text{\(\sigma_{z}\) is the \(j\)-th tensor factor}.
     \end{equation*}
     Due to Proposition~\ref{prop:stabilised-subspace}, the stabilised space \(V_{S}\) is one-dimensional.
-    Evaluating the generators of \(S\) on \(\ket{s}\) yields:
+    Evaluating the generators of \(S\) on \(\ket{s}\) yields
     \begin{equation*}
-      s_{j} \ket{s} = (-1)^{s_j} (-1)^{s_j} \ket{s} = (-1)^{2s_{j}}\ket{s} = \ket{s}.
+      g_{j} \ket{s} = (-1)^{s_j} (-1)^{s_j} \ket{s} = (-1)^{2s_{j}}\ket{s} = \ket{s}.
     \end{equation*}
     Thus \([\ket{s}]\) is the unique stabiliser state of \((s, (0_n \mid I_n))\).
 
     \item Let \(S = \langle \Theta(v,A) \rangle\) and let \(\ket{w} \in V_S\).
-    For a Clifford gate \(U \in \mathcal{C}_n\), define \(S' = U S U^\dagger = \langle U \Theta(v,A)_1 U^\dagger, \dots, U \Theta(v,A)_n U^\dagger \rangle\).
-    Since \(S'\) is generated by \(n\) independent, pairwise commuting generators and \(-I\notin S\), Lemma~\ref{lem:stabiliser-matrix-bijection} provides a unique \((v', A') \in \mathcal{L}_n\) such that \(\Theta(v', A' ) = S' \).
+    For brevity, we denote the generators of \(S\) by \(s_{1}, \dots , s_{n}\), where \(s_{j}\eqdef \Theta(v,A)_{j}\).
+    Give a Clifford gate \(U \in \mathcal{C}_n\), set \(s'_{j} = U s_{j} U^{\dagger}\) and write \(S' =  \langle U s_1 U^\dagger, \dots, U s_n U^\dagger \rangle\).
+    Since \(S'\) is generated by \(n\) independent, pairwise commuting generators and \(-I\notin S\), Lemma~\ref{lem:stabiliser-matrix-bijection} provides a unique \((v', A') \in \mathcal{L}_n\) such that \(\Theta(v', A' ) = (s'_{1}, \dots , s'_{n})\).
     Furthermore, for any \(s \in S\), we observe that
     \begin{equation*}
       (U s U^\dagger) U\ket{w} = U s \ket{w} = U\ket{w}.
@@ -6754,20 +6893,35 @@ where
     Hence, \([U\ket{w}]\) is precisely the stabiliser state of the datum \((v', A')\).
 
     \item Write \(P = p_l\) and \(S = \langle \Theta(v,A) \rangle\).
-    If \((-1)^\lambda P \in S\) for some \(\lambda \in \{0,1\}\), then \(P \ket{w} = (-1)^\lambda \ket{w}\)
-    and the projection \(e_{\sigma,l}(\lambda)\) onto the eigenspace acts as
+    If \((-1)^\lambda P \in S\) for some \(\lambda \in \{0,1\}\), then
+    \begin{equation*}
+      P \ket{w} = (-1)^{2\lambda}P \ket{w} = (-1)^\lambda \ket{w}
+    \end{equation*}
+    and the projection \(e_{\sigma,l}(\lambda)\) onto the eigenspace of \(P\) with eigenvalue \(\lambda\) acts as
     \begin{equation*}
       e_{\sigma,l}(\lambda) \ket{w} = \tfrac{1}{2}(I + (-1)^\lambda P)\ket{w} = \ket{w}.
     \end{equation*}
-    Thus, evaluating the inner product yields \(\braket{w | E_{\sigma,l}(\{m\}) | w} = \braket{w|w} = 1\), which forces \(\braket{w | E_{\sigma,l}(\{-\lambda\}) | w} = 0\).
-    Note that in this  case, \(P\) commutes with every element of \(S\), implying \(c = 0\), and the state after measurement is given by \([\ket{w}]\).
+    Thus, evaluating the inner product yields
+    \begin{equation*}
+      \braket{w}{ E_{\sigma,l}(\{m\}) | w} = \braket{w}{e_{\sigma,l}(\lambda) \mid w} =  \braket{w|w} = 1,
+    \end{equation*}
+    which forces \(\braket{w | E_{\sigma,l}(\{-\lambda\}) | w} = 0\).
+    In this  case, \(P\) commutes with every element of \(S\), so \(c = 0\), and the state after measurement is given by \([\ket{w}]\).
 
     If neither \(P\) nor \(-P\) belongs to \(S\), there exists a nonempty set of indices \(j\) for which \(s_{j}=\Theta(v,A)_j\) anti-commutes with \(P\) since \(S\) is maximal abelian by  Exercise~\ref{exe:max-abelian}.
     Let \(k\) be an index such that \(c_k = 1\).
     For any other index \(j \neq k\) with \(c_j = 1\), replacing the generator \(s_j\) with \(s_j s_k\) yields a new set of generators \((s_{1}', \dots , s_{n}')\) of \(S\) such that \(P\) anti-commutes with \(s'_{k}\) and commutes with each \(s_{j}\) for \(j\neq k\).
-    We fix the unique \((v', A') \in \mathcal{L}_{n}\) such that \(\Theta(v', A') = (s_{1}, \dots , s_{n})\).
+    We fix the unique \((v', A') \in \mathcal{L}_{n}\) such that \(\Theta(v', A') = (s_{1}', \dots , s_{n}')\).
 
-    Using the identity  \(s_k e_{\sigma,l}(\lambda) s_k = e_{\sigma,l}(-\lambda\) we compute
+    Using the identity
+    \begin{equation*}
+      s'_k e_{\sigma,l}(\lambda) s'_k
+      = \frac{s'_k (I + \lambda P) s'_k}{2}
+      = \frac{I + \lambda s'_{k} P s'_{k}}{2}
+      = \frac{I - \lambda  P }{2}
+      = e_{\sigma,l}(-\lambda)
+    \end{equation*}
+    we compute
     \begin{align*}
       \braket{w}{ E_{\sigma,l}(\{\lambda\}) | w}
       & = \braket{w}{e_{\sigma,l}(\lambda) | w}
@@ -6776,6 +6930,7 @@ where
         = 1 - \braket{w }{ E_{\sigma,l}(\{\lambda\}) | w},
     \end{align*}
     which implies \(\braket{w}{E_{\sigma,l}(\{\lambda\}) | w} = \tfrac{1}{2}\).
+
     Note that the updated state is stabilised by \(\langle s'_{1}, \dots , (-1)^{\lambda}p_{l}, \dots , s'_{n}\rangle\).
     And a direct computation shows that the associated datum \((v'', A'' ) \in \mathcal{L}_{n}\) is as described in Equation~\eqref{eq:Got-Knil-state-updates}. \qedhere
   \end{thmlist}
@@ -6787,7 +6942,7 @@ The Gottesmann--Knill theorem implies that any quantum circuit restricted to the
   Consider a quantum algorithm specified by the following steps:
   \begin{thmlist}
     \item Initialization in the pure computational basis state \(\ket{0 \dots 0} \in (\mathbb{C}^{2})^{\otimes n}\).
-    \item Sequential application of \(m\) elementary Clifford gates \(U_{1}, \dots , U_{m}\), where each \(U_{i}\) belongs to the set of generators \(\{H_l, S_l, \CNOT_{l} \mid 1 \leq l \leq n\}\) defined by
+    \item Sequential application of \(m\) Clifford gates \(U_{1}, \dots , U_{m}\), where each \(U_{i}\) belongs to the set of generators \(\{H_l, S_l, \CNOT_{l} \mid 1 \leq l \leq n\}\) defined by
     \begin{align*}
       H_{l} &\eqdef I_{2}^{\otimes l-1} \otimes H \otimes I_{2}^{\otimes n - l}, \\
       S_{l} &\eqdef I_{2}^{\otimes l-1} \otimes S \otimes I_{2}^{\otimes n - l}, \\
@@ -6795,7 +6950,7 @@ The Gottesmann--Knill theorem implies that any quantum circuit restricted to the
     \end{align*}
     \item Measurement of all \(n\) qubits with respect to the computational basis.
   \end{thmlist}
-  This is classically evaluated via Theorem~\ref{thm:gottesman-knill} under the following resource estimates:
+  Via Theorem~\ref{thm:gottesman-knill} this can be classically modelled under the following resource estimates:
   \begin{thmlist}
     \item The initial state \(\ket{0 \dots 0}\) is uniquely represented by the datum \((0, (0_n \mid I_n)) \in \mathcal{L}_n\).
     This configuration is stored classically as an array of size \(2n^2 + n\) bits over \(\mathbb{F}_2\).
@@ -6807,20 +6962,20 @@ The Gottesmann--Knill theorem implies that any quantum circuit restricted to the
       \item \textbf{Hadamard gate:}
       The matrix \(M_H\) interchanges the \(l\)-th and \((n+l)\)-th columns of \(A\), and for each \(1\leq j \leq n\) we have
       \begin{equation*}
-        \delta_j = a_{j,l} \cdot \dots \cdot a_{j,n+l}.
+        \delta_j = a_{j,l}  \cdot a_{j,n+l}.
       \end{equation*}
 
       \item \textbf{Phase gate:}
       The matrix \(M_S\) adds the \(l\)-th column of \(A\) to its \((n+l)\)-th column, and for each \(1\leq j \leq n\) we have
       \begin{equation*}
-        \delta_j = a_{j,l} \cdot \dots \cdot a_{j,n+l}.
+        \delta_j = 0.
       \end{equation*}
 
       \item \textbf{Controlled-NOT gate:}
       The matrix \(M_{\CNOT}\) adds column \(l\) to column \(l+1\), and column \(n+l+1\) to column \(n+l\).
       The \(j\)-th entry of \((\delta_{1}, \dots , \delta_{n})^{T}\) is determined by
       \begin{equation*}
-        \delta_j = a_{j,l} a_{j, n+l+1} (a_{j,l+1} + a_{j, n+l} + 1).
+        \delta_j = a_{j,l} a_{j, n+l+1} (a_{j,l+1} \boxplus a_{j, n+l} \boxplus 1).
       \end{equation*}
     \end{itemize}
     In all three cases at most \(3n\) entries of the datum \((v,A)\) are changed to obtain \((v', A')\).
@@ -6832,54 +6987,95 @@ The Gottesmann--Knill theorem implies that any quantum circuit restricted to the
 
 By~\cite{aaronson-gottesman2004:ImprovedSimulationStabiliserCircuits}, for any Clifford-gate \(U\in \mathcal{C}_{n}\) there exists a sequence (of length \(O(n^{2}/\log(n))\)) consisting of \(\CNOT\)-, Hadamard-, and \(S\)-gates such that the resulting unitary \(V\) satisfies \(UV^{-1}=e^{2\pi i \lambda} I\).
 
-\subsubsection{The Solovay--Kitaev theorem}\label{sec:the-solovay--kitaev-theorem}
+\subsection{Interlude: Shor's algorithm}\label{sec:interlude:-shor's-algorithm}
+Another use of group theory in quantum computing relies on an efficient way to factor integers known as Shor's algorithm.
 
-In quantum computing the set of possible operations of a circuit is encoded by the unitary matrices \(U(2^{n})\) this set is far from being finite--it is in fact uncountably infinite.
-Thus, from finitely many gates we will be able to produce every unitary matrix exatly.
-Instead we can ask to approximate such a matrix with an arbitary level of precission.
-\begin{definition}\label{def:operator-norm}
-  Let \(f \from V\to W\) be alinear map between finite-dimensional Hilbert spaces.
-  The \emph{operator norm} of \(f\) is
-  \begin{equation*}
-    \|f\| = \sup_{v \in V\setminus\{0\}}\tfrac{\|f(v)\|_{W}}{\|v\|}_{V} <- before this def we need to recall that \| is given by sqrt of \braket{v}{v}.
-  \end{equation*}
-\end{definition}
-Here we should mention without prove that for diag matrix we get the abs value of the biggest ev.
-
-For further discussion on universal gate sets, see \cite[Section~4.5]{nielsen-chuang2000:QuantumComputationInformation}.
-\begin{definition}\label{def:universal-gate-set}
-  A gate set \(G\) is \emph{(approximate) universal} if for any unitary map \(f\from \mathbb{C}^{2}(^{ \otimes n} \to ..\)  and \(\varepsilon>0\) there exists a circuit \(g = (g_{11} \otimes \dots \otimes g_{1k_{1}}) \circ \dots \circ (g_{n1} \otimes \dots \otimes g_{n k_{n}}), \qquad \text{ where } g_{ij} \in G \cup\{\id_{ \mathbb{C}^{2}}\}\) such that
-\begin{equation}
-  \|f-g\| \leq \varepsilon.
-\end{equation}
+\begin{definition}\label{def:congruence}
+  We say ...  mod N
 \end{definition}
 
-This raises two important questions:
+\begin{definition}\label{def:gcd}
+  The \emph{greatest common divisor}
+\end{definition}
 
-Why do we even want universal gates?
-So far we mostly used Hadamards to perform a change of basis.
-and does the choice matter:
-are different approximate universal gate sets better than other.
-I.e. if we can realise one algorithm efficiently (with a number of gates that scales polynomialy
+\begin{lemma}\label{lem:bezouts-identity}
+
+\end{lemma}
+
+TODO: exercise: proof bezout using euclids alg.
+
+TODO: Remark that we can therefore efficiently compute gcds.
+
+TODO: totient function and  the multiplicative group inside z/nz.
+
+TODO:
+
+\begin{remark}\label{rmk:shor-algorithm-overview}
+  Let \(N \in \mathbb{N}\) be an odd positive integer great or equal than three. % not a prime power
+  To find a non-trivial divisor of \(N\) repeat the following steps.
+  \begin{thmlist}
+    \item Chose randomly an integer  \(2< a <N\).
+    \item Compute \(d=\gcd(a,N)\).
+    If \(d\neq 1\) we have found a non-trivial divisor of \(N\) and the algorithm ends.
+    Otherwise, we continue with the steps below.
+    \item Compute the minimal \(r\in \mathbb{N}\) such that \(a^{r} \equiv 1 \mod N\).
+    If \(r\) is odd restart the algorithm with \(a'\neq a\).
+    \item Compute \(d_{1}=\gcd(a^{r/2}-1, N)\) and \(d_{2}=\gcd(a^{r/2}+1, N)\).
+    If \(d_{1}\neq 1\) or \(d_{2} \neq 1\), we have found a non-trivial divisor of \(N\) and the algorithm ends.
+    Otherwise restart the algorithm with \(a'\neq a\).
+  \end{thmlist}
+\end{remark}
+
+\begin{proposition}\label{prop:number-theory-leading-to-probabilities}
+  Let \(N= p_{1}^{x_{1}} \cdot \dots \cdot p_{m}^{x_{m}}\in \mathbb{N}\) be odd and \(m\geq 2\).
+  Then
+  \begin{thmlist}
+    \item \begin{equation*}
+      \left|\{2< a < N \mid gcd(a,N) =1 and ord(a) even\}\right|/|a with gcd(a,N) = 1|\geq \tfrac{1}{2} <- modify by m.
+    \end{equation*}
+  \item  Set of all a with gcd(a,N)=1 and even order s.t  \(gcd(a^{ord a/2} pm 1,N)\) neq 1 over all admissibe a ( so where order is in part even) is large.
+  \end{thmlist}
+\end{proposition}
+
+consequence:
+the probability for k uniformly and randomly chosen numbers giving you p or q is.
+Thus for any arbitary precisiion \(\varepsilon\) the size of numbers we have to try grows ????
+
+Classically, there is no  efficient way to determine the order of a.
+This is solved in the qunatum settingvia
+
+\subsubsection{The quantum Fourier transform and the hidden subgroup problem}\label{sec:the-quantum-fourier-transform-and-the-hidden-subgroup-problem}
 
 
+% \subsubsection{The Solovay--Kitaev theorem}\label{sec:the-solovay--kitaev-theorem}
 
-% \subsubsection{The Kitaev--Solovay algorithm}\label{sec:the-kitaev--solovay-algorithm}
-% Solovay
-% later proven by Kitaev.
+% In quantum computing the set of possible operations of a circuit is encoded by the unitary matrices \(U(2^{n})\) this set is far from being finite--it is in fact uncountably infinite.
+% Thus, from finitely many gates we will be able to produce every unitary matrix exatly.
+% Instead we can ask to approximate such a matrix with an arbitary level of precission.
+% \begin{definition}\label{def:operator-norm}
+%   Let \(f \from V\to W\) be alinear map between finite-dimensional Hilbert spaces.
+%   The \emph{operator norm} of \(f\) is
+%   \begin{equation*}
+%     \|f\| = \sup_{v \in V\setminus\{0\}}\tfrac{\|f(v)\|_{W}}{\|v\|}_{V} <- before this def we need to recall that \| is given by sqrt of \braket{v}{v}.
+%   \end{equation*}
+% \end{definition}
+% Here we should mention without prove that for diag matrix we get the abs value of the biggest ev.
 
-% In this section we prove a single statement that is central to quantum computing.
-% \begin{theorem}\label{thm:Kitaev-Solovay-theorem}
+% For further discussion on universal gate sets, see \cite[Section~4.5]{nielsen-chuang2000:QuantumComputationInformation}.
+% \begin{definition}\label{def:universal-gate-set}
+%   A gate set \(G\) is \emph{(approximate) universal} if for any unitary map \(f\from \mathbb{C}^{2}^{ \otimes n} \to ..\)  and \(\varepsilon>0\) there exists a circuit \(g = (g_{11} \otimes \dots \otimes g_{1k_{1}}) \circ \dots \circ (g_{n1} \otimes \dots \otimes g_{n k_{n}}), \qquad \text{ where } g_{ij} \in G \cup\{\id_{ \mathbb{C}^{2}}\}\) such that
+% \begin{equation}
+%   \|f-g\| \leq \varepsilon.
+% \end{equation}
+% \end{definition}
 
-% \end{theorem}
-% algorithmic proof due to Dawson Nielsen % https://arxiv.org/pdf/quant-ph/0505030
+% This raises two important questions:
 
-
-
-% \subsection{ZX-diagrams and their rewriting rules}\label{sec:zx-diagrams-and-their-rewriting-rules}
-
-
-% \end{proof}
+% Why do we even want universal gates?
+% So far we mostly used Hadamards to perform a change of basis.
+% and does the choice matter:
+% are different approximate universal gate sets better than other.
+% I.e. if we can realise one algorithm efficiently (with a number of gates that scales polynomialy)
 
 % The 7 rules of the ZX-calculus
 
@@ -6900,75 +7096,58 @@ I.e. if we can realise one algorithm efficiently (with a number of gates that sc
 % \subsection{Applications of the ZX-calculus}\label{sec:applications-of-the-zx-calculus}
 
 \cleardoublepage
-\subsection{Exercises}\label{sec:ZX-exercises}
+\subsection{Exercises}\label{sec:Groups-exercises}
+\subsubsection*{Groups}
 
-\subsubsection*{ZX-spiders}
-
-\begin{exercise}\label{exe:complex-numbers-as-ZX-diagrams}
-Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-diagram by proceeding as follows.
-\begin{thmlist}
-  \item Verify that multiplying complex numbers corresponds to composing (or tensoring) \(ZX\)-diagrams (without in- and outputs).
-  \item Show that for any real number \(0\leq q\leq 2\) there is a \(ZX\)-diagram, evaluating to \(q\).
-  \item Write \(z= q2^{n} \sqrt{2}e^{2\pi i \alpha}\) for \(q, \alpha \in \mathbb{R}\) and \(n \in \mathbb{N}\). Use this decomposition to obtain a \(ZX\)-diagram representing \(z\).
-\end{thmlist}
-\end{exercise}
-
-\begin{exercise}
-  Prove that Equation~\eqref{eq:Hadamard-via-Euler-decomposition} yields a \(ZX\)-presentation of the Hadamard gate.
-\end{exercise}
-
-\begin{exercise}
-  Given \(n,m \in \mathbb{N}\), find \(\lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \in \mathbb{C}\) coefficients such that
+\begin{exercise}\label{exe:cyclic-groups}
+  Let \(2\leq n \in \mathbb{N}\) be a positive integer.
+  For each \(a\in \mathbb{Z}\), we write
   \begin{equation*}
-    X_{n}^{m} = \sum_{\substack{i_{1}, \dots , i_{n} \in\{0,1\}\\, j_{1}, \dots , j_{m} \in\{0,1\}}} \lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \ket{j_{1} \dots j_{m}}\bra{i_{1} \dots i_{n}}.
+    [a] \eqdef \{\dots, a-2n, a-n, a, a+n , a+2n, \dots \}.
+  \end{equation*}
+  Show that \( \mathbb{Z}/ n \mathbb{Z} =\{[a] \mid a \in \mathbb{Z}\}\) is a group with group operation \(* \from \mathbb{Z}/n \mathbb{Z} \times \mathbb{Z}/ n \mathbb{Z} \to \mathbb{Z}/ n \mathbb{Z}\) defined by
+  \begin{equation*}
+    [a] * [b] \eqdef [a+b].
   \end{equation*}
 \end{exercise}
 
 \begin{exercise}
-  Given \(\alpha, \beta \in \mathbb{R}\), determine the absolute value of \(X_{n}^{0}(\beta)X_{0}^{n}(\alpha)\).
+  Let \(H\) be a subgroup of a group \(G\) with \(|G|< \infty\).
+  Show that \(|G|/|H| \in \mathbb{N}\).
 \end{exercise}
 
-\begin{exercise}[(Bernstein--Vazirani algorithm)]
-  Suppose there is an element \(s \in\{0,1\}^{n}\) and a function \(f \from\{0, 1\}^{n} \to\{0,1\}\) satisfying
+\begin{exercise}
+  Determine the number of subgroups of \(( \mathbb{F}_{2}^{n},  \boxplus)\).
+\end{exercise}
+
+\begin{exercise}
+  Show that the set
   \begin{equation*}
-    f(x) = x_{1}s_{1} \boxplus x_{2}s_{2} \boxplus \dots \boxplus x_{n} s_{n}.
+    \left\{
+      \begin{pmatrix}
+        1 & a & b \\
+        0 & 1 & c \\
+        0 & 0 & 1
+      \end{pmatrix} \;\middle| \; a,b,c, \in \mathbb{C}
+    \right\}
   \end{equation*}
-  Use a variation of the Deutsch--Jozsa algorithm to show that it is possible to find \(s\) with a single call of \(UB(f)\).
+is a subgroup of \(\GL_{3}( \mathbb{C})\).
 \end{exercise}
 
-\subsubsection*{Universality of the ZX-calculus}
-
-\begin{exercise}\label{exe:existence-of-rotation}
-  Show that for any pair of complex numbers \(a, b \in \mathbb{C}\), there exist \(x,y \in \mathbb{C}\) such that \(|x|^{2} +|y|^{2}=1 \) and  \(\overline{x}a + \overline{y}b = 0\).
-
-  \textit{Hint:} Think about the subspace \(
-  \mathbb{C}
-  \begin{psmallmatrix}
-    a \\b
-  \end{psmallmatrix} \subset \mathbb{C}^{2}
-  \).
+\begin{exercise}
+  Let \(G, H\) be two groups and denote their neutral elements by \(e_{G}\) and \(e_{H}\), respectively.
+  Prove that a homomorphism of groups \(f\from G\to H \) is injective if and only if \(f(g) = e_{H}\) implies that \(g=e_{G}\).
 \end{exercise}
 
-\begin{exercise}[Hard]\label{exe:conjugacy-classes-su2}
-  Consider a unitary matrices \(U\in\SU(2)\).
-  \begin{thmlist}
-    \item Show that \(\tr(U)\in [-2, 2]\).
-    \item  Let \(V\in\SU(2)\). Show that  there exists an \(A\in \SU(2)\) with \(AUA^{-1}= V\) if and only if \(\tr(U) = \tr(V)\).
-  \end{thmlist}
-\end{exercise}
-
-\begin{exercise}\label{exe:flipped-cnot-using-cnot-Hadamard}
-  Verify that \(\CNOT_{1}\eqdef\SWAP \CNOT \SWAP\) corresponds to
-  \begin{equation*}
-     \id \otimes \ket{0}\bra{0} + \sigma_{x} \otimes \ket{1}\bra{1}.
-  \end{equation*}
-  Moreover show that \(\CNOT_{1}\) can be obtained from the gate-set \(\mathcal{G}= \{H, \CNOT\}\).
+\begin{exercise}
+  Show that a group homomorphism \(f\from G \to H\) maps neutral elements to neutral elements and inverses to inverses.
 \end{exercise}
 
 
 \begin{exercise}
 Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGroup_{n}\).
 \end{exercise}
+
 \begin{exercise}\label{exe:n-Pauli-group-is-group}
   Show that the set
   \begin{equation*}
@@ -6998,6 +7177,8 @@ Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGrou
   \end{thmlist}
 \end{exercise}
 
+\subsubsection*{The stabiliser formalism}
+
 \begin{exercise}\label{exe:max-abelian}
   Consider a subgroup \(S= \langle s_{1}, \dots , s_{l}\rangle \subseteq \PauliGroup_{n}\) such that \(-I \notin S\) and \(s_{j}s_{k}= s_{k}s_{j}\).
   We call \(S\) \emph{maximal abelian} if for any \(g\in \PauliGroup_{n}\)  with \(g^{2}= I\), \(g\notin S\), and \(-g \notin S\) there is a \(1\leq j \leq l\) such that \(s_{j}g = -g s_{j}\).
@@ -7007,38 +7188,26 @@ Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGrou
 
 \cleardoublepage
 \subsection{Study goals}\label{sec:ZX-study-goals}
-The questions below are designed to help you build a conceptual understanding of the ZX-calculus.
+% TODO
+The questions below are designed to help you develop your understanding of group theory in the context of quantum computing.
 You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
-The level of difficulty is aligned with what you can expect in the exam.
+The level of difficulty is indicative of what you could expect in an oral exam.
 
-\subsubsection*{ZX-spiders}
+\subsubsection*{Groups}
 \begin{thmlist}
-  \item What \(ZX\)-spider represents the identity map \( \mathbb{C}^{2} \to \mathbb{C}^{2}\),
-  \item Can the number \(3\) be represented as a single \(ZX\)-spider?
-  \item Determine all  \(\alpha \in \mathbb{ \mathbb{R}}\) such that there is an arity \((0,0)\)-spider representing \(e^{2\pi i \alpha}\).
-  \item Let \(\theta \in \mathbb{R}\) be a real number.
-  Find a \(ZX\)-diagram representing \(\cos(\theta)\).
-  \item What is \(ZX\)-diagram represents the Pauli matrix \(\sigma_{y}\)?
-  \item Write \(\tr(Z_{1}^{1}(0)\) as a \(ZX\)-diagram.
-  \item When does the spider \(Z_{n}^{m}(\alpha)\) represent a linear isomety?
-  \item How can the state \(\ket{00+}\) be created using \(ZX\)-spiders?
-  \item Compute \(X_{n}^{0}(0)Z_{0}^{n}(0)\) for all \(n \in \mathbb{N}\).
-  \item Represent the matrix \(
-  \begin{pmatrix}
-    -i & 0 \\ 0 & 1
-  \end{pmatrix}
-  \) as a \(ZX\)-diagram.
-\end{thmlist}
-
-\subsubsection*{Universality of the ZX-calculus}
-\begin{thmlist}
-  \item Let \(f \from ( \mathbb{C}^{2})^{\otimes n }\to ( \mathbb{C}^{2})^{ \otimes n}\) be unitary and assume that \(\dim \{v\in V \mid f(v) = -v\} =3\).
-  Can there be a basis \(\mathcal{B}\) of \(( \mathbb{C}^{2})^{\otimes n}\) such that \({}_{\mathcal{B}}f_{\mathcal{B}}\) is two-level unitary.
-  \item Is the product of two-level unitary matrices a two-level unitary matrix?
-  \item Find the \(ABC\)-decomposition of \(-I_{2}\).
-  \item Is the set of all \(n\times n\)-matrices containing a single \(1\) in each row and column and all other entries \(z\) a subgroup of \(\GL(n)\)?
-  \item Is there an element \(I_{2}\neq g\in \PauliGroup_{1}\) such that \(g^{3}= I_{2}\)?
+  \item Are the complex numbers with complex multiplication as group operation a group?
+  \item Is the set of all bijections \(\{1, \dots , n\}\to\{1, \dots , n\}\) a group with multiplication given by composition?
+  \item Let \(G\) be a group. Show that the inverse \(g^{-1}\) of a element \(g\in G\) is unique.
+  \item Show that there cannot be a group homomorphism \( \mathbb{Z}_{2} \to \mathbb{Z}\).
   \item Explain why a subgroup \(H\subset G\) is a group (with the same neutral element and multiplication inherited by \(G\)).
+  \item Suppose \(G\subset \GL_{n}( \mathbb{C})\) is closed under taking transposes.
+  Show that  \(g \mapsto (g^{-1})^{T} \) is a homomorphism of groups.
+  \item Is the set of all \(n\times n\)-matrices containing a single \(1\) in each row and column and all other entries \(z\) a subgroup of \(\GL(n)\)?
+  \item Prove that the composition \(g\circ f \from G \to K\) of two group homomorphisms \(f \from G \to H\) and \(g \from H \to K \) is a homomorphism of groups.
+  \item Is the intersection \(H\cap K\) of two subgroups \(H,K \subset G\) a subgroup?
+  \item Consider a bijective group homomorphism \(f\from G\to H\). Show that \(f^{-1} \from H \to G\) is a homomorphism of groups.
+  \item Is there an element \(I_{2}\neq g\in \PauliGroup_{1}\) such that \(g^{3}= I_{2}\)?
+  \item How many elements of \(\PauliGroup_{n}\) have the same check vector \((b \mid c)\)?
   \item State for two given elements \(g,h \in \PauliGroup_{n}\) criteria for them to commute using their check vectors.
   \item Is the matrix \(
   \begin{pmatrix}
@@ -7046,6 +7215,37 @@ The level of difficulty is aligned with what you can expect in the exam.
   \end{pmatrix}
   \) contained in the \(1\)-Clifford group?
   \item Is \(\U(n)\) contained in the normaliser of \(\SU(n) \subset \GL(n)\)?
+\end{thmlist}
+
+\subsubsection*{The stabiliser formalism}
+
+\begin{thmlist}
+  \item Consider a subgroup \(S= \langle a, b, c \rangle \) with \(-I \notin S\) and  check matrix of the generators
+  \begin{equation*}
+    A=
+    \left(\begin{array}{ccc|ccc}
+      1 & 0 & 0 & 0 & 0 & 1 \\
+      0 & 0 & 1 & 1 & 1 & 1 \\
+      1 & 0 & 1 & 1 & 1 & 0 \\
+    \end{array}\right).
+\end{equation*}
+Determine whether the generators of \(S\) commute and if they are a minimal generating set.
+\item How would the state \(\ket{01}\) be encoded in the stabiliser formalism?
+\item  Consider the stabiliser state \([\ket{w}]\) of \((v, A) \in \mathcal{L}_{2}\) where
+\begin{equation*}
+  v =
+  \begin{pmatrix}
+    1\\1
+  \end{pmatrix},
+  \qquad
+  A=
+  \left(
+    \begin{array}{cc|cc}
+      0 & 0 & 1 & 0\\
+      0 & 0 & 0 & 1
+    \end{array}\right).
+\end{equation*}
+Determine the datum \((v', A')\) that determines \([\CNOT\ket{w}]\).
 \end{thmlist}
 
 \cleardoublepage
