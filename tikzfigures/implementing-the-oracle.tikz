@@ -1,0 +1,35 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (6, -0.5) {};
+		\node [style=none] (1) at (9, 1.75) {};
+		\node [style=none] (2) at (3, 0.25) {};
+		\node [style=none] (3) at (6, 2.5) {};
+		\node [style=Z-spider] (4) at (7.5, 1.75) {};
+		\node [style=X-spider] (5) at (4.5, 0.25) {};
+		\node [style=none] (6) at (9.75, 3.25) {};
+		\node [style=none] (7) at (2.25, 3.25) {};
+		\node [style=none] (8) at (2.25, -1.25) {};
+		\node [style=none] (9) at (9.75, -1.75) {};
+		\node [style=none] (10) at (9.75, -1.25) {};
+		\node [style=none] (11) at (2.25, -1.75) {};
+		\node [style=dagger-morph] (12) at (6, 1) {$\tilde{f}$};
+		\node [style=none] (13) at (9, -0.5) {};
+		\node [style=none] (14) at (3, 2.5) {};
+		\node [style=none] (15) at (6, -1.5) {The map $UB(f)$ expressed in the ZX-calculus.};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (7.center) to (11.center);
+		\draw (11.center) to (9.center);
+		\draw (6.center) to (9.center);
+		\draw (7.center) to (6.center);
+		\draw (10.center) to (8.center);
+		\draw [style=object] (1.center) to (4);
+		\draw [style=object, in=0, out=135] (4) to (3.center);
+		\draw [style=object, in=0, out=-135] (4) to (12);
+		\draw [style=object, in=45, out=180] (12) to (5);
+		\draw [style=object] (5) to (2.center);
+		\draw [style=object, in=180, out=-30] (5) to (0.center);
+		\draw [style=object] (14.center) to (3.center);
+		\draw [style=object] (0.center) to (13.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

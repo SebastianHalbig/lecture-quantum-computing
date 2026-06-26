@@ -1,0 +1,42 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (5, 1.25) {};
+		\node [style=X-spider, draw=blue, very thick] (1) at (9, 3.5) {};
+		\node [style=X-spider, draw=blue, very thick] (2) at (1, 2) {};
+		\node [style=none] (3) at (5, 4.25) {};
+		\node [style=Z-spider, draw=blue, very thick] (4) at (6.5, 3.5) {};
+		\node [style=X-spider, draw=blue, very thick] (5) at (3.5, 2) {};
+		\node [style=none] (6) at (10, 5) {};
+		\node [style=none] (7) at (0, 5) {};
+		\node [style=none] (8) at (0, 0.5) {};
+		\node [style=none] (9) at (10, 0) {};
+		\node [style=none] (10) at (10, 0.5) {};
+		\node [style=none] (11) at (0, 0) {};
+		\node [style=dagger-morph] (12) at (5, 2.75) {$\tilde{f}$};
+		\node [style=X-spider, draw=blue, very thick] (13) at (9, 1.25) {};
+		\node [style=X-spider, draw=blue, very thick] (14) at (1, 4.25) {};
+		\node [style=none] (15) at (5, 0.25) {If we abstract the $ZX$-calculus slightly, we can solve the abelian HSP.};
+		\node [style=none] (16) at (1, 3.125) {$\tfrac{1}{4}$};
+		\node [style=Hadamard, draw=blue, very thick] (17) at (7.75, 3.5) {};
+		\node [style=Hadamard, draw=blue, very thick] (18) at (2.25, 4.25) {};
+		\node [style=Hadamard, draw=blue, very thick] (19) at (7.75, 1.25) {};
+		\node [style=Hadamard, draw=blue, very thick] (20) at (2.25, 2) {};
+		\node [style=none] (21) at (9, 1.25) {$\tfrac{1}{2}$};
+		\node [style=none] (22) at (1, 2) {$\tfrac{1}{2}$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (7.center) to (11.center);
+		\draw (11.center) to (9.center);
+		\draw (6.center) to (9.center);
+		\draw (7.center) to (6.center);
+		\draw [in=360, out=180] (10.center) to (8.center);
+		\draw [style=object] (1) to (4);
+		\draw [style=object, in=0, out=135] (4) to (3.center);
+		\draw [style=object, in=0, out=-135] (4) to (12);
+		\draw [style=object, in=45, out=180] (12) to (5);
+		\draw [style=object] (5) to (2);
+		\draw [style=object, in=180, out=-45] (5) to (0.center);
+		\draw [style=object] (14) to (3.center);
+		\draw [style=object] (0.center) to (13);
+	\end{pgfonlayer}
+\end{tikzpicture}

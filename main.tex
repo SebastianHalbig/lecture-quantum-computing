@@ -35,6 +35,7 @@ pkgOptions={
 \newcommand*{\Dtime}{\ensuremath{\mathbf{DTIME}}}
 \DeclareMathOperator{\SWAP}{SWAP}
 \DeclareMathOperator{\CNOT}{CNOT}
+\DeclareMathOperator{\lcm}{lcm}
 \newcommand*{\PauliGroup}{\ensuremath{\mathcal{P}}}
 
 
@@ -6209,12 +6210,33 @@ With groups we will frequently use the following notations.
   We denote the inverse of an element \(a\in G\) by \(a^{-1}\) and write the multiplication of \(G\) using juxtaposition: \( ab \eqdef a \cdot b\) for all \(a,b \in G\).
 \end{convention}
 
+Note that if \(G\) is a finite group with neutral element \(G\), there  are \(c<d \in \mathbb{N}\)  such that \(a^{c}= a^{d}\), where \(a^{c}\) and \(a^{d}\) denote the \(c\) and \(d\)-fold product of \(a\) with itself, respectively.
+This implies that \(a^{d-c}=e\) is the neutral element.
+
+\begin{definition}\label{def:order}
+  Consider an element \(a\in G\) of a group.
+  The cardinality \(\ord(a) \eqdef |\langle a \rangle | \in \mathbb{N} \cup \{\infty\}\) is called the \emph{order}
+  of \(a\).
+  We say that \(a\) has \emph{finite order} if \(\ord(a)< \infty\).
+  Otherwise it has \emph{infinite order}.
+\end{definition}
+
+\begin{remark}\label{rmk:finite-group-means-finite-order}
+  If \(|G|< \infty\), every element \(a\in G\) has finite order.
+  Moreover, one shows that \(\ord(a) = \min\{r \in \mathbb{N} \mid a^{r} =e\}\), where \(e\) is the neutral element of \(G\).
+\end{remark}
+
+
 As for vector spaces, we have a notion of structure preserving maps between groups.
 
 \begin{definition}
   A map \(f\from G\to H\) between two groups is a \emph{(group) homomorphism} if
   \begin{equation}
     f(g_{1} g_{2}) = f(g_{1}) f(g_{2})\qquad\quad \text{for all \(g_{1}, g_{2} \in G\)}.
+  \end{equation}
+  It is called an \emph{isomorphism} if there is a homomorphism of groups \(r \from H \to G\) such that
+  \begin{equation}
+    rf = \id_{G}\qquad \text{ and }\qquad fr = \id_{H}.
   \end{equation}
 \end{definition}
 Note that indeed any linear map \(f\from V\to W\) is a homomorphism of the groups \((V,+)\) and \((W,+)\).
@@ -6639,7 +6661,33 @@ This minimality condition can also be seen from the collection of all check vect
       \right) \in \Mat_{l,2n}( \mathbb{F}_{2}),
     \end{equation*}
     where the \(k\)-th row is given by the check vector \(r(s_{k})\) of \(s_{k}\).
-\end{definition}
+  \end{definition}
+
+  We will focus on particularly well-behaved subgroups \(S\) of \(\PauliGroup_{n}\) for which the map \(r \from S \to \mathbb{Z}_{2}^{2n}\) is injective.
+
+  \begin{lemma}\label{lem:nice-abelian}
+    Let \(S\subset \PauliGroup_{n}\) be a subgroup with \(-I \notin S\).
+    Then \(g^{2}=I\) and  \(gh = hg\) for all \(g, h\in S\).
+    Moreover, the homomorphism of groups \(r \from S\to \mathbb{Z}_{2}^{2n}\) that associates to each \(g\in S \) its check vector \(r(g)\) is injective.
+  \end{lemma}
+  \begin{proof}
+    Consider an element \(g \in S\).
+    The check vector of \(g^{2}\) is \(r(g^{2}) = r(g) \boxplus r(g) = (0\mid 0)\).
+    Therefore, \(g=i^{a}I\) for some \(a \in\{0, \dots , 3\}\).
+    As \(a \neq 0\) would imply that \(-I \in S\), we conclude that \(g^{2}= I\).
+
+    Now, let us assume that \(gh \neq hg\).
+    Then, by Lemma~\ref{lem:pauli-commutativity}, we arrive at the contradiction.
+    \begin{equation*}
+      ghgh = - ghhg = -gg = -I.
+    \end{equation*}
+
+    Finally we compute the preimage
+    \begin{equation*}
+      r^{-1}(0 \mid 0) = \{i^{a}I \mid a \in \{0, \dots , 3\}\} \cap S = \{I\}
+    \end{equation*}
+    and injectivity of \(r\from S \to \mathbb{Z}_{2}^{2n}\) follows.
+  \end{proof}
 
 
 
@@ -6648,26 +6696,14 @@ This minimality condition can also be seen from the collection of all check vect
   Then, the generators  \(s_{1}, \dots , s_{l}\) are independent if and only if the check matrix of \((s_{1}, \dots , s_{l})\) has rank \(l\).
 \end{proposition}
 \begin{proof}
-  Note that the check vector of \(s_{i}^{2}\) is given by \( (0 \mid 0) \).
-  Thus
-  \begin{equation*}
-    s_i^2 \in \{ i^a I_{2^n} \mid a \in \{0, \dots, 3\} \}.
-  \end{equation*}
-  As \( s_i^2 \neq I_{2^n} \) would imply that \( -I \in S \), we conclude that \( s_i^2 = I \).
-  Now, the check matrix has rank \( l \) if and only if its rows are linearly independent.
-  Consider \( a_1, \dots, a_l \in \mathbb{F}_2 \) such that \(\sum_{i=1}^l a_i r_i = 0\), where \( r_i = r(s_i) \) denotes the \( i \)-th row of the check matrix. This is equivalent to
-  \begin{equation*}
-    r\left( \prod_{i=1}^l s_i^{a_i} \right) = (0 \mid 0).
-  \end{equation*}
-  As \(-I \notin S\) we get \( \prod_{i=1}^l s_i^{a_i} = I \).
-  Therefore, the generators are independent if and only if the check matrix has rank \( l \), which completes the proof.
+  Lemma~\ref{lem:nice-abelian} implies that the generators  \(s_{1}, \dots , s_{l}\) are independent if and only if the subspace  of \( \mathbb{F}_{2}^{2n}\) spanned by \(r(s_{1}), \dots , r(s_{l})\) has dimension \(l\) which is equivalent to the check matrix having rank \( l \).
 \end{proof}
 
 An important application of the previous result is that a minimal set of generators allows us to determine the size of the stabilised subspace.
 This also has applications in quantum error correction.
 
 \begin{proposition}\label{prop:stabilised-subspace}
-  Let \(S=\langle s_{1}, \dots , s_{n-k}\rangle\subset \PauliGroup_{n}\) be generated by \(n-k\) independent elements such that \(-I \notin S\) and \(s_{i}s_{j}= s_{j} s_{i}\) for all \(1\leq i,j \leq n-k\).
+  Let \(S=\langle s_{1}, \dots , s_{n-k}\rangle\subset \PauliGroup_{n}\) be generated by \(n-k\) independent elements such that \(-I \notin S\).
   Then, the stabilised subspace
   \begin{equation*}
     V_S = \{ \ket{v} \in (\mathbb{C}^2)^{\otimes n} \mid s \ket{v} = \ket{v} \text{ for all } s \in S \}
@@ -6681,11 +6717,11 @@ This also has applications in quantum error correction.
   \end{equation*}
   We will now show that \((p^{x}_{S})_{x\in \mathbb{F}_{2}^{n-k}}\) forms a set of pairwise-orthogonal projectors and \(\im p^{0}_{S} = V_{S}\).
 
-  Since  \(s_j^2 = I\), we have
+  By Lemma~\ref{lem:nice-abelian}, we have \(s_j^2 = I\) and
   \begin{equation*}
-    (I + (-1)^{x_j} s_j)^2 = I + 2(-1)^{x_j}s_j + s_j^2 = 2(I + (-1)^{x_j} s_j)
+    (I + (-1)^{x_j} s_j)^2 = I + 2(-1)^{x_j}s_j + s_j^2 = 2(I + (-1)^{x_j} s_j).
   \end{equation*}
-  and the commutativity \(s_{i}s_{j}= s_{j} s_{i}\) yields
+  Again using Lemma~\ref{lem:nice-abelian}, we observe that \(s_{i}s_{j}= s_{j} s_{i}\), implying
     \begin{equation*}
       (p^x_S)^2
       = \frac{\prod_{j=1}^{n-k} (I + (-1)^{x_j} s_j)^2}{(2^{n-k})^2}
@@ -6706,7 +6742,7 @@ This also has applications in quantum error correction.
       = \prod_{j=1}^{n-k} \big( (I + s_j) + (I - s_j) \big) = \prod_{j=1}^{n-k} 2I
       = 2^{n-k}I
     \end{equation*}
-    and therefore \(\sum_{x \in \mathbb{F}_2^{n-k}} p^x_S = I\).
+    so \(\sum_{x \in \mathbb{F}_2^{n-k}} p^x_S = I\).
 
     Finally, we show that \(V_{S}= \im p^{0}_{S}\).
     If \(\ket{v} \in \im p^0_S\), then \(\ket{v} = p^0_S\ket{w}\) for some \(\ket{w} \in ( \mathbb{C}^{2})^{\otimes n}\).
@@ -6988,63 +7024,633 @@ The Gottesmann--Knill theorem implies that any quantum circuit restricted to the
 By~\cite{aaronson-gottesman2004:ImprovedSimulationStabiliserCircuits}, for any Clifford-gate \(U\in \mathcal{C}_{n}\) there exists a sequence (of length \(O(n^{2}/\log(n))\)) consisting of \(\CNOT\)-, Hadamard-, and \(S\)-gates such that the resulting unitary \(V\) satisfies \(UV^{-1}=e^{2\pi i \lambda} I\).
 
 \subsection{Interlude: Shor's algorithm}\label{sec:interlude:-shor's-algorithm}
-Another use of group theory in quantum computing relies on an efficient way to factor integers known as Shor's algorithm.
+Another application of group theory in quantum computing is Shor's algorithm, which provides an efficient way to factor integers \( N \in \mathbb{Z} \).
+It relies on a combination of basic number-theoretic tools to reduce the problem to finding, for a randomly chosen \( 2 \leq a \leq N-1 \), the minimal \( r \in \mathbb{N} \) such that \( a^r - 1 \) is a multiple of \( N \).
+This step of finding \( r \) is the crucial part a quantum computer can perform exponentially faster than any known classical algorithm.
 
-\begin{definition}\label{def:congruence}
-  We say ...  mod N
+\begin{definition}\label{def:division-in-Z}
+  For a given pair of integers \( a, b \in \mathbb{Z} \), we say that \( a \) \emph{divides} \( b \), or call \(a\) a \emph{divisor} of \(b\), if there exists a \( k \in \mathbb{Z} \) such that \( a k = b \).
+  In this case,  we write \(a|b\).
 \end{definition}
+
+
+For any pair of non-zero numbers \(a,b \in \mathbb{Z}\), we can consider the ``biggest'' number that divides both \(a\) and \(b\), and the ``smallest'' number that is divided by \(a\) as well as \(b\).
 
 \begin{definition}\label{def:gcd}
-  The \emph{greatest common divisor}
+  Fix \( a, b \in \mathbb{Z} \setminus \{0\} \).
+  \begin{thmlist}
+    \item The \emph{greatest common divisor} \(\gcd(a,b)\in \mathbb{N}\) of \( a \) and \( b \) is the unique natural number such that
+    \begin{itemize}
+      \item \( \gcd(a, b) \mid a \) and \( \gcd(a, b) \mid b \), and
+      \item for all divisors \( k \) of both \( a \) and \( b \), we have \( k \mid \gcd(a, b) \).
+    \end{itemize}
+    \item The \emph{least common multiple} \(\lcm(a,b) \in \mathbb{N}\) of \( a \) and \( b \), is the unique natural number such that
+    \begin{itemize}
+      \item \( a \mid \lcm(a, b) \) and \( b \mid \lcm(a, b) \),
+      \item For all \( k \in \mathbb{N} \) divisible by both \( a \) and \( b \), we have \( \lcm(a, b) \mid k \).
+    \end{itemize}
+  \end{thmlist}
 \end{definition}
 
+The greatest common divisor of \( a \) and \( b \) can be expressed as a linear combination of \( a \) and \( b \).
+This is known as \emph{Bézout's identity}.
+
 \begin{lemma}\label{lem:bezouts-identity}
-
+  For any \( a, b \in \mathbb{Z} \setminus \{0\} \), there exist \( r, s \in \mathbb{Z} \) such that
+  \begin{equation}
+    ra + bs = \gcd(a, b).
+  \end{equation}
+  Moreover, we have \(\lcm(a, b) = \frac{|ab|}{\gcd(a, b)}\).
 \end{lemma}
+\begin{proof}
+  The claim that there are \( r, s \in \mathbb{Z}\) such that \( ra + bs = \gcd(a, b) \) follows from Exercise~\ref{exe:extended-Euclidean-algo}.
 
-TODO: exercise: proof bezout using euclids alg.
+  Next, we show that \(\lcm(a, b) = \frac{|ab|}{\gcd(a, b)}\).
+  To increase the readability of our argument, we assume \(a,b\geq 1\).
+  First notice that \( \frac{ab}{\gcd(a, b)} \) is a multiple of both \( a \) and \( b \).
+  Now consider \(c,x,y \in \mathbb{Z}\) such that \(ax = c = by\).
+  Then
+  \begin{equation*}
+    \frac{c}{\frac{ab}{\gcd(a,b)}}
+    = \frac{c \gcd(a,b)}{ab}
+    = \frac{c(ra + bs)}{ab}
+    = \frac{cra}{ab} + \frac{cbs}{ab}
+    = \frac{ryab}{ab} + \frac{sxab}{ab}
+    = ry + sx \in \mathbb{Z}.
+  \end{equation*}
+  Therefore \(\frac{ab}{\gcd(a,b)}\) divides \(c\).
+\end{proof}
 
-TODO: Remark that we can therefore efficiently compute gcds.
+Bézout's identity can be understood as stating that \( \gcd(a, b) \) is the minimal positive linear combination of \( a \) and \( b \).
 
-TODO: totient function and  the multiplicative group inside z/nz.
+\begin{remark}\label{rmk:linear-combs-and-the-gcd}
+  For any \( a, b \in \mathbb{Z} \setminus \{0\} \) and any \( r, s \in \mathbb{Z} \), there exists an \( x \in \mathbb{Z} \) such that
+  \begin{equation*}
+    ra + sb = x \gcd(a, b).
+  \end{equation*}
+  To see this, note that \(a = v\gcd(a,b)\) and \(b = w\gcd(a,b)\) and so
+  \begin{equation*}
+    (rv + sw) \gcd(a,b) = rv\gcd(a,b) + sw \gcd(a,b) = ra + sb.
+  \end{equation*}
+\end{remark}
 
-TODO:
+Shor's algorithm relies on the relationship between various integers using an extension of addition and multiplication modulo 2, known as \emph{modular arithmetic}.
 
-\begin{remark}\label{rmk:shor-algorithm-overview}
-  Let \(N \in \mathbb{N}\) be an odd positive integer great or equal than three. % not a prime power
-  To find a non-trivial divisor of \(N\) repeat the following steps.
+\begin{definition}\label{def:congruence}
+  Consider \( N \in \mathbb{N} \).
+  Given \( a, b \in \mathbb{Z} \), we say that \( a \) is \emph{congruent to \( b \) modulo \( N \)} if there exists a \( k \in \mathbb{Z} \) such that \(a - b = k N\).
+  In this case, we write
+  \begin{equation}
+    a \equiv b \mod N.
+  \end{equation}
+\end{definition}
+
+Note that for each \(a\in \mathbb{Z}\) the set of numbers congruent to \(a\) modulo \(N\) is given by \(a + N \mathbb{Z} \eqdef\{a+ xN \mid x \in \mathbb{Z}\}\).
+We call \(a + N \mathbb{Z}\) the \emph{congruence class} of \(a\).
+
+\begin{definition}\label{def:modular-arithmetic}
+  Let \( N \in \mathbb{N} \).
+  We denote by \( \mathbb{Z}_N \) the set of all \( \{ a + N\mathbb{Z} \mid a \in \mathbb{Z} \} \), endowed with the operations \(\boxplus \from \mathbb{Z}_{N}\times \mathbb{Z}_{N}\to \mathbb{Z}_{N}\) and \(\boxtimes \from \mathbb{Z}_{N} \times \mathbb{Z}_{N} \to \mathbb{Z}_{N}\) given for all \(a+ N \mathbb{Z}\) and \(b + N \mathbb{Z}\) by
+  \begin{subequations}
+    \begin{align*}
+      (a + N\mathbb{Z}) \boxplus (b + N\mathbb{Z}) &= (a + b) + N\mathbb{Z},\\
+      (a + N\mathbb{Z}) \boxtimes (b + N\mathbb{Z}) &= (ab) + N\mathbb{Z}.
+    \end{align*}
+  \end{subequations}
+\end{definition}
+
+Since \(a\) and \(a+kN\) represent the same congruence class, the cardinality of \( \mathbb{Z}_{N}\) is \(N\).
+
+\begin{convention}
+  We will often write \(a\in \mathbb{Z}_{N}\) for the congruence class \(a+ N \mathbb{Z}\).
+  To emphasise that we consider numbers modulo \(N\), we set
+  \(a\equiv b\) for congruence classes \(a,b \in \mathbb{Z}_{N}\) instead of \(a = b\).
+\end{convention}
+
+\begin{remark}\label{rmk:gcd-as-order-in-mod-arith}
+  Observe that for all \( a, N \in \mathbb{Z} \setminus \{0\} \), we have
+  \begin{equation*}
+    \gcd(a + kN, N) = \gcd(a, N).
+  \end{equation*}
+  This can be derived in many ways.
+  For example, let \( d = \gcd(a, N) \) and \(d' = \gcd(a+kN, N)\).
+  Then \( d |a \) and \( d |N \), so \( d |(a + kN) \), implying that \(d| d' \).
+  Conversely, if \( d' = \gcd(a + kN, N) \), then \( d' |N \) and \( d' |(a + kN) \), so \( d' |a \).
+  Thus, \( d' |d \), and since \( d |d' \), we have \( d = d' \).
+\end{remark}
+
+While the only integers \(a\in \mathbb{Z}\) satisfying \(a^{r}=1\) for some \(r\in \mathbb{Z}\) are \(1\) and \(-1\), there are potentially many congruence classes \(b\in \mathbb{Z}_{N}\) with \(b^{r}\equiv 1\) for some \(r \in \mathbb{N}\).
+
+\begin{lemma}\label{lem:group-of-units}
+  The set \(\mathbb{Z}_N^\times \eqdef \{ a + N\mathbb{Z} |\gcd(a, N) = 1 \}\) is a group with respect to the multiplication \( \boxtimes \from \mathbb{Z}_N^\times \times \mathbb{Z}_N^\times \to \mathbb{Z}_N^\times \).
+\end{lemma}
+\begin{proof}
+  Consider \( a, b \in \mathbb{Z}_N^\times \) with \( \gcd(a, N) = \gcd(b, N) = 1 \).
+  First note that  there exist \( r, s \in \mathbb{Z} \) such that \( ra + sN = 1 \). Similarly, there are \( r', s' \in \mathbb{Z} \) satisfying \( r'b + s'N = 1 \).
+  Therefore, we have
+  \begin{equation*}
+    (ra + sN)(r'b + s'N) = (rr')(ab) + (ras'+ sr'b + ss')N = 1.
+  \end{equation*}
+  Remark~\ref{rmk:linear-combs-and-the-gcd} therefore implies that \(\gcd(ab,N) = 1\).
+  Next, note that the group operation \(\boxtimes \from \mathbb{Z}_{N}^{\times} \times \mathbb{Z}_{N}^{\times} \to \mathbb{Z}_{N}^{\times}\) inherits the  associativity of the multiplication of \( \mathbb{Z}\).
+  Similarly, we have
+  \begin{equation*}
+    (1+ N \mathbb{Z})(a + N \mathbb{Z}) = 1a + N \mathbb{Z} = a + N \mathbb{Z} = a1 + N \mathbb{Z} = (a + N \mathbb{Z})(1 + N \mathbb{Z}).
+  \end{equation*}
+  Lastly, by Bézout's identity, there exist \( r, s \in \mathbb{Z} \) such that \( ra + sN = 1 \).
+  Thus
+  \begin{equation*}
+    (r+ N \mathbb{Z}) (a + N \mathbb{Z}) = ra + N \mathbb{Z} = ra+ sN + N \mathbb{Z} = 1 + N \mathbb{Z}.
+  \end{equation*}
+\end{proof}
+
+\begin{definition}\label{def:group-of-units}
+  We call \( (\mathbb{Z}_N^\times, \boxtimes) \) the \emph{group of units} of \( \mathbb{Z}_N \).
+\end{definition}
+
+
+Recall that a prime \(p\in \mathbb{N}\) is a number with exactly two distinct divisors: \(1\) and \(p\).
+So the primes are \(\{ 2, 3, 5, 7,\dots  \}\subset \mathbb{N}\).
+
+\begin{proposition}\label{prop:prime-factorisation}
+  For every \(N \in \mathbb{N}\) there are unique pairwise distinct primes \(p_{1}, \dots , p_{m}\) and exponents \(k_{1}, \dots , k_{m}\in \mathbb{N}\) such that
+  \begin{equation*}
+    N= p_{1}^{k_{1}}\cdot \dots \cdot p_{m}^{k_{m}}.
+  \end{equation*}
+\end{proposition}
+
+We can now discuss the abstract setting used in \emph{Shor's algorithm}.
+It is our first example of a quantum algorithm with real applications which is exponentially faster than any known classical counterpart.
+While a formal would require discussion of \eg Turing machines,
+we want to briefly and informally motivate the two complexity classes
+that distinguish efficient classical and quantum computation.
+
+\begin{align*}
+  \Pclass &= \left\{
+            \begin{aligned}
+              &\text{problems solvable by a classical computer using a}\\
+              &\text{polynomial amount of gates in the input length.}
+            \end{aligned}
+            \right\}\\
+  \BQPclass &= \left\{
+              \begin{aligned}
+                &\text{problems solvable by a quantum computer using a polynomial}\\ &\text{ amount of quantum gates in the input length, where the} \\
+                &\text{probability of obtaining an incorrect answer is strictly less than  \(\tfrac{1}{3}\).}
+              \end{aligned}
+              \right\}
+\end{align*}
+\medskip
+
+\noindent
+\fbox{%
+  \begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+    \begin{remark}[The strategy of Shor's algorithm]\label{rmk:shor-algorithm-overview}
+      For a given \(N=p_{1}^{k_{1}} \dots p_{m}^{k_{m}}\in \mathbb{N}\), a divisor of \(N\) is computed as follows.
+
+      \noindent
+      \textbf{Simplification and primality test}
+      \begin{thmlist}
+        \item If \(N\) is even, \(2\) is a divisor and the algorithm ends here.
+        Given the binary presentation \((a_{n}, \dots , a_{0})\) of \(N\) (\ie \(N = \sum_{j=0}^{n} a_{j}2^{j}\)), this amounts to checking whether \(a_{0}=0\).
+        This consists of a single operation and is therefore in the complexity class \(\Pclass\).
+        \item Use the perfect power test, see Exercise~\ref{exe:prime-power-test}, to determine whether \(N=r^{k}\) for some \(r, k\in \mathbb{N}\) with \(k\geq 2\).
+        Use a primality test such as the \textit{AKS primality test} to determine whether \(N\) is prime.
+        This can be done efficiently on a classical computer: determining whether \(N=r^{k}\) is in \(\Pclass\).
+      \end{thmlist}
+      \textbf{Divisor test}
+      \begin{thmlist}[resume]
+        \item Chose randomly an integer \(2< a <N\).
+        \item Compute \(d=\gcd(a,N)\), for example using the Euclidean algorithm of Exercise~\ref{exe:extended-Euclidean-algo}.
+        This is done in polynomially many steps depending on the size of \(N\) and so is in the complexity class \(\Pclass\).
+        \item  If \(d\neq 1\) we have found a non-trivial divisor of \(N\) and the algorithm ends.
+        \item Compute the order \(r\) of \(a\in \mathbb{Z}_{N}^{\times}\).
+        For this, no efficient classical algorithm is known.
+        We will present an eqfficient quantum algorithm in Section~\ref{sec:the-quantum-fourier-transform-and-the-hidden-subgroup-problem} which shows that this problem is in \(\BQPclass\).
+        \item If \(r\) is even and \(a^{r/2}\nequiv -1 \mod N\)
+        then \(d=\gcd(a^{r/2}+1, N)>1\), see Lemma~\ref{lem:finding-divisors-using-gcd-tricks} and thus \(d\) is a non-trivial divisor of \(N\).
+      \end{thmlist}
+      Note that finding suitable \(1<a<N\) is quite likely in the sense that by
+      Proposition~\ref{prop:lots-of-good-candidates}, we have
+      \begin{equation*}
+        \frac{|\{a \in \mathbb{Z}_{N}^{\times} \mid r=\ord(a) \text{ even  and } a^{r/2}\nequiv-1\}|}{| \mathbb{Z}_{N}^{\times}|}
+        \geq 1-2^{-(m-1)}.
+      \end{equation*}
+    \end{remark}
+  \end{minipage}
+}
+\medskip
+
+Let us first try to understand why computing the order of some \(a \in \mathbb{Z}_{N}^{\times}\) is such a powerful tool.
+
+\begin{lemma}\label{lem:finding-divisors-using-gcd-tricks}
+  Let \(2\leq a\leq N-1\) such that \(\gcd(a,N)=1\), and the order \(r=\ord(a)\) of \(a\) considered as an element of \( \mathbb{Z}_{N}^{\times}\) satisfies \(r\) is even and \(a^{r/2}\nequiv -1\), then
+  \(\gcd(a^{r/2}+1, N)\neq 1\).
+\end{lemma}
+\begin{proof}
+  Since \(r\) is even and \(a^{r}\equiv 1\), we get \(a^{r}-1 \equiv 0\).
+  This can be rewritten as
+  \begin{equation*}
+    (a^{r/2}-1)(a^{r/2}+1) \equiv 0\mod N \iff (a^{r/2}-1)(a^{r/2}+1) = kN \text{for some } k \in \mathbb{N}.
+  \end{equation*}
+  Since \(N\) divides the right hand side of the equation it must also divide
+  \((a^{r/2}-1)(a^{r/2}+1)\).
+  There are three cases to consider.
+  First, \(N\) might divide \(a^{r/2}-1\) but then \(a^{r/2}\equiv N \mod N\), contradicting the minimality of \(r\).
+  Second, \(N\) might divide \(a^{r/2}+1\).
+  This would contradict our assumption that  \(a^{r/2}\nequiv -1 \mod N\).
+  Therefore, the third option must hold:
+  there are \(x,y \in \mathbb{N}_{\geq 2}\) with \(xy =N\), \(x \mid a^{r/2} + 1\) and \(y \nmid a^{r/2}+1 \).
+  Therefore \(\gcd(N, a^{r/2}+1) >1\).
+\end{proof}
+
+The efficiency of the algorithm is due to the fact that we have to test very few elements \(1<a<N-1\) to find a divisor of \(N\).
+This relies on a few group-theoretic observations, starting with a direct consequence of the \emph{Chinese remainder theorem}.
+
+\begin{lemma}\label{lem:Chinese-remainder}
+  Consider an odd integer \(N=p_{1}^{k_{1}} \dots p_{m}^{k_{m}} \in \mathbb{N}\)  with \(m\) distinct prime factors.
+  Then, there is an isomorphism of groups
+  \begin{equation}
+    \mathbb{Z}_{N}^{\times } \to \mathbb{Z}_{p_{1}^{k_{1}}}^{\times} \times \dots \times \mathbb{Z}_{p_{m}^{k_{m}}}^{\times}, \qquad (g + N \mathbb{Z}) \mapsto (g + p_{1}^{k_{1}} \mathbb{Z}, \dots , g + p_{m}^{k_{m}} \mathbb{Z})
+  \end{equation}
+  Moreover, for each odd prime \(p\in \mathbb{N}\) and natural number \( k \in \mathbb{N}\),
+  there exists a \(g \in \mathbb{Z}_{p^{k}}^{\times}\) with order \(\ord(g) =p^{k-1}(p-1)\).
+  This yields an isomorphism of groups
+  \begin{equation*}
+     (\mathbb{Z}_{p^{k-1}(p-1)}, \boxplus) \to (\mathbb{Z}_{p^{k}}^{\times }, \boxtimes), \qquad x \mapsto g^{x}.
+  \end{equation*}
+\end{lemma}
+The proof of the result uses algebraic tools that go beyond the content of this lecture.
+For the sake of completeness, and to give the reader a glimpse of the involved methods, we present a short proof with greyed-out terms used for concepts that were not discussed in these notes.
+\begin{proof}
+  By the {\color{gray} Chinese remainder theorem},
+  there is an {\color{gray} isomorphism of rings}
+  \begin{equation*}
+    \mathbb{Z}_{N} \to \mathbb{Z}_{p_{1}^{k_{1}}} \times \dots \times \mathbb{Z}_{p_{m}^{k_{m}}}, \qquad (g + N \mathbb{Z}) \mapsto (g + p_{1}^{k_{1}} \mathbb{Z}, \dots , g + p_{m}^{k_{m}} \mathbb{Z}).
+  \end{equation*}
+  It maps {\color{gray} units} (\ie elements \(a\in \mathbb{Z}_{N}\) such that \(\gcd(a,N)=1\)) to units and therefore results in the desired isomorphism of groups \(\mathbb{Z}_{N} \to \mathbb{Z}_{p_{1}^{k_{1}}} \times \dots \times \mathbb{Z}_{p_{m}^{k_{m}}}\).
+
+  Showing that for an odd prime \(p\) the groups \( \mathbb{Z}_{p^{k}}^{\times}\) and \( \mathbb{Z}_{p^{k-1}(p-1)}\) coincide is quite subtle.
+  First, one shows that \(( \mathbb{Z}_{p-1}, \boxplus)\) and \((\mathbb{Z}_{p}^{\times}, \boxtimes)\)  are isomorphic by proving that there is an element \(g\in \mathbb{Z}_{p}^{\times}\) of order \(p-1\).
+  Let \(o \in \mathbb{N}\) be the maximal order of elements in \( \mathbb{Z}_{p}^{\times}\) and note that \(o \leq p-1\).
+  One can show that every \(g\in \mathbb{Z}_{N}^{\times}\) has an order \(\ord(g) | o\) and so is a root of \(x^{o}-1\).
+  Thus \(x^{o}-1\) has \(p-1\) distinct roots, implying  that \(o=p-1\).
+
+  Next, let us consider  the group \( \mathbb{Z}_{p^{2}}\).
+  We fix an element \(g \in \mathbb{Z}\) generating \( \mathbb{Z}_{p}^{\times}\).
+  That is \(g^{p-1} = 1+ cp\) for some \(c \in \mathbb{Z}\).
+  If \(p\nmid c\), \(g^{p-1} \nequiv 1 \mod p^{2}\) and so by {\color{gray} Lagrange's theorem}, the order of \(g\in \mathbb{Z}_{p^{2}}^{\times}\) is \(ord(g) =p(p-1)\).
+  Thus, \(g\) is a generator of \( \mathbb{Z}_{p^{2}}^{\times}\).
+  Otherwise, we consider the element \(g+p\in \mathbb{Z}_{p^{2}}^{\times}\).
+  Since \(g+p \equiv g \mod p\), it must have either order \((p-1)\) or \(p(p-1)\).
+  We compute
+  \begin{equation*}
+    (g+p)^{p-1}
+    \equiv g^{p-1} + (p-1)g^{p-2}p
+    \equiv g^{p-1}- g^{p-2}p
+    \equiv 1 +cp - g^{p-2}p
+    \equiv 1 - g^{p-2}p \mod p^{2}.
+  \end{equation*}
+  But since  \(p \nmid g\), we have \(g^{p-2}p \nequiv 0 \mod p^{2}\) and so \(g+p\) has order \(p(p-1)\).
+
+  Lastly, we show by induction that if \(g\in \mathbb{Z}_{p^{2}}^{\times}\) has order \(p(p-1)\), then \(g\) generates \( \mathbb{Z}_{p^{k}}^{\times }\) for each \(k \in \mathbb{N}\).
+  By the above argument, the claim holds for \(k\leq 2\) and we focus on the induction step.
+  By the induction hypothesis, we have
+  \begin{equation*}
+    g^{p^{k-2}(p-1)}\nequiv 1 \mod p^{k} \qquad \text{and}\qquad
+    g^{p^{k-2}(p-1)}\equiv 1 \mod p^{k-1}.
+  \end{equation*}
+  Thus \(g^{p^{k-2}(p-1)} = 1 + cp^{k-1}\) for some \(c\in \mathbb{Z}\) with \(\gcd(c,p) = 1\).
+  Now, we have
+  \begin{equation*}
+    g^{p^{k-1}(p-1)}
+    \equiv (g^{p^{k-2}(p-1)})^{p}
+    \equiv (1+ cp^{k-1})^{p}
+    \equiv \sum_{j=0}^{p} \binom{p}{j}(cp^{k-1})^{j} \mod p^{k+1}
+  \end{equation*}
+  Note that for any \(j\geq 2\) we have \(p^{k+1} \mid (p^{k-1})^{j}\) and therefore
+  \begin{equation*}
+    \sum_{j=0}^{p} \binom{p}{j}(cp^{k-1})^{j}
+    \equiv 1 + cp^{k-1}
+    \nequiv -1 \mod p^{k+1}. \qedhere
+  \end{equation*}
+\end{proof}
+
+\begin{proposition}\label{prop:lots-of-good-candidates}
+  For any given odd \(N=p_{1}^{k_{1}} \dots p_{m}^{k_{m}}\in \mathbb{N}\) with \(m\) prime divisors, we have
+  \begin{equation}
+    \frac{|\{a \in \mathbb{Z}_{N}^{\times} \mid r=\ord(a) \text{ even  and } a^{r/2}\nequiv-1\}|}{| \mathbb{Z}_{N}^{\times}|}
+    \geq 1-2^{-(m-1)}.
+  \end{equation}
+\end{proposition}
+Again this proof uses a few advanced concepts that are colour-highlighted.
+\begin{proof}
+  We write \( \mathbb{Z}_{1}= \{0 + \mathbb{Z}\}\) for the trivial group.
+  Let \(2\leq s=2^{j}n\) with \(n\) odd.
+  The {\color{gray} Chinese remainder theorem} shows that there is a {\color{gray} group isomorphism}
+  \begin{equation*}
+    \mathbb{Z}_{s} \to \mathbb{Z}_{2^{j}} \times \mathbb{Z}_{n}, \qquad a + s \mathbb{Z} \mapsto (a + 2^{j} \mathbb{Z}, a+ n \mathbb{Z}).
+  \end{equation*}
+  For each \(1\leq t \leq m\), let \(1\leq j_{t}\) be such that \(p_{t}^{k_{t}-1}(p_{t}-1) = 2^{j_{t}}n\) for some odd \(n\).
+  The above observation together with Lemma~\ref{lem:Chinese-remainder} shows that there is a group \(H\) with \(|H|\) odd and an isomorphism of groups
+  \begin{equation*}
+    \psi \from \mathbb{Z}_N^{\times} \to \mathbb{Z}_{2^{j_{1}}} \times \dots \times \mathbb{Z}_{2^{j_{m}}} \times H, a + N \mathbb{Z}\mapsto (a+ 2^{j_{1}} \mathbb{Z}, \dots , a+ 2^{j_{m}} \mathbb{Z}, \psi(a)_{H}).
+  \end{equation*}
+  Note that \(\psi(-1) = (2^{j_{1}-1}, \dots , 2^{j_{m}-1},0_{H})\).
+  We fix an element \(a\in \mathbb{Z}_{N}^{\times}\) and write
+  \begin{equation*}
+    \psi(a) = (\psi(a)_{1}, \dots , \psi(a)_{m}, \psi(a)_{H}).
+  \end{equation*}
+  The order of \(a\) is given by
+  \begin{equation*}
+    \ord(a) = \lcm(\ord(\psi(a)_{1}), \dots , \ord(\psi(a)_{m}), \ord(\psi(a)_{H})).
+  \end{equation*}
+  This allows us to make two observations.
+  First, \(a\) having odd order, is equivalent to  \(\psi(a)_{t} \nequiv 0\) for all \(1\leq t \leq m\).
+  Second, if \(a\) has even order, \(a^{r/2}\equiv -1\) requires as a bare minimum \(\psi(a)_{t} \nequiv 0\) for all \(1\leq t\leq m\).
+  Thus there are \(|H|\) elements of odd order and at most
+  \begin{equation*}
+    2^{j_{1}-1} \cdots 2^{j_{m}-1}|H| = 2^{-m}(2^{j_{1} + \dots + j_{m}}|H|)
+  \end{equation*}
+  elements \(a \in \mathbb{Z}_{N}^{\times}\) of even order \(r\) such that \(a^{r/2}\equiv -1\).
+
+ Therefore, the ratio \(x \in \mathbb{Q}\) of elements \(a\in \mathbb{Z}_{N}^{\times}\) that have an even order \(r\) and satisfy the identity \(a^{\ord(a)/2}\nequiv -1\) is bounded by
+  \begin{equation*}
+    x \geq 1 - \frac{|H| + 2^{-m}(2^{j_{1} + \dots + j_{m}}|H|)}{2^{j_{1} + \dots + j_{m}}|H|}
+    = 1 - 2^{-(j_{1} + \dots + j_{m})} - 2^{-m}
+    \geq 1- 2^{-m} - 2^{-m} = 1- 2^{-(m-1)}. \qedhere
+  \end{equation*}
+\end{proof}
+
+\subsubsection{The hidden subgroup problem and the quantum Fourier transform}\label{sec:the-quantum-fourier-transform-and-the-hidden-subgroup-problem}
+
+As explained in Remark~\ref{rmk:shor-algorithm-overview}, the role of a quantum computer in Shor's algorithm is to determine the order of a given \(a \in \mathbb{Z}_{N}^{\times}\).
+This is part of a wider class of problems known as the \emph{hidden subgroup problem}.
+
+\begin{definition}\label{def:HSP}
+  Let \(G\) be a group, \(H \subset G\) a subgroup and \(X\) a set.
+  A function \(f \from G \to X\) is said to \emph{hide} \(H\)  if
+  \begin{equation*}
+    f(g_1) = f(g_2) \iff g_1^{-1}g_2 \in H.
+  \end{equation*}
+
+  The \emph{hidden subgroup problem} requires finding a generating set for \(H\) given only \(G\), \(X\) and the function \(f\).
+\end{definition}
+
+\begin{remark}[Order finding as an instance of the HSP]\label{rmk:order-finding-as-HSP}
+  Fix \(a \in \mathbb{Z}_N^\times\) with order \(r = \ord(a)\).
+  Consider the map \(f \from \mathbb{Z} \to \mathbb{Z}_{N}\), \(k \mapsto a^{k}\).
+  Then
+  \begin{equation*}
+    f(k) = f(l) \iff a^{k}\equiv a^{l} \iff a^{k-l}\equiv 1 \iff \ord(a) \mid k-l.
+  \end{equation*}
+  Thus, \(f\) hides the subgroup \(\ord(a) \mathbb{Z}\) and solving the hidden subgroup problem allows us to reconstruct \(\ord(a)\).
+\end{remark}
+
+The standard approach to uncovering hidden symmetries in quantum computing relies on rephrasing it as an eigenvalue problem.
+
+\begin{remark}\label{rmk:the-hsp-for-z2}
+  To build intuition, let us first consider the simplest non-trivial example.
+  Consider the cyclic group of two elements, \(G = \mathbb{Z}_2 = \{0, 1\} =X\).
+  A function \(f \from \mathbb{Z}_2 \to X\) can either be constant (\(f(0) = f(1)\)), therefore hiding \(H = \mathbb{Z}_2\), or balanced (\(f(0) \neq f(1)\)), hiding only the trivial subgroup \(H = \{0\}\).
+  In other words, we compute the easiest case of the Deutsch--Jozsa algorithm.
+
+  Recall that the quantum version of the map \(f\) is the unitary \(UB(f) \from (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) which satisfies for all \(g,h \in G\)
+  \begin{equation*}
+    UB(f)\ket{gh} = \ket{g}\otimes \ket{f(g) \boxplus h}.
+  \end{equation*}
+  Let  \(\tilde{f} \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) denote the linear map that satisfies on in the computational basis \(\ket{g} \mapsto \sqrt{2}\ket{f(g)}\) for all \(f \in G\).
+
+  We can represent \(UB(f)\) as the \(ZX\)-diagram shown below.
+  \begin{equation*}
+    \inputtikz{implementing-the-oracle}
+  \end{equation*}
+  The auxiliary computations of Lemma~\ref{lem:CNOT-auxiliary-XZ} show that we indeed have
+  \begin{equation*}
+    \ket{gh}
+    \xrightarrow{Z_{1}^{2}\otimes \id}
+    \ket{ggh}
+    \xrightarrow{\id \otimes \tilde{f} \otimes \id}
+    \sqrt{2} \ket{g} \otimes \ket{f(g)}\otimes \ket{h}
+    \xrightarrow{\id \otimes X_{2}^{1}}
+    \ket{g} \otimes \ket{f(g) \boxplus h}.
+  \end{equation*}
+
+  We can now read off the hidden subgroup by performing the algorithm depicted in the next diagram.
+  \begin{equation*}
+    \inputtikz{implementing-the-oracle-and-reading-of-its-subgroup}
+  \end{equation*}
+  It can be summarised as follows.
   \begin{thmlist}
-    \item Chose randomly an integer  \(2< a <N\).
-    \item Compute \(d=\gcd(a,N)\).
-    If \(d\neq 1\) we have found a non-trivial divisor of \(N\) and the algorithm ends.
-    Otherwise, we continue with the steps below.
-    \item Compute the minimal \(r\in \mathbb{N}\) such that \(a^{r} \equiv 1 \mod N\).
-    If \(r\) is odd restart the algorithm with \(a'\neq a\).
-    \item Compute \(d_{1}=\gcd(a^{r/2}-1, N)\) and \(d_{2}=\gcd(a^{r/2}+1, N)\).
-    If \(d_{1}\neq 1\) or \(d_{2} \neq 1\), we have found a non-trivial divisor of \(N\) and the algorithm ends.
-    Otherwise restart the algorithm with \(a'\neq a\).
+    \item \textbf{Initialising the system:}
+    We start with the state
+    \begin{equation*}
+      \ket{01}.
+    \end{equation*}
+
+    \item \textbf{Setting up a superposition over all group elements:}
+    We apply the Hadamard gates to both inputs and get
+    \begin{equation*}
+      \tfrac{1}{\sqrt{|G|}^{2}}\sum_{g, h \in G} (-1)^{h}\ket{g} \otimes \ket{h}.
+    \end{equation*}
+    \item \textbf{Doubling of the first qubit:}
+    We get via the \(Z\)-spider the state
+    \begin{equation*}
+      \tfrac{1}{\sqrt{|G|}^{2}} \sum (-1)^{h}\ket{g} \otimes \ket{g} \otimes \ket{h}.
+    \end{equation*}
+    \item \textbf{Applying the hiding function:}
+    The linear map \(\tilde{f}\) applied to the middle strand transforms our state into
+    \begin{equation*}
+      \tfrac{1}{\sqrt{|G|}^{2}} \sum (-1)^{h} \ket{g} \otimes \ket{f(g)} \otimes \ket{h}.
+    \end{equation*}
+    \item \textbf{Using the group operation:}
+    We use the \(X_{2}^{1}\)-spider to get
+    \begin{equation*}
+      \tfrac{1}{\sqrt{|G|}} \sum_{g,h\in G}(-1)^{h} \ket{g} \otimes \ket{f(g) \boxplus h}.
+    \end{equation*}
+    \item \textbf{Reverting the superposition:}
+    We apply Hadamard gates again and get
+    \begin{equation*}
+      = \tfrac{1}{|G|} \left(\sum_{g,h\in G} (-1)^{f(h) +gh }\ket{g} \right) \otimes \ket{1}.
+    \end{equation*}
+    \item \textbf{Measuring in the computational basis:}
+    We determine the probability that our final state is measured in the configuration \(\ket{01}\).
+    To that end, let \(e \from (\mathbb{C}^{2})^{\otimes 2}\to (\mathbb{C}^{2})^{\otimes 2}\) be the projector onto the subspace spanned by \(\ket{01}\).
+    There are two cases to consider.
+    \begin{enumerate}
+      \item If \(f\) is constant, then \(f(0) = f(1)\) and the coefficient of \(\ket{11}\) vanishes.
+      Thus, we are already in the state \(\ket{s}=\ket{00}\) and so \(e\ket{s} = \ket{s} \) and the result of our measurement is
+      \begin{equation*}
+        \braket{s}{e\mid s} = \braket{00}{00} = 1.
+      \end{equation*}
+      \item If \(f\) is balanced, then \(f(0) \neq f(1)\). The coefficient of \(\ket{01}\) vanishes  due to the sign difference.
+      The state before measurement therefore is given by \(\pm \ket{11}\).
+      Applying \(e\) yields \(e\ket{s} = 0\) and so
+      \begin{equation*}
+        \braket{s}{e \mid s} = 0.
+      \end{equation*}
+    \end{enumerate}
   \end{thmlist}
 \end{remark}
 
-\begin{proposition}\label{prop:number-theory-leading-to-probabilities}
-  Let \(N= p_{1}^{x_{1}} \cdot \dots \cdot p_{m}^{x_{m}}\in \mathbb{N}\) be odd and \(m\geq 2\).
-  Then
+Solving the abelian hidden subgroup problem requires generalising each of these seven steps.
+
+To simplify the situation, we first observe that it suffices to restrict onto the groups \( \mathbb{Z}_{m}\).
+
+\begin{theorem}\label{thm:fundamental-thm-fg-abelian-groups}
+  Let \(G\) be a finite group such that \(gh=hg\) for all \(g, h \in G\).
+  Then, there are unique pairs \((p_{i},n_{i})_{1\leq i \leq n }\) with \(p_{i}\) prime and \(n_{i} \in \mathbb{N}\) such that
+  \begin{equation}
+    G\cong \mathbb{Z}_{p_{1}^{k_{1}}} \times \dots \times \mathbb{Z}_{p_{n}^{k_{n}}}.
+  \end{equation}
+\end{theorem}
+\begin{proof}[Proof (sketch).]
+  For each prime \(p\) we define \(G_{p}\eqdef\{g\in G \mid \sum_{k=1}^{p^{n}} g =0 \text{ for some } n\in \mathbb{N}\}\).
+  In all but finitely many cases \(G_{p}= \{0\}\) and one shows that
+  \begin{equation*}
+    G \cong \prod_{p \text{ prime}} G_{p}.
+  \end{equation*}
+  For a given prime \(p\), we may fix an element \(g\in G_{p}\) of maximal order.
+  Then \(\langle g\rangle \cong \mathbb{Z}_{p^{n}}\) and one shows that \(G_{p}\cong \langle g \rangle \times G_{p}'\).
+  By repeating updating \(G_{p}\) with  \(G'_{p}\) and repeating this procedure until one reaches the trivial group, one obtains the desired decomposition.
+\end{proof}
+
+As an application, we can simplify the abelian hidden subgroup problem for finite groups.
+
+As an application, we can reduce the abelian hidden subgroup problem over arbitrary finite groups to a collection of independent problems over cyclic groups.
+
+\begin{corollary}\label{cor:abelian-vs-cyclic-hsps}
+  Let \(G\) be a finite group such that \(gh=hg\) for all \(g,h\in G\).
+  Let \(\eta \from G \to \mathbb{Z}_{m}\times G'\) be an isomorphism of groups and  \(\gcd(m, |G'|) = 1\).
+  Let \(H \leq G\) be a subgroup and \(f \from G \to X\) a map that hides \(H\).
   \begin{thmlist}
-    \item \begin{equation*}
-      \left|\{2< a < N \mid gcd(a,N) =1 and ord(a) even\}\right|/|a with gcd(a,N) = 1|\geq \tfrac{1}{2} <- modify by m.
+    \item There exist unique subgroups \( \mathbb{Z}_{r} \subseteq \mathbb{Z}_{m}\) and \(H' \subseteq G'\) such that \(\eta(H) = \mathbb{Z}_{n} \times H'\).
+    \item Let \(e\) be the identity element of \(G'\) and consider the canonical inclusions
+    \begin{equation*}
+      \iota_{1} \from \mathbb{Z}_{m} \to \mathbb{Z}_{m} \times G',\quad a \mapsto (a,e)\qquad \text{ and }\qquad
+      \iota_{2} \from G' \to \mathbb{Z}_{m}\times G', \quad g \mapsto (0,g),
     \end{equation*}
-  \item  Set of all a with gcd(a,N)=1 and even order s.t  \(gcd(a^{ord a/2} pm 1,N)\) neq 1 over all admissibe a ( so where order is in part even) is large.
+    along with the restricted functions \(f_{1} = f \circ \eta^{-1} \circ \iota_{1} \from \mathbb{Z}_{m} \to X\) and \(f_{2} = f \circ \eta^{-1} \circ \iota_{2} \from G' \to X\).
+    Then \(f_1\) hides \(\mathbb{Z}_r\) and \(f_2\) hides \(H'\).
   \end{thmlist}
-\end{proposition}
+\end{corollary}
+\begin{proof}[Proof (sketch).]
+  Since \(\eta \from G \to \mathbb{Z}_{m}\times G'\) is an isomorphism,
+  there is a subgroup \(K\subset \mathbb{Z}_{m} \times G' \) such that \(\eta(H) = K\).
+  Then, there is a \(r\in \mathbb{N}\) such that  \(K_{r} \eqdef K \cap \mathbb{Z}_{m} \cong \mathbb{Z}_{r}\).
+  Moreover we set \(H' \eqdef K \cap G'\).
+  First note, that the multiplication map
+  \begin{equation*}
+    K_{r} \times H' \xrightarrow{(k,h)\mapsto kh} K
+  \end{equation*}
+  is a homomorphism of groups and injective.
+  To show that it is also surjective,
+  we note that by Bézout's identity, there are \(a,b \in \mathbb{N}\) such that \(am + b|G'| = 1\).
+  Thus any \(k\in K\) can be written as
+  \begin{equation*}
+    k = k^{1} = k^{am + b|G'|} = k^{am} k^{b|G'|}
+  \end{equation*}
+  and \(k^{am}\in H' \) as well as \(k^{b|G'|} \in K_{r}\).
 
-consequence:
-the probability for k uniformly and randomly chosen numbers giving you p or q is.
-Thus for any arbitary precisiion \(\varepsilon\) the size of numbers we have to try grows ????
 
-Classically, there is no  efficient way to determine the order of a.
-This is solved in the qunatum settingvia
+  For the second statement,  we use  that \(f\) hides \(H\) and evaluate  for \(f_1\)
+  \begin{align*}
+    f_1(a) = f_1(b) &\iff f(\eta^{-1}(a, e)) = f(\eta^{-1}(b, e)) \\
+                  &\iff \eta^{-1}(a, e) \cdot \big(\eta^{-1}(b, e)\big)^{-1} \in H \\
+                  &\iff \eta^{-1}(a, e) \cdot \eta^{-1}(-b, e) \in H \\
+                  &\iff \eta^{-1}(a \boxminus b, e) \in H \\
+                  &\iff (a \boxminus b, e) \in \eta(H) = \mathbb{Z}_r \times H'.
+  \end{align*}
+  This holds if and only if \(a \boxminus b \in \mathbb{Z}_r\).
+  An analogous computation proves the remaining case.
+\end{proof}
 
-\subsubsection{The quantum Fourier transform and the hidden subgroup problem}\label{sec:the-quantum-fourier-transform-and-the-hidden-subgroup-problem}
+By combining Theorem~\ref{thm:fundamental-thm-fg-abelian-groups} and Corollary~\ref{cor:abelian-vs-cyclic-hsps}, we can translate a hidden subgroup problem \((G,X,f)\) for \(G\) a finite group such that \(gh= hg\) for all \(g,h\) with a finite family of independent hidden subgroup problems
+\((G_1, X, f_1), \dots, (G_n, X, f_n)\) where \(G_{i}= \mathbb{Z}_{m_{i}}\).
+Solving these problems then gives us the original hidden subgroup \(H\) in form of a product \(H_{1}\times  \dots \times H_{n}\).
+
+\begin{convention}
+  For the remainder of this section, we restrict our focus to the case where \(G = \mathbb{Z}_{m}\) for a natural number \(m \in \mathbb{N}\), \(X\) is a finite set, and \(f \from \mathbb{Z}_m \to X\) hiding a  subgroup \(H \subseteq \mathbb{Z}_m\).
+
+  Furthermore, we fix a \(Q\in \mathbb{N}\) such that \(2^{Q}>|G|\) as well as an embedding map \(\iota \from \mathbb{Z}_m \to \{0,1\}^{Q}\).
+  By a slight abuse of notation, for any \(g \in \mathbb{Z}_m\), we write \(\ket{g}\in ( \mathbb{C}^{2})^{\otimes Q}\) as a shorthand for the computational basis state \(\ket{\iota(g)}\).
+\end{convention}
+
+Our first goal is to generalise the Hadamard gate.
+
+\begin{remark}\label{rmk:Hadamard-and-the-group-Z2}
+  Consider the Hilbert space \(\mathbb{C}^2\).
+  Its  computational basis corresponds to the elements of the group \(\mathbb{Z}_2\).
+  We define the unitary map \(\mathrm{add}_{1} \from \mathbb{C}^2 \to \mathbb{C}^2\) on this basis by \(\ket{g} \mapsto \ket{g \boxplus 1}\) for each \(g \in \mathbb{Z}_2\).
+  It is diagonalisable with eigenvalues \(\pm 1\) and an orthonormal basis of eigenvectors is given by \(\ket{+}\) and \(\ket{-}\).
+  The base change from the computation basis to this basis of eigenvectors is  precisely the Hadamard gate \(H\).
+\end{remark}
+
+To extend this to our general cyclic setting, we define for every for every fixed \(k \in \mathbb{Z}_m\) the unitary map \(\mathrm{add}_{k} \from ( \mathbb{C}^{2})^{\otimes Q} \to ( \mathbb{C}^{2})^{\otimes Q}\)  by
+\begin{equation}
+  \mathrm{add}_{k} \ket{g} = \ket{g \boxplus k} \quad \text{for all } g \in \mathbb{Z}_m,
+  \quad
+  \text{ and }
+  \quad
+  \mathrm{add}_{k}\ket{s} = \ket{s} \text{ for all } s \in \{0,1\}^{Q} \setminus \iota(\mathbb{Z}_m).
+\end{equation}
+The minimal polynomial of  \(\mathrm{add}_{1}^m = \id\) is  \(x^m - 1\) and so the eigenvalues are \(\lambda_{0}, \dots , \lambda_{m-1}\) with
+\begin{equation}
+  \lambda_{j} = e^{2\pi i\tfrac{i}{m}} \qquad 0\leq j \leq m-1.
+\end{equation}
+For each eigenvalue \(\lambda_{j}\), the  corresponding eigenvector is given by
+\begin{equation*}
+  \Lambda_{j} = \frac{1}{\sqrt{m}} \sum_{g\in \mathbb{Z}_{m}} e^{2\pi i \tfrac{-jg}{m}}\ket{g}.
+\end{equation*}
+
+Indeed, a direct calculation shows that these states are eigenvectors for all \(\mathrm{add}_{k}\).
+
+\begin{definition}\label{def:qft-for-grp}
+  The \emph{quantum Fourier transform} of \(\mathbb{Z}_m\) is the unitary map
+  \begin{equation}
+    \mathrm{QFT}_{ \mathbb{Z}_{m}} \from ( \mathbb{C}^{2})^{\otimes Q} \to ( \mathbb{C}^{2})^{\otimes Q}
+  \end{equation}
+  satisfying for all \(g\in \mathbb{Z}_{m}\) and \(s\in\{0,1\}^{Q}\setminus \iota(Q)\)
+  \begin{equation*}
+    \ket{g} \mapsto \Lambda_{g} \qquad \text{ and }\qquad \ket{s} \mapsto \ket{s}.
+  \end{equation*}
+\end{definition}
+
+To implement the quantum Fourier transform, we need  controlled \(Z\)-phase-gate
+
+\begin{lemma}\label{lem:CZ-gate}
+  For any \(\alpha\in \mathbb{R}\) the diagram below depicts a linear map that
+satisfies on the computational basis \(\ket{xy} \mapsto e^{2\pi i \alpha x} \ket{xy}\).
+\begin{equation}
+  \inputtikz{CZ-gate}
+\end{equation}
+\end{lemma}
+\begin{proof}
+  Using the identities of Lemma~\ref{lem:CNOT-auxiliary-XZ}, we compute
+  \begin{align*}
+    \ket{xy} &
+               \xrightarrow{Z_{1}^{2}(\tfrac{\alpha}{2})\otimes Z_{1}^{2}(\tfrac{\alpha}{2})}
+               e^{\pi i \alpha(x + y)} \ket{xxyy}
+               \xrightarrow{\id \otimes X_{2}^{1}\otimes \id}
+               \tfrac{1}{\sqrt{2}} e^{\pi i \alpha x}e^{\pi i \alpha y}\ket{x} \otimes \ket{x\boxplus y} \otimes \ket{y}\\
+             & \tfrac{1}{\sqrt{2}} e^{\pi i \alpha x}e^{\pi i \alpha y}\ket{x} \otimes \ket{x\boxplus y} \otimes \ket{y}
+               \xrightarrow{ \id \otimes Z_{1}^{0}(-\tfrac{\alpha}{2}) \otimes \id}
+               \tfrac{1}{\sqrt{2}} e^{\pi i \alpha x}e^{\pi i \alpha y} e^{-\pi i \alpha(x\boxplus y)}\ket{xy}
+  \end{align*}
+  Thus, the depicted gate satisfies on the computational basis
+  \begin{equation*}
+    \ket{00} \mapsto \ket{00}, \quad
+    \ket{10} \mapsto \ket{10}, \quad
+    \ket{01} \mapsto \ket{01}, \quad
+    \ket{11} \mapsto e^{2\pi i \alpha} \ket{11}. \qedhere
+  \end{equation*}
+\end{proof}
+
+% TODO: setup notation
+
+% \begin{equation*}
+%   \inputtikz{solving-the-hidden-subgroup-problem}
+% \end{equation*}
+
 
 
 % \subsubsection{The Solovay--Kitaev theorem}\label{sec:the-solovay--kitaev-theorem}
@@ -7185,7 +7791,76 @@ Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGrou
 
   Show that \(S\) is maximal abelian if and only if \(l=n\).
 \end{exercise}
+\subsubsection{Shor's algorithm}
+\begin{exercise}\label{exe:extended-Euclidean-algo}
+  Let \(a, b \in \mathbb{Z} \setminus \{0\}\).
+  The \emph{extended Euclidean algorithm} is given as follows:
 
+  \begin{itemize}
+    \item \textbf{Reduction part:} \\
+    Set \(t_{0} = a\) and \(t_{1} = b\).
+    Initialise \(j = 1\) and repeat the following steps:
+    \begin{enumerate}
+      \item Determine \(q_{j}, t_{j+1} \in \mathbb{Z}\) such that
+      \begin{equation*}
+        t_{j-1} = q_{j}t_{j} + t_{j+1} \quad \text{where } 0 \leq t_{j+1} < |t_{j}|
+      \end{equation*}
+      \item If \(t_{j+1} = 0\), the reduction terminates.
+      Set \(n = j\).
+      % The final non-zero remainder \(r_{n}\) satisfies \(r_{n-1} = q_{n}r_{n}\).
+      \item Otherwise, increment \(j\) to \(j+1\) and repeat.
+    \end{enumerate}
+
+    \item \textbf{Build-up part:} \\
+    Set
+    \begin{align*}
+      s_0 &= 1, \quad r_0 = 0, \qquad t_0 = s_0 a + r_0 b \\
+      s_1 &= 0, \quad r_1 = 1, \qquad t_1 = s_1 a + r_1 b
+    \end{align*}
+    For \(j = 1, 2, \dots, n-1\), compute
+    \begin{align*}
+      s_{j+1} &= s_{j-1} - q_{j}s_{j} \\
+      r_{j+1} &= r_{j-1} - q_{j}r_{j}
+    \end{align*}
+    Finally, define \(s=s_{n}\) and \(r=r_{n}\)
+  \end{itemize}
+
+  \begin{thmlist}
+    \item Show that \(sa + rb = t_{n}\).
+    \item Prove that \(sa + rb = \gcd(a,b)\).
+  \end{thmlist}
+\end{exercise}
+
+\begin{exercise}
+  Given \(N \in \mathbb{N}\) show that \(( \mathbb{Z}_{N}, \boxplus)\) is a group.
+\end{exercise}
+
+
+\begin{exercise}\label{exe:prime-power-test}
+  Consider a natural number \(N \in \mathbb{N}_{\geq 2}\) given by its binary expansion \(N = \sum_{j=0}^{n} a_j 2^j\) with  \(a_{n}, \dots , a_{0}\in \mathbb{N}\) and \(a_n = 1\).
+  Note that \(2^n \leq N < 2^{n+1}\).
+  \begin{thmlist}
+    \item Execute the algorithm below manually for the input value \(N = 25\).
+    \item Prove that the algorithm correctly determines whether \(N = x^k\) for some integers \(x, k \geq 2\).
+    \item \textit{Bonus:} In case you are familiarly with the big-O-notation, you may want to show that it uses \(\mathcal{O}((\log_{2} N)^3)\) classical bit operations.
+  \end{thmlist}
+
+  \noindent\textbf{Algorithm: Perfect Power Detection}
+  \begin{thmlist}
+    \item Set \(k=n\) and repeat the steps below until \(k=2\):
+    \begin{enumerate}
+      \item Define \(l = 1\) and \(r = 2^{\lfloor n/k \rfloor + 1}\) and repeat while \(l \leq r\):
+      \begin{itemize}
+        \item Compute \(m = \left\lfloor \frac{l + r}{2} \right\rfloor\) and evaluate the power value \(M = m^k\). This leads to 3 cases.
+        \item \textbf{Case 1:} If \(M = N\), terminate the algorithm and return \textbf{True}.
+        \item \textbf{Case 2:} If \(M > N\), update the upper boundary: \(r = m - 1\).
+        \item \textbf{Case 3:} If \(M < N\), update the lower boundary: \(l = m + 1\).
+      \end{itemize}
+      \item Update \(k\) to \(k-1\).
+    \end{enumerate}
+    \item If the loops terminate without a match, return \textbf{False}.
+  \end{thmlist}
+\end{exercise}
 \cleardoublepage
 \subsection{Study goals}\label{sec:ZX-study-goals}
 % TODO
@@ -7314,41 +7989,6 @@ Determine the datum \((v', A')\) that determines \([\CNOT\ket{w}]\).
 % \section{Quantum computing from a complexity theory perspective}\label{sec:quantum-computing-from-a-complexity-theory-perspective}
 % \subsection{Some complexity theory terminology}\label{sec:some-complexity-theory-terminology}
 
-
-% \begin{definition}\label{def:letters-words-languages}
-%   A \emph{word} in the \emph{letters} \(\{0,1\}\) is a finite sequence \(w \eqdef (s_{1}, \dots , s_{n})\), where \(n\in \mathbb{N}\) and \(s_{i}\in \{0,1\}\) for all \(1 \leq i \leq n\).
-
-%   We call \(|x|\eqdef n\) the \emph{length} of \(w\) and write \(\{0,1\}^{n}\) for the set of all words of length \(n\).
-%   Furthermore, we set
-%   \begin{equation}\label{eq:set-of-words}
-%     \{0,1\}^{*}\eqdef \bigcup_{n\geq 0}\{0,1\}^{n}.
-%   \end{equation}
-
-%   A \emph{decision problem} is a subset \(L \subset \{0,1\}^{*}\).
-% \end{definition}
-
-% There is a bijection
-% \begin{equation}
-%   \begin{aligned}
-%     \{\text{decision problems}\} &\iso \{f\from\{0,1\}^{*} \to \{0,1\}\}\\
-%     L &\mapsto  f\from\{0,1\}^{*} \to \{0,1\}, \quad f(x)= 1 \iff x \in L \\
-%     L_{f}\eqdef\{x \in\{0,1\}^{*} \mid f(x) = 1\} & \longmapsfrom f
-%   \end{aligned}
-% \end{equation}
-% We will often view decision problems in terms of their unique associated maps \(\{0,1\}^{*}\to\{0, 1\}\)
-% \medskip
-
-% Besides formalising algorithms, we want to discuss their (asymptotic) efficiency.
-% To that end, we need to a notion of functions being ``approximately similar''.
-
-% \begin{definition}\label{def:O-notation}
-%   Let \(D\) be a subset of \( \mathbb{R}\) and\(f, g \from D \to \mathbb{R}\).
-%   We write \(f \in O(g)\) if there exists a \(M\in \mathbb{R}\) such that
-%   \begin{equation}
-%     |f(x)| \leq |M g(x) | \qquad\quad \text{ for all } x \in D.
-%   \end{equation}
-
-% \end{definition}
 
 
 % \subsection{Universal Turing machines}\label{sec:universal-turing-machines}
