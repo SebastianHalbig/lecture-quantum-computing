@@ -7231,7 +7231,8 @@ that distinguish efficient classical and quantum computation.
         \item  If \(d\neq 1\) we have found a non-trivial divisor of \(N\) and the algorithm ends.
         \item Compute the order \(r\) of \(a\in \mathbb{Z}_{N}^{\times}\).
         For this, no efficient classical algorithm is known.
-        We will present an eqfficient quantum algorithm in Section~\ref{sec:the-quantum-fourier-transform-and-the-hidden-subgroup-problem} which shows that this problem is in \(\BQPclass\).
+        We will present an efficient quantum algorithm in Remark~ref{rmk:shor-quantum-step} which shows that this problem is in \(\BQPclass\).
+        This problem has no know algorithmic solution in \(\Pclass\).
         \item If \(r\) is even and \(a^{r/2}\nequiv -1 \mod N\)
         then \(d=\gcd(a^{r/2}+1, N)>1\), see Lemma~\ref{lem:finding-divisors-using-gcd-tricks} and thus \(d\) is a non-trivial divisor of \(N\).
       \end{thmlist}
@@ -7914,6 +7915,214 @@ But what if our group \(G\) is not of the form \( \mathbb{Z}_{2^{Q}}\)? We can s
   \end{equation*}
 \end{remark}
 
+We are now prepared to overcome the main difficulty of Shor's algorithm: efficiently determining the order \(r\) of a given element \(a \in \mathbb{Z}_{N}^{\times}\).
+To that end, we fix a natural number \(N \in \mathbb{N}\) and a number \(1\leq a\leq N-1\) such that \(\gcd(a,N)=1\).
+Furthermore, let \(n \in \mathbb{N}\) be the smallest positive integer satisfying \(2^{n}\geq N\).
+As before, the embedding \(\iota\from \mathbb{Z}_{N} \to\{0,1\}^{n}\) maps a \(0\leq x \leq N-1\) to the tuple \((x_{1}, \dots , x_{n})\) such that \(x = x_{1}2^{n-1} + \dots + x_{n-1} 2^{1} + x_{n}2^{0}\).
+In order to find the order of \(a\), we consider the unitary map
+\begin{equation}
+  \mathrm{mult}_{a} \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{ \otimes n}
+\end{equation}
+satisfying for each \(x \in \mathbb{Z}_{N}\) (viewed via its embedding) and \(y \in\{0,1\}^{n} \setminus \iota(\mathbb{Z}_{N})\)
+\begin{equation*}
+  \mathrm{mult}_{a}\ket{x} = \ket{a \boxtimes x} , \qquad \mathrm{mult}_{a}\ket{y} = \ket{y}.
+\end{equation*}
+This map has the eigenvalues \((\lambda_{k})_{k=0}^{r-1}\) with \(\lambda_{k} = e^{2\pi i \tfrac{k}{r}}\), and for each \(\lambda_{k}\) an eigenvector is given by
+\begin{equation}\label{eq:eigenvectors-order-a}
+  \Lambda_{k} = \tfrac{1}{\sqrt r }\sum_{g=0}^{r-1} e^{-2\pi i \frac{kg}{r}} \ket{a^{g} \; (\text{mod } N)}.
+\end{equation}
+A major obstacle is that we cannot compute such a vector unless we already know \(r\).
+However, by Exercise~\ref{exe:summation-of-vectors-gives-one}, we have
+\begin{equation*}
+  \frac{1}{\sqrt{r}}\sum_{k=0}^{r-1} \Lambda_{k} =\ket{1}.
+\end{equation*}
+
+We now choose \(p \in \mathbb{N}\) and set \(Q = 2n + 3 + p\), then \(2^{Q-p} = 2^{2n+2} > 4N^2\).
+Applying the phase estimation algorithm of Remark~\ref{rmk:quantum-phase-estimation} with the unitary \(U = \mathrm{mult}_{a}\) and input \(\ket{0}^{\otimes (Q+1)}\otimes \ket{1}\), results with probability \(1- \tfrac{1}{(2^{p}-2)}\) in an outcome of the form \(\ket{h} \otimes \ket{0} \otimes \ket{v}\) such that
+ \(\tfrac{h}{2^Q}\) approximates a fraction  \(\tfrac{k}{r}\) for some \(0\leq k \leq r-1\) with error bound by
+\begin{equation}\label{eq:qpe-precision}
+  \left|\frac{h}{2^Q} - \frac{k}{r}\right| < \frac{1}{2^{Q-p}} = \frac{1}{4 \cdot 2^{2n}} \leq \frac{1}{4N^2}.
+\end{equation}
+
+Therefore, our task reduces to retrieving the exact fraction \(\tfrac{k}{r}\) from the known, measured value \(\tfrac{h}{2^Q}\).
+
+\begin{definition}\label{def:continued-fraction}
+  A  \emph{finite continued fraction} is an expression of the form
+  \begin{equation}
+    [a_0, a_1, \dots, a_m] \eqdef a_{0} + \frac{1}{a_{1} + \frac{1}{a_{2} + \frac{1}{\dots + \frac{1}{a_{m}}}}} \in \mathbb{Q},
+  \end{equation}
+  where \(a_0 \in \mathbb{N}_0\) and \(a_i \in \mathbb{N}\) for all \(i \geq 1\).
+
+  For any \(0 \leq j \leq m\), the \(j\)-th \emph{convergent} of the continued fraction is
+  \begin{equation*}
+    [a_0, a_1, \dots, a_j] \eqdef a_{0} + \frac{1}{a_{1} + \frac{1}{a_{2} + \frac{1}{\dots + \frac{1}{a_{j}}}}}.
+  \end{equation*}
+
+\end{definition}
+
+A continued fraction representation of a rational number can be computed quite easily.
+
+\begin{remark}\label{rmk:continued-fraction-algo}
+  Let \(\frac{p}{q} \in \mathbb{Q}_{\geq 0}\) and \(p \geq 0\), \(q >0\).
+  It admits a continued fraction expansion \([a_0, a_1, \dots, a_m]\) with \(a_m > 1\) that can be computed recursively by iteratively isolating integer parts and inverting the remaining fraction.
+  \begin{thmlist}
+    \item  Set \(a_j \eqdef \lfloor \frac{p}{q} \rfloor\) to be the maximal integer smaller or equal to \(\frac{p}{q}\).
+    Then  \(\frac{p}{q} = a_j + \frac{r}{q}\), where the remainder \(r = p- a_{j}q\) satisfies \(0 \leq r < q\).
+    \item If \(r = 0\), the algorithm terminates and \(m = j\).
+    Otherwise \(r > 0\), and we rewrite
+    \begin{equation*}
+      \frac{p}{q} = a_j + \frac{1}{\frac{q}{r}}.
+    \end{equation*}
+    To compute \(a_{j+1}\) we repeat step 1 with the updated  \(p \rightarrow q\) and \(q \rightarrow r\).
+  \end{thmlist}
+    By Lamé's theorem, we have \(m\leq 2k\) where \(k = \min\{y \in \mathbb{N} \mid 2^{y}>|q|\}\)
+\end{remark}
+
+To establish the uniqueness of certain continued fractions we need the next result.
+
+\begin{lemma}\label{lem:contd-frac-non-int}
+  The finite continued fraction \(\frac{p}{q} =[0, a_1, \dots , a_{m}]\) with \(m \geq 1\) and \(a_{m}>1\) satisfies
+  \begin{equation*}
+    0 < \frac{p}{q} < 1.
+  \end{equation*}
+\end{lemma}
+\begin{proof}
+  If \(m=1\), then \(\frac{p}{q} = \frac{1}{a_1}\).
+  Since \(a_1 = a_m > 1\), it immediately follows that \(0 < \frac{1}{a_1} < 1\).
+
+  Now assume \(m > 1\).
+  We can express \(\frac{p}{q}\) as
+  \begin{equation*}
+    \frac{p}{q} = \frac{1}{a_{1} + \frac{v}{w}},
+  \end{equation*}
+  where \(\frac{v}{w} = [0, a_2, \dots, a_m]\).
+  Since \(0 < \frac{v}{w}\) and \(a_{1}\in \mathbb{N}\) we have  \(a_{1}+ \frac{v}{w} > 1\) and so \(0 <\frac{p}{q}< 1\).
+\end{proof}
+
+
+\begin{theorem}\label{thm:existence-and-uniqueness}
+  Every positive rational number \(\frac{p}{q} \in \mathbb{Q}\), has a unique representation as a  finite continued fraction \([a_{0}, \dots , a_{m}]\)  with \(a_m > 1\) in case \(m \geq 1\).
+\end{theorem}
+\begin{proof}
+  Existence follows from Remark~\ref{rmk:continued-fraction-algo}.
+
+  To prove uniqueness, suppose that two sequences satisfy \([a_0, \dots, a_m] = [b_0, \dots, b_k]\).
+  Without loss of generality, we assume \(m \leq k\).
+  If\( m = 0\), \(\frac{p}{q} \in \mathbb{N}\) and so \(a\)
+  By Lemma~\ref{lem:contd-frac-non-int}, we have
+  \begin{equation*}
+    a_0 = \big\lfloor [a_0, \dots, a_m] \big\rfloor = \big\lfloor \tfrac{p}{q} \big\rfloor =  \big\lfloor [b_0, \dots, b_k] \big\rfloor = b_0.
+  \end{equation*}
+  If \(m = 0\), then \(\frac{p}{q} = a_0 \in \mathbb{N}\) and since \(a_0 = b_0\), the remaining part satisfies \([0, b_1, \dots, b_k] = 0\).
+  This forces  \(k=0\).
+
+  Now suppose \(m \geq 1\).
+  We have
+  \begin{equation*}
+    a_{1} + \frac{1}{a_{2} + \frac{1}{\dots + \frac{1}{a_{m}}}}
+    = \left( \frac{p}{q} - a_{0}\right)^{-1}
+    = \left( \frac{p}{q} - b_{0}\right)^{-1}
+    = b_{1} + \frac{1}{b_{2} + \frac{1}{\dots + \frac{1}{b_{k}}}}.
+  \end{equation*}
+  Since \(a_{1}, b_{1} \in \mathbb{N}\),  Lemma~\ref{lem:contd-frac-non-int} implies that  \(a_1 = b_1\). Inductively, we find that \(a_i = b_i\) for all indices \(0 \leq i \leq m\).
+  This implies in particular \([b_{m+1}, \dots , b_{k}]=0\) and so \(k=m\).
+\end{proof}
+
+A remarkable fact about convergents is that they provide the ``best'' rational approximations  relative to the size of their denominators.
+
+\begin{theorem}\label{thm:convergent-best-approx}
+  Let \(x, \frac{p}{q} \in \mathbb{Q}\) be non-negative rational numbers.
+  If
+  \begin{equation*}
+    \left|\frac{p}{q} - x \right| \leq \frac{1}{2 q^{2}},
+  \end{equation*}
+  then \(\frac{p}{q}\) is a convergent of \(x\).
+\end{theorem}
+\begin{proof}
+  See \cite[Theorem~A4.16]{nielsen-chuang2000:QuantumComputationInformation}.
+\end{proof}
+
+Recall that for our goal of determining the order \(r\) of \(a\in \mathbb{Z}_{N}^{\times}\), we used quantum phase estimation and obtained a fraction \(\frac{h}{2^{Q}}\) such that
+\begin{equation}
+  \left|\frac{h}{2^Q} - \frac{k}{r}\right| \leq \frac{1}{4N^{2}}.
+\end{equation}
+Since the unknown order satisfies \(r < N\), we have \(2r^2 < 2N^2 < 4N^2\), which implies \(\frac{1}{4N^2} \leq \frac{1}{2r^2}\). Therefore, Theorem~\ref{thm:convergent-best-approx} applies with \(x = \frac{h}{2^Q}\) and the fraction \(\frac{p}{q} = \frac{k}{r}\).
+
+So \(\frac{k}{r}\) is a convergent of \(\frac{h}{2^Q}\). But which one?
+It turns out that we can iteratively compute convergents \(\frac{v}{w}\) with denominator \(w<N\).
+The lemma below shows that any convergent \(\frac{v}{w}\) we find that satisfies \(w<N\) and \( \left|\frac{h}{2^Q} - \frac{v}{w}\right| \leq \frac{1}{4N^{2}}\) must automatically satisfy \(\frac{v}{w} = \frac{k}{r}\).
+
+\begin{lemma}\label{lem:uniqueness}
+  Let \(N \in \mathbb{N}\) and \(x \in \mathbb{R}\).
+  If two rational numbers \(\frac{k}{r}\) and \(\frac{k_2}{r_2}\) with \(1 \leq r, r_2 < N\) both satisfy
+  \begin{equation*}
+    \left|x - \frac{k}{r} \right| \leq \frac{1}{4N^2} \quad \text{and} \quad \left| x - \frac{k_2}{r_2} \right| \leq \frac{1}{4N^2},
+  \end{equation*}
+  then \(\frac{k}{r} = \frac{k_2}{r_2}\).
+\end{lemma}
+\begin{proof}
+  Suppose for contradiction that \(\frac{k}{r} \neq \frac{k_2}{r_2}\).
+  We consider the absolute value of their difference
+  \begin{equation*}
+    \left| \frac{k}{r} - \frac{k_2}{r_2} \right| = \left| \frac{k r_2 - k_2 r}{r r_2} \right|.
+  \end{equation*}
+  Note that  \(\left|k r_2 - k_2 r\right|\geq 1\).
+  Furthermore, because \(r\) and \(r_{2}\) are strictly bounded by \(N\), their product satisfies \(r r_2 < N^2\).
+  Therefore, we have
+  \begin{equation*}
+    \left| \frac{k}{r} - \frac{k_2}{r_2} \right| > \frac{1}{N^2}.
+  \end{equation*}
+  On the other hand, applying the triangle inequality leads to the contradiction
+  \begin{equation*}
+    \left| \frac{k}{r} - \frac{k_2}{r_2} \right| \leq \left| \frac{k}{r} - x\right| + \left| x - \frac{k_2}{r_2} \right| \leq \frac{1}{4N^2} + \frac{1}{4N^2} = \frac{1}{2N^2}. \qedhere
+  \end{equation*}
+\end{proof}
+
+Therefore determining the multiplicative order of an element can be done as follows.
+
+\medskip
+
+\noindent
+\fbox{%
+  \begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+    \begin{remark}[Determining multiplicative orders]\label{rmk:shor-quantum-step}\hfill\\
+      \textbf{Input}: Natural numbers \(a, N, p \in \mathbb{N}\) such that \(\gcd(a,N) = 1\), and a quantum circuit implementing the controlled-unitary gates for the unitary maps \(\mathrm{mult}_{a}^{2^{l}} \colon (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{ \otimes n}\) for each \(0 \leq l \leq Q-1\), where \(n = \lceil \log_2 N \rceil\).\\
+      \textbf{Goal:} Determine the multiplicative order \(r = \operatorname{ord}(a)\) of \(a\) considered as an element in \(\mathbb{Z}_{N}^{\times}\).
+
+      \textbf{Step 1:} \\
+      Set \(Q = 2n + 3 + p\) and run the quantum phase estimation circuit from Remark~\ref{rmk:quantum-phase-with-errors} to obtain a \(h \in \{0, \dots, 2^Q-1\}\).
+      With a success probability of at least \(1 - \frac{1}{2^{p}-2}\), the resulting fraction \(\frac{h}{2^{Q}}\) satisfies:
+      \begin{equation*}
+        \left| \frac{h}{2^Q} - \frac{k}{r} \right| \leq \frac{1}{4N^{2}}
+      \end{equation*}
+      for some (unknown) integer \(0 \leq k \leq r-1\).
+
+      \textbf{Step 2:} \\
+      Compute the finite continued fraction of\(\frac{h}{2^{Q}}\).
+      By Theorem~\ref{thm:convergent-best-approx}, this sequence contains a convergent \(\frac{v}{w}\) satisfying \(\gcd(v,w)=1\), \(w < N\), and
+      \begin{equation*}
+        \left| \frac{h}{2^Q} - \frac{v}{w} \right| \leq \frac{1}{4N^2}.
+      \end{equation*}
+      Due to Lemma~\ref{lem:uniqueness}, this  convergent is guaranteed to satisfy \(\frac{v}{w} = \frac{k}{r}\).
+
+      We extract this fraction \(\frac{v}{w}\) by iteratively evaluating the convergents of \(\frac{h}{2^Q}\).
+
+      \textbf{Step 3:} \\
+      Compute \(a^{w} \mod N\).
+      \begin{itemize}
+        \item If \(a^{w} \equiv 1 \pmod N\), then \(w\) is the true order \(r\), and the algorithm terminates successfully.
+        \item Otherwise, because \(\frac{v}{w} = \frac{k}{r}\) with \(\gcd(v,w)=1\), the denominator \(w\) must be a proper  divisor of \(r\).
+        We then recursively repeat Step 1 through Step 3, replacing the base element \(a\) with the updated element \(a' \equiv a^w \mod N\).
+      \end{itemize}
+      The new element \(a'\) has the strictly smaller order \(\operatorname{ord}(a') = \frac{r}{w}\).
+      Therefore, the algorithm terminates with the true order \(r\) after at most \(\lfloor \log_{2} r \rfloor\) circuit iterations.
+    \end{remark}
+  \end{minipage}
+}
+\medskip
+fail
+ %TODO Hidden subgroup problem.
+
 % \begin{equation*}
 %   \inputtikz{solving-the-hidden-subgroup-problem}
 % \end{equation*}
@@ -8165,6 +8374,13 @@ Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGrou
     \item Show that it suffices to restrict the proof to \(\delta \geq 0\).
     \item Prove that \(\sin(x) \geq \tfrac{2}{\pi}x\) for all \(x \in [0, \tfrac{\pi}{2}]\).
   \end{thmlist}
+\end{exercise}
+
+
+\begin{exercise}\label{exe:summation-of-vectors-gives-one}
+  Show that \(\frac{1}{\sqrt{r}}\sum_{k=0}^{r-1} \Lambda_{k} = \ket{1}\), where the vectors \(\Lambda_{k}\in (\mathbb{C}^{2})^{\otimes n}\) are defined as in Equation~\eqref{eq:eigenvectors-order-a}.
+
+  \textit{Hint:}   Substitute the explicit definition of \(\Lambda_k\), swap the order of summation, and show that the sum \(\sum_{k=0}^{r-1} e^{2\pi i k \frac{m}{r}}\) vanishes for any integer \(m \nequiv 0 \mod r\).
 \end{exercise}
 \cleardoublepage
 \subsection{Study goals}\label{sec:groups-study-goals}
