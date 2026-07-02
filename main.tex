@@ -1,4 +1,4 @@
-\documentclass[a4paper,oneside, 12pt]{amsart}
+\documentclass[a4paper, oneside, 12pt]{amsart}
 
 \usepackage[draft,
 type = paper,
@@ -4066,7 +4066,7 @@ To get a first idea why quantum algorithms are believed to be more powerful than
 We conclude our discussion of unitary transformations with some supplementary advanced considerations.
 The topics below will not be included in an examination and are not part of the core content.
 
-\begin{definition}\label{def:group}
+\begin{definition}\label{def:group-for-special-sec}
   A \emph{group} is a set \( G \) together with a binary operation \( \cdot \from G \times G \to G \), called the \emph{group operation} or \emph{multiplication}, satisfying the following axioms.
   \begin{thmlist}
     \item \emph{Associativity:} For all \( a, b, c \in G \), we have \( (a \cdot b) \cdot c = a \cdot (b \cdot c) \).
@@ -4618,7 +4618,7 @@ For example, in topological quantum computing, gates arise from braidings of any
         1 & 1 \\
         1 & -1
       \end{pmatrix} =
-      \inputtikz{Hadamard} %TODO raise
+      \inputtikz{Hadamard}
     \end{equation*}
     The Hadamard gate allows us to create superpositions.
     It transforms the \(Z\)-basis to the \(X\)-basis and vice versa.
@@ -4980,7 +4980,13 @@ Lastly, the connection between this classical wire and the gate \(S\) means that
 \begin{exercise}
   Let \(V\), \(W\) be two finite-dimensional vector space.
   \begin{thmlist}
-    \item Show that \(\coev_{V\otimes W} = (\id_{V} \otimes \coev_{W}\otimes \id_{\rd*{V}})\coev_{V}\)
+    \item You can assume without proof that there is a linear isomorphism
+    \(f \from \rd*{W} \otimes \rd*{V} \to \rd*{(V\otimes W)}\),satisfying \(f(\gamma \otimes \mu) (v \otimes w) \) = \(\gamma(w)\mu(v)\).
+     Show that
+     \begin{equation*}
+       \coev_{V\otimes W} = (f \otimes \id_{V\otimes W})(\id_{\rd*{W}} \otimes \coev_{V}\otimes \id_{W})\coev_{W}.
+     \end{equation*}
+
     \item Fill in the correct letters such that the following equation holds
     \begin{equation*}
       \widetilde{\ev}_{{V\otimes W}} = (\widetilde{\ev}_{\square})(\square \otimes \widetilde{\ev}_{\square} \otimes \square).
@@ -5050,11 +5056,11 @@ Lastly, the connection between this classical wire and the gate \(S\) means that
   \begin{equation*}
     \braket{f}{g} = \tr(f^{\dagger}g).
   \end{equation*}
-  Prove that for two \(e_{i}, e_{j}\from V\to V\), we have
+  Prove that for two orthogonal projections  \(e_{i}, e_{j}\from V\to V\), we have
   \(e_{i} e_{j} =0 = e_{j} e_{i}\) if and only if \(\braket{e_{i}}{e_{j}} = 0\).
 
   \textit{Hint:} Let \(\mathcal{B}\) be a (well-chosen) orthonormal basis of \(V\).
-  Express \(\tr(e_{i} e_{j})\) using \(\mathcal{B}\) the inner product of \(V\) to conclude that if
+  Express \(\tr(e_{i} e_{j})\) using \(\mathcal{B}\) and the inner product of \(V\) to conclude that if
   \(\tr(e_{i} e_{j}) =0\) the image of \(e_{i}\) must be contained in the orthogonal complement of the image of \(e_{j}\).
 \end{exercise}
 
@@ -7406,13 +7412,11 @@ This is part of a wider class of problems known as the \emph{hidden subgroup pro
   Thus, \(f\) hides the subgroup \(\ord(a) \mathbb{Z}\) and solving the hidden subgroup problem allows us to reconstruct \(\ord(a)\).
 \end{remark}
 
-The standard approach to uncovering hidden symmetries in quantum computing relies on rephrasing it as an eigenvalue problem.
-
 \begin{remark}\label{rmk:the-hsp-for-z2}
   To build intuition, let us first consider the simplest non-trivial example.
-  Consider the cyclic group of two elements, \(G = \mathbb{Z}_2 = \{0, 1\} =X\).
+  Consider the group \(G = \mathbb{Z}_2 = \{0, 1\} =X\).
   A function \(f \from \mathbb{Z}_2 \to X\) can either be constant (\(f(0) = f(1)\)), therefore hiding \(H = \mathbb{Z}_2\), or balanced (\(f(0) \neq f(1)\)), hiding only the trivial subgroup \(H = \{0\}\).
-  In other words, we compute the easiest case of the Deutsch--Jozsa algorithm.
+  In other words, we study the easiest case of the Deutsch--Jozsa algorithm.
 
   Recall that the quantum version of the map \(f\) is the unitary \(UB(f) \from (\mathbb{C}^{2})^{\otimes 2} \to (\mathbb{C}^{2})^{\otimes 2}\) which satisfies for all \(g,h \in G\)
   \begin{equation*}
@@ -7420,7 +7424,7 @@ The standard approach to uncovering hidden symmetries in quantum computing relie
   \end{equation*}
   Let  \(\tilde{f} \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) denote the linear map that satisfies on in the computational basis \(\ket{g} \mapsto \sqrt{2}\ket{f(g)}\) for all \(f \in G\).
 
-  We can represent \(UB(f)\) as the \(ZX\)-diagram shown below.
+  We can represent \(UB(f)\) as the \(ZX\)-diagram depicted below.
   \begin{equation*}
     \inputtikz{implementing-the-oracle}
   \end{equation*}
@@ -7453,7 +7457,7 @@ The standard approach to uncovering hidden symmetries in quantum computing relie
       \tfrac{1}{\sqrt{|G|}^{2}}\sum_{g, h \in G} (-1)^{h}\ket{g} \otimes \ket{h}.
     \end{equation*}
     \item \textbf{Doubling of the first qubit:}
-    We get via the \(Z\)-spider the state
+    Via the \(Z\)-spider we get the state
     \begin{equation*}
       \tfrac{1}{\sqrt{|G|}^{2}} \sum (-1)^{h}\ket{g} \otimes \ket{g} \otimes \ket{h}.
     \end{equation*}
@@ -7498,7 +7502,7 @@ To simplify the situation, we first observe that it suffices to restrict onto th
 
 \begin{theorem}\label{thm:fundamental-thm-fg-abelian-groups}
   Let \(G\) be a finite group such that \(gh=hg\) for all \(g, h \in G\).
-  Then, there are unique pairs \((p_{i},n_{i})_{1\leq i \leq n }\) with \(p_{i}\) prime and \(n_{i} \in \mathbb{N}\) such that
+  Then, there are unique pairs \((p_{i},k_{i})_{1\leq i \leq n }\) with \(p_{i}\) prime and \(k_{i} \in \mathbb{N}\) such that
   \begin{equation}
     G\cong \mathbb{Z}_{p_{1}^{k_{1}}} \times \dots \times \mathbb{Z}_{p_{n}^{k_{n}}}.
   \end{equation}
@@ -7513,10 +7517,6 @@ To simplify the situation, we first observe that it suffices to restrict onto th
   Then \(\langle g\rangle \cong \mathbb{Z}_{p^{n}}\) and one shows that \(G_{p}\cong \langle g \rangle \times G_{p}'\).
   By repeating updating \(G_{p}\) with  \(G'_{p}\) and repeating this procedure until one reaches the trivial group, one obtains the desired decomposition.
 \end{proof}
-
-As an application, we can simplify the abelian hidden subgroup problem for finite groups.
-
-As an application, we can reduce the abelian hidden subgroup problem over arbitrary finite groups to a collection of independent problems over cyclic groups.
 
 \begin{corollary}\label{cor:abelian-vs-cyclic-hsps}
   Let \(G\) be a finite group such that \(gh=hg\) for all \(g,h\in G\).
@@ -7564,14 +7564,22 @@ As an application, we can reduce the abelian hidden subgroup problem over arbitr
   An analogous computation proves the remaining case.
 \end{proof}
 
-By combining Theorem~\ref{thm:fundamental-thm-fg-abelian-groups} and Corollary~\ref{cor:abelian-vs-cyclic-hsps}, we can translate a hidden subgroup problem \((G,X,f)\) for \(G\) a finite group such that \(gh= hg\) for all \(g,h\) with a finite family of independent hidden subgroup problems
-\((G_1, X, f_1), \dots, (G_n, X, f_n)\) where \(G_{i}= \mathbb{Z}_{m_{i}}\).
+By combining Theorem~\ref{thm:fundamental-thm-fg-abelian-groups} and Corollary~\ref{cor:abelian-vs-cyclic-hsps}, we can translate the  hidden subgroup problem \((G,X,f)\) for a ``nice enough'' finite group \(G\) to a finite family of independent hidden subgroup problems
+\((G_1, X, f_1), \dots, (G_n, X, f_n)\) where \(G_{i}= \mathbb{Z}_{m_{i}}\)\footnote{%
+  Nice enough here means that \(gh=hg\) for all \(g\in G\) and for each prime \(p\) the set of elements \(\{g\in G\mid \ord(g) = p^{l} \text{ for an } l \in \mathbb{N}\}\) is a group isomorphic to \( \mathbb{Z}_{p^{k}}\) for a \(k\geq 0\).
+  While dropping the condition on the prime divisors still lets us solve the hidden subgroup theorem, removing the assumption that \(gh=hg\) for all \(g,h\in G\) makes the situation much harder.
+}.
 Solving these problems then gives us the original hidden subgroup \(H\) in form of a product \(H_{1}\times  \dots \times H_{n}\).
 
 \begin{convention}
   For the remainder of this section, we restrict our focus to the case where \(G = \mathbb{Z}_{m}\) for a natural number \(m \in \mathbb{N}\), \(X\) is a finite set, and \(f \from \mathbb{Z}_m \to X\) hiding a  subgroup \(H \subseteq \mathbb{Z}_m\).
 
-  Furthermore, we fix a \(Q\in \mathbb{N}\) such that \(2^{Q}>|G|\) as well as an embedding map \(\iota \from \mathbb{Z}_m \to \{0,1\}^{Q}\).
+  Furthermore, we fix  \(Q\in \mathbb{N}\) such that \(2^{Q}>|G|\).
+  For any congruence class \(g+m \mathbb{Z} \in \mathbb{Z}_{m}\) we may choose a unique representative \(0\leq g \leq m-1\).
+  Then \(g= g_{1}2^{Q-1} + \dots + g_{Q-1}2^{1} + g_{Q}2^{0}\) for \(g_{1}, \dots , g_{Q}\in\{0,1\}\), leading to an embedding
+  \begin{equation*}
+    \iota \from \mathbb{Z}_{m}\to\{0,1\}^{Q}, \qquad g+ m \mathbb{Z} \mapsto (g_{1}, \dots , g_{Q}).
+  \end{equation*}
   By a slight abuse of notation, for any \(g \in \mathbb{Z}_m\), we write \(\ket{g}\in ( \mathbb{C}^{2})^{\otimes Q}\) as a shorthand for the computational basis state \(\ket{\iota(g)}\).
 \end{convention}
 
@@ -7597,7 +7605,7 @@ The minimal polynomial of  \(\mathrm{add}_{1}^m = \id\) is  \(x^m - 1\) and so t
 \begin{equation}
   \lambda_{j} = e^{2\pi i\tfrac{i}{m}} \qquad 0\leq j \leq m-1.
 \end{equation}
-For each eigenvalue \(\lambda_{j}\), the  corresponding eigenvector is given by
+For each eigenvalue \(\lambda_{j}\), a corresponding normalised eigenvector is given by
 \begin{equation*}
   \Lambda_{j} = \frac{1}{\sqrt{m}} \sum_{g\in \mathbb{Z}_{m}} e^{2\pi i \tfrac{-jg}{m}}\ket{g}.
 \end{equation*}
@@ -7615,11 +7623,47 @@ Indeed, a direct calculation shows that these states are eigenvectors for all \(
   \end{equation*}
 \end{definition}
 
-To implement the quantum Fourier transform, we need  controlled \(Z\)-phase-gate
+To describe an efficient algorithm for computing the quantum Fourier transform, we first focus on  the group \(G= \mathbb{Z}_{2^{Q}}\).
+To that end, we write for a given \(1\leq n \leq Q-1\) and \((j_{n}, \dots , j_{Q})\in\{0,1\}^{l}\)
+\begin{equation}
+  0.j_{n}\dots j_{Q} \eqdef \sum_{l=n}^Q j_n 2^{l-n-1}.
+\end{equation}
+
+\begin{lemma}
+  Consider the binary expansion \(\sum_{k=1}^Q j_k 2^{Q-k}\) of an element \(j\in \mathbb{Z}_{2^{Q}}\).
+  Then \(\Lambda_j\) factors into the \(Q\)-fold tensor product
+\begin{equation}\label{eq:qft_product}
+  \Lambda_j
+  =  \frac{1}{\sqrt{2^Q}} \bigotimes_{k=1}^Q \left( \ket{0} + e^{-2\pi i j 2^{-k}} \ket{1} \right)
+  = \frac{1}{\sqrt{2^Q}} \bigotimes_{k=1}^Q \left( \ket{0} + e^{-2\pi i (0.j_{Q-k+1}\dots j_{Q})} \ket{1} \right).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+  By definition, we have
+  \begin{align*}
+    \Lambda_{j}
+    & = \frac{1}{\sqrt{2^{Q}}} \sum_{g\in \mathbb{Z}_{2^{Q}}} e^{2\pi i \tfrac{-jg}{2^{Q}}}\ket{g}
+      = \frac{1}{\sqrt{2^Q}} \sum_{a_1, \dots , a_{Q}=0}^1 e^{-2\pi i j  \sum_{k=1}^Q a_k 2^{-k}} \ket{a_1 \dots a_{Q}} \\
+    & = \frac{1}{\sqrt{2^Q}} \sum_{a_1, \dots , a_Q=0}^1 \bigotimes_{k=1}^Q e^{- 2\pi i j a_k 2^{-k}} \ket{a_k}
+      = \frac{1}{\sqrt{2^Q}} \bigotimes_{k=1}^Q \left( \sum_{a_k=0}^1 e^{-2\pi i j a_k 2^{-k}} \ket{a_k} \right)\\
+    & = \frac{1}{\sqrt{2^Q}} \bigotimes_{k=1}^Q \left( \ket{0} + e^{-2\pi i j 2^{-k}} \ket{1} \right)
+    = \frac{1}{\sqrt{2^Q}} \bigotimes_{k=1}^Q \left( \ket{0} + e^{-2\pi i (0.j_{Q-k+1}\dots j_{Q})} \ket{1} \right).
+  \end{align*}
+  where we used in the last step that
+  \begin{equation*}
+    j 2^{-k}
+    = \sum_{l=1}^Q j_l 2^{Q-l-k}
+    = \sum_{l=1}^{Q-k} j_{l} 2^{Q-l-k} + \sum_{l=Q-k+1}^{Q} j_{l} 2^{Q-l-k}
+  \end{equation*}
+  and so \(e^{-2\pi i j 2^{-k}} = e^{-2\pi i (\sum_{l=Q-k+1}^{Q} j_{l} 2^{Q-l-k})} = e^{-2\pi i (0.j_{Q-k+1} \dots j_{Q})}\).
+\end{proof}
+
+To implement the quantum Fourier transform, we need the controlled \(Z\)-phase-gate.
 
 \begin{lemma}\label{lem:CZ-gate}
   For any \(\alpha\in \mathbb{R}\) the diagram below depicts a linear map that
-satisfies on the computational basis \(\ket{xy} \mapsto e^{2\pi i \alpha x} \ket{xy}\).
+satisfies on the computational basis \(\ket{xy} \mapsto e^{2\pi i \alpha xy} \ket{xy}\).
 \begin{equation}
   \inputtikz{CZ-gate}
 \end{equation}
@@ -7629,7 +7673,7 @@ satisfies on the computational basis \(\ket{xy} \mapsto e^{2\pi i \alpha x} \ket
   \begin{align*}
     \ket{xy} &
                \xrightarrow{Z_{1}^{2}(\tfrac{\alpha}{2})\otimes Z_{1}^{2}(\tfrac{\alpha}{2})}
-               e^{\pi i \alpha(x + y)} \ket{xxyy}
+               e^{\pi i \alpha x} e^{\pi i \alpha y} \ket{xxyy}
                \xrightarrow{\id \otimes X_{2}^{1}\otimes \id}
                \tfrac{1}{\sqrt{2}} e^{\pi i \alpha x}e^{\pi i \alpha y}\ket{x} \otimes \ket{x\boxplus y} \otimes \ket{y}\\
              & \tfrac{1}{\sqrt{2}} e^{\pi i \alpha x}e^{\pi i \alpha y}\ket{x} \otimes \ket{x\boxplus y} \otimes \ket{y}
@@ -7645,7 +7689,230 @@ satisfies on the computational basis \(\ket{xy} \mapsto e^{2\pi i \alpha x} \ket
   \end{equation*}
 \end{proof}
 
-% TODO: setup notation
+To implement the quantum Fourier transform, we use the following shorthand notation for a controlled \(Z(\alpha)\)-gate.
+
+\begin{equation*}
+  \inputtikz{CZ-shorthand}
+\end{equation*}
+Below, we will count a controlled \(Z(\alpha)\)-gate as a single gate operation.
+\begin{proposition}\label{prop:the-quantum-fourier-transform-for-powers-of-2}
+  The quantum Fourier transform \(\mathrm{QFT}_{ \mathbb{Z}_{2^{Q}}} \from ( \mathbb{C}^{2})^{\otimes Q} \to ( \mathbb{C}^{2})^{\otimes Q}\) can be computed using \(Q^{2}\) gates by the algorithm depicted below.
+  \begin{equation}
+    \inputtikz{quantum-fourier-transform}
+  \end{equation}
+\end{proposition}
+\begin{proof}
+  Consider \(j= \sum_{k=1}^{Q}j_{k}2^{Q-k}\) and the corresponding state \(\ket{j} = \ket{j_{1} \dots j_{Q}} \).
+  Applying the Hadamard gate to the first qubit yields \(\tfrac{1}{\sqrt 2}(\ket{0} + e^{-2\pi i (0.j_{1})}\ket{1})\otimes \ket{j_{2} \dots j_{Q}}\)
+  The first controlled \(Z_{1}^{1}(-\tfrac{1}{4})\)-gate transforms this into\(
+  \tfrac{1}{\sqrt 2}(\ket{0} + e^{-2\pi i (0.j_{1}j_{2})}\ket{1})\otimes \ket{j_{2} \dots j_{Q}}\).
+  Further applications of the controlled \(Z_{1}^{1}(-\tfrac{1}{2^{3}}), \dots , Z_{1}^{1}(-\tfrac{1}{2^{Q}})\)-gates result in
+  \begin{equation*}
+    \tfrac{1}{\sqrt 2}(\ket{0} + e^{-2\pi i (0.j_{1}j_{2}\dots j_{Q}))}\ket{1})\otimes \ket{j_{2} \dots j_{Q}}.
+  \end{equation*}
+  Repeating the procedure for the remaining \(Q-1\) qubits produce the state
+  \begin{equation*}
+    \tfrac{1}{\sqrt{2^{Q}}}\big( \ket{0} + e^{-2\pi i (0.j_1 j_2 \dots j_Q)} \ket{1} \big) \otimes \dots \otimes \big( \ket{0} + e^{-2\pi i (0.j_Q)} \ket{1} \big).
+  \end{equation*}
+  By reverting the order of the qubits this produces the desired result \(\Lambda_{j}\).
+
+  From the diagram, we conclude that before the order of the qubits is permuted, \(Q\) operations are applied to the first qubit, \(Q-1\) to the second up until a single operation is applied to the last qubit.
+  This accounts for \(Q + Q-1 + \dots + 1 = \tfrac{Q(Q+1)}{2}\) operations.
+  Furthermore, one shows, see Exercise~\ref{exe:swaps-needed-to-invert} inductively that inverting the order of the qubits is realised by swapping \(\tfrac{Q(Q-1)}{2}\) neighbouring qubits.
+  Thus, the number of gates used in total is
+  \begin{equation*}
+    \tfrac{Q(Q-1)}{2} + \tfrac{Q(Q+1)}{2} = \tfrac{Q(2Q)}{2} = Q^{2}. \qedhere
+  \end{equation*}
+\end{proof}
+
+
+A first application of the quantum Fourier transformation that will allow us to solve the hidden subgroup problem for groups of the form \( \mathbb{Z}_{m}\) is the \emph{phase estimation algorithm}.
+
+\begin{remark}\label{rmk:quantum-phase-estimation}
+  Consider a unitary map \(U \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) admitting an eigenvector \(\ket{u}\in ( \mathbb{C}^{2})^{\otimes n}\) with an eigenvalue \(\lambda= e^{-2\pi i \tfrac{k}{2^{Q}}}\) for some \(0 \leq k \leq 2^{Q-1}\).
+  We want to determine \(k\)  (equivalently \(\lambda\)) using the inverse of the quantum Fourier transform.
+  To that end, let us assume that for each \(0 \leq l \leq Q-1\) we have a black box that implements a controlled \(U^{2^{l}}\)-operation.
+  Explicitly, the controlled \(U^{2^{l}}\)-operation corresponds to the unitary map \(CU^{2^{l}} \from \mathbb{C}^{2}\otimes ( \mathbb{C}^{2})^{\otimes n} \to \mathbb{C}^{2} \otimes ( \mathbb{C}^{2})^{\otimes n}\), satisfying for any \(x\in\{0,1\}\) and \(\ket{y} \in ( \mathbb{C}^{2})^{\otimes n}\)
+  \begin{equation*}
+    \ket{x}\otimes \ket{y} \mapsto \ket{x} \otimes U^{x\cdot 2^{l}}\ket{y}.
+  \end{equation*}
+
+  In our diagrammatical calculus, we represent this as
+  \begin{equation}\label{eq:controlled-u2k}
+    \inputtikz{controlled-u2k}
+  \end{equation}
+  We now consider the algorithm depicted below.
+  \begin{equation}\label{eq:quantum-phase-estimation}
+    \inputtikz{qunatum-phase-est-pre-qft}
+  \end{equation}
+  Since
+  \begin{equation*}
+    \tfrac{1}{\sqrt{2}}( \ket{0} + \ket{1}) \otimes \ket{u}
+    \xrightarrow{CU^{2^{Q-l}}}
+     \tfrac{1}{\sqrt{2}}( \ket{0} + e^{- 2\pi i \tfrac{k}{2^{Q}} \cdot 2^{Q-l} }\ket{1}) \otimes \ket{u}
+    = \tfrac{1}{\sqrt{2}}( \ket{0} + e^{- 2\pi ik2^{-l}}\ket{1}) \otimes \ket{u},
+  \end{equation*}
+  the state \(\ket{0 \dots 0} \otimes  \ket{u}\) is first, via the Hadamard gates, mapped to \( \tfrac{1}{\sqrt{2^{Q}}} \big(\otimes_{l=1}^{Q}(\ket{0} + \ket{1}) \big)\) and then, by appyling the controlled \(U\)-gates to
+\begin{equation*}
+  \tfrac{1}{\sqrt{2^{Q}}} \big( \otimes_{l=1}^{Q}(\ket{0} + e^{- 2\pi i k 2^{-l}}\ket{1}\big)
+  \overset{{\eqref{eq:qft_product}}}{=} \Lambda_{k} \otimes \ket{u} .
+\end{equation*}
+Thus, applying the inverse quantum Fourier transformation results in the state
+\begin{equation*}
+  \ket{\mathrm{out}} = \ket{k} \otimes \ket{u}.
+\end{equation*}
+
+
+Now, consider the observable (\ie self-adjoint map)
+\begin{equation}\label{eq:measuring-the-comp-basis}
+  M \eqdef \sum_{j=1}^{Q} 2^{Q-j-1} ( \id - \sigma_z^{(j)}) \otimes \id
+\end{equation}
+where \(\sigma_z^{(j)}= \id^{\otimes j-1} \otimes \sigma_{z} \otimes \id^{\otimes Q-j} \).
+Its eigenvalues are \(\mathrm{spec}(M) =\{0, \dots , 2^{Q}-1\}\) and for each \(\zeta \in \mathrm{spec}(M)\), \(s \in\{0,1\}^{Q}\), and \(\ket{v} \in ( \mathbb{C}^{2})^{\otimes n}\) we have \(M (\ket{s}\otimes \ket{v} )= \zeta (\ket{s} \otimes \ket{v}) \) if and only if \(\ket{\zeta} = \ket{s}\).
+Let \(E \from\{ \Gamma \subseteq \mathrm{spec}(M)\} \to \mathrm{Proj}\big((\mathbb{C}^2)^{\otimes Q} \otimes (\mathbb{C}^2)^{\otimes n}\big)\) be the associated projection-valued measure of \(M\).
+Then
+\begin{equation*}
+  \braket{\mathrm{out}}{E(\{k\}) \mid \mathrm{out}}
+  = \braket[\Big]{\ket{k} \otimes \ket{u}}{E(\{k\}) \;\Big|\; \ket{k} \otimes \ket{u}}
+  = 1
+\end{equation*}
+and so we observe the state  \(\ket{k} \otimes \ket{u}\) with a probability of \(1\).
+\end{remark}
+
+But what if our group \(G\) is not of the form \( \mathbb{Z}_{2^{Q}}\)? We can still use the algorithm of the previous remark to approximate certain eigenvalues with a guaranteed probability.
+
+
+\begin{remark}\label{rmk:quantum-phase-with-errors}
+  Fix an  \(m_{\mathrm{in}}, k_{\mathrm{in}} \in \mathbb{N}\) such that \(\tfrac{k_{\mathrm{in}}}{m_{\mathrm{in}}} \neq \tfrac{g}{2^{n}}\) for \(g, n\in \mathbb{N}\).
+  Consider the group \(G= \mathbb{Z}_{m_{\mathrm{in}}}\) and, as before, a unitary map \(U\from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) admitting an eigenvector \(\ket{u}\) corresponding to an eigenvalue \( \lambda = e^{-2\pi i \tfrac{k_{\mathrm{in}}}{m_{\mathrm{in}}}}\) with \(0 \leq k_{\mathrm{in}} \leq m_{\mathrm{in}}-1\).
+  We will now adapt the procedure of Remark~\ref{rmk:quantum-phase-estimation} to obtain with a high likelihood an approximation of \(\tfrac{k_{\mathrm{in}}}{m_{\mathrm{in}}}\).
+  More concretely, let \(Q_{0}\in \mathbb{N}\) be the  minimal natural number such that \(2^{Q_{0}}\geq m_{\mathrm{in}}\) and \(x \in \mathbb{N}\).
+  Ideally, we would want to determine the unique \(0 \leq g\leq 2^{Q_{0}+ x}-1\) such that
+  \begin{equation*}
+    \left|\frac{g}{2^{Q_{0}+x}}-\frac{k_{\mathrm{in}}}{m_{\mathrm{in}}} \right| < \frac{1}{2^{Q_{0}+x+1}}.
+  \end{equation*}
+  This has two issues.
+  First, our algorithm does not ``see'' \(\tfrac{k_{\mathrm{in}}}{m_{\mathrm{in}}}\) but only \(e^{-2\pi i \tfrac{k_{\mathrm{in}}}{m_{\mathrm{in}}}}\).
+  For values \(\tfrac{k_{\mathrm{in}}}{m_{\mathrm{in}}}\) close to zero or one this would become problematic and so we  we update \(k_{\mathrm{in}}\) and \(m_{\mathrm{in}}\) to
+  \begin{equation*}
+    m = 4m_{\mathrm{in}}, \qquad
+    k = m_{\mathrm{in}} + 2k_{\mathrm{in}}.
+  \end{equation*}
+  Second, a posteriori, we realise that obtaining a correct solution only happens with a certain probability.
+  To be able to control the probability, we introduce a second parameter \(p\in \mathbb{N}\) and set \(Q = Q_{0}+x+p+1\) and modify our conditions such that we consider the algorithm successful if we obtain a \(0\leq l \leq 2^{Q}-1\) such that
+  \begin{equation*}
+    \left|\frac{l}{2^{Q}}-\frac{k}{m}\right| < \frac{1}{2^{Q-p+1}}.
+  \end{equation*}
+  Note that this gives us \(2^{p}\) possible correct results.
+
+  As discussed in Exercise~\ref{exe:adopted-qpe} there is an adaptation of the phase estimation algorithm of Remark~\ref{rmk:quantum-phase-estimation}  that maps the  initial state \(\ket{0}^{\otimes Q} \otimes \ket{0} \otimes \ket{u}\) to
+  \begin{equation*}
+    \ket{r} \otimes  \ket{0} \otimes \ket{u}
+    \eqdef \frac{1}{\sqrt{2^Q}}\sum_{h\in \mathbb{Z}_{2^{Q}}} e^{-2\pi i h \left(\tfrac{1}{4} +\tfrac{k_{\mathrm{in}}}{2m_{\mathrm{in}}}\right)}\ket{h} \otimes  \ket{0} \otimes \ket{u}
+    = \frac{1}{\sqrt{2^Q}}\sum_{h\in \mathbb{Z}_{2^{Q}}} e^{-2\pi i h \tfrac{k}{m}}\ket{h} \otimes  \ket{0} \otimes \ket{u}.
+  \end{equation*}
+  Since \((\Lambda_{h})_{h\in \mathbb{Z}_{2^{Q}}}\) forms an orthonormal basis of \( ( \mathbb{C}^{2})^{\otimes Q}\), we have
+  \begin{equation*}
+    \ket{r} = \sum_{h\in \mathbb{Z}_{2^{Q}}} \alpha_{h} \Lambda_{h}.
+  \end{equation*}
+
+  By applying the inverse of the quantum Fourier transform to the first \(Q\) qubits, we obtain the state
+  \begin{equation*}
+    \ket{\mathrm{out}} \eqdef  \sum_{h\in \mathbb{Z}_{2^{Q}}} \alpha_{h} \ket{h}  \otimes \ket{0} \otimes \ket{u}.
+  \end{equation*}
+  The likelihood of observing a specific measurement outcome \(\ket{h}\otimes \ket{0} \otimes \ket{u}\) when measuring the first \(Q\) qubits with respect to the computational basis is determined by the orthogonal projection \(E(\{h\})\) whose image is spanned by \(\ket{h}\otimes \ket{x} \otimes \ket{y}\), where \(\ket{x}\in (\mathbb{C}^2)\) and \(\ket{y}\in (\mathbb{C}^2)^{\otimes n}\) and results in
+  \begin{equation*}
+    \braket{\mathrm{out}}{E(\{h\})\mid \mathrm{out}} = |\alpha_{h}|^{2}.
+  \end{equation*}
+  From this, we want to derive the likelihood \(P_{\mathrm{fail}}\) of observing an incorrect answer.
+  We define \(\delta_{h}\in [-\tfrac{1}{2}, \tfrac{1}{2}]\) via
+  \begin{equation*}
+    e^{-2\pi i \left(\tfrac{k}{m}- \tfrac{h}{2^Q}\right)} = e^{2\pi i \delta_{h}}.
+  \end{equation*}
+  The scalar \(\alpha_{h}\) is obtained by computing the inner product
+  \begin{equation*}
+    \alpha_h = \braket{\Lambda_{h}}{r}
+    = \frac{1}{2^Q} \!\sum_{j,h \in \mathbb{Z}_{2^Q} } e^{2\pi i \tfrac{h \cdot j}{2^Q}}e^{-2\pi i\tfrac{k}{m}h} \braket{j}{h}
+    = \frac{1}{2^Q} \!\sum_{j=0}^{2^Q-1} \left(e^{2\pi i \left(\tfrac{h}{2^{Q}} - \tfrac{k}{m}\right)}\right)^j
+    = \frac{1}{2^Q} \!\sum_{j=0}^{2^Q-1} \left(e^{2\pi i \delta_{h}}\right)^j.
+  \end{equation*}
+  Since this is a finite geometric series (and \(\delta_{h}\neq 0\)), we get
+  \begin{equation*}
+    \alpha_{h}  = \frac{1}{2^Q} \sum_{j=0}^{2^Q-1} \left(e^{2\pi i \delta_{h}}\right)^j = \frac{1}{2^Q} \left( \frac{1 - \left({e^{2\pi i \delta_{h}}}\right)^{2^{Q}}}{1 - e^{2\pi i \delta_{h}}} \right).
+  \end{equation*}
+  To get a good estimate for this probability, we note that the enumerator satisfies
+  \begin{equation*}
+    |1 - e^{2\pi i \delta_h 2^Q}|^2 \leq 4.
+  \end{equation*}
+  For the denominator, Exercise~\ref{exe:bound-for-denominator-phase-est} shows that
+  \begin{equation*}
+    |1 - e^{2\pi i \delta_h}|^2 \geq 16 \delta_{h}^{2}.
+  \end{equation*}
+  Putting these identities together, we get
+  \begin{equation*}
+    |\alpha_h|^2 \leq \frac{4}{2^{2Q} \cdot 16\delta_h^2} = \frac{1}{2^{2Q+2} \cdot \delta_h^2}.
+  \end{equation*}
+  Because \(\tfrac{k}{m} \in [\tfrac{1}{4}, \tfrac{3}{4})\) , we get that  \(\left|\frac{h}{2^{Q}} - \frac{k}{m} \right| < \frac{1}{2^{Q-p+1}}\) holds if and only if \(|\delta_h| < \frac{1}{2^{Q-p+1}}\). Taking the contrapositive, the failure condition corresponds precisely to
+  \begin{equation*}
+    \big|\tfrac{h}{2^{Q}} - \tfrac{k}{m} \big| \geq \tfrac{1}{2^{Q-p+1}}
+    \iff |\delta_h| \geq \frac{1}{2^{Q-p+1}} = \frac{2^{p-1}}{2^Q}.
+  \end{equation*}
+
+
+  For each integer \(2^{p-1} \leq d \leq 2^{Q-1}\), we define
+  \begin{equation*}
+    S_d \eqdef \left\{ h \in \mathbb{Z}_{2^Q} \;\Big|\; d-1 < | 2^{Q}\delta_{h}| \leq d \right\}.
+  \end{equation*}
+  We will now show that \(|S_{d}|\leq 2\).
+
+  First, note that the map \(\mathbb{Z}_{2^{Q}} \to [-\tfrac{1}{2}, \tfrac{1}{2}]\), \(h \mapsto \delta_{h}\) is injective.
+  Indeed, if \(\delta_{h_1} = \delta_{h_2}\), then
+  \begin{equation*}
+    1 = e^{-2\pi i (\delta_{h_{1}} - \delta_{h_{2}})} = e^{2\pi i \tfrac{h_1 - h_2}{2^Q}}
+  \end{equation*}
+  and so \(\tfrac{h_1 - h_2}{2^Q} \in \mathbb{Z}\) which implies \(h_1 = h_2\).
+
+  Second, suppose \(h \in S_{d}\) satisfies \(h > 2^Q \tfrac{k}{m}\).
+  Then, a direct computation shows that for every \(x \in\{1, \dots , 2^{Q}-h\}\)  we have \(2^Q\delta_{h+x} > d\) and so \(h+x \notin S_{d}\).
+  Similarly,  for each \(y \in\{1, \dots , h\}\) with \((h-y) > 2^{Q} \tfrac{k}{m}\) we have \(2^{Q}\delta_{h-y} \leq d-1\).
+  An analogous  argument for \(h \in S_{d}\) satisfying \(h < 2^Q \tfrac{k}{m}\) then implies \(|S_{d}| \leq 2\).
+
+ For any given \(h \in S_d\), we have  \(|\delta_h| \geq \frac{d-1}{2^Q}\) and so
+  \begin{equation*}
+    |\alpha_h|^2 \leq \frac{1}{4(d-1)^2} \leq \frac{1}{4d^2}.
+  \end{equation*}
+  This results in
+  \begin{equation*}
+    P_{\text{fail}}
+    = \sum_{\substack{ h\in \mathbb{Z}_{2^{Q}}\\ 2^{Q}\delta_{h}\geq 2^{p-1}}} |\alpha_{h}|^{2}
+    \leq 2 \sum_{d=2^{p-1}}^{2^{Q-1}} \frac{1}{4d^2}
+    = \sum_{d=2^{p-1}}^{2^{Q-1}} \frac{1}{2d^2}.
+  \end{equation*}
+  This can be further simplified to
+  \begin{equation*}
+    P_{\text{fail}}
+    \leq \sum_{d=2^{p-1}}^{2^{Q-1}} \frac{1}{2d^2}
+    \leq \int_{2^{p-1}}^{\infty} \frac{1}{2(y-1)^2} \mathrm{d}y
+    = \int_{2^{p-1}-1}^{\infty} \frac{1}{2y^2} \mathrm{d}y
+    = \frac{1}{2(2^{p-1}-1)}
+    = \frac{1}{2^p - 2}.
+  \end{equation*}
+  Therefore, the total probability of successfully measuring an outcome \(\ket{h} \otimes \ket{0} \otimes \ket{u}\) such that \(\left|\frac{h}{2^{Q}} - \frac{k}{m} \right| < \frac{1}{2^{Q-p+1}}\) is
+  \begin{equation*}
+    1 - \frac{1}{2^p - 2}.
+  \end{equation*}
+
+  Finally note that
+  \begin{equation*}
+    \left|\frac{h}{2^Q} - \frac{k}{m}\right|
+    = \left|\frac{h}{2^Q} - \left(\frac{1}{4} + \frac{1}{2}\frac{k_{\mathrm{in}}}{m_{\mathrm{in}}}\right)\right|
+    = \frac{1}{2}\left|2\frac{h}{2^{Q}} - \frac{1}{2} - \frac{k_{\mathrm{in}}}{m_{\mathrm{in}}} \right|.
+  \end{equation*}
+  Therefore, we get
+  \begin{equation*}
+    \left|2\frac{h}{2^{Q}} - \frac{1}{2}  - \frac{k_{\mathrm{in}}}{m_{\mathrm{in}}} \right| < \frac{1}{2^{Q-p}}= \frac{1}{2^{Q_{0} + x + 1}}.
+  \end{equation*}
+\end{remark}
 
 % \begin{equation*}
 %   \inputtikz{solving-the-hidden-subgroup-problem}
@@ -7861,9 +8128,46 @@ Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGrou
     \item If the loops terminate without a match, return \textbf{False}.
   \end{thmlist}
 \end{exercise}
+
+\begin{exercise}\label{exe:swaps-needed-to-invert}
+  For any \(1\leq i\leq n-1\) define the map \(\tau_{i} \from\{1, \dots , n\} \to\{1, \dots , n\}\) by
+  \begin{equation*}
+    \tau_{i}(j) =
+    \begin{cases}
+      j + 1 & j = i \\
+      j - 1 & j = i + 1 \\
+      j & \text{otherwise}.
+    \end{cases}
+  \end{equation*}
+  Prove by induction that the map \(f \from\{1, \dots , n\} \to\{ 1, \dots , n\}\), \(f(j) = n - j + 1\) can be obtained by composing \(n(n+1)/2\) of the \(\tau_{i}\)-maps.
+\end{exercise}
+
+\begin{exercise}
+  Provide a diagram for an algorithm that computes the inverse of the quantum Fourier transform.
+\end{exercise}
+
+\begin{exercise}\label{exe:adopted-qpe}
+  Consider a unitary map \(U \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) admitting an eigenvector \(\ket{u}\in ( \mathbb{C}^{2})^{\otimes n}\) for the eigenvalue \(\lambda= e^{-2\pi i \alpha}\) for an \(\alpha \in \mathbb{R}\).
+  Compute for a given \(\beta \in \mathbb{R}\) and \(Q\in \mathbb{N}\) the outcome of the algorithm depicted below  applied to the input \(\ket{0}^{\otimes Q}\otimes \ket{u}\):
+  \begin{equation*}
+   \inputtikz{qpe-modified}
+  \end{equation*}
+\end{exercise}
+
+\begin{exercise}\label{exe:bound-for-denominator-phase-est}
+  Prove that for any  \(\delta \in [-\tfrac{1}{2}, \tfrac{1}{2}]\)
+  \begin{equation*}
+    |1 - e^{2\pi i \delta}|^2 \geq 16 \delta^2
+  \end{equation*}
+  by following the steps:
+  \begin{thmlist}
+    \item Show that \(|1 - e^{2\pi i \delta}|^2 = 4(\sin(\pi \delta))^{2}\).
+    \item Show that it suffices to restrict the proof to \(\delta \geq 0\).
+    \item Prove that \(\sin(x) \geq \tfrac{2}{\pi}x\) for all \(x \in [0, \tfrac{\pi}{2}]\).
+  \end{thmlist}
+\end{exercise}
 \cleardoublepage
-\subsection{Study goals}\label{sec:ZX-study-goals}
-% TODO
+\subsection{Study goals}\label{sec:groups-study-goals}
 The questions below are designed to help you develop your understanding of group theory in the context of quantum computing.
 You should aim to answer and explain your reasoning independently, without relying on external aids such as search engines or AI tools.
 The level of difficulty is indicative of what you could expect in an oral exam.
