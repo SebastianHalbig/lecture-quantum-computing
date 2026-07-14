@@ -80,7 +80,19 @@ pkgOptions={
 }
 
 %
-% TODO: Post semester: Move section on Gottesmann-Knill up to Kitaev solvay into a section called group-theoretic aspects of quantum computing.
+% TODO: Post semester:
+% New structure:
+%%%
+%%% PART I: Lin Alg, Group and number theory, probability theory
+%%% Part II: Quantum mechanics and the circuit model of quantum computing
+%%% Part III: Quantum algorithms
+%%% Part IV: Optimisation of quantum algorithms via the ZX-calc
+%%% Part V: The stabiliser formalism
+%%% Part VI: Lie-theoretic aspects of quantum computing
+%%%
+%%% TODO Move section on Gottesmann-Knill up to Kitaev solvay into a section called group-theoretic aspects of quantum computing.
+%%% TODO Complete Hidden subgroup problem.
+%%% TODO AddThe rules of the ZX-calculus.
 %
 %
 \begin{document}
@@ -3867,11 +3879,18 @@ Then \(V M V^{\dagger} = U M U^{\dagger}\).
   The proof is concluded by observing that \(\det(U) = 1\) forces \( \lambda = 1 \).
 \end{proof}
 
-We can now describe  unitary maps \(f \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) up to scalars \(e^{2\pi i \lambda} \in \mathbb{C}\), with \(\lambda \in \mathbb{R}\) in terms of \(Z\) and \(X\)-phase gates.
-This is called the \emph{Euler decomposition} of \(f\).
+We can now describe  unitary maps \(f \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) up to scalars \(e^{2\pi i \lambda} \in \mathbb{C}\), with \(\lambda \in \mathbb{R}\) in terms of \(Z\) and \(X\)-phase gate.
+
+\begin{definition}\label{def:euler-decomposition}
+  A \emph{Euler decomposition} of a unitary map \(f \from \mathbb{C}^{2} \to \mathbb{C}^{2}\) is a decomposition
+  \begin{equation*}
+     f = e^{2 \pi i \lambda} Z(\alpha) X(\beta) Z(\gamma), \qquad \alpha, \beta, \gamma, \lambda \in \mathbb{R}.
+  \end{equation*}
+\end{definition}
 
 \begin{proposition}\label{prop:euler-decomposition-of-rotation}
-  For any unitary map \( f \from \mathbb{C}^2 \to \mathbb{C}^2 \) there exist \( \alpha, \beta, \gamma, \lambda \in \mathbb{R} \) such that
+  Any unitary map \( f \from \mathbb{C}^2 \to \mathbb{C}^2 \) admits an Euler decomposition.
+  That is, there are \( \alpha, \beta, \gamma, \lambda \in \mathbb{R} \) such that
   \begin{equation}\label{eq:euler-decomposition-of-rotation}
     f = e^{2 \pi i \lambda} Z(\alpha) X(\beta) Z(\gamma).
   \end{equation}
@@ -5910,9 +5929,9 @@ To keep the proof concise, we will, depending on the context, implicitly identif
 
   \textit{Base case (\( n = 2 \)):}
   Let \( V \) be the transformation matrix of \( f \) with respect to the \( Z \)-basis \( \mathcal{B} \).
-  There is a \( \lambda \in \mathbb{R} \)   such that
+  Then, there is  a \( \lambda \in \mathbb{R} \) such that \(U = e^{2\pi i \lambda} V \in \SU(2)\).
+  Moreover, we set
   \begin{equation*}
-    U= P V\in \SU(2), \qquad\qquad \text{where }
     P= \begin{pmatrix}
       1 & 0\\
       0 & e^{2\pi i \lambda}
@@ -5928,7 +5947,7 @@ To keep the proof concise, we will, depending on the context, implicitly identif
   \begin{align*}
     (\id\otimes A)&\CNOT(\id\otimes B)\CNOT(\id\otimes C)(P^{-1}\otimes\id) \ket{st}
               = e^{-2\pi i s \lambda} \ket{s}\otimes A \sigma_{x}^{s}B \sigma_{x}^{s}C\ket{t}\\
-            & = \ket{s} \otimes U^{s}\ket{t}
+            & = \ket{s} \otimes V^{s}\ket{t}
               = \CNOT(f) \ket{st}.
   \end{align*}
 
@@ -6067,7 +6086,7 @@ Show that any complex number \(z \in \mathbb{C}\) can be obtained from a \(ZX\)-
 \begin{exercise}
   Given \(n,m \in \mathbb{N}\), find \(\lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \in \mathbb{C}\) coefficients such that
   \begin{equation*}
-    X_{n}^{m} = \sum_{\substack{i_{1}, \dots , i_{n} \in\{0,1\}\\, j_{1}, \dots , j_{m} \in\{0,1\}}} \lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \ket{j_{1} \dots j_{m}}\bra{i_{1} \dots i_{n}}.
+    X_{n}^{m} = \sum_{\substack{i_{1}, \dots , i_{n} \in\{0,1\},\\ j_{1}, \dots , j_{m} \in\{0,1\}}} \lambda_{\substack{i_{1}, \dots , i_{n}\\ j_{1}, \dots , j_{m}}} \ket{j_{1} \dots j_{m}}\bra{i_{1} \dots i_{n}}.
   \end{equation*}
 \end{exercise}
 
@@ -7755,7 +7774,7 @@ A first application of the quantum Fourier transformation that will allow us to 
   \end{equation*}
   the state \(\ket{0 \dots 0} \otimes  \ket{u}\) is first, via the Hadamard gates, mapped to \( \tfrac{1}{\sqrt{2^{Q}}} \big(\otimes_{l=1}^{Q}(\ket{0} + \ket{1}) \big)\) and then, by appyling the controlled \(U\)-gates to
 \begin{equation*}
-  \tfrac{1}{\sqrt{2^{Q}}} \big( \otimes_{l=1}^{Q}(\ket{0} + e^{- 2\pi i k 2^{-l}}\ket{1}\big)
+  \tfrac{1}{\sqrt{2^{Q}}} \big( \otimes_{l=1}^{Q}(\ket{0} + e^{- 2\pi i k 2^{-l}}\ket{1})\big)
   \overset{{\eqref{eq:qft_product}}}{=} \Lambda_{k} \otimes \ket{u} .
 \end{equation*}
 Thus, applying the inverse quantum Fourier transformation results in the state
@@ -7916,20 +7935,19 @@ But what if our group \(G\) is not of the form \( \mathbb{Z}_{2^{Q}}\)? We can s
 \end{remark}
 
 We are now prepared to overcome the main difficulty of Shor's algorithm: efficiently determining the order \(r\) of a given element \(a \in \mathbb{Z}_{N}^{\times}\).
-To that end, we fix a natural number \(N \in \mathbb{N}\) and a number \(1\leq a\leq N-1\) such that \(\gcd(a,N)=1\).
-Furthermore, let \(n \in \mathbb{N}\) be the smallest positive integer satisfying \(2^{n}\geq N\).
-As before, the embedding \(\iota\from \mathbb{Z}_{N} \to\{0,1\}^{n}\) maps a \(0\leq x \leq N-1\) to the tuple \((x_{1}, \dots , x_{n})\) such that \(x = x_{1}2^{n-1} + \dots + x_{n-1} 2^{1} + x_{n}2^{0}\).
+Let \(n \in \mathbb{N}\) be the smallest positive integer satisfying \(2^{n}\geq N\).
+As before, the embedding \(\iota\from \mathbb{Z}_{N} \to\{0,1\}^{n}\) maps a number \(0\leq x \leq N-1\) to the tuple \((x_{1}, \dots , x_{n})\) such that \(x = x_{1}2^{n-1} + \dots + x_{n-1} 2^{1} + x_{n}2^{0}\).
 In order to find the order of \(a\), we consider the unitary map
 \begin{equation}
   \mathrm{mult}_{a} \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{ \otimes n}
 \end{equation}
-satisfying for each \(x \in \mathbb{Z}_{N}\) (viewed via its embedding) and \(y \in\{0,1\}^{n} \setminus \iota(\mathbb{Z}_{N})\)
+satisfying for each \(x \in \mathbb{Z}_{N}\) and \(y \in\{0,1\}^{n} \setminus \iota(\mathbb{Z}_{N})\)
 \begin{equation*}
   \mathrm{mult}_{a}\ket{x} = \ket{a \boxtimes x} , \qquad \mathrm{mult}_{a}\ket{y} = \ket{y}.
 \end{equation*}
 This map has the eigenvalues \((\lambda_{k})_{k=0}^{r-1}\) with \(\lambda_{k} = e^{2\pi i \tfrac{k}{r}}\), and for each \(\lambda_{k}\) an eigenvector is given by
 \begin{equation}\label{eq:eigenvectors-order-a}
-  \Lambda_{k} = \tfrac{1}{\sqrt r }\sum_{g=0}^{r-1} e^{-2\pi i \frac{kg}{r}} \ket{a^{g} \; (\text{mod } N)}.
+  \Lambda_{k} = \frac{1}{\sqrt r }\sum_{g=0}^{r-1} e^{-2\pi i \frac{kg}{r}} \ket{a^{g} \; (\text{mod } N)}.
 \end{equation}
 A major obstacle is that we cannot compute such a vector unless we already know \(r\).
 However, by Exercise~\ref{exe:summation-of-vectors-gives-one}, we have
@@ -7937,27 +7955,23 @@ However, by Exercise~\ref{exe:summation-of-vectors-gives-one}, we have
   \frac{1}{\sqrt{r}}\sum_{k=0}^{r-1} \Lambda_{k} =\ket{1}.
 \end{equation*}
 
-We now choose \(p \in \mathbb{N}\) and set \(Q = 2n + 3 + p\), then \(2^{Q-p} = 2^{2n+2} > 4N^2\).
-Applying the phase estimation algorithm of Remark~\ref{rmk:quantum-phase-estimation} with the unitary \(U = \mathrm{mult}_{a}\) and input \(\ket{0}^{\otimes (Q+1)}\otimes \ket{1}\), results with probability \(1- \tfrac{1}{(2^{p}-2)}\) in an outcome of the form \(\ket{h} \otimes \ket{0} \otimes \ket{v}\) such that
- \(\tfrac{h}{2^Q}\) approximates a fraction  \(\tfrac{k}{r}\) for some \(0\leq k \leq r-1\) with error bound by
+We now choose \(p \in \mathbb{N}\) and set \(Q = 2n + 1 + p\).
+Then \(2^{Q-p} = 2^{2n+1} > 2N^2\).
+Applying the phase estimation algorithm of Remark~\ref{rmk:quantum-phase-with-errors} with the unitary \(U = \mathrm{mult}_{a}\) and input \(\ket{0}^{\otimes (Q+1)}\otimes \ket{1}\), results with probability \(1- \tfrac{1}{(2^{p}-2)}\) in an outcome of the form \(\ket{h} \otimes \ket{0} \otimes \ket{v}\) such that
+ \(\tfrac{h}{2^Q}\) approximates a fraction \(\tfrac{k}{r}\) for some \(0\leq k \leq r-1\) with error bound by
 \begin{equation}\label{eq:qpe-precision}
-  \left|\frac{h}{2^Q} - \frac{k}{r}\right| < \frac{1}{2^{Q-p}} = \frac{1}{4 \cdot 2^{2n}} \leq \frac{1}{4N^2}.
+  \left|\frac{h}{2^Q} - \frac{k}{r}\right| < \frac{1}{2^{Q-p}} = \frac{1}{2 \cdot 2^{2n}} \leq \frac{1}{2N^2}.
 \end{equation}
 
 Therefore, our task reduces to retrieving the exact fraction \(\tfrac{k}{r}\) from the known, measured value \(\tfrac{h}{2^Q}\).
 
 \begin{definition}\label{def:continued-fraction}
-  A  \emph{finite continued fraction} is an expression of the form
+  A  \emph{finite continued fraction} is a sequence \([a_0, a_1, \dots, a_m]\), with \(a_0 \in \mathbb{N}_0\) and \(a_i \in \mathbb{N}\) for all \(i \geq 1\), representing the rational number
   \begin{equation}
-    [a_0, a_1, \dots, a_m] \eqdef a_{0} + \frac{1}{a_{1} + \frac{1}{a_{2} + \frac{1}{\dots + \frac{1}{a_{m}}}}} \in \mathbb{Q},
+    a_{0} + \frac{1}{a_{1} + \frac{1}{a_{2} + \frac{1}{\dots + \frac{1}{a_{m}}}}} \in \mathbb{Q}.
   \end{equation}
-  where \(a_0 \in \mathbb{N}_0\) and \(a_i \in \mathbb{N}\) for all \(i \geq 1\).
 
-  For any \(0 \leq j \leq m\), the \(j\)-th \emph{convergent} of the continued fraction is
-  \begin{equation*}
-    [a_0, a_1, \dots, a_j] \eqdef a_{0} + \frac{1}{a_{1} + \frac{1}{a_{2} + \frac{1}{\dots + \frac{1}{a_{j}}}}}.
-  \end{equation*}
-
+  For any \(0 \leq j \leq m\), the \(j\)-th \emph{convergent} of the continued fraction is \([a_0, a_1, \dots, a_j]\).
 \end{definition}
 
 A continued fraction representation of a rational number can be computed quite easily.
@@ -7975,13 +7989,13 @@ A continued fraction representation of a rational number can be computed quite e
     \end{equation*}
     To compute \(a_{j+1}\) we repeat step 1 with the updated  \(p \rightarrow q\) and \(q \rightarrow r\).
   \end{thmlist}
-    By Lamé's theorem, we have \(m\leq 2k\) where \(k = \min\{y \in \mathbb{N} \mid 2^{y}>|q|\}\)
+    By Lamé's theorem, we have \(m\leq 2k\) where \(k = \min\{y \in \mathbb{N} \mid 2^{y}>|q|\}\).
 \end{remark}
 
 To establish the uniqueness of certain continued fractions we need the next result.
 
 \begin{lemma}\label{lem:contd-frac-non-int}
-  The finite continued fraction \(\frac{p}{q} =[0, a_1, \dots , a_{m}]\) with \(m \geq 1\) and \(a_{m}>1\) satisfies
+  Any finite continued fraction \(\frac{p}{q} =[0, a_1, \dots , a_{m}]\) with \(m \geq 1\) and \(a_{m}>1\) satisfies
   \begin{equation*}
     0 < \frac{p}{q} < 1.
   \end{equation*}
@@ -7996,7 +8010,7 @@ To establish the uniqueness of certain continued fractions we need the next resu
     \frac{p}{q} = \frac{1}{a_{1} + \frac{v}{w}},
   \end{equation*}
   where \(\frac{v}{w} = [0, a_2, \dots, a_m]\).
-  Since \(0 < \frac{v}{w}\) and \(a_{1}\in \mathbb{N}\) we have  \(a_{1}+ \frac{v}{w} > 1\) and so \(0 <\frac{p}{q}< 1\).
+  Since \(0 < \frac{v}{w}\) and \(a_{1}\in \mathbb{N}\) we have  \(a_{1}+ \frac{v}{w} > 1\) and therefore obtain \(0 <\frac{p}{q}< 1\).
 \end{proof}
 
 
@@ -8008,24 +8022,23 @@ To establish the uniqueness of certain continued fractions we need the next resu
 
   To prove uniqueness, suppose that two sequences satisfy \([a_0, \dots, a_m] = [b_0, \dots, b_k]\).
   Without loss of generality, we assume \(m \leq k\).
-  If\( m = 0\), \(\frac{p}{q} \in \mathbb{N}\) and so \(a\)
-  By Lemma~\ref{lem:contd-frac-non-int}, we have
+  For any \(1\leq i\leq m\), we define the rational numbers \(\alpha_{i}, \beta_{i}\in \mathbb{Q}\) represented by the continued fractions  \([a_i, \dots, a_m]\) and \( [b_i, \dots, b_k]\), respectively.
+  We will now show  that  \(\alpha_i = \beta_i\).
+  For \(i=0\) this holds trivially and if \(\alpha_j = \beta_j\) for some \(0\leq j <m\), then Lemma~\ref{lem:contd-frac-non-int} yields
   \begin{equation*}
-    a_0 = \big\lfloor [a_0, \dots, a_m] \big\rfloor = \big\lfloor \tfrac{p}{q} \big\rfloor =  \big\lfloor [b_0, \dots, b_k] \big\rfloor = b_0.
+    a_j = \lfloor \alpha_j \rfloor = \lfloor \beta_j \rfloor = b_j.
   \end{equation*}
-  If \(m = 0\), then \(\frac{p}{q} = a_0 \in \mathbb{N}\) and since \(a_0 = b_0\), the remaining part satisfies \([0, b_1, \dots, b_k] = 0\).
-  This forces  \(k=0\).
+  This implies that \(\alpha_j - a_j = \beta_j - b_j\) and thus
+  \begin{equation*}
+    \alpha_{j+1} = (\alpha_j - a_j)^{-1} = (\beta_j - b_j)^{-1} = \beta_{j+1},
+  \end{equation*}
+  Note that in particular \(\alpha_{m}= \beta_{m}\) and since \(\alpha_{m}=a_{m}\in \mathbb{N}_{0}\), Lemma~\ref{lem:contd-frac-non-int} implies that \(k=m\).
 
-  Now suppose \(m \geq 1\).
-  We have
+  To conclude the proof, we need to show that for all \(1\leq i \leq m\) we have  \(a_{i}=b_{i}\).
+  This however follows from Lemma~\ref{lem:contd-frac-non-int} applied to \(\alpha_{i+1} = \beta_{i+1}\) since
   \begin{equation*}
-    a_{1} + \frac{1}{a_{2} + \frac{1}{\dots + \frac{1}{a_{m}}}}
-    = \left( \frac{p}{q} - a_{0}\right)^{-1}
-    = \left( \frac{p}{q} - b_{0}\right)^{-1}
-    = b_{1} + \frac{1}{b_{2} + \frac{1}{\dots + \frac{1}{b_{k}}}}.
+    a_{i} = \lfloor \alpha_{i} \rfloor = \lfloor \beta_{i} \rfloor = b_{i}. \qedhere
   \end{equation*}
-  Since \(a_{1}, b_{1} \in \mathbb{N}\),  Lemma~\ref{lem:contd-frac-non-int} implies that  \(a_1 = b_1\). Inductively, we find that \(a_i = b_i\) for all indices \(0 \leq i \leq m\).
-  This implies in particular \([b_{m+1}, \dots , b_{k}]=0\) and so \(k=m\).
 \end{proof}
 
 A remarkable fact about convergents is that they provide the ``best'' rational approximations  relative to the size of their denominators.
@@ -8044,7 +8057,7 @@ A remarkable fact about convergents is that they provide the ``best'' rational a
 
 Recall that for our goal of determining the order \(r\) of \(a\in \mathbb{Z}_{N}^{\times}\), we used quantum phase estimation and obtained a fraction \(\frac{h}{2^{Q}}\) such that
 \begin{equation}
-  \left|\frac{h}{2^Q} - \frac{k}{r}\right| \leq \frac{1}{4N^{2}}.
+  \left|\frac{h}{2^Q} - \frac{k}{r}\right| < \frac{1}{2N^{2}}.
 \end{equation}
 Since the unknown order satisfies \(r < N\), we have \(2r^2 < 2N^2 < 4N^2\), which implies \(\frac{1}{4N^2} \leq \frac{1}{2r^2}\). Therefore, Theorem~\ref{thm:convergent-best-approx} applies with \(x = \frac{h}{2^Q}\) and the fraction \(\frac{p}{q} = \frac{k}{r}\).
 
@@ -8056,7 +8069,7 @@ The lemma below shows that any convergent \(\frac{v}{w}\) we find that satisfies
   Let \(N \in \mathbb{N}\) and \(x \in \mathbb{R}\).
   If two rational numbers \(\frac{k}{r}\) and \(\frac{k_2}{r_2}\) with \(1 \leq r, r_2 < N\) both satisfy
   \begin{equation*}
-    \left|x - \frac{k}{r} \right| \leq \frac{1}{4N^2} \quad \text{and} \quad \left| x - \frac{k_2}{r_2} \right| \leq \frac{1}{4N^2},
+    \left|x - \frac{k}{r} \right| \leq \frac{1}{2N^2} \quad \text{and} \quad \left| x - \frac{k_2}{r_2} \right| \leq \frac{1}{2N^2},
   \end{equation*}
   then \(\frac{k}{r} = \frac{k_2}{r_2}\).
 \end{lemma}
@@ -8074,7 +8087,7 @@ The lemma below shows that any convergent \(\frac{v}{w}\) we find that satisfies
   \end{equation*}
   On the other hand, applying the triangle inequality leads to the contradiction
   \begin{equation*}
-    \left| \frac{k}{r} - \frac{k_2}{r_2} \right| \leq \left| \frac{k}{r} - x\right| + \left| x - \frac{k_2}{r_2} \right| \leq \frac{1}{4N^2} + \frac{1}{4N^2} = \frac{1}{2N^2}. \qedhere
+    \left| \frac{k}{r} - \frac{k_2}{r_2} \right| \leq \left| \frac{k}{r} - x\right| + \left| x - \frac{k_2}{r_2} \right| \leq \frac{1}{2N^2} + \frac{1}{2N^2} = \frac{1}{N^2}. \qedhere
   \end{equation*}
 \end{proof}
 
@@ -8086,14 +8099,14 @@ Therefore determining the multiplicative order of an element can be done as foll
 \fbox{%
   \begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
     \begin{remark}[Determining multiplicative orders]\label{rmk:shor-quantum-step}\hfill\\
-      \textbf{Input}: Natural numbers \(a, N, p \in \mathbb{N}\) such that \(\gcd(a,N) = 1\), and a quantum circuit implementing the controlled-unitary gates for the unitary maps \(\mathrm{mult}_{a}^{2^{l}} \colon (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{ \otimes n}\) for each \(0 \leq l \leq Q-1\), where \(n = \lceil \log_2 N \rceil\).\\
+      \textbf{Input}: Natural numbers \(a, N, p \in \mathbb{N}\) such that \(\gcd(a,N) = 1\), and a quantum circuit implementing the controlled-unitary gates for the unitary maps \(\mathrm{mult}_{a}^{2^{l}} \from (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{ \otimes n}\) for each \(0 \leq l \leq Q-1\), where \(n = \lceil \log_2 N \rceil\).\\
       \textbf{Goal:} Determine the multiplicative order \(r = \operatorname{ord}(a)\) of \(a\) considered as an element in \(\mathbb{Z}_{N}^{\times}\).
 
       \textbf{Step 1:} \\
-      Set \(Q = 2n + 3 + p\) and run the quantum phase estimation circuit from Remark~\ref{rmk:quantum-phase-with-errors} to obtain a \(h \in \{0, \dots, 2^Q-1\}\).
+      Set \(Q = 2n + 1 + p\) and run the quantum phase estimation circuit from Remark~\ref{rmk:quantum-phase-with-errors} to obtain a \(h \in \{0, \dots, 2^Q-1\}\).
       With a success probability of at least \(1 - \frac{1}{2^{p}-2}\), the resulting fraction \(\frac{h}{2^{Q}}\) satisfies:
       \begin{equation*}
-        \left| \frac{h}{2^Q} - \frac{k}{r} \right| \leq \frac{1}{4N^{2}}
+        \left| \frac{h}{2^Q} - \frac{k}{r} \right| < \frac{1}{2N^{2}}
       \end{equation*}
       for some (unknown) integer \(0 \leq k \leq r-1\).
 
@@ -8101,7 +8114,7 @@ Therefore determining the multiplicative order of an element can be done as foll
       Compute the finite continued fraction of\(\frac{h}{2^{Q}}\).
       By Theorem~\ref{thm:convergent-best-approx}, this sequence contains a convergent \(\frac{v}{w}\) satisfying \(\gcd(v,w)=1\), \(w < N\), and
       \begin{equation*}
-        \left| \frac{h}{2^Q} - \frac{v}{w} \right| \leq \frac{1}{4N^2}.
+        \left| \frac{h}{2^Q} - \frac{v}{w} \right| < \frac{1}{2N^2}.
       \end{equation*}
       Due to Lemma~\ref{lem:uniqueness}, this  convergent is guaranteed to satisfy \(\frac{v}{w} = \frac{k}{r}\).
 
@@ -8120,9 +8133,682 @@ Therefore determining the multiplicative order of an element can be done as foll
   \end{minipage}
 }
 \medskip
-fail
- %TODO Hidden subgroup problem.
+\subsection{Quantum error correction}\label{sec:quantum-error-correction}
+Up to this point, our mathematical exposition of quantum computing has relied on a highly idealised model.
+We assumed that one could prepare a pure state to exact specifications, perfectly execute a sequence of arbitrary unitary gates, and perform measurements without a single error.
+Nothing could be further from the truth.
+And indeed, one of the most active branches of research in quantum information theory is the development of suitable means to implement error correction.
 
+\subsubsection{Repetition codes and the no-cloning theorem}\label{sec:repetition-codes}
+
+We begin by taking a brief look into one of the most basic forms of classical error-detection and correction procedures: the repetition code.
+This scheme encodes information by repeating each information bit multiple times.
+Let us consider the two possible configurations of a bit \(\{0,1\}\).
+We can define a \(3\)-bit repetition code as a subset \(C \subseteq \mathbb{F}_{2}^{3}\) containing exactly two valid codewords:
+
+\begin{equation*}
+  C = \left\{ (0,0,0), (1,1,1) \right\}.
+\end{equation*}
+
+We represent the \emph{logical} bit \(0_L\) by the codeword \((0,0,0) \in \mathbb{F}_{2}^{3}\) and the \emph{logical} bit \(1_L\) by \((1,1,1) \in \mathbb{F}_{2}^{3}\).
+
+If, say upon transmission, a single bit-flip error occurs on the second coordinate of the encoded zero state, the receiver obtains the corrupted sequence \((0,1,0) \notin C\), the \emph{majority vote decoding principle} suggest that the correct state should be \((0,0,0)\) and therefore the receiver interprets the information as \(0_{L}\).
+Note that in case two bits are flipped, and so the receiver obtains \eg the string \((1,1,0)\), it will be interpreted as \(1_{L}\) and a logical error has occurred.
+
+The \emph{Hamming weight} on the set of binary strings \(\{0,1\}^{n}\) is the map
+\begin{equation}\label{eq:hamming-weight}
+  \operatorname{wt}(\blank) \from \{0,1\}^{n} \to \mathbb{N}_{0}, \qquad \operatorname{wt}(x) = \sum_{i=1}^{n} x_{i}.
+\end{equation}
+
+\begin{definition}\label{def:Hamming-distance}
+  Given \(n \in \mathbb{N}\), the \emph{Hamming distance} between two binary sequences \(x, y \in \{0,1\}^n\) is defined as the mapping
+  \begin{equation*}
+    d_{H} \from \{0,1\}^{n} \times \{0,1\}^{n} \to \mathbb{N}_{0}, \qquad (x,y) \mapsto \operatorname{wt}(x \boxplus y).
+  \end{equation*}
+\end{definition}
+
+In our \(3\)-bit encoding of a single bit, the Hamming distance between the two codewords is \(3\) and, as we have seen, we can only correct errors that affect at most \(\lfloor \frac{3-1}{2} \rfloor = 1\) bit.
+
+\begin{proposition}\label{prop:error-correction-capabilities}
+  Let \(C \subseteq \{0,1\}^{n}\) be a code with minimal Hamming distance
+  \begin{equation*}
+    d = \min \left\{ d_H(c_1, c_2) \;\middle|\; c_1, c_2 \in C, \, c_1 \neq c_2 \right\}
+  \end{equation*}
+  between distinct codewords.
+  Then for any \(\tilde{c} \in\{0,1\}^{n}\) such that \(\min \left\{ d_H(c, \tilde{c}) \;\middle|\; c \in C \right\} \leq \lfloor\frac{d-1}{2}\rfloor\) there exists a unique \(c\in C\) such that
+  \(d_H(c, \tilde{c}) \leq \lfloor\frac{d-1}{2}\rfloor \).
+\end{proposition}
+\begin{proof}
+  Clearly, by assumption there is at least one \(c\in C\) such that \(d_{H}(c, \tilde{c}) \leq \lfloor\frac{d-1}{2}\rfloor\) and it remains to show uniqueness.
+
+  Therefore, let us assume that \(c' \in C\) also satisfies \(d_{H}(c', \tilde{c}) \leq \lfloor\frac{d-1}{2}\rfloor\).
+  Then
+  \begin{align*}
+    d_{H}(c,c')
+    & = \operatorname{wt}(c \boxplus c')
+      = \operatorname{wt}(c \boxplus \tilde{c} \boxplus \tilde{c} \boxplus c')\\
+    & \leq \operatorname{wt}(c \boxplus \tilde{c}) + \operatorname{wt}(\tilde{c} \boxplus c')
+      = d_{H}(c, \tilde{c}) + d_{H}(c', \tilde{c}) \leq d-1
+  \end{align*}
+  and so \(c = c'\).
+\end{proof}
+Arguably, more important than the statement is its interpretation.
+Any error affecting at most \(\lfloor\frac{d-1}{2}\rfloor\) entries of a codeword can be uniquely corrected.
+We already observed that in the 3-fold repetition code, this is only a single bit flip.
+But there is an obvious generalisation.
+
+\begin{definition}\label{def:repetition-code-length-n}
+  Consider an odd positive integer \(n \in \mathbb{N}\).
+  The \emph{\(n\)-fold repetition code} is the code \(C = \{0_L, 1_L\} \subset \{0,1\}^n\) that encodes the classical bits \(0\) and \(1\) as
+  \begin{equation*}
+    0_{L} \eqdef (0, \dots , 0), \qquad
+    1_{L} \eqdef  (1, \dots , 1).
+  \end{equation*}
+\end{definition}
+
+An \(n = 2t+1\)-fold repetition code has minimal Hamming distance \(d = n\).
+By increasing \(n\), Proposition~\ref{prop:error-correction-capabilities} guarantees that we can uniquely correct up to
+\begin{equation*}
+  t = \frac{n-1}{2}
+\end{equation*}
+simultaneous bit-flips.
+
+Another observation useful for quantum computing is that we can make the probability of a non-correctable error occurring arbitrarily small.
+Suppose that for a codeword \(x = (x_{1}, \dots , x_{n}) \in C \subset \{0,1\}^{n}\), the probability of a single bit-flip changing \(x_{i} \to 1 \oplus x_{i}\) occurs with a constant probability \(p \in [0, 1]\) independently for each coordinate \(i\).
+Then, a suitable model for the probability of a logical failure (changing more than \(t = \lfloor\frac{d-1}{2}\rfloor\) bits) is
+\begin{equation}\label{eq:binomial-failure}
+  P_{\text{logical}}(n, p) = \sum_{j=t+1}^{n} \binom{n}{j} p^j (1-p)^{n-j}.
+\end{equation}
+
+\begin{theorem}\label{thm:threshold-theorem}
+  Consider an odd integer \(n \in \mathbb{N}\) with \(n \geq 3\), and let \(p \in [0, 1]\). The logical failure probability of the \(n\)-fold repetition code satisfies
+  \begin{equation*}
+    P_{\text{logical}}(n, p) < p
+  \end{equation*}
+  if and only if \(p < \frac{1}{2}\).
+\end{theorem}
+\begin{proof}
+  Let \(n = 2t+1\) for some \(t \in \mathbb{N}\).
+  We have
+  \begin{equation*}
+    p
+    = p (p + (1-p))^{2t+1}
+    = p\sum_{j=0}^{2t+1} \binom{2t+1}{j} p^{j} (1-p)^{2t+1-j}
+  \end{equation*}
+  and therefore
+  \begin{align*}
+    P_{\text{logical}}(n, p) - p
+    &= \sum_{j=t+1}^{2t+1} \binom{2t+1}{j} p^j (1-p)^{2t+1-j}
+      - p\sum_{j=0}^{2t+1} \binom{2t+1}{j} p^{j} (1-p)^{2t+1-j} \\
+    &= \sum_{j=t+1}^{2t+1} \binom{2t+1}{j} p^j (1-p)^{2t+1-j}(1-p)
+      - p \sum_{j=0}^{t} \binom{2t+1}{j} p^{j} (1-p)^{2t+1-j} \\
+    &= \sum_{j=t+1}^{2t+1} \binom{2t+1}{j} p^j (1-p)^{2t+2-j} - \sum_{j=0}^{t} \binom{2t+1}{j} p^{j+1} (1-p)^{2t+1-j}.
+  \end{align*}
+By changing the index of the first summation via \(j \to 2t+1-j\) and using that  \(\binom{2t+1}{j} = \binom{2t+1}{2t+1-j}\), we get
+  \begin{align*}
+    \sum_{j=t+1}^{2t+1} \binom{2t+1}{j} p^j (1-p)^{2t+2-j} &= \sum_{j=0}^{t} \binom{2t+1}{2t+1-j} p^{2t+1-j} (1-p)^{j+1} \\
+    &= \sum_{j=0}^{t} \binom{2t+1}{j} p^{2t+1-j} (1-p)^{j+1}.
+  \end{align*}
+  Substituting this back into the difference  gives us
+  \begin{align*}
+    P_{\text{logical}}(n, p) - p &= \sum_{j=0}^{t} \binom{2t+1}{j} \left[ p^{2t+1-j} (1-p)^{j+1} - p^{j+1} (1-p)^{2t+1-j} \right] \\
+    &= \sum_{j=0}^{t} \binom{2t+1}{j} p^{j+1} (1-p)^{j+1} \left[ p^{2(t-j)} - (1-p)^{2(t-j)} \right].
+  \end{align*}
+  Notice that for \(j = t\), the bracketed term reduces to \(1 - 1 = 0\), so this  term vanishes. For any fixed \(j < t\), we have \(\binom{2t+1}{j} p^{j+1} (1-p)^{j+1}\geq 0\) and since the function \(f(x) = x^{2(t-j)}\) is strictly increasing on \([0,1]\), we get
+  \begin{equation*}
+    p^{2(t-j)} - (1-p)^{2(t-j)} < 0 \iff p < 1-p \iff p < \frac{1}{2}. \qedhere
+  \end{equation*}
+\end{proof}
+Again, this theorem has significant implications for us: Suppose, we  decode a single bit using an \(n\)-bit repetition code.
+If the error rate \(p\) for a single bitflip is below our  threshold value of \(\frac{1}{2}\), the logical error probability drops to \(P_{\text{logical}}(n,p) < p\).
+
+To further shrink this error probability, we can apply this procedure recursively.
+We can encode each of our logical bits \(0_L\) and \(1_L\) into a repetition code of length \(n\) themselves and get \(0_{LL}\) and \(1_{LL}\), where
+\begin{equation*}
+  0_{LL} = (0_L, \dots, 0_L) \in\{ 0,1\}^{n^{2}}, \qquad
+  1_{LL} = (1_L, \dots, 1_L) \in\{ 0,1\}^{n^{2}}
+\end{equation*}
+Repeating this  procedure reduces the logical error probability down to an arbitrarily small value.
+\bigskip
+
+It is tempting to use such a scheme directly for quantum computing  by attempting to encode an arbitrary unknown single-qubit state \(\ket{u} = \alpha\ket{0} + \beta\ket{1}\) into say three physical qubits via repetition
+\begin{equation*}
+  \ket{u} \mapsto \ket{u}\ket{u}\ket{u}.
+\end{equation*}
+
+However, a fundamental theorem of quantum mechanics asserts that such an operation cannot exist.
+
+\begin{theorem}[No-Cloning Theorem]\label{thm:no-cloning-theorem}
+  Consider a finite-dimensional Hilbert space \(V\) of dimension \(\dim V \geq 2\).
+  There is no triple \((n,v,U)\) comprising a natural number \(n \in \mathbb{N}\), a vector \(v \in V^{\otimes n}\) and a unitary map \(U \from V\otimes V^{\otimes n} \to V\otimes V^{\otimes n}\) such that for all \(x \in V\), we have
+  \begin{equation*}
+    U(x \otimes v) = e^{2\pi i \alpha_x} x^{\otimes (n+ 1)},\qquad \alpha_{x} \in \mathbb{R}.
+  \end{equation*}
+\end{theorem}
+\begin{proof}
+  Suppose such an \(n\in \mathbb{N}\), \(v \in V^{\otimes n}\) and unitary operator \(U\) exist.
+  Without loss of generality, we may assume that \(v\) is normalised.
+  Let \(x, y \in V\) such that \(\braket{x}{y} = \frac{1}{2}\).
+  We compute
+  \begin{align*}
+    \braket{x}{y}
+    & = \braket{x}{y} \braket{v}{v}
+      = \braket{x \otimes v}{y \otimes v}
+      = \braket{U(x \otimes v)}{U(y \otimes v)} \\
+    & = e^{2 \pi i (\alpha_{y} -\alpha_{x})}\braket{x^{\otimes (n+ 1)}}{y^{\otimes (n+ 1)}}
+      = e^{2 \pi i (\alpha_{y} -\alpha_{x})}\braket{x}{y}^{ n+ 1}.
+  \end{align*}
+  Taking the absolute value on both sides then yields the contradiction
+  \begin{equation*}
+    \frac{1}{2} = |\braket{x}{y}| = | e^{2 \pi i (\alpha_{y} -\alpha_{x})}\braket{x}{y}^{ n+ 1}| = \frac{1}{2^{n+1}}. \qedhere
+  \end{equation*}
+\end{proof}
+Since we cannot use a repetition approach, we must build other redundancies into the system.
+\subsubsection{Quantum codes}\label{sec:quantum-codes}
+
+\begin{definition}\label{def:quantum-code}
+  A \emph{(quantum) code} is a subspace \(L \subseteq (\mathbb{C}^{2})^{\otimes n}\) of dimension \(2^{k}\) for some \(k \leq n\).
+  We call \(L\) the \emph{code space} and associate to it the parameter tuple \([[n,k]]\) containing the number \(n\) of \emph{physical} qubits and the number \(k\) of \emph{logical} qubits.
+\end{definition}
+
+We start with the simplest illustrative example: the \(2\)-qubit code.
+Here, a logical state \(\ket{s} = \alpha \ket{0} + \beta \ket{1} \in \mathbb{C}^{2}\) is given by
+\begin{equation*}
+  \alpha\ket{0} + \beta\ket{1} \;\mapsto\; \alpha \ket{00} + \beta \ket{11} \in (\mathbb{C}^{2})^{\otimes 2}.
+\end{equation*}
+
+\begin{remark}\label{rmk:2-qubit-encoder}
+  To see that we can construct this code without violating the No-Cloning Theorem~\ref{thm:no-cloning-theorem}, observe that under a CNOT-gate we have
+  \begin{equation*}
+    \CNOT\ket{00} = \ket{00}, \qquad
+    \CNOT\ket{10} = \ket{11}
+  \end{equation*}
+  and so for any normalised \(\ket{s} \in \mathbb{C}^{2}\), we have
+  \begin{equation*}
+    \CNOT(\ket{s} \otimes \ket{0}) = \ket{s} \otimes \ket{s}.
+  \end{equation*}
+\end{remark}
+
+Now, we face the next challenge.
+In classical error-correction, we may look at each bit to inspect its state and, if needed, correct an error.
+In quantum computing, measuring the qubits directly would collapse the superposition back to a basis state.
+To overcome this, we may introduce an extra \emph{ancilla qubit} to extract the parity of the system without destroying the superposition.
+
+\begin{remark}\label{rmk:ancilla-error-removal-2-qubit-case}
+  Consider a state \(\ket{s}\in C\) in our codespace \(C = \spanset_{ \mathbb{C}}(\ket{00}, \ket{11}) \subseteq ( \mathbb{C}^{2})^{\otimes 2}\) and let us suppose some unitary transformation has mapped it to a new state \(\ket{v}\).
+  Then, there is a unique decomposition \(\ket{v} = \ket{s'} + \ket{t}\), where \(\ket{s'}\in C\) and \(\ket{t} \in C^{\perp}\).
+  To detect whether an error has occurred (\ie whether we left the code space), we add an additional qubit called an \emph{ancilla qubit} to our system.
+  Then, we run the algorithm depicted below, and finally measure the ancilla qubit.
+  \begin{equation}\label{eq:syndrome-transfer-2-code}
+    \inputtikz{ancilla-in-2-qubit}.
+  \end{equation}
+  So in total, our procedure consists of the three steps:
+  \begin{thmlist}
+    \item We initiate the ancilla qubit in \(\ket{0}\).
+    \item Then, we apply the unitary map of Equation~\eqref{eq:syndrome-transfer-2-code} which is given by
+    \begin{equation*}
+      U = (\SWAP \otimes \id)(\CNOT)(\SWAP\otimes \id)(\id \otimes \CNOT).
+    \end{equation*}
+    Note that
+    \begin{align*}
+      U \ket{00}\otimes \ket{0} &= \ket{00} \otimes \ket{0 \boxplus 0\boxplus 0} = \ket{00}\otimes \ket{0},\\
+      U \ket{11}\otimes \ket{0} &= \ket{11} \otimes \ket{1 \boxplus 1\boxplus 0} = \ket{11}\otimes \ket{0},\\
+      U \ket{10}\otimes \ket{0} &= \ket{10} \otimes \ket{1 \boxplus 0 \boxplus 0} = \ket{10}\otimes \ket{1},\\
+      U \ket{01}\otimes \ket{0} &= \ket{01} \otimes \ket{0 \boxplus 1 \boxplus 0} = \ket{01}\otimes \ket{1}.
+    \end{align*}
+    Therefore, \(U(\ket{v} \otimes \ket{0}) = \ket{s'}\otimes \ket{0} + \ket{t} \otimes \ket{1}\).
+    \item We measure with respect to the computational basis on the ancilla qubit.
+    Given \(j \in\{0,1\}\), let \(e_{j} \from (\mathbb{C}^{2})^{\otimes 3} \to ( \mathbb{C}^{2})^{\otimes 3}\) be the projection onto the subspace \( (\mathbb{C}^{2})^{\otimes 2}\otimes \ket{j} = \{ \ket{w} \otimes \ket{j} \mid \ket{w} \in (\mathbb{C}^{2})^{\otimes 2}\}\).
+    The probability of observing  \(\ket{j}\) on the ancilla qubit  is
+    \begin{equation*}
+      \braket[\big]{U(\ket{v}\otimes \ket{0})}{e_{j}\;\big|\; U(\ket{v}\otimes \ket{0})}
+      =
+      \begin{cases}
+        \braket{s'}{s'} & j =0, \\
+        \braket{t}{t} & j = 1.
+      \end{cases}
+    \end{equation*}
+    Even more importantly, after measurement, our state \(\ket{v}\) is  either updated to \(\ket{s'}\) (in case we observed a \(\ket{0}\) on the ancilla qubit) or \(\ket{t}\) (in case we observe a \(\ket{1}\) on the ancilla).
+  \end{thmlist}
+  To conclude our discussion of the 2-qubit code, let us explore a few scenarios.
+  We assume an error has happened in form of Pauli operations on our state \(\ket{s}\).
+  Explicitly,  there are \(i,j \in\{0,x,y,z\}\) such that
+ \begin{equation*}
+    \ket{v} = (\sigma_{i}\otimes \sigma_{j})\ket{s}.
+  \end{equation*}
+  Note that  \(\ket{v}\in C^{\perp}\) if and only if
+  \begin{equation*}
+    (i,j) \in\{(0,x),(x,0), (0,y), (y,0)\}.
+  \end{equation*}
+  Otherwise \(\ket{v} \in C\).
+
+  Two conclusions are to be drawn:
+  First, as in the classical case, the short ``length'' of the code makes it impossible to detect Pauli errors affecting both qubits.
+  Second, unlike the classical case, more errors then an accumulation of ``bit-flips'' \(\ket{0} \leftrightarrow \ket{1}\) can happen.
+  Our code so far would only detect variants of these flips (modelled by the Pauli matrices \(\sigma_{x}\) and \(\sigma_{y}\)).
+\end{remark}
+\subsubsection{Shor's 9-qubit code}\label{sec:shor's-9-qubit-code}
+Shor's 9-qubit code was the first example of a code that could correct any single qubit errors.
+It is obtained by combining two 3-qubit codes.
+\begin{definition}\label{def:3-qubit-code}
+  The \emph{3-qubit (bit-flip) code} is the \([[3,1]]\) code given by the subspace \(L_{F} = \spanset_{ \mathbb{C}}(\ket{000} , \ket{111})\subseteq (\mathbb{C}^{2})^{\otimes 3}\).
+  The logical \(0\) and \(1\) states are
+  \begin{equation}
+    \ket{0}_{F} \eqdef \ket{000}, \qquad\quad
+    \ket{1}_{F} \eqdef \ket{111}.
+  \end{equation}
+
+  The  \emph{3-qubit (phase-flip) code} is the \([[3,1]]\) code \(L_{P} = \spanset_{ \mathbb{C}}(\ket{+++} , \ket{---})\subseteq (\mathbb{C}^{2})^{\otimes 3}\) with logical \(0\) and \(1\) given by
+  \begin{equation}
+    \ket{0}_{P} \eqdef \ket{+++}, \qquad\quad
+    \ket{1}_{P} \eqdef \ket{---}.
+  \end{equation}
+\end{definition}
+
+Just as in the \(2\)-qubit code, we can encode physical states by logical ones.
+\begin{remark}\label{rmk:encoding}
+  Consider the algorithm depicted below.
+  \begin{equation*}
+    \inputtikz{encoder-3-qubit-code}
+  \end{equation*}
+  It consists of applying two \(\CNOT\)-gates (the first between qubits 1 and 2 and the second between qubits 1 and 3) and so, given \(x\in\{0,1\}\), produces the output.
+  \begin{equation*}
+    \ket{x} \otimes \ket{0} \otimes \ket{0} \mapsto \ket{0} \otimes \ket{x \boxplus 0} \otimes \ket{0} \to \ket{x} \otimes \ket{x \boxplus 0} \otimes \ket{x \boxplus 0} = \ket{x}\otimes \ket{x} \otimes \ket{x}.
+  \end{equation*}
+  In particular any state \(\ket{s} = \alpha \ket{0} + \beta \ket{1}\) is mapped to \(\alpha \ket{000} + \beta \ket{111} = \ket{s}_{F}\).
+\end{remark}
+
+Now we want to investigate a certain kind of error and how to correct it.
+
+\begin{remark}\label{rmk:x-error-detection}
+  Consider an error \(E\from ( \mathbb{C}^{2})^{\otimes 3} \to ( \mathbb{C}^{2})^{\otimes 3}\) of the form \(E = \id^{\otimes i-1}\otimes \sigma_{x}\otimes \id ^{3-i}\) for an \(i\in\{1,2,3\}\) and a state \(\ket{s}_{L}\in L \subset ( \mathbb{C}^{2})^{\otimes 3}\) of the 3-qubit code.
+
+  We write \(\ket{v} = E \ket{s}_{L}\).
+
+  To determine \(i\in\{1,2,3\}\), we will now run a procedure know as \emph{syndrome measurement}.
+  \begin{thmlist}
+    \item Add two ancilla qubits to obtain the state \(\ket{v} \otimes \ket{00}\)
+    \item Execute the algorithm depicted below.
+    \begin{equation*}
+      \inputtikz{syndrome-3-qubit-code}
+    \end{equation*}
+    It consists of two pairs of \(\CNOT\)-gates.
+    First between the qubit pairs \(1\)--\(4\) and \(2\)--\(4\), and then between \(1\)--\(5\)  and \(3\)--\(5\).
+    Note that when applied to \(\ket{abc}\otimes \ket{00}\), where any \(a,b,c \in\{0,1\}\) its  outcome is of the form \(\ket{abc}\otimes \ket{a \boxplus b} \ket{a \boxplus c}\).
+    \item Measure the last two qubits with respect to the computational basis.
+    In doing so, we can read of \(i\).
+    \begin{center}
+      \begin{tabular}{| c | c | c |}
+        \textbf{state on the last 2 qubits} & \(\mathbf{i \in\{ 1, 2, 3\}}\) & \textbf{state after measurement}\\\hline
+        \(\ket{01}\) & \(i=3\) & \(\ket{s}_{L}\otimes \ket{01}\)\\
+        \(\ket{10}\) & \(i=2\) & \(\ket{s}_{L}\otimes \ket{10}\) \\
+        \(\ket{11}\) & \(i=1\) & \(\ket{s}_{L}\otimes \ket{11}\) \\[2\baselineskip]
+        \(\ket{00}\) & not possible (no error) &
+      \end{tabular}
+    \end{center}
+  \end{thmlist}
+\end{remark}
+
+Now that we have a procedure capable of detecting  where an error in form of applying \(\sigma_{x}\) to a single qubit has occurred, how do we correct it?
+The logic is simple: we need to apply \(\sigma_{x}\) to that specific qubit again, since \(\sigma_{x}^{2} = I_{2}\).
+Hereto we need the controlled \(\CNOT\) gate (called \(\mathrm{CCNOT}\)-gate):
+\begin{equation*}
+  \inputtikz{CCZ-gate}
+\end{equation*}
+It is defined on the computational basis by
+\begin{equation*}
+  \mathrm{CCNOT}\ket{abc} = \ket{ab} \otimes \ket{(a \boxtimes b) \boxplus c}, \qquad a,b,c \in\{0,1\}.
+\end{equation*}
+
+\begin{remark}\label{rmk:error-correction-3-qubit-code}
+Consider the following algorithm.
+  \begin{equation*}
+    \inputtikz{3-qubit-z-error-correction}
+  \end{equation*}
+  Suppose we are in a state of the form \(\ket{abc}\otimes \ket{vw} \in ( \mathbb{C}^{2})^{\otimes 5}\), where \(a,b,c,v,w \in\{0,1\}\).
+  The first qubit  \(\ket{a}\) is flipped---in other words, mapped to \(\ket{a \boxplus 1}\)---if and only if the \(v = 1 = w\).
+  Likewise, \(\ket{b}\) being flipped is equivalent to \(v=1\) and \(w=0\).
+  Lastly, \(\ket{c}\) is flipped, if and only if \(v=0\) and \(w =1\).
+\end{remark}
+
+Putting the algorithms of Remarks~\ref{rmk:x-error-detection} and~\ref{rmk:error-correction-3-qubit-code} together, we
+obtain an algorithm on the \(3\) qubit code that is able to detect and correct an error of the form \(E= \id^{\otimes i}\otimes \sigma_{x}\otimes \id ^{\otimes 3-i}\) for any \(1\leq i\leq 3\):
+\begin{equation}\label{eq:3-qubit-x-error-correction}
+  \inputtikz{3-qubit-x-error-correction-and-detection}
+\end{equation}
+
+Suppose that for any \(1\leq i \leq 3\), the probability  of a \(\sigma_{x}\)-error occurring on the  \(i\)-th physical qubit of the \(3\)-qubit code, modelled by \(\id^{\otimes(i-1)}\otimes \sigma_{x}\otimes \id^{3-i}\),is \(p \in [0,1]\).
+Then, we may model the probability of a correctable error as
+\begin{equation*}
+  p_{\mathrm{corr}} \eqdef (p-1)^{3} + 3p(p-1)^{2}
+\end{equation*}
+Since the 3-qubit code can correct any error of the form \(\id^{\otimes (i-1)} \otimes \sigma_{z}\otimes \id^{\otimes (3-i)} \), the set of unorrectable \(\sigma_{x}\)-errors is \(\{\sigma_{x}^{i} \otimes \sigma_{x}^{j} \otimes \sigma_{x}^{k} \mid i,j,k \in\{0, 1\}, i+j+k \geq 2\}\) and the probability of an unccorectable \(\sigma_{x}\)-error happening is \(1- p_{\mathrm{corr}}\).
+\begin{proposition}\label{prop:threshold-for-3-qubit-code-x-error}
+  The probability of an uncorrectable \(\sigma_{x}\)-error occurring in the \(3\)-qubit code is given by
+  \begin{equation}
+    p_{\mathrm{logical}} = 3p^{2}(1-p) + p^{3} = 3p^2 - 2p^3,
+  \end{equation}
+  and \(p_{\mathrm{logical}} < p\) if and only if \(0< p < \frac{1}{2}\).
+\end{proposition}
+\begin{proof}
+  We have
+  \begin{equation*}
+    1
+    = (p + (1-p))^{3}
+    = p^{3} + 3 p^{2}(1-p) + 3p(1-p)^{2} + (1-p)^{3}
+    = p^{3} + 3 p^{2}(1-p) + p_{\mathrm{corr}}
+  \end{equation*}
+  and so the probability of an uncorrectable \(\sigma_{x}\)-error is \(p_{\mathrm{logical}} = 1 - p_{\mathrm{corr}} = 3p^{2}(1-p) + p^{3} = 3p^2 - 2p^3\).
+
+  To show that the threshold condition holds, we consider the inequality
+  \begin{equation*}
+    p_{\mathrm{logical}} < p
+    \iff 3p^2 - 2p^3 < p
+    \iff 2p^3 - 3p^2 + p > 0
+    \iff p(2p^2 - 3p + 1) > 0.
+  \end{equation*}
+  This gives us
+  \begin{equation*}
+    p(2p - 1)(p - 1) > 0.
+  \end{equation*}
+  which holds for \(p\in [0, 1]\) if and only if \(0<p<\tfrac{1}{2}\).
+\end{proof}
+
+To define the \(9\)-qubit code, we need the GHZ states of Definition~\ref{def:GHZ-states} as well as their phase-flipped counterpart
+\begin{equation}
+  \ket{\mathrm{GHZ}_{+}} \eqdef \tfrac{1}{\sqrt{2}}(\ket{000} + \ket{111}), \qquad
+  \ket{\mathrm{GHZ}_{-}} \eqdef \tfrac{1}{\sqrt{2}}(\ket{000} - \ket{111}).
+\end{equation}
+
+\begin{definition}\label{def:Shor-9-qubit-code}
+  \emph{Shor's 9-qubit code} is given by \(\spanset\{\ket{0}_{L}, \ket{1}_{L}\}\subset ( \mathbb{C}^{2})^{\otimes 9}\), where
+  \begin{equation*}
+    \ket{0}_{L} = \ket{\mathrm{GHZ}_{+}}^{\otimes 3}, \qquad\quad
+    \ket{1}_{L} = \ket{\mathrm{GHZ}_{-}}^{\otimes 3}.
+  \end{equation*}
+\end{definition}
+
+In fact, the \(9\)-qubit code is a concatenation of the \(3\)-qubit bit flip and phase-flip code.
+
+\begin{remark}\label{rmk:constructing-shor-code}
+  Consider a state \(\ket{s} = \alpha \ket{0} + \beta \ket{1}\).
+  Encoding it as a logical state in the \(3\)-qubit phase-flip code gives us the state
+  \begin{equation*}
+    \ket{s}_{P} = \alpha \ket{+++} + \beta\ket{---}
+  \end{equation*}
+  Next, we apply the bit-flip encoding to all physical qubits to get
+  \begin{equation*}
+    \ket{s}_{\tilde{L}} = \alpha \ket{+_{F}}\otimes \ket{+_{F}}\otimes \ket{+_{F}} + \beta \ket{-_{F}}\otimes \ket{-_{F}}\otimes \ket{-_{F}}.
+  \end{equation*}
+  Since \(\ket{+}_{F} = \tfrac{1}{\sqrt{2}} ( \ket{000} + \ket{111})\) and \(\ket{-}_{F} = \tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\), it follows that \(\ket{s}_{\tilde{L}}= \ket{s}_{L}\) is indeed the representation of the state \(\ket{s}\) as a logical qubit in Shor's \(9\)-qubit code.
+\end{remark}
+
+We can use Remark~\ref{rmk:constructing-shor-code} to define an encoder for the \(9\)-qubit code.
+\begin{remark}\label{rmk:9-qubit-encoder}
+  The encoding of the \(9\)-qubit code first applies the encoder of the \(3\)-qubit bit-flip code on groups of three, and then, after applying three Hadamard-gates, runs on each of the three groups the encoder of the \(3\)-qubit bit-flip code again.
+  \begin{equation}
+    \inputtikz{9-qubit-encoder}
+  \end{equation}
+\end{remark}
+
+\begin{remark}\label{rmk:error-correction-9-qubit-code}
+  Since the \(9\)-qubit code consists of a combination of a \(3\)-qubit phase-flip and \(3\)-qubit bit-flip code it can correct single \(\sigma_{x}\) as well as \(\sigma_{z}\)-errors.
+  To see how this is achieved, consider a state
+  \begin{equation*}
+    \ket{s}_{L} = \alpha \ket{\mathrm{GHZ}_{+}}^{\otimes 3} + \beta \ket{\mathrm{GHZ}_{-}}^{\otimes 3}
+  \end{equation*}
+  in the code space of Shor's \(9\)-qubit code.
+
+  Let \(1\leq i \leq 9\) and consider the error \(E_{i} = \id^{\otimes (i-1)}\otimes \sigma_{x} \otimes \id^{\otimes (9-i)}\).
+  Since it is a single-qubit error, it affects only the first, second, or third block.
+  In mathematical terms, this means that there are \(1\leq j,k \leq 3\) such that
+  \begin{equation*}
+    E_{i} = \id^{\otimes 3(j-1)}\otimes \tilde{E}_{k} \otimes \id^{\otimes 3(3-j)}, \qquad \tilde E_{k} = \id^{\otimes (k-1)} \otimes \sigma_{x} \otimes \id^{\otimes (3-k)}.
+  \end{equation*}
+  We may therefore apply the algorithm of Equation~\eqref{eq:3-qubit-x-error-correction} to each of the three groups.
+  By Remarks~\ref{rmk:x-error-detection} and~\ref{rmk:error-correction-3-qubit-code} and Exercise~\ref{exe:error-correction-protocol-does-not-detect-and-alter-z-errors}, this corrects the error on the relevant \(3\)-qubit block, while acting as the identity on the other two groups.
+  \begin{equation}\label{eq:Shor-correction-x-error}
+    \inputtikz{shor-error-correction}
+  \end{equation}
+  In summary, we have
+  \begin{equation}\label{eq:x-correction-summarised}
+    E_{i}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} \xrightarrow{\; \text{Algorithm~\eqref{eq:Shor-correction-x-error}}\;} \ket{s}_{L}\otimes \ket{x_{1} \dots x_{6}}\otimes \ket{00}, \qquad x_{1}, \dots , x_{6} \in\{0,1\}.
+  \end{equation}
+
+
+  The next algorithm is capable of correcting an error of the form
+  \begin{equation*}
+    D_{i} = \id^{\otimes (i-1)} \otimes \sigma_{z} \otimes \id^{\otimes (9-i)}, \qquad 1\leq i\leq 9.
+  \end{equation*}
+  \begin{equation}\label{eq:Shor-correction-z-error}
+    \inputtikz{shor-error-correction-3}
+  \end{equation}
+  The \(9\)-qubit code is spanned by the states
+  \begin{equation*}
+    \ket{0}_{L}= \ket{\mathrm{GHZ}_{+}} \otimes \ket{\mathrm{GHZ}_{+}} \otimes \ket{\mathrm{GHZ}_{+}} \quad \text{ and }\quad
+    \ket{1}_{L}= \ket{\mathrm{GHZ}_{-}} \otimes \ket{\mathrm{GHZ}_{-}} \otimes \ket{\mathrm{GHZ}_{-}}.
+  \end{equation*}
+  Applying \(\sigma_{z}\) to any of the three qubits involved in a \(\ket{\mathrm{GHZ}_{\pm}}\) state leads to
+  \begin{equation}\label{eq:sigma-z-to-ghz-state}
+    (\id^{\otimes (k-1)} \otimes \sigma_{z} \otimes \id^{\otimes (3-k)}) \ket{\mathrm{GHZ}_{\pm}} = \ket{\mathrm{GHZ}_{\mp}}, \qquad\quad 1\leq k \leq 3
+  \end{equation}
+  In other words, the error \(D_{i}\) flips (the sign) one of the \(\ket{\mathrm{GHZ}_{\pm}}\)-states constituting the logical \(\ket{0}_{L}\) and \(\ket{1}_{L}\) to a \(\ket{\mathrm{GHZ}_{\mp}}\)-state.
+  Therefore, we need a way to detect where the flip has happened.
+  We compute
+  \begin{align*}
+    (H \otimes H \otimes H) \ket{\mathrm{GHZ}_{+}}
+    & = \tfrac{1}{4} \big((\ket{0} + \ket{1})^{\otimes 3} + (\ket{0} -\ket{1})^{\otimes 3}\big)
+      = \tfrac{1}{2}( \ket{000} + \ket{110} + \ket{101} + \ket{011})\\
+     (H \otimes H \otimes H) \ket{\mathrm{GHZ}_{-}}
+    & = \tfrac{1}{4} \big((\ket{0} + \ket{1})^{\otimes 3} - (\ket{0} -\ket{1})^{\otimes 3}\big)
+      = \tfrac{1}{2}(\ket{001} + \ket{010} + \ket{100} + \ket{111}).
+  \end{align*}
+  Note that all four summands constituting \((H \otimes H \otimes H) \ket{\mathrm{GHZ}_{+}}\) have an even number of \(1\)s.
+  In contrast, the summands of \((H \otimes H \otimes H) \ket{\mathrm{GHZ}_{-}}\) have an odd number of \(1\)s.
+  This, allows us to adopt a variant of the error-correction algorithm of Remark~\ref{rmk:error-correction-3-qubit-code}.
+  \begin{thmlist}
+    \item Initialise 8-ancilla qubits in the state \(\ket{0}\), so the system is in the state \(D_{i}\ket{s}_{L}\otimes \ket{0}^{\otimes 8}\).
+    \item Apply the algorithm of Equation~\eqref{eq:Shor-correction-z-error}.
+    Note for the ``error-detection'' phase that the penultimate ancilla qubit is in state \(\ket{1}\) if and only if the first and second GHZ states of \(\ket{s}_{L}\) differ.
+    Similarly, the last ancilla  qubit is \(1\) if and only if the first and the third GHZ states of \(\ket{s}_{L}\) differ.
+     \begin{center}
+      \begin{tabular}{| c | c | c |}
+        \textbf{state of the last 2 qubits} & \(\mathbf{i \in\{ 1, \dots , 9\}}\) & \textbf{state of the system}\\\hline
+        \(\ket{01}\) & \(i\in\{7,8,9\}\) & \(D_{i}\ket{s}_{L}\otimes \ket{01}\)\\
+        \(\ket{10}\) & \(i\in\{4,5,6\}\) & \(D_{i}\ket{s}_{L}\otimes \ket{10}\) \\
+        \(\ket{11}\) & \(i\in\{1,2,3\}\) & \(D_{i}\ket{s}_{L}\otimes \ket{11}\) \\[2\baselineskip]
+        \(\ket{00}\) & not possible (no error)  &
+      \end{tabular}
+    \end{center}
+    Now, the ``error-correction'' phase applies a single \(\sigma_{x}\) to the first, fourth, or seventh qubit, depending where the error was detected, and then Hadamard gates to all 9 non-ancilla qubits.
+    We have
+    \begin{equation*}
+      (H \otimes H \otimes H)(\sigma_{x}\otimes \id \otimes \id )(H \otimes H \otimes H) \ket{\mathrm{GHZ}_{\pm}}
+      = (\sigma_{z} \otimes \id \otimes \id) \ket{\mathrm{GHZ}_{\pm}} = \ket{\mathrm{GHZ}_{\mp}}
+    \end{equation*}
+    and therefore, the algorithm maps
+    \begin{equation}\label{eq:z-correction-summarised}
+      D_{i}\ket{s}_{L} \otimes \ket{0}^{\otimes 8}  \xrightarrow{\; \text{Algorithm~\eqref{eq:Shor-correction-z-error}}\;} \ket{s}_{L} \otimes \ket{0}^{\otimes 6}\otimes \ket{z_{1}z_{2}}, \qquad z_{1},z_{2}\in\{0,1\}.
+    \end{equation}
+  \end{thmlist}
+\end{remark}
+
+\begin{convention}
+  By a \emph{single qubit error} for Shor's \(9\)-qubit code, we mean a unitary map of the form
+  \begin{equation*}
+    E = \id^{\otimes (i-1)}\otimes u \otimes \id^{\otimes (9-i)} \from ( \mathbb{C}^{2})^{ \otimes 9} \to ( \mathbb{C}^{2})^{ \otimes 9}, \qquad 1\leq i\leq 9, u \from \mathbb{C}^{2} \to \mathbb{C}^{2} \text{ unitary}.
+  \end{equation*}
+\end{convention}
+Let \(p\in [0,1]\) be the probability that a single qubit error occurs on the \(i\)-th qubit of the \(9\) physical qubits constituting Shor's \(9\)-qubit code.
+Then, we may model the probability of an error affecting at most a single qubit as
+\begin{equation*}
+  p_{\mathrm{corr}} = 9p(1-p)^{8} + (1-p)^{9}.
+\end{equation*}
+
+\begin{proposition}\label{prop:shor-can-correct-any-error}
+  The \(9\)-qubit code can correct any single qubit error via
+  \begin{thmlist}
+    \item initiating \(8\) ancilla qubits in the state \(\ket{0}^{\otimes 8}\),
+    \item executing first the algorithm of Equation~\eqref{eq:Shor-correction-x-error} and then the algorithm of Equation~\eqref{eq:Shor-correction-z-error}, and
+    \item measuring the \(8\)-ancilla qubits in the computational basis.
+  \end{thmlist}
+  Thus, the probability of an uncorrectable error occurring is
+  \begin{equation}
+    p_{\mathrm{logical}} < 1 - p_{\mathrm{corr}} = 1 - (1-p)^{8}(1+ 8p).
+  \end{equation}
+  Moreover, we have \(p_{\mathrm{logical}}<p\) if \(0<p<0.032\).
+\end{proposition}
+\begin{proof}
+  Consider a state \(\ket{s}_{L}\) in the code space of the \(9\)-qubit code and a single qubit error \(E= \id^{\otimes (i-1)}\otimes u \otimes \id^{\otimes (9-i)}\), where \(1\leq i \leq 9\) and \(u \from \mathbb{C}^{2} \to  \mathbb{C}^{2}\) is unitary.
+  Since the Pauli matrices together with the identity form a basis of \(\Mat_{2}(\mathbb{C})\) and \( \sigma_{y} = i\sigma_{x}\sigma_{z}\), there are \(\alpha, \beta, \gamma, \delta \in \mathbb{C}\) such that \(u= \alpha \id + \beta \sigma_{x}+ \gamma \sigma_{z} + \delta\sigma_{x}\sigma_{z}\).
+  We define
+  \begin{align*}
+    E_{\id} &\eqdef \id^{\otimes (i-1)}\otimes \id \otimes \id^{\otimes (9-i)}, \quad
+    & E_{x} &\eqdef \id^{\otimes (i-1)}\otimes \sigma_{x} \otimes \id^{\otimes (9-i)}, \\
+    E_{z} &\eqdef  \id^{\otimes (i-1)}\otimes \sigma_{z} \otimes \id^{\otimes (9-i)}, \quad
+    & E_{y} &\eqdef E_{x}E_{z} =  \id^{\otimes (i-1)}\otimes \sigma_{x}\sigma_{z} \otimes \id^{\otimes (9-i)}.
+  \end{align*}
+
+  We now apply the error-correction protocol.
+  First, we add  \(8\) ancilla qubits in state \(\ket{0}\), resulting in the system's state
+  \begin{equation*}
+    E \ket{s}_{L}\otimes \ket{0}^{\otimes 8}
+    = \alpha E_{\id}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} + \beta E_{x}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} + \gamma E_{z}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} + \delta E_{y}\ket{s}_{L}\otimes \ket{0}^{\otimes 8}.
+  \end{equation*}
+  Since the maps represented by the Diagrams~\eqref{eq:Shor-correction-x-error} and~\eqref{eq:Shor-correction-z-error} are unitary, we may evaluate them on each of the summands individually.
+  This yields
+  \begin{gather*}
+    \alpha E_{\id}\ket{s}_{L}\otimes \ket{0}^{\otimes 8}
+    = \alpha \ket{s}_{L}\otimes \ket{0}^{\otimes 8} \xrightarrow{{\eqref{eq:Shor-correction-x-error}}}
+    \alpha \ket{s}_{L}\otimes \ket{0}^{\otimes 8} \xrightarrow{{\eqref{eq:Shor-correction-z-error}}}
+    \alpha \ket{s}_{L}\otimes \ket{0}^{\otimes 8},\\
+    \beta E_{x}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} \xrightarrow{{\eqref{eq:Shor-correction-x-error}}}
+    \beta \ket{s}_{L}\otimes \ket{x_{1} \dots x_{6}}\otimes \ket{0}^{\otimes 2} \xrightarrow{{\eqref{eq:Shor-correction-z-error}}}
+    \beta \ket{s}_{L}\otimes \ket{x_{1} \dots x_{6}}\otimes \ket{0}^{\otimes 2},\\
+    \gamma E_{z}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} \xrightarrow{{\eqref{eq:Shor-correction-x-error}}}
+    \gamma E_{z}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} \xrightarrow{{\eqref{eq:Shor-correction-z-error}}}
+    \gamma \ket{s}_{L}\otimes \ket{0}^{\otimes 6}\otimes \ket{z_{1}z_{2}},\\
+    \delta E_{y}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} \xrightarrow{{\eqref{eq:Shor-correction-x-error}}}
+    \delta E_{z}\ket{s}_{L}\otimes \ket{x_{1} \dots x_{6}}\otimes \ket{0}^{\otimes 2} \xrightarrow{{\eqref{eq:Shor-correction-z-error}}}
+    \delta \ket{s}_{L}\otimes \ket{x_{1} \dots x_{6}z_{1}z_{2}},
+  \end{gather*}
+  where \(x_{1}, \dots , x_{6}, z_{1}, z_{2} \in\{0,1\}\).
+  Summarised, first applying the algorithm of Diagram~\eqref{eq:Shor-correction-x-error} and then the algorithm of Diagram~\eqref{eq:Shor-correction-z-error} transforms \(E\ket{s}_{L}\otimes \ket{0}^{\otimes 8}\) into \(\ket{s}_{L} \otimes \ket{r}\) where \(\ket{r} \in ( \mathbb{C}^{2})^{\otimes 8}\).
+  Therefore, performing a measurement with respect to the computational basis on the last two qubits results in \(\ket{s}_{L}\otimes \ket{x'_{1} \dots  x'_{6}, z_{1}' z_{2}'}\), where \(x'_{1}, \dots , x'_{6}, z'_{1}, z'_{2} \in\{0,1\}\).
+
+  To conclude the proof, we observe that indeed
+  \begin{equation*}
+    p_{\mathrm{logical}} < 1 - p_{\mathrm{corr}} =  1 - (1-p)^{8}(1+ 8p).
+  \end{equation*}
+  One computes that \(1 - (1-p)^{8}(1+ 8p)\), as a polynomial in \(p\), has the three real roots \(0\), \(1\), and approximately \(0.032\).
+  Moreover, it takes negative values between \(0\) and \(0.032\) and positive values between \(0.032\) and \(1\).
+\end{proof}
+
+To conclude our discussion of the \(9\)-qubit code, we remark how some of its logical operations can be implemented.
+
+\begin{remark}\label{rmk:logical-operations-shor-code}
+  We define the \emph{logical Pauli z matrix} as \(\sigma_{z, L} \eqdef \sigma_{x}^{\otimes 9}\) and
+  the \emph{logical Pauli x matrix} as \(\sigma_{x, L}\eqdef (\sigma_{z} \otimes \id \otimes \id )^{\otimes 9}\).
+  \begin{equation*}
+    \inputtikz{logical-operators-on9-qubit-code}
+  \end{equation*}
+ These satisfy
+  \begin{align*}
+    \sigma_{z,L} \ket{0}_{L}
+    & = (\sigma_{x}\otimes \sigma_{x}\otimes \sigma_{x})^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} + \ket{111})\big)
+      = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\sigma_{x}^{\otimes3}\ket{000} + \sigma_{x}^{\otimes 3} \ket{111} \big)^{\otimes 3}\\
+    & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{111} + \ket{000} \big)^{\otimes 3}
+      =  \big(\tfrac{1}{\sqrt{2}}(\ket{111} + \ket{000}) \big)^{\otimes 3}
+      = \ket{0}_{L}, \\
+    \sigma_{z,L} \ket{1}_{L}
+    & = (\sigma_{x}\otimes \sigma_{x}\otimes \sigma_{x})^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\big)
+      = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\sigma_{x}^{\otimes 3}\ket{000} - \sigma_{x}^{\otimes 3} \ket{111} \big)^{\otimes 3}\\
+    & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{111} - \ket{000} \big)^{\otimes 3}
+      =  \big(-\tfrac{1}{\sqrt{2}}(\ket{000} - \ket{111}) \big)^{\otimes 3}
+      = -\ket{1}_{L}, \\[0.2\baselineskip]
+    \sigma_{x,L} \ket{0}_{L}
+    & = (\sigma_{z}\otimes \id \otimes \id)^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} + \ket{111})\big) \\
+    & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big((\sigma_{z}\otimes \id \otimes \id)\ket{000} + (\sigma_{z}\otimes \id \otimes \id) \ket{111} \big)^{\otimes 3}\\
+    & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{000} - \ket{111} \big)^{\otimes 3}
+      =  \big(\tfrac{1}{\sqrt{2}}(\ket{000} - \ket{111}) \big)^{\otimes 3}
+      = \ket{1}_{L}, \\
+    \sigma_{x,L} \ket{1}_{L}
+    & = (\sigma_{z}\otimes \id \otimes \id)^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\big) \\
+    & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big((\sigma_{z}\otimes \id \otimes \id)\ket{000} - (\sigma_{z}\otimes \id \otimes \id) \ket{111} \big)^{\otimes 3}\\
+    & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{000} + \ket{111} \big)^{\otimes 3}
+      =  \big(\tfrac{1}{\sqrt{2}}(\ket{000} + \ket{111}) \big)^{\otimes 3}
+      = \ket{0}_{L}.
+  \end{align*}
+\end{remark}
+
+Finally, below we state and prove a weaker variant of the Knill--Laflamme theorem.
+\begin{theorem}[Knill--Laflamme]\label{thm:Knill-Laflamme}
+  Consider an orthogonal projection \(p \from (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes n}\) onto a \(2^{k}\)-dimensional space \(C\) and a linear subspace \(E \subset \End((\mathbb{C}^{2})^{\otimes n})\) endowed with a basis \((e_{1}, \dots , e_{m})\) of unitary maps and let \(p_{i} \in \End((\mathbb{C}^{2})^{\otimes n})\) be the orthogonal projection onto \(e_{i}(C)\) for all \(1\leq i \leq m\).
+  The following are equivalent:
+  \begin{thmlist}
+    \item The orthogonal projections \(p_{i} \in \End((\mathbb{C}^{2})^{\otimes n})\) onto the subspaces \(e_{i}(C)\)
+    satisfy \(p_{i}p_{j} = 0 = p_{j} p_{i}\) for all \(1\leq i,j \leq m\).
+    \item The Knill--Laflamme condition holds:
+    \begin{equation}
+      p e_{i}^{\dagger} e_{j} p = \delta_{i=j} p \qquad\quad \text{ for all } 1\leq i,j \leq m.
+    \end{equation}
+  \end{thmlist}
+  If any of these two equivalent conditions are hold, the map \(R = \sum_{j=1}^{l} e_{j}^{\dagger}p_{j}\) satisfies for all unitary maps \(u\in E\) that
+  \begin{equation*}
+    Rup = \lambda_{u}p \qquad\qquad \text{ where }\lambda_{u}\in \mathbb{C} .
+  \end{equation*}
+\end{theorem}
+\begin{proof}
+  To prove that \((i) \iff (ii)\), we consider the chain of equivalences
+  \begin{align*}
+    && p e_{i}^{\dagger} e_{j} p & = \delta_{i = j}p \\
+    & \iff & e_{i}^{\dagger}p_{i}p_{j} e_{j} & = \delta_{i = j}pe_{i}^{\dagger} e_{i} p \\
+    & \iff & e_{i}^{\dagger}p_{i}p_{j} e_{j} & = \delta_{i = j}e_{i}^{\dagger}p_{i} p_{i} e_{i} \\
+    & \iff & p_{i}p_{j}  & = \delta_{i = j} p_{i} e_{i}e_{j}^{\dagger} \\
+    & \iff & p_{i}p_{j}  & = \delta_{i = j} p_{i}.
+  \end{align*}
+
+  Now, let us assume \((ii)\) holds and fix a unitary map \(u= \lambda_{1}e_{1}+ \dots + \lambda_{m}e_{m}\in E\).
+  Then
+  \begin{equation*}
+    Rup
+    = \sum_{k=1}^{m} \lambda_{k}R e_{k}p
+    = \sum_{j,k=1}^{m} \lambda_{k}e_{j}^{\dagger} p_{j} e_{k}p
+    = \sum_{k=1}^{m} \lambda_{k}e_{k}^{\dagger} p_{k} e_{k}p
+    = \sum_{k=1}^{m} \lambda_{k}e_{k}^{\dagger} e_{k}p
+    = \sum_{k=1}^{m} \lambda_{k}p. \qedhere
+  \end{equation*}
+\end{proof}
+
+% TODO: ERROR CORRECTION
+% TODO: FIRST ABSTRACT
+% TODO: THEN SPELLED OUT
+% Shor's \(9\)-qubit code is a combination of two \(3\)-qubit codes.
+% To correct an error, we execute the algo
+
+
+% \begin{theorem}\label{thm:9-qubit-code-can-correct-errors}
+%   Consider a unitary map \(f \from ( \mathbb{C}^{2}) \to ( \mathbb{C}^{2})\) an a natural number \(1\leq i \leq 9\) as well as a state \(\ket{s}_{L}\in L\subset (\mathbb{C}^{2})^{\otimes 9}\).
+%   Then, the algorithm of Remark~ corrects the error \(E=\id^{\otimes(i-1)}\otimes f \otimes \id^{\otimes(9-i)}\).
+%   That is, it maps \(E\ket{s}_{L}\) to \(\ket{s}_{L}\).
+% \end{theorem}
+% \begin{proof}
+%   TODO: error of form \(\alpha\id + \beta\sigma_{x} + \gamma\sigma_{z} + \delta\sigma_{y}\).
+%   Recall \(\sigma_{y} = \sigma_{x}\sigma_{z}\) % TODO scalar. also unitary iff sum to 1
+%   TODO: consider logical state \(\ket{s}_{L}\) and the state \(\ket{v}= E\ket{s}_{L}\).
+%   We write \(\ket{v}\) as a linear combination of all 4 cases.
+%   apply error correction to each case gives us
+%   i id cases: nothing happens
+%   ii x case: error corrected
+%   iii z case: error corrected
+%   iv y case: error corrected.
+%   Therefore we obtain after the error correction procedure
+
+
+%   \begin{equation*}
+%     \ket{} + \dots + = \ket{s}.
+%   \end{equation*}
+% \end{proof}
 % \begin{equation*}
 %   \inputtikz{solving-the-hidden-subgroup-problem}
 % \end{equation*}
@@ -8267,6 +8953,21 @@ Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGrou
 
   Show that \(S\) is maximal abelian if and only if \(l=n\).
 \end{exercise}
+
+\begin{exercise}
+  Find the stabiliser subgroups of the following subspaces:
+  \begin{thmlist}
+    \item \(C_{1} = \spanset_{ \mathbb{C}}(\ket{000}, \ket{111}) \subset ( \mathbb{C}^{2})^{\otimes 3}\)
+    \item \(C_{2} = \spanset_{ \mathbb{C}}(\ket{+++}, \ket{---}) \subset ( \mathbb{C}^{2})^{\otimes 3}\)
+    \item \(C_{3} = \spanset_{ \mathbb{C}}(\ket{\mathrm{GHZ}_{+}}^{\otimes 3}, \ket{\mathrm{GHZ}_{-}}^{\otimes 3}) \subset ( \mathbb{C}^{2})^{\otimes 9}\), where
+    \begin{equation*}
+      \ket{\mathrm{GHZ}}_{+} = \tfrac{1}{\sqrt{2}} ( \ket{000} + \ket{111})
+      \qquad \text{and}\qquad
+      \ket{\mathrm{GHZ}}_{-} = \tfrac{1}{\sqrt{2}} ( \ket{000} - \ket{111})
+    \end{equation*}
+
+  \end{thmlist}
+\end{exercise}
 \subsubsection{Shor's algorithm}
 \begin{exercise}\label{exe:extended-Euclidean-algo}
   Let \(a, b \in \mathbb{Z} \setminus \{0\}\).
@@ -8382,6 +9083,38 @@ Determine for each \(n\in \mathbb{N}\) the order of the Pauli group \(\PauliGrou
 
   \textit{Hint:}   Substitute the explicit definition of \(\Lambda_k\), swap the order of summation, and show that the sum \(\sum_{k=0}^{r-1} e^{2\pi i k \frac{m}{r}}\) vanishes for any integer \(m \nequiv 0 \mod r\).
 \end{exercise}
+\subsubsection*{Quantum error correction}
+\begin{exercise}
+  The 3-qubit phase-flip code has an analogous behaviour to the 3-qubit bit-flip code.
+  \begin{thmlist}
+    \item Implement an encoder in the form of a unitary map \(\mathrm{enc}\from ( \mathbb{C}^{2})^{\otimes 3} \to ( \mathbb{C}^{2})^{\otimes 3}\) that sends \(\ket{s} \otimes \ket{00}\) to the logical state \(\ket{s}_{P}\).
+    \item Show that the \(3\)-qubit code can detect single qubit \(\sigma_{z}\)-errors.
+    \item Implement an algorithm that corrects single \(\sigma_{z}\)-errors.
+  \end{thmlist}
+\end{exercise}
+
+\begin{exercise}
+  Show that \(\ket{0}^{\otimes 9}\) and \(\ket{1}^{\otimes 9}\) are contained in the code space of Shor's \(9\)-qubit code.
+\end{exercise}
+
+\begin{exercise}\label{exe:error-correction-protocol-does-not-detect-and-alter-z-errors}
+  The following exercises are preparations for the \(9\)-qubit code.
+  \begin{thmlist}
+    \item Show that the states \(\ket{\mathrm{GHZ}_{+}}\) and \(\ket{\mathrm{GHZ}_{-}}\) are contained in the code space of the  \(3\)-qubit bit flip code.
+    \item Consider a state \(\ket{s}_{F}\in L_{F} \subset ( \mathbb{C}^{2})^{\otimes 3}\) of the \(3\)-qubit bit-flip code and a unitary map \(E = \id^{\otimes (i-1)} \otimes \sigma_{z}^{k}\otimes \id^{\otimes (3-i)} \from ( \mathbb{C}^{2})^{\otimes 3} \to ( \mathbb{C}^{2})^{\otimes 3}\), where \(1\leq i \leq 3 \) and \(k \in\{ 0,1\}\).
+    Show that the algorithm of Equation~\eqref{eq:3-qubit-x-error-correction} maps \(E\ket{s}_{F}\) to \(E\ket{s}_{F}\)
+  \end{thmlist}
+\end{exercise}
+
+\begin{exercise}
+  Verify that the algorithm of Remark~\ref{rmk:9-qubit-encoder} maps any state \(\ket{s} \in \mathbb{C}^{2}\) to
+  the logical encoding \(\ket{s}_{L}\) of \(\ket{s}\) i n the 9-qubit code.
+\end{exercise}
+
+\begin{exercise}
+ Show that the map \(H^{\otimes 9}\) is not an implementation of a logical Hadamard gate on the \(9\)-qubit code: it does not map \(\ket{0}_{L}\) to \(\tfrac{1}{\sqrt{2}} (\ket{0}_{L}+ \ket{1}_{L})\)  and \(\ket{1}_{L}\) to \(\tfrac{1}{\sqrt{2}} (\ket{0}_{L}- \ket{1}_{L})\).
+\end{exercise}
+
 \cleardoublepage
 \subsection{Study goals}\label{sec:groups-study-goals}
 The questions below are designed to help you develop your understanding of group theory in the context of quantum computing.
@@ -8442,6 +9175,31 @@ Determine whether the generators of \(S\) commute and if they are a minimal gene
 \end{equation*}
 Determine the datum \((v', A')\) that determines \([\CNOT\ket{w}]\).
 \end{thmlist}
+\subsubsection*{Shor's algorithm}
+\begin{thmlist}
+  \item Determine the order of \(4 \in \mathbb{Z}_{15}^{\times}\).
+  \item Sketch how Shor's algorithm would use the number \(a= 2\) to factor \(21\).
+  \item   Suppose the unitary map \(U \from ( \mathbb{C}^{2})^{\otimes n} \to ( \mathbb{C}^{2})^{\otimes n}\) admitting an eigenvector \(\ket{u}\in ( \mathbb{C}^{2})^{\otimes n}\) with an eigenvalue \(\lambda= e^{-2\pi i \tfrac{k}{2^{Q}}}\) for some \(0 \leq k \leq 2^{Q-1}\).
+  How does quantum phase estimation determine \(k\)?
+  \item Compute a continued fraction representation of \(\tfrac{13}{7}\).
+\end{thmlist}
+\subsubsection*{Quantum error correction}
+\begin{thmlist}
+  \item Why does a unitary map \(U \from ( \mathbb{C}^{2})^{\otimes 2} \to ( \mathbb{C}^{2})^{\otimes 2}\), satisfying \(\ket{x0} \mapsto \ket{xx}\) for all \(x\in\{0,1\}\), not violate the no-cloning theorem?
+  \item Consider the code space \(C = \spanset_{ \mathbb{C}} (\ket{010}, \ket{101}) \subset ( \mathbb{C}^{2})^{\otimes 3}\).
+  Define a unitary map \(f \from ( \mathbb{C}^{2})^{\otimes 3} \to ( \mathbb{C}^{2})^{\otimes 3}\) such that
+  \begin{equation*}
+    f \ket{000} = \ket{010} \qquad \text{ and }\qquad
+    f \ket{100} = \ket{101}.
+  \end{equation*}
+  \item How does Shor's \(9\) qubit code correct the error \(\id^{\otimes 2} \otimes \sigma_{z}\otimes \id^{\otimes 6}\)?
+  \item Find unitaries \(U_{1}, \dots , U_{9} \in ( \mathbb{C}^{2})^{\otimes 9}\) such that \(U = U_{1}\otimes \dots \otimes U_{9}\) satisfies for the logical states \(\ket{0}_{L}\) and \(\ket{1}_{L}\) of the \(9\)-qubit code
+  \begin{equation*}
+    U \ket{0}_{L} = i\ket{1}_{L} \qquad\quad \text{ and }\qquad
+    U \ket{1}_{L} = -i\ket{0}_{L}.
+  \end{equation*}
+\end{thmlist}
+
 
 \cleardoublepage
 % \begin{description}

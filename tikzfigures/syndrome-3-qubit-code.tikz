@@ -1,0 +1,55 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z-spider] (5) at (5.75, 5) {};
+		\node [style=X-spider] (7) at (5.75, 2) {};
+		\node [style=none] (9) at (6.75, 2) {};
+		\node [style=none] (10) at (6.75, 5) {};
+		\node [style=Z-spider] (13) at (4.75, 4) {};
+		\node [style=none] (14) at (1.75, 4) {};
+		\node [style=X-spider] (15) at (4.75, 2) {};
+		\node [style=none] (16) at (1.75, 2) {};
+		\node [style=none] (18) at (6.75, 4) {};
+		\node [style=Z-spider] (21) at (3.75, 5) {};
+		\node [style=none] (22) at (1.75, 5) {};
+		\node [style=X-spider] (23) at (3.75, 1) {};
+		\node [style=none] (24) at (6.75, 1) {};
+		\node [style=Z-spider] (26) at (2.75, 3) {};
+		\node [style=none] (27) at (1.75, 3) {};
+		\node [style=X-spider] (28) at (2.75, 1) {};
+		\node [style=none] (29) at (1.75, 1) {};
+		\node [style=none] (30) at (6.75, 3) {};
+		\node [style=Z-spider] (31) at (5.25, 6) {};
+		\node [style=Z-spider] (32) at (3.25, 6) {};
+		\node [style=none] (33) at (8.5, 6.75) {};
+		\node [style=none] (34) at (0, 6.75) {};
+		\node [style=none] (35) at (8.5, 0) {};
+		\node [style=none] (36) at (0, 0) {};
+		\node [style=none] (37) at (0, 0.5) {};
+		\node [style=none] (38) at (8.5, 0.5) {};
+		\node [style=none] (39) at (4.25, 0.25) {Extracting the position of a bit-flip error in the 3-qubit code.};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=object] (7) to (9.center);
+		\draw [style=object] (10.center) to (5);
+		\draw [style=object] (5) to (7);
+		\draw [style=object] (13) to (14.center);
+		\draw [style=object] (18.center) to (13);
+		\draw [style=object] (15) to (16.center);
+		\draw [style=object] (13) to (15);
+		\draw [style=object] (7) to (15);
+		\draw [style=object] (21) to (22.center);
+		\draw [style=object] (23) to (24.center);
+		\draw [style=object] (21) to (23);
+		\draw [style=object] (26) to (27.center);
+		\draw [style=object] (30.center) to (26);
+		\draw [style=object] (28) to (29.center);
+		\draw [style=object] (26) to (28);
+		\draw [style=object] (23) to (28);
+		\draw [style=object] (5) to (21);
+		\draw (34.center) to (33.center);
+		\draw (33.center) to (35.center);
+		\draw (35.center) to (36.center);
+		\draw (34.center) to (36.center);
+		\draw (37.center) to (38.center);
+	\end{pgfonlayer}
+\end{tikzpicture}
