@@ -17,7 +17,6 @@ pkgOptions={
 \usetikzlibrary{quantikz2}
 
 \addbibresource{local-bib.bib}
-\usetikzlibrary{babel} % TODO: WIESO?!?
 \pdfoutput=1
 \title{Quantum Computing}
 \author{Sebastian Halbig}
@@ -8498,7 +8497,11 @@ Since the 3-qubit code can correct any error of the form \(\id^{\otimes (i-1)} \
     = p^{3} + 3 p^{2}(1-p) + 3p(1-p)^{2} + (1-p)^{3}
     = p^{3} + 3 p^{2}(1-p) + p_{\mathrm{corr}}
   \end{equation*}
-  and so the probability of an uncorrectable \(\sigma_{x}\)-error is \(p_{\mathrm{logical}} = 1 - p_{\mathrm{corr}} = 3p^{2}(1-p) + p^{3} = 3p^2 - 2p^3\).
+  and so the probability of an uncorrectable \(\sigma_{x}\)-error is
+  \begin{equation*}
+    p_{\mathrm{logical}} = 1 - p_{\mathrm{corr}} = 3p^{2}(1-p) + p^{3} = 3p^2 - 2p^3.
+  \end{equation*}
+
 
   To show that the threshold condition holds, we consider the inequality
   \begin{equation*}
@@ -8538,10 +8541,11 @@ In fact, the \(9\)-qubit code is a concatenation of the \(3\)-qubit bit flip and
   \end{equation*}
   Next, we apply the bit-flip encoding to all physical qubits to get
   \begin{equation*}
-    \ket{s}_{\tilde{L}} = \alpha \ket{+_{F}}\otimes \ket{+_{F}}\otimes \ket{+_{F}} + \beta \ket{-_{F}}\otimes \ket{-_{F}}\otimes \ket{-_{F}}.
+    \ket{s}_{\tilde{L}} = \alpha \ket{+_{F}}\otimes \ket{+_{F}}\otimes \ket{+=_{F}} + \beta \ket{-}_{F}\otimes \ket{-}_{F}\otimes \ket{-}_{F}.
   \end{equation*}
   Since \(\ket{+}_{F} = \tfrac{1}{\sqrt{2}} ( \ket{000} + \ket{111})\) and \(\ket{-}_{F} = \tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\), it follows that \(\ket{s}_{\tilde{L}}= \ket{s}_{L}\) is indeed the representation of the state \(\ket{s}\) as a logical qubit in Shor's \(9\)-qubit code.
 \end{remark}
+
 
 We can use Remark~\ref{rmk:constructing-shor-code} to define an encoder for the \(9\)-qubit code.
 \begin{remark}\label{rmk:9-qubit-encoder}
@@ -8567,6 +8571,7 @@ We can use Remark~\ref{rmk:constructing-shor-code} to define an encoder for the 
   \end{equation*}
   We may therefore apply the algorithm of Equation~\eqref{eq:3-qubit-x-error-correction} to each of the three groups.
   By Remarks~\ref{rmk:x-error-detection} and~\ref{rmk:error-correction-3-qubit-code} and Exercise~\ref{exe:error-correction-protocol-does-not-detect-and-alter-z-errors}, this corrects the error on the relevant \(3\)-qubit block, while acting as the identity on the other two groups.
+
   \begin{equation}\label{eq:Shor-correction-x-error}
     \inputtikz{shor-error-correction}
   \end{equation}
@@ -8592,7 +8597,7 @@ We can use Remark~\ref{rmk:constructing-shor-code} to define an encoder for the 
   \begin{equation}\label{eq:sigma-z-to-ghz-state}
     (\id^{\otimes (k-1)} \otimes \sigma_{z} \otimes \id^{\otimes (3-k)}) \ket{\mathrm{GHZ}_{\pm}} = \ket{\mathrm{GHZ}_{\mp}}, \qquad\quad 1\leq k \leq 3
   \end{equation}
-  In other words, the error \(D_{i}\) flips (the sign) one of the \(\ket{\mathrm{GHZ}_{\pm}}\)-states constituting the logical \(\ket{0}_{L}\) and \(\ket{1}_{L}\) to a \(\ket{\mathrm{GHZ}_{\mp}}\)-state.
+  In other words, the error \(D_{i}\) flips (the sign of) one of the \(\ket{\mathrm{GHZ}_{\pm}}\)-states constituting the logical \(\ket{0}_{L}\) and \(\ket{1}_{L}\) to a \(\ket{\mathrm{GHZ}_{\mp}}\)-state.
   Therefore, we need a way to detect where the flip has happened.
   We compute
   \begin{align*}
@@ -8669,13 +8674,13 @@ Then, we may model the probability of an error affecting at most a single qubit 
     & E_{y} &\eqdef E_{x}E_{z} =  \id^{\otimes (i-1)}\otimes \sigma_{x}\sigma_{z} \otimes \id^{\otimes (9-i)}.
   \end{align*}
 
-  We now apply the error-correction protocol.
+  Now, let us apply the error-correction protocol.
   First, we add  \(8\) ancilla qubits in state \(\ket{0}\), resulting in the system's state
   \begin{equation*}
     E \ket{s}_{L}\otimes \ket{0}^{\otimes 8}
     = \alpha E_{\id}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} + \beta E_{x}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} + \gamma E_{z}\ket{s}_{L}\otimes \ket{0}^{\otimes 8} + \delta E_{y}\ket{s}_{L}\otimes \ket{0}^{\otimes 8}.
   \end{equation*}
-  Since the maps represented by the Diagrams~\eqref{eq:Shor-correction-x-error} and~\eqref{eq:Shor-correction-z-error} are unitary, we may evaluate them on each of the summands individually.
+  Since the maps represented by the Diagrams~\eqref{eq:Shor-correction-x-error} and~\eqref{eq:Shor-correction-z-error} are linear, we may evaluate them on each of the summands individually.
   This yields
   \begin{gather*}
     \alpha E_{\id}\ket{s}_{L}\otimes \ket{0}^{\otimes 8}
@@ -8696,7 +8701,7 @@ Then, we may model the probability of an error affecting at most a single qubit 
   Summarised, first applying the algorithm of Diagram~\eqref{eq:Shor-correction-x-error} and then the algorithm of Diagram~\eqref{eq:Shor-correction-z-error} transforms \(E\ket{s}_{L}\otimes \ket{0}^{\otimes 8}\) into \(\ket{s}_{L} \otimes \ket{r}\) where \(\ket{r} \in ( \mathbb{C}^{2})^{\otimes 8}\).
   Therefore, performing a measurement with respect to the computational basis on the last two qubits results in \(\ket{s}_{L}\otimes \ket{x'_{1} \dots  x'_{6}, z_{1}' z_{2}'}\), where \(x'_{1}, \dots , x'_{6}, z'_{1}, z'_{2} \in\{0,1\}\).
 
-  To conclude the proof, we observe that indeed
+  To conclude the proof, we observe that \(p_{\mathrm{logical}} < 1 - p_{\mathrm{corr}}\) and so
   \begin{equation*}
     p_{\mathrm{logical}} < 1 - p_{\mathrm{corr}} =  1 - (1-p)^{8}(1+ 8p).
   \end{equation*}
@@ -8708,32 +8713,32 @@ To conclude our discussion of the \(9\)-qubit code, we remark how some of its lo
 
 \begin{remark}\label{rmk:logical-operations-shor-code}
   We define the \emph{logical Pauli z matrix} as \(\sigma_{z, L} \eqdef \sigma_{x}^{\otimes 9}\) and
-  the \emph{logical Pauli x matrix} as \(\sigma_{x, L}\eqdef (\sigma_{z} \otimes \id \otimes \id )^{\otimes 9}\).
+  the \emph{logical Pauli x matrix} as \(\sigma_{x, L}\eqdef (\sigma_{z} \otimes \id \otimes \id )^{\otimes 3}\).
   \begin{equation*}
     \inputtikz{logical-operators-on9-qubit-code}
   \end{equation*}
  These satisfy
   \begin{align*}
     \sigma_{z,L} \ket{0}_{L}
-    & = (\sigma_{x}\otimes \sigma_{x}\otimes \sigma_{x})^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} + \ket{111})\big)
+    & = (\sigma_{x}\otimes \sigma_{x}\otimes \sigma_{x})^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} + \ket{111})\big)^{\otimes 3}
       = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\sigma_{x}^{\otimes3}\ket{000} + \sigma_{x}^{\otimes 3} \ket{111} \big)^{\otimes 3}\\
     & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{111} + \ket{000} \big)^{\otimes 3}
       =  \big(\tfrac{1}{\sqrt{2}}(\ket{111} + \ket{000}) \big)^{\otimes 3}
       = \ket{0}_{L}, \\
     \sigma_{z,L} \ket{1}_{L}
-    & = (\sigma_{x}\otimes \sigma_{x}\otimes \sigma_{x})^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\big)
+    & = (\sigma_{x}\otimes \sigma_{x}\otimes \sigma_{x})^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\big)^{\otimes 3}
       = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\sigma_{x}^{\otimes 3}\ket{000} - \sigma_{x}^{\otimes 3} \ket{111} \big)^{\otimes 3}\\
     & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{111} - \ket{000} \big)^{\otimes 3}
       =  \big(-\tfrac{1}{\sqrt{2}}(\ket{000} - \ket{111}) \big)^{\otimes 3}
       = -\ket{1}_{L}, \\[0.2\baselineskip]
     \sigma_{x,L} \ket{0}_{L}
-    & = (\sigma_{z}\otimes \id \otimes \id)^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} + \ket{111})\big) \\
+    & = (\sigma_{z}\otimes \id \otimes \id)^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} + \ket{111})\big)^{\otimes 3} \\
     & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big((\sigma_{z}\otimes \id \otimes \id)\ket{000} + (\sigma_{z}\otimes \id \otimes \id) \ket{111} \big)^{\otimes 3}\\
     & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{000} - \ket{111} \big)^{\otimes 3}
       =  \big(\tfrac{1}{\sqrt{2}}(\ket{000} - \ket{111}) \big)^{\otimes 3}
       = \ket{1}_{L}, \\
     \sigma_{x,L} \ket{1}_{L}
-    & = (\sigma_{z}\otimes \id \otimes \id)^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\big) \\
+    & = (\sigma_{z}\otimes \id \otimes \id)^{\otimes 3} \big(\tfrac{1}{\sqrt{2}} (\ket{000} - \ket{111})\big)^{\otimes 3} \\
     & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big((\sigma_{z}\otimes \id \otimes \id)\ket{000} - (\sigma_{z}\otimes \id \otimes \id) \ket{111} \big)^{\otimes 3}\\
     & = \big(\tfrac{1}{\sqrt{2}}\big)^{3} \big(\ket{000} + \ket{111} \big)^{\otimes 3}
       =  \big(\tfrac{1}{\sqrt{2}}(\ket{000} + \ket{111}) \big)^{\otimes 3}
@@ -8746,20 +8751,21 @@ Finally, below we state and prove a weaker variant of the Knill--Laflamme theore
   Consider an orthogonal projection \(p \from (\mathbb{C}^{2})^{\otimes n} \to (\mathbb{C}^{2})^{\otimes n}\) onto a \(2^{k}\)-dimensional space \(C\) and a linear subspace \(E \subset \End((\mathbb{C}^{2})^{\otimes n})\) endowed with a basis \((e_{1}, \dots , e_{m})\) of unitary maps and let \(p_{i} \in \End((\mathbb{C}^{2})^{\otimes n})\) be the orthogonal projection onto \(e_{i}(C)\) for all \(1\leq i \leq m\).
   The following are equivalent:
   \begin{thmlist}
-    \item The orthogonal projections \(p_{i} \in \End((\mathbb{C}^{2})^{\otimes n})\) onto the subspaces \(e_{i}(C)\)
+    \item The orthogonal projections \(p_{i} \in \End((\mathbb{C}^{2})^{\otimes n})\)
     satisfy \(p_{i}p_{j} = 0 = p_{j} p_{i}\) for all \(1\leq i,j \leq m\).
     \item The Knill--Laflamme condition holds:
     \begin{equation}
       p e_{i}^{\dagger} e_{j} p = \delta_{i=j} p \qquad\quad \text{ for all } 1\leq i,j \leq m.
     \end{equation}
   \end{thmlist}
-  If any of these two equivalent conditions are hold, the map \(R = \sum_{j=1}^{l} e_{j}^{\dagger}p_{j}\) satisfies for all unitary maps \(u\in E\) that
+  If any of these two equivalent conditions are met, the map \(R = \sum_{j=1}^{l} e_{j}^{\dagger}p_{j}\) can correct any error arising from \(E\) in the sense that for all unitary maps \(u\in E\) we have
   \begin{equation*}
     Rup = \lambda_{u}p \qquad\qquad \text{ where }\lambda_{u}\in \mathbb{C} .
   \end{equation*}
 \end{theorem}
 \begin{proof}
-  To prove that \((i) \iff (ii)\), we consider the chain of equivalences
+  First observe that  \(e_{i}p = p_{i}e\) holds.
+  From this we deduce that \((i) \iff (ii)\) by considering the chain of equivalences
   \begin{align*}
     && p e_{i}^{\dagger} e_{j} p & = \delta_{i = j}p \\
     & \iff & e_{i}^{\dagger}p_{i}p_{j} e_{j} & = \delta_{i = j}pe_{i}^{\dagger} e_{i} p \\
@@ -8774,11 +8780,26 @@ Finally, below we state and prove a weaker variant of the Knill--Laflamme theore
     Rup
     = \sum_{k=1}^{m} \lambda_{k}R e_{k}p
     = \sum_{j,k=1}^{m} \lambda_{k}e_{j}^{\dagger} p_{j} e_{k}p
-    = \sum_{k=1}^{m} \lambda_{k}e_{k}^{\dagger} p_{k} e_{k}p
-    = \sum_{k=1}^{m} \lambda_{k}e_{k}^{\dagger} e_{k}p
+    = \sum_{j,k=1}^{m} \lambda_{k}pe_{j}^{\dagger} e_{k}p
+    = \sum_{k=1}^{m} \lambda_{k}p e^{\dagger}_{k} e_{k}p.
     = \sum_{k=1}^{m} \lambda_{k}p. \qedhere
   \end{equation*}
 \end{proof}
+
+The significance of the  Knill--Laflamme theorem, as discussed in the next remark, is that it implies that if we can correct errors which are ``sufficiently'' distinct from each other, we can immediately correct any error arising as a linear combination of these.
+
+\begin{remark}\label{rmk:KL-interpretation}
+  Suppose we have a code space \(C \subset (\mathbb{C}^{2})^{\otimes n}\) and a set of unitary maps \(e_{1}, \dots , e_{m} \in \End( ( \mathbb{C}^{2})^{\otimes n})\)
+  which satisfy \(e_{i}(C) \perp e_{j}(C)\) for all \(i\neq j\) and for which we have a correction protocol, meaning that there is a quantum algorithm on \(( \mathbb{C}^{2})^{\otimes n}\) implementing \(e_{i}^{\dagger}\).
+  Then, the Knill--Laflamme theorem states that any unitary \(u \in \End( ( \mathbb{C}^{2})^{\otimes n})\) of the form \(u = \sum_{k=1}^{m} \lambda_{k} e_{k}\) can be corrected by the executing the ``algorithm'' \(R= \sum_{j=1}^{m} e_{j}^{\dagger} p_{j}\).
+  In practise, this algorithm will often look like the error correction scheme we have seen for the \(3\) and the \(9\)-qubit code:
+
+  \begin{equation*}
+    \inputtikz{error-correction-overview}
+  \end{equation*}
+\end{remark}
+
+
 
 % TODO: ERROR CORRECTION
 % TODO: FIRST ABSTRACT
